@@ -29,6 +29,8 @@ if(!defined('__DIR__')) {
     define("__DIR__", substr(__FILE__, 0, $iPos) . DIRECTORY_SEPARATOR);
 }
 
+define('DELIBERA_ABOUT_PAGE', __('sobre-a-plataforma', 'delibera'));
+
 // End Defines
 
 // Parse shorttag
@@ -2293,6 +2295,17 @@ function delibera_instalacao()
 			require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_roles.php';
 			delibera_roles_install($delibera_permissoes);
 		}
+	}
+	
+	if (!get_page_by_slug(DELIBERA_ABOUT_PAGE)) {
+		$post = array(
+			'post_name' => DELIBERA_ABOUT_PAGE,
+			'post_title' => __('Sobre a plataforma', 'delibera'),
+	        'post_content' => __('Use está página para explicar para os usuários como utilizar o sistema', 'delibera'),
+	        'post_type' => 'page',
+	        'post_status' => 'publish',
+		);
+		wp_insert_post($post);
 	}
 }
 register_activation_hook(__FILE__,'delibera_instalacao');

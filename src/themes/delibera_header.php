@@ -30,7 +30,7 @@ $opt = delibera_get_config();
     	    	?>
         	</p>
             <p class="delibera-participacao">
-            	<a href="<?php echo get_page_link( get_page_by_slug( 'about-the-platform' )->ID ); ?>"><?php _e( 'Saiba por que e como participar', 'direitoamoradia' ); ?></a>
+            	<a href="<?php echo get_page_link( get_page_by_slug( DELIBERA_ABOUT_PAGE )->ID ); ?>"><?php _e( 'Saiba por que e como participar', 'direitoamoradia' ); ?></a>
             </p>
         </div>
 		<p class="delibera-login">
