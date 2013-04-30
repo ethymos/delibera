@@ -41,8 +41,8 @@ $opt = delibera_get_config();
 				get_currentuserinfo();
 				
             	printf(
-            		__( 'Você está logado como <a href="%1$s" title="Ver meu perfil" class="profile">%2$s</a>. Caso deseje sair de sua conta, <a href="%3$s" title="Sair">faça o logout</a>.', 'direitoamoradia' ), 
-            		get_author_link( false, $current_user->ID ),
+            		__( 'Você está logado como <a href="%1$s" title="Ver meu perfil" class="profile">%2$s</a>. Caso deseje sair de sua conta, <a href="%3$s" title="Sair">faça o logout</a>.', 'direitoamoradia' ),
+            		get_author_posts_url($current_user->ID),
             		$current_user->display_name,
             		wp_logout_url( home_url( '/' ) )
             	);

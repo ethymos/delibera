@@ -668,6 +668,8 @@ function delibera_pauta_meta()
 	)
 	{
 		$disable_edicao = 'readonly="readonly"';
+	} else {
+	    $disable_edicao = '';
 	}
 	
 	if(!($post->post_status == 'draft' ||
@@ -2031,7 +2033,8 @@ function delibera_postbox($id, $title, $content) {
  */
 function delibera_conf_page()
 {
-
+	$mensagem = '';
+	
 	if ($_SERVER['REQUEST_METHOD']=='POST')
 	{
 		
@@ -2236,7 +2239,7 @@ function delibera_admin_scripts()
 		wp_enqueue_script('jquery-ui-datepicker-ptbr', WP_CONTENT_URL.'/plugins/delibera/js/jquery.ui.datepicker-pt-BR.js', array('jquery-ui-datepicker'));
 		wp_enqueue_script('delibera-admin',WP_CONTENT_URL.'/plugins/delibera/js/admin_scripts.js', array( 'jquery-ui-datepicker-ptbr'));
 	}
-	if($_REQUEST['page'] == 'delibera-config')
+	if(isset($_REQUEST['page']) && $_REQUEST['page'] == 'delibera-config')
 	{
 		wp_enqueue_script('delibera-admin-notifica',WP_CONTENT_URL.'/plugins/delibera/js/admin_notifica_scripts.js', array('jquery'));
 	}
@@ -2800,6 +2803,11 @@ function delibera_comment_number($postID, $tipo)
 function delibera_comment_number_filtro($count, $postID)
 {
 	$situacao = delibera_get_situacao($postID);
+	
+	if (!$situacao) {
+		return;
+	}
+	
 	switch($situacao->slug)
 	{
 		case 'validacao':
@@ -2839,7 +2847,7 @@ function delibera_restrict_listings()
 			'taxonomy' => $taxonomy,
 			'name' => 'situacao',
 			'orderby' => 'id',
-			'selected' => $_REQUEST['situacao'],
+			'selected' => isset($_REQUEST['situacao']) ? $_REQUEST['situacao'] : '',
 			'hierarchical' => false,
 			'depth' => 1,
 			'show_count' => true, // This will give a view
@@ -2853,7 +2861,8 @@ function delibera_convert_situacao_id_to_taxonomy_term_in_query(&$query)
 {
 	global $pagenow; 
 	$qv = &$query->query_vars;
-	if ($qv['post_type'] == 'pauta' &&
+	if (isset($qv['post_type']) &&
+		$qv['post_type'] == 'pauta' &&
 		$pagenow=='edit.php' &&
 		isset($qv['situacao'])
 	)
