@@ -30,7 +30,7 @@ $opt = delibera_get_config();
     	    	?>
         	</p>
             <p class="delibera-participacao">
-            	<a href="<?php echo get_page_link( get_page_by_slug( 'about-the-platform' )->ID ); ?>"><?php _e( 'Saiba por que e como participar', 'direitoamoradia' ); ?></a>
+            	<a href="<?php echo get_page_link( get_page_by_slug( DELIBERA_ABOUT_PAGE )->ID ); ?>"><?php _e( 'Saiba por que e como participar', 'direitoamoradia' ); ?></a>
             </p>
         </div>
 		<p class="delibera-login">
@@ -41,8 +41,8 @@ $opt = delibera_get_config();
 				get_currentuserinfo();
 				
             	printf(
-            		__( 'Você está logado como <a href="%1$s" title="Ver meu perfil" class="profile">%2$s</a>. Caso deseje sair de sua conta, <a href="%3$s" title="Sair">faça o logout</a>.', 'direitoamoradia' ), 
-            		get_author_link( false, $current_user->ID ),
+            		__( 'Você está logado como <a href="%1$s" title="Ver meu perfil" class="profile">%2$s</a>. Caso deseje sair de sua conta, <a href="%3$s" title="Sair">faça o logout</a>.', 'direitoamoradia' ),
+            		get_author_posts_url($current_user->ID),
             		$current_user->display_name,
             		wp_logout_url( home_url( '/' ) )
             	);
