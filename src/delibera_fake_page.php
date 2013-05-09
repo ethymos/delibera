@@ -142,7 +142,7 @@ class FakePage
 		{
 			if(
 					strtolower($this->getReq()) == strtolower($page->page_slug) ||
-					(isset($wp->query_vars['page_id']) && $wp->query_vars['page_id'] == $page->page_slug) ||
+					$wp->query_vars['page_id'] == $page->page_slug ||
 					strtolower($referer) == strtolower($page->page_slug) ||
 					($post != false && $post->post_slug == $page->page_slug)
 			)
