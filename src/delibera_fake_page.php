@@ -45,7 +45,7 @@ class FakePage
 			$areq = explode('/', $wp->request);
 			$req = end($areq);
 			
-			if(empty($req)) // Ajax
+			if(empty($req) && isset($_SERVER['HTTP_REFERER'])) // Ajax
 			{
 				$referer = $_SERVER['HTTP_REFERER'];
 				
@@ -129,13 +129,14 @@ class FakePage
 			return true;
 		}
 		
-		$referer = $_SERVER['HTTP_REFERER'];
-		
-		$referer = $referer[strlen($referer) - 1] == "/" ? substr($referer, 0, -1) : $referer;
-		
-		$areferer = explode('/', $referer);
-		
-		$referer = end($areferer);
+		if (isset($_SERVER['HTTP_REFERER'])) {
+			$referer = $_SERVER['HTTP_REFERER'];
+			$referer = $referer[strlen($referer) - 1] == "/" ? substr($referer, 0, -1) : $referer;
+			$areferer = explode('/', $referer);
+			$referer = end($areferer);
+		} else {
+			$referer = '';
+		}
 		
 		$request = false;
 		foreach ($this->pages as $page)
