@@ -2232,7 +2232,7 @@ function delibera_print_styles()
 		wp_enqueue_style('jquery-ui-custom', plugins_url() . '/delibera/css/jquery-ui-1.9.2.custom.min.css');
 	}
 	
-	wp_enqueue_style('delibera_style', WP_CONTENT_URL.'/plugins/delibera/delibera.css');
+	wp_enqueue_style('delibera_style', WP_CONTENT_URL.'/plugins/delibera/css/delibera.css');
 } 
 add_action('admin_print_styles', 'delibera_print_styles');
 
