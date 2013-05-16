@@ -692,14 +692,14 @@ function delibera_pauta_meta()
 		</p>
 		<p>
 			<label for="prazo_validacao" class="label_prazo_validacao"><?php _e('Prazo para Validação','delibera') ?>:</label>
-			<input <?php echo $disable_edicao ?> id="prazo_validacao" name="prazo_validacao" class="prazo_validacao widefat hasDatepicker" value="<?php echo $prazo_validacao; ?>"/>
+			<input <?php echo $disable_edicao ?> id="prazo_validacao" name="prazo_validacao" class="prazo_validacao widefat hasdatepicker" value="<?php echo $prazo_validacao; ?>"/>
 		</p>
 	<?php
 	} 
 	?>
 	<p>
 		<label for="prazo_discussao" class="label_prazo_discussao"><?php _e('Prazo para Discussões','delibera') ?>:</label>
-		<input <?php echo $disable_edicao ?> id="prazo_discussao" name="prazo_discussao" class="prazo_discussao widefat hasDatepicker" value="<?php echo $prazo_discussao; ?>"/>
+		<input <?php echo $disable_edicao ?> id="prazo_discussao" name="prazo_discussao" class="prazo_discussao widefat hasdatepicker" value="<?php echo $prazo_discussao; ?>"/>
 	</p>
 	<?php 
 	if($options_plugin_delibera['relatoria'] == "S")
@@ -709,21 +709,21 @@ function delibera_pauta_meta()
 		?>
 			<p>
 				<label for="prazo_eleicao_relator" class="label_prazo_eleicao_relator"><?php _e('Prazo para Eleição de Relator','delibera') ?>:</label>
-				<input <?php echo $disable_edicao ?> id="prazo_eleicao_relator" name="prazo_eleicao_relator" class="prazo_eleicao_relator widefat hasDatepicker" value="<?php echo $prazo_eleicao_relator; ?>"/>
+				<input <?php echo $disable_edicao ?> id="prazo_eleicao_relator" name="prazo_eleicao_relator" class="prazo_eleicao_relator widefat hasdatepicker" value="<?php echo $prazo_eleicao_relator; ?>"/>
 			</p>
 		<?php
 		}
 	?>
 		<p>
 			<label for="prazo_relatoria" class="label_prazo_relatoria"><?php _e('Prazo para Relatoria','delibera') ?>:</label>
-			<input <?php echo $disable_edicao ?> id="prazo_relatoria" name="prazo_relatoria" class="prazo_relatoria widefat hasDatepicker" value="<?php echo $prazo_relatoria; ?>"/>
+			<input <?php echo $disable_edicao ?> id="prazo_relatoria" name="prazo_relatoria" class="prazo_relatoria widefat hasdatepicker" value="<?php echo $prazo_relatoria; ?>"/>
 		</p>
 	<?php
 	}
 	?>
 	<p>
 		<label for="prazo_votacao" class="label_prazo_votacao"><?php _e('Prazo para Votações','delibera') ?>:</label>
-		<input <?php echo $disable_edicao ?> id="prazo_votacao" name="prazo_votacao" class="prazo_votacao widefat hasDatepicker" value="<?php echo $prazo_votacao; ?>"/>
+		<input <?php echo $disable_edicao ?> id="prazo_votacao" name="prazo_votacao" class="prazo_votacao widefat hasdatepicker" value="<?php echo $prazo_votacao; ?>"/>
 	</p>
 	<?php
 }
@@ -2228,6 +2228,10 @@ add_action('wp_print_styles', 'delibera_print_styles');*/
 
 function delibera_print_styles()
 {
+	if (is_pauta()) {
+		wp_enqueue_style('jquery-ui-custom', plugins_url() . '/delibera/css/jquery-ui-1.9.2.custom.min.css');
+	}
+	
 	wp_enqueue_style('delibera_style', WP_CONTENT_URL.'/plugins/delibera/delibera.css');
 } 
 add_action('admin_print_styles', 'delibera_print_styles');
