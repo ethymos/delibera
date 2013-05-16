@@ -1135,7 +1135,7 @@ function delibera_check_post_data($data, $postarr)
 	$opt = delibera_get_config();
 	$erros = array();
 	$autosave = ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE );
-	if(get_post_type() == 'pauta' && $_POST['action'] != 'trash' && $_REQUEST['action'] != 'trash')
+	if(get_post_type() == 'pauta' && (!isset($_REQUEST['action']) || $_REQUEST['action'] != 'trash'))
 	{
 		if($opt['validacao'] == 'S')
 		{
