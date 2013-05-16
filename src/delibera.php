@@ -2288,27 +2288,11 @@ function delibera_get_config()
 
 function delibera_instalacao() 
 { 
-	// simple check to see if pautas capabilities are in place. We only set them if not.
-	$Role = get_role('administrator');
-	if(!$Role->has_cap('publish_pautas'))
-	{
-		// Inicialização das configurações padrão
-		$opt = delibera_get_config();
-			
-		update_option('delibera-config', $opt);
-		if(file_exists(__DIR__.DIRECTORY_SEPARATOR.'delibera_roles.php'))
-		{
-			$delibera_permissoes = array();
-			require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_roles.php';
-			delibera_roles_install($delibera_permissoes);
-		}
-	}
-
 	if(is_multisite())
 	{
 		$id = get_current_blog_id();
 		switch_to_blog(1);
-			delibera_wpmu_new_blog($id);
+		delibera_wpmu_new_blog($id);
 		restore_current_blog();
 	}
 	
@@ -2323,11 +2307,27 @@ function delibera_instalacao()
 		wp_insert_post($post);
 	}
 }
-register_activation_hook(__FILE__,'delibera_instalacao');
+register_activation_hook(__FILE__, 'delibera_instalacao');
 
-
-add_action('admin_init','delibera_instalacao');
-
+function delibera_install_roles()
+{
+	// simple check to see if pautas capabilities are in place. We only set them if not.
+	$Role = get_role('administrator');
+	if(!$Role->has_cap('publish_pautas'))
+	{
+	    // Inicialização das configurações padrão
+	    $opt = delibera_get_config();
+	    	
+	    update_option('delibera-config', $opt);
+	    if(file_exists(__DIR__.DIRECTORY_SEPARATOR.'delibera_roles.php'))
+	    {
+	        $delibera_permissoes = array();
+	        require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_roles.php';
+	        delibera_roles_install($delibera_permissoes);
+	    }
+	}
+}
+add_action('admin_init', 'delibera_install_roles');
 
 function delibera_roles_install($delibera_permissoes)
 {
