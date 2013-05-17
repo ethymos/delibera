@@ -231,7 +231,7 @@ function ecu_message_text() {
 function ecu_options_menu() {
 	if (current_user_can("level_10"))
 		add_plugins_page('Easy Comment Uploads options',
-			'Easy Comment Uploads', 8, __FILE__, 'ecu_options_page');
+			'Easy Comment Uploads', 'manage_options', __FILE__, 'ecu_options_page');
 }
 
 // Add an image to the media library
@@ -501,7 +501,7 @@ function ecu_options_page() {
 	</p>
 	</a>
 
-	<form name="ecuform" action="<?php echo $action_url ?>"
+	<form name="ecuform" action="<?php echo isset($action_url) ? $actionurl : ''; ?>"
 		method="post">
 		<input type="hidden" name="submitted" value="1" />
 		<?php wp_nonce_field('easy-comment-uploads') ?>
@@ -563,7 +563,7 @@ function ecu_options_page() {
 								id="upload_form_visibility_category"
 								name="upload_form_visibility"
 								value="category"
-								<?php echo $upload_form_visibility_checked['category'] ?> />
+								<?php echo isset($upload_form_visibility_checked['category']) ? $upload_form_visibility_checked['category'] : ''; ?> />
 							<?php _e('Show only in category', 'easy-comment-uploads') ?>
 							<?php
 							$args = array('hide_empty' => 0,
@@ -580,7 +580,7 @@ function ecu_options_page() {
 								id="upload_form_visibility_pages"
 								name="upload_form_visibility"
 								value="pages"
-								<?php echo $upload_form_visibility_checked['pages'] ?> />
+								<?php echo isset($upload_form_visibility_checked['pages']) ? $upload_form_visibility_checked['pages'] : ''; ?> />
 							<?php _e('Show only for these <a href="http://www.techtrot.com/wordpress-page-id/">page/post IDs</a>', 'easy-comment-uploads') ?>
 							<input id="enabled_pages" type="text"		   
 								name="enabled_pages" class="large-text"
@@ -594,7 +594,7 @@ function ecu_options_page() {
 								id="upload_form_visibility_none"
 								name="upload_form_visibility"
 								value="none"
-								<?php echo $upload_form_visibility['none'] ?> />
+								<?php echo isset($upload_form_visibility['none']) ? $upload_form_visibility['none'] : ''; ?> />
 							<?php _e('Hide from all comment forms',
 								'easy-comment-uploads') ?>
 						</label>
@@ -622,7 +622,7 @@ function ecu_options_page() {
 								id="upload_form_position_below"
 								name="upload_form_position"
 								value="below"
-								<?php echo $upload_form_position_checked['below'] ?> />
+								<?php echo isset($upload_form_position_checked['below']) ? $upload_form_position_checked['below'] : ''; ?> />
 							<?php _e('Place below the submit button',
 								'easy-comment-uploads') ?>
 						</label>
@@ -632,7 +632,7 @@ function ecu_options_page() {
 								id="upload_form_position_default"
 								name="upload_form_position"
 								value="default"
-								<?php echo $upload_form_position_checked['default'] ?> />
+								<?php echo isset($upload_form_position_checked['default']) ? $upload_form_position_checked['below'] : ''; ?> />
 							<?php _e('Let the current theme determine position', 'easy-comment-uploads') ?>
 						</label>
 					</fieldset>
