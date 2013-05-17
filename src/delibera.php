@@ -1245,8 +1245,9 @@ function delibera_comment_text($commentText)
 	global $comment, $post, $delibera_comments_padrao;
 	if(get_post_type($post) == "pauta" && $delibera_comments_padrao !== true)
 	{
-		$commentText = delibera_comment_text_filtro($commentText, $comment->comment_ID);
-		$tipo = get_comment_meta($comment->comment_ID, "delibera_comment_tipo", true);
+		$commentId = isset($comment) ? $comment->comment_ID : false;
+		$commentText = delibera_comment_text_filtro($commentText, $commentId);
+		$tipo = get_comment_meta($commentId, "delibera_comment_tipo", true);
 		$total = 0;
 		$nvotos = 0;
 		switch ($tipo)
