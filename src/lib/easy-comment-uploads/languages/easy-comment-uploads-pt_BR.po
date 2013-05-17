@@ -1,0 +1,35 @@
+# Brazilian Portuguese translation for easy-comment-uploads
+# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
+# This file is distributed under the same license as the easy-comment-uploads package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
+# Thomas Wright <tom.tdw@gmail.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: easy-comment-uploads\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/easy-comment-uploads\n"
+"POT-Creation-Date: 2011-09-05 21:52:03+00:00\n"
+"PO-Revision-Date: 2011-09-05 22:58+0100\n"
+"Last-Translator: Thomas Wright <tom.tdw@gmail.com>\n"
+"Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Virtaal 0.7.0\n"
+"X-Launchpad-Export-Date: 2009-08-21 08:32+0000\n"
+
+#: main.php:179
+msgid "Upload Files"
+msgstr "Enviar Arquivos"
+
+#: main.php:190
+msgid "You can include images or files in your comment by selecting them below. Once you select a file, it will be uploaded and a link to it added to your comment. You can upload as many images or files as you like and they will all be added to your comment."
+msgstr "É possível colocar imagens ou outro tipo de arquivo, junto com o seu comentário. Clique no botão abaixo, para selecionar e enviar o arquivo. Você pode enviar quantas imagens forem necessárias, cada imagem será mostrada junto de seu comentário."
+
+#: upload-form.php:26
+msgid "Select File"
+msgstr "Selecionar Arquivo"
+
+#~ msgid "Upload files"
+#~ msgstr "Enviar arquivos"

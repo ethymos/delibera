@@ -49,6 +49,9 @@ require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_widgets.php';
 
 require_once __DIR__.'/print/wp-print.php';
 
+// inclui o plugin easy-comment-uploads para permitir anexos nos comentários
+require_once __DIR__ . '/lib/easy-comment-uploads/main.php';
+
 function delibera_init()
 {
 	add_action('admin_menu', 'delibera_config_menu');
@@ -1794,6 +1797,9 @@ function delibera_comment_form_action($postID)
 	if(is_pauta())
 	{
 		global $comment_footer;
+		
+		$situacao = delibera_get_situacao($postID);
+		
 		echo $comment_footer;
 		echo "</div>";
 		if(function_exists('ecu_upload_form') && $situacao->slug != 'relatoria' && $situacao->slug != 'discussao')

@@ -1,0 +1,30 @@
+# Copyright (C) 2010
+# This file is distributed under the same license as the  package.
+# Thomas Wright <tom.tdw@gmail.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: easy-comment-uploads\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/easy-comment-uploads\n"
+"POT-Creation-Date: 2011-09-05 21:52:03+00:00\n"
+"PO-Revision-Date: 2011-09-05 23:01+0100\n"
+"Last-Translator: Thomas Wright <tom.tdw@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Virtaal 0.7.0\n"
+
+#: main.php:179
+msgid "Upload Files"
+msgstr "Bestanden Uploaden"
+
+#: main.php:190
+msgid "You can include images or files in your comment by selecting them below. Once you select a file, it will be uploaded and a link to it added to your comment. You can upload as many images or files as you like and they will all be added to your comment."
+msgstr "Je kunt afbeeldingen of bestanden aan je kommentaar toevoegen, door ze hieronder te selecteren. Het geselecteerde bestand wordt direct geupload en een link zal worden toegevoegd aan je kommentaar. Je kunt zoveel afbeeldingen of bestanden uploaden als je wil."
+
+#: upload-form.php:26
+msgid "Select File"
+msgstr "Selecteer Bestand"
+
