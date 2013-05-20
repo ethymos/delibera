@@ -1,0 +1,35 @@
+# Spanish translation for easy-comment-uploads
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the easy-comment-uploads package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+# Thomas Wright <tom.tdw@gmail.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: easy-comment-uploads\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/easy-comment-uploads\n"
+"POT-Creation-Date: 2011-09-05 21:52:03+00:00\n"
+"PO-Revision-Date: 2011-09-05 22:56+0100\n"
+"Last-Translator: Thomas Wright <tom.tdw@gmail.com>\n"
+"Language-Team: Spanish <es@li.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Virtaal 0.7.0\n"
+"X-Launchpad-Export-Date: 2011-07-05 20:40+0000\n"
+
+#: main.php:179
+msgid "Upload Files"
+msgstr "Subir Archivos"
+
+#: main.php:190
+msgid "You can include images or files in your comment by selecting them below. Once you select a file, it will be uploaded and a link to it added to your comment. You can upload as many images or files as you like and they will all be added to your comment."
+msgstr "Puedes incluir imágenes o archivos en tu comentario seleccionandolas a continuación. Una vez seleccionadas, serán cargadas al servidor y un enlace a ellas será insertado en tu comentario. Puedes subir cuantas imagenes o archivos desees. Todos se agregarán a tu comentario."
+
+#: upload-form.php:26
+msgid "Select File"
+msgstr "Seleccionar archivo"
+
+#~ msgid "Upload files"
+#~ msgstr "Subir archivos"

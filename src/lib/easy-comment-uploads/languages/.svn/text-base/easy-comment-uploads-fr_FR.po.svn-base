@@ -1,0 +1,87 @@
+# Copyright (C) 2010
+# This file is distributed under the same license as the  package.
+# Thomas Wright <tom.tdw@gmail.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: ECU\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/easy-comment-uploads\n"
+"POT-Creation-Date: 2011-09-05 21:52:03+00:00\n"
+"PO-Revision-Date: 2011-09-05 22:57+0100\n"
+"Last-Translator: Thomas Wright <tom.tdw@gmail.com>\n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Virtaal 0.7.0\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: main.php:179
+msgid "Upload Files"
+msgstr "Pièces jointes"
+
+#: main.php:190
+msgid "You can include images or files in your comment by selecting them below. Once you select a file, it will be uploaded and a link to it added to your comment. You can upload as many images or files as you like and they will all be added to your comment."
+msgstr "Vous pouvez ajouter un fichier à votre commentaire. Recherchez et choisissez ce fichier sur votre poste de travail en cliquant sur le bouton [Parcourir...]. Le fichier choisi sera téléversé et un lien sera créé vers lui dans votre commentaire. Vous pouvez téléverser autant de fichiers que vous le souhaitez."
+
+#: upload-form.php:26
+msgid "Select File"
+msgstr "Votre choix de fichier(s)"
+
+#~ msgid "Upload files"
+#~ msgstr "Pièces jointes"
+
+#~ msgid "Only allow images to be uploaded."
+#~ msgstr "Autoriser seulement le téléversement d'images."
+
+#~ msgid "Allow all users to upload files with their comments."
+#~ msgstr "Droit de téléversement de fichiers pour : tous les utilisateurs."
+
+#~ msgid "Only allow registered users to upload files."
+#~ msgstr ""
+#~ "Droit de téléversement de fichiers pour : utilisateurs abonnés (= "
+#~ "inscrits), contributeurs, auteurs, éditeurs, administrateur."
+
+#~ msgid "Require Contributor rights to upload files."
+#~ msgstr ""
+#~ "Droit de téléversement de fichiers pour : contributeurs, auteurs, "
+#~ "éditeurs, administrateur."
+
+#~ msgid ""
+#~ "Require Upload rights to uploads files (e.g. only admin, editors and "
+#~ "authors)."
+#~ msgstr ""
+#~ "Droit de téléversement de fichiers pour : auteurs, éditeurs, "
+#~ "administrateur."
+
+#~ msgid "Hide from comment forms."
+#~ msgstr "Ne pas afficher cette extension dans la partie 'Commentaire'"
+
+#~ msgid "Limit the size of uploaded files:"
+#~ msgstr "Limiter la taille des fichiers à téléverser : "
+
+#~ msgid "(KiB, 0 = unlimited)"
+#~ msgstr "(Kilo-octets, 0 = illimité)"
+
+#~ msgid "Only allow uploads on these pages:"
+#~ msgstr "Limiter le droit de téléversement aux pages suivantes :  "
+
+#~ msgid "page_ids"
+#~ msgstr "Identifiants (Id) des pages"
+
+#~ msgid "seperated with spaces or all to enable globally"
+#~ msgstr ""
+#~ "séparés par des espaces, ou 'all' pour toujours autoriser le "
+#~ "téléversement."
+
+#~ msgid "Update options"
+#~ msgstr "Mettre à jour les options"
+
+#~ msgid "all"
+#~ msgstr "[Toutes]"
+
+#~ msgid "Easy Comment Uploads options saved."
+#~ msgstr "Les options d'Easy Comment Uploads ont été enregistrées."
