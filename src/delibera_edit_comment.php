@@ -57,7 +57,7 @@ function delibera_update_comment($comment_id, $user_id, $text, $proposta)
 	
 	$comment = get_comment($comment_id);
 	
-	$proposta_antes = get_comment_meta($comment_id, 'delibera_comment_tipo', true);
+	$proposta_antes = delibera_get_comment_type($comment_id);
 	if($proposta != $proposta_antes)
 	{
 		if($proposta == 'encaminhamento')

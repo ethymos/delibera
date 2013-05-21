@@ -35,7 +35,7 @@ class Delibera_Walker_Comment extends Walker_Comment
 
 		$GLOBALS['comment'] = $comment;
 		
-		$tipo = get_comment_meta($comment->comment_ID, "delibera_comment_tipo", true);
+		$tipo = delibera_get_comment_type($comment->comment_ID);
 		$situacao = delibera_get_situacao($comment->comment_post_ID);
 		
 		extract($args, EXTR_SKIP);

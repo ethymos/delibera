@@ -9,7 +9,7 @@ $opt = delibera_get_config();
 		$h = ( is_post_type_archive ( 'pauta' ) ) ? 'h1' : 'h2';
 		
 		$delibera_header = '<' . $h . ' class="page-title"><span>';
-		$delibera_header .= __( 'Sistema de Discussão', 'direitoamoradia' );
+		$delibera_header .= __( 'Sistema de Discussão', 'delibera' );
 		$delibera_header .= '</span></' . $h . '>';
 		
 		echo $delibera_header;
@@ -25,12 +25,20 @@ $opt = delibera_get_config();
     	    		}
     	    		else
     	    		{
-    	    			echo __( 'Bem-vindo a plataforma de debate do ', 'direitoamoradia' ).get_bloginfo('name');
+    	    			echo __( 'Bem-vindo a plataforma de debate do ', 'delibera' ).get_bloginfo('name');
     	    		}
     	    	?>
         	</p>
             <p class="delibera-participacao">
-            	<a href="<?php echo get_page_link( get_page_by_slug( DELIBERA_ABOUT_PAGE )->ID ); ?>"><?php _e( 'Saiba por que e como participar', 'direitoamoradia' ); ?></a>
+            	<a href="<?php 
+            			$about_page = get_page_by_slug( DELIBERA_ABOUT_PAGE );
+            			if(!is_object($about_page))
+            			{
+            				delibera_create_about_page();
+            				$about_page = get_page_by_slug( DELIBERA_ABOUT_PAGE );
+            			}
+            			echo get_page_link( $about_page->ID );
+            		?>"><?php _e( 'Saiba por que e como participar', 'delibera' ); ?></a>
             </p>
         </div>
 		<p class="delibera-login">
@@ -41,7 +49,7 @@ $opt = delibera_get_config();
 				get_currentuserinfo();
 				
             	printf(
-            		__( 'Você está logado como <a href="%1$s" title="Ver meu perfil" class="profile">%2$s</a>. Caso deseje sair de sua conta, <a href="%3$s" title="Sair">faça o logout</a>.', 'direitoamoradia' ),
+            		__( 'Você está logado como <a href="%1$s" title="Ver meu perfil" class="profile">%2$s</a>. Caso deseje sair de sua conta, <a href="%3$s" title="Sair">faça o logout</a>.', 'delibera' ),
             		get_author_posts_url($current_user->ID),
             		$current_user->display_name,
             		wp_logout_url( home_url( '/' ) )
@@ -50,7 +58,7 @@ $opt = delibera_get_config();
 			else
 			{	
 				printf(
-            		__( 'Para participar, você precisa <a href="%1$s" title="Faça o login">fazer o login</a> ou <a href="%2$s" title="Registre-se" class="register">registrar-se no site</a>.', 'direitoamoradia' ), 
+            		__( 'Para participar, você precisa <a href="%1$s" title="Faça o login">fazer o login</a> ou <a href="%2$s" title="Registre-se" class="register">registrar-se no site</a>.', 'delibera' ), 
             		wp_login_url( home_url( '/' ) ),
             		site_url('wp-login.php?action=register', 'login')."&lang="
             	);
@@ -60,7 +68,7 @@ $opt = delibera_get_config();
 		</p><!-- .delibera-login -->
 		
 		<?php if ( ! ( is_home() || is_post_type_archive( 'pauta' ) ) ) : ?>
-			<p class="delibera-pagina-discussoes"><a href="<?php echo get_post_type_archive_link( 'pauta' ); ?>"><?php _e( 'Voltar à página de discussões', 'direitoamoradia' ); ?></a></p>
+			<p class="delibera-pagina-discussoes"><a href="<?php echo get_post_type_archive_link( 'pauta' ); ?>"><?php _e( 'Voltar à página de discussões', 'delibera' ); ?></a></p>
 		<?php endif; ?>
 	</div><!-- #delibera-header -->
 

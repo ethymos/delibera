@@ -14,7 +14,7 @@ class FakePage
 {
 	/**
 	 * The slug for the fake post.  This is the URL for your plugin, like:
-	 * http://site.com/about-me or http://site.com/?page_id=about-me
+	 * http://site.com/delibera-template-archive or http://site.com/?page_id=delibera-template-archive
 	 * @var string
 	 */
 	var $page_slug = 'delibera-template-archive';
@@ -70,7 +70,9 @@ class FakePage
 		$this->pages = array();
 		
 		$this->NewFakePage('delibera-template-archive', 'Delibera Template Archive', false, "", true);
-		$this->NewFakePage('delibera-template-validacao', 'Delibera Template Validação', 'validacao', "", false);
+		$this->NewFakePage('delibera-template-validacao', 'Delibera Template Validação', 'validacao', "Aqui você propõe as pautas a serem discutidas. Insira o contexto, com fotos, vídeos e todos os elementos multimídia e hipertextuais que fortaleçam a sua proposta!
+
+Após a apresentação da pauta, há um processo de validação no qual os demais usuários vão decidir se querem discutir o tema proposto. Se aprovado, vai para discussão. Caso contrário, a pauta é arquivada.", false);
 		$this->NewFakePage('delibera-template-discussao', 'Delibera Template Discussão', 'discussao', "", false);
 		$this->NewFakePage('delibera-template-votacao-relatoria', 'Delibera Template Votação Relatoria', '', "", false);
 		$this->NewFakePage('delibera-template-relatoria', 'Delibera Template Relatoria', '', "", false);
@@ -89,6 +91,10 @@ class FakePage
 		add_filter('body_class', array(&$this,'body_class'), 10, 2);
 		add_filter('the_posts',array(&$this,'detectPost'));
 		add_filter('delibera_get_situacao',array(&$this,'delibera_get_situacao'));
+		add_filter('comments_array',array(&$this,'get_comments'), 100, 2);
+		add_filter('delibera-comments-force-filter', array(&$this,'delibera_comments_force'));
+		add_filter('delibera_comment_tipo', array(&$this,'delibera_comment_tipo'));
+		add_filter('delibera_validacao_filter', array(&$this,'delibera_validacao_filter'), 100, 2);
 		
 		//add_filter('post_type_link',array(&$this,'post_type_link'), 10, 4);
 	}
@@ -101,6 +107,7 @@ class FakePage
 		$page->content = $content;
 		$page->is_archive = $is_archive;
 		$page->situacao = $situacao;
+		$page->comment_count = 10;
 		$this->pages[$slug] = $page;
 	}
 	
@@ -145,7 +152,7 @@ class FakePage
 					strtolower($this->getReq()) == strtolower($page->page_slug) ||
 					(isset($wp->query_vars['page_id']) && $wp->query_vars['page_id'] == $page->page_slug) ||
 					strtolower($referer) == strtolower($page->page_slug) ||
-					($post != false && $post->post_slug == $page->page_slug)
+					( ($post != false && is_object($post)) && $post->post_slug == $page->page_slug)
 			)
 			{
 				$request = true;
@@ -221,7 +228,7 @@ class FakePage
 		/**
 		 * Turning off comments for the post.
 		 */
-		$post->comment_status = 'closed';
+		$post->comment_status = 'open';
 		 
 		/**
 		 * Let people ping the post?  Probably doesn't matter since
@@ -230,7 +237,7 @@ class FakePage
 		 */
 		$post->ping_status = $this->ping_status;
 		 
-		$post->comment_count = 0;
+		$post->comment_count = 10;
 		 
 		/**
 		 * You can pretty much fill these up with anything you want.  The
@@ -293,7 +300,8 @@ class FakePage
 			$wp_query->query_vars["error"]="";
 			$wp_query->is_404=false;
 			$wp_query->queried_object = $posts[0];
-			
+			$wp_query->queried_object_id = $posts[0]->ID;
+			$wp_query->comment_count = 10;
 		}
 		return $posts;
 	}
@@ -315,9 +323,113 @@ class FakePage
 			$sitName = is_string($this->pages[$this->getReq()]->situacao) ? $this->pages[$this->getReq()]->situacao : 'validacao';
 			$sit = new stdClass();
 			$sit->name = $sitName;
+			$sit->slug = $sitName;
 			return $sit;
 		}
 		return $situacao;
+	}
+	
+	function get_comments($comments, $post_ID)
+	{
+		if($this->is_fake())
+		{
+			$id = -1;
+			$comments = array();
+			$comment = new stdClass();
+			$comment->comment_post_ID = 1;
+			$comment->comment_ID = $id--;
+			$comment->comment_author = 'admin';
+			$comment->comment_author_email = 'admin@admin.com';
+			$comment->comment_author_url = 'http://';
+			$comment->comment_content = 'content here';
+			$comment->comment_type = '';
+			$comment->comment_parent = 0;
+			$comment->user_id = 1;
+			$comment->comment_author_IP = '127.0.0.1';
+			$comment->comment_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.10) Gecko/2009042316 Firefox/3.0.10 (.NET CLR 3.5.30729)';
+			$comment->comment_date = '2013-01-01';
+			$comment->comment_approved = 1;
+			 
+			$comments[] = $comment;
+			$comment = new stdClass();
+			$comment->comment_post_ID = 1;
+			$comment->comment_ID = $id--;
+			$comment->comment_author = 'João';
+			$comment->comment_author_email = 'admin@admin.com';
+			$comment->comment_author_url = 'http://';
+			$comment->comment_content = 'content here';
+			$comment->comment_type = '';
+			$comment->comment_parent = 0;
+			$comment->user_id = 1;
+			$comment->comment_author_IP = '127.0.0.1';
+			$comment->comment_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.10) Gecko/2009042316 Firefox/3.0.10 (.NET CLR 3.5.30729)';
+			$comment->comment_date = '2013-01-01';
+			$comment->comment_approved = 1;
+			
+			$comments[] = $comment;
+		}
+		return $comments;
+	}
+	
+	function delibera_comments_force($comments)
+	{
+		if($this->is_fake())
+		{
+			$comments = $this->get_comments($comments, 1);
+			$situacao = $this->delibera_get_situacao(false);
+			
+			switch ($situacao->slug)
+			{
+				case 'validacao':
+					{
+						$ret = delibera_comments_filter_portipo($comments, array('validacao'));
+					}break;
+				case 'discussao':
+					{
+						$ret = delibera_comments_filter_portipo($comments, array('discussao', 'encaminhamento'));
+					}break;
+				case 'relatoria':
+					{
+						$ret = delibera_comments_filter_portipo($comments, array('discussao', 'encaminhamento'));
+					}break;
+				case 'emvotacao':
+					{
+						$ret = delibera_comments_filter_portipo($comments, array('voto'));
+					}break;
+				case 'comresolucao':
+					{
+						$ret = delibera_comments_filter_portipo($comments, array('resolucao'));
+					}break;
+			}
+			return $ret;
+		}
+		return $comments;
+	}
+	
+	function delibera_comment_tipo($meta)
+	{
+		if($this->is_fake())
+		{
+			switch ($this->delibera_get_situacao(false)->slug)
+			{
+				case 'validacao':
+					return 'validacao';
+				break;
+			}
+		}
+		return $meta;
+	}
+	
+	function delibera_validacao_filter($validacao, $comment_ID)
+	{
+		if($this->is_fake())
+		{
+			if($comment_ID == -2)
+			{
+				return 'S';
+			}
+		}
+		return $validacao;
 	}
 	
 }
