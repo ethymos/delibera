@@ -250,6 +250,9 @@ Após a apresentação da pauta, há um processo de validação no qual os demai
 		$post->post_type = 'pauta';
 		$post->name = 'pauta';
 		
+		$post->labels = new stdClass();
+		$post->labels->name = $page->page_title;
+		
 		return($post);
 	}
 	 
