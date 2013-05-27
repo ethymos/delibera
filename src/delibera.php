@@ -45,6 +45,12 @@ require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_widgets.php';
 
 // End Parse widgets
 
+//  comment-upload
+
+require_once __DIR__.DIRECTORY_SEPARATOR.'easy-comment-uploads'.DIRECTORY_SEPARATOR."main.php";
+
+// End comment-upload
+
 // Inicialização do plugin
 
 require_once __DIR__.'/print/wp-print.php';
@@ -1803,6 +1809,7 @@ function delibera_comment_form_action($postID)
 		global $comment_footer;
 		echo $comment_footer;
 		echo "</div>";
+		$situacao = delibera_get_situacao($postID);
 		if(function_exists('ecu_upload_form') && $situacao->slug != 'relatoria' && $situacao->slug != 'discussao')
 		{
 			echo '<script type="text/javascript">
