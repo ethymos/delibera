@@ -893,17 +893,14 @@ function delibera_tratar_prazo_discussao($args)
 			if($opts['eleicao_relator'] == 'S')
 			{
 				wp_set_object_terms($post_id, 'eleicaoredator', 'situacao', false); //Mudar situação para Votação
-				//delibera_notificar_situacao($post_id);
 			}
 			elseif($opts['relatoria'] == 'S')
 			{
 				wp_set_object_terms($post_id, 'relatoria', 'situacao', false); //Mudar situação para Votação
-				//delibera_notificar_situacao($post_id);
 			}
 			else 
 			{
 				wp_set_object_terms($post_id, 'emvotacao', 'situacao', false); //Mudar situação para Votação
-				//delibera_notificar_situacao($post_id); 
 			}
 			if(has_action('delibera_discussao_concluida'))
 			{
