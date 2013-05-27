@@ -2886,7 +2886,7 @@ add_filter('parse_query','delibera_convert_situacao_id_to_taxonomy_term_in_query
 /**
  * Notificações do sistema.
  */
-require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_notifica.php';
+require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_notificar.php';
 
 /**
  * Perfil do usuário
