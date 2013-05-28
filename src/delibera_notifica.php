@@ -25,7 +25,63 @@
 	return has_filter('delibera_notificar_get_tipos') ? apply_filters('delibera_notificar_get_tipos', $tipos) : $tipos;   
 }*/
 
-function delibera_notificar_get_config($config)
+function delibera_notifications_menu_action($base_page)
+{
+	add_submenu_page($base_page, __('Notificações', 'delibera'), __('Notificações', 'delibera'), 'manage_options', 'delibera-notifications', 'delibera_notifications_page' );
+}
+add_action('delibera_menu_itens', 'delibera_notifications_menu_action', 10, 1);
+
+function delibera_notifications_page()
+{
+	$mensagem = '';
+	$opt = array();
+	
+	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+		if (!current_user_can('manage_options')) {
+			die(__('Você não pode editar as configurações do delibera.', 'delibera'));
+		}
+		check_admin_referer('delibera-notifications');
+			
+		foreach (array_keys(delibera_notificar_get_config()) as $option_name) {
+			if (isset($_POST[$option_name])) {
+				$opt[$option_name] = htmlspecialchars($_POST[$option_name]);
+			}
+		}
+
+		if (update_option('delibera-notifications', $opt)) {
+			$mensagem = __('Configurações salvas!','delibera');
+		} else {
+			$mensagem = __('Erro ao salvar as configurações. Verifique os valores inseridos e tente novamente!','delibera');
+		}
+	}
+	
+	?>
+	<div class="wrap">
+		<h2>Notificações</h2>
+		<div class="postbox-container" style="width:80%;">
+			<div class="metabox-holder">	
+				<div class="meta-box-sortables">
+					<?php if ($mensagem) : ?>
+						<div id="message" class="updated">
+							<?php echo $mensagem; ?>
+						</div>
+					<?php endif; ?>
+					<form action="<?php echo $_SERVER['REQUEST_URI'];?>" method="post" id="delibera-config" >
+						<?php
+						wp_nonce_field('delibera-notifications');
+		
+						$table = delibera_nofiticar_config_page();
+						delibera_postbox('delibera-notifications', __('Notificações', 'delibera'), $table . '<div class="submit"><input type="submit" class="button-primary" name="submit" value="' . __('Save Changes') . '" /></div>');
+						?>
+					</form>
+				</div> <!-- meta-box-sortables -->
+			</div> <!-- meta-box-holder -->
+		</div> <!-- postbox-container -->
+	</div>
+	<?php
+}
+
+function delibera_notificar_get_config()
 {
 	$opt['notificacoes'] = "S";
 	foreach (delibera_nofiticar_get_tipos() as $notif)
@@ -169,10 +225,8 @@ Equipe ÀgoraDelibera
 		}
 	}
 	
-	return array_merge($opt, $config);
+	return $opt;
 }
-
-add_filter('delibera_get_config', 'delibera_notificar_get_config');
 
 function delibeta_nofiticar_config_page_row(&$rows, $opt, $tipo, $label = '', $lang = '')
 {
@@ -212,8 +266,11 @@ function delibera_nofiticar_config_page_campos($opt, $lang = '')
 	return $rows;
 }
 
-function delibera_nofiticar_config_page($table, $opt)
+function delibera_nofiticar_config_page()
 {
+	$table = '';
+	$opt = delibera_notificar_get_config();
+	
 	$rows = array();
 	$rows[] = array(
 		"id" => "notificacoes",
@@ -222,6 +279,7 @@ function delibera_nofiticar_config_page($table, $opt)
 	);
 	$table .= delibera_form_table($rows);
 	$rows_lang = array();
+	
 	if(function_exists('qtrans_enableLanguage'))
 	{
 		$head = "<div id=\"delibera-mensagens-notificacoes-painel\" ".(htmlspecialchars_decode($opt['notificacoes']) == 'S' ? '' : 'style="display:none"')." ><div id=\"delibera-mensagens-notificacoes\"><label id=\"label-delibera-mensagens-notificacoes\" >".__('Selecione uma língua para configurar as notificações em cada idioma', 'delibera')."</label>";
@@ -271,15 +329,12 @@ function delibera_nofiticar_config_page($table, $opt)
 			
 		
 		$table .= $head."</div>";
-		
-		
-//		$rows_lang = delibera_nofiticar_config_page_campos($opt);
-		//$table .= delibera_form_table($rows);
 	}
-//	wp_die(print_r($rows_lang, true));
+
 	$table .= '<div id="painel-notificacoes" '.(htmlspecialchars_decode($opt['notificacoes']) == 'S' ? '' : 'style="display:none"').' >';
 	$rows = array();
 	$i = 0;
+	
 	foreach (delibera_nofiticar_get_tipos() as $notif)
 	{
 		delibera_nofiticar_config_page_create_checkbox($rows,
@@ -295,7 +350,6 @@ function delibera_nofiticar_config_page($table, $opt)
 	
 	return $table;
 }
-add_filter('delibera_config_form', 'delibera_nofiticar_config_page', 10, 2);
 
 function delibera_nofiticar_config_page_create_checkbox(&$rows, $id, $label, $opt, $rows_lang, $index)
 {
