@@ -344,7 +344,7 @@ function delibera_Add_custom_taxonomy()
 				)
 			);
 		}
-		if($opt['relatoria'] == 'S')
+		if(isset($opt['relatoria']) && $opt['relatoria'] == 'S')
 		{
 			if($opt['eleicao_relator'] == 'S')
 			{
@@ -390,7 +390,7 @@ function delibera_Add_custom_taxonomy()
 				)
 			);
 		}
-		if($opt['validacao'] == 'S')
+		if(isset($opt['validacao']) && $opt['validacao'] == 'S')
 		{
 			if(term_exists('validacao', 'situacao', null) == false)
 			{
@@ -2270,8 +2270,8 @@ function delibera_get_config()
 	$opt['cabecalho_arquivo'] = false;
 	
 	
-	$opt_conf = get_option('delibera-config');
-	if(!is_array($opt_conf)) $opt_conf = array();
+	$opt_conf = get_option('delibera-config', array());
+	
 	$opt = array_merge($opt, $opt_conf);
 	if(has_filter('delibera_get_config'))
 	{
@@ -2882,7 +2882,7 @@ add_filter('parse_query','delibera_convert_situacao_id_to_taxonomy_term_in_query
 /**
  * Notificações do sistema.
  */
-require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_notifica.php';
+require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_notificar.php';
 
 /**
  * Perfil do usuário
