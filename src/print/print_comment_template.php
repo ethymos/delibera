@@ -15,8 +15,11 @@ foreach ($comments_tmp as $comment) :
 			?> <u><?php comment_author(); ?></u><?php
 				_e(' em ', 'delibera');
 				comment_date(sprintf(__('%s @ %s', 'delibera'), get_option('date_format'), get_option('time_format')));
-				echo $ncurtiu > 0 ? ", $ncurtiu "._n('concordou', 'concordaram', $ncurtiu, 'delibera')  : '';
-				echo " (".delibera_get_quem_curtiu($comment->comment_ID, 'comment', 'string').")";
+				if($ncurtiu > 0)
+				{
+					echo ", $ncurtiu "._n('concordou', 'concordaram', $ncurtiu, 'delibera');
+					echo " (".delibera_get_quem_curtiu($comment->comment_ID, 'comment', 'string').")";
+				}
 			?>
 		</p>
 		<div class="CommentContent">
