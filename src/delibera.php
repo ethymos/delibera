@@ -2046,6 +2046,10 @@ function delibera_conf_page()
 			{
 				$opt[$option_name] = htmlspecialchars($_POST[$option_name]);
 			}
+			else
+			{
+				$opt[$option_name] = 'N';
+			}
 		}
 
 		if(
