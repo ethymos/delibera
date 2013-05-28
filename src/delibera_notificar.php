@@ -35,7 +35,7 @@ function delibera_notifications_page()
 {
 	$mensagem = '';
 	$opt = delibera_get_config();
-	$notification_options = delibera_notificar_get_config();
+	$notification_options = delibera_get_notification_config();
 	
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		if (!current_user_can('manage_options')) {
@@ -84,7 +84,7 @@ function delibera_notifications_page()
 	<?php
 }
 
-function delibera_notificar_get_config($config = array())
+function delibera_get_notification_config($config = array())
 {
 	$opt['notificacoes'] = "S";
 	foreach (delibera_nofiticar_get_tipos() as $notif)
@@ -230,7 +230,7 @@ Equipe ÀgoraDelibera
 	
 	return array_merge($opt, $config);
 }
-add_filter('delibera_get_config', 'delibera_notificar_get_config');
+add_filter('delibera_get_config', 'delibera_get_notification_config');
 
 function delibeta_nofiticar_config_page_row(&$rows, $opt, $tipo, $label = '', $lang = '')
 {
