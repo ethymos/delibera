@@ -463,7 +463,7 @@ function delibera_get_comment_type_label($comment, $tipo = false, $echo = true)
 			return __('Voto', 'delibera');
 		break;
 		case 'resolucao':
-			if($echo)  _e('Resolução', 'delibera');
+			if($echo) _e('Resolução', 'delibera');
 			return __('Resolução', 'delibera');
 		break;
 		case 'discussao':
@@ -2035,20 +2035,16 @@ function delibera_conf_page()
 	
 	if ($_SERVER['REQUEST_METHOD']=='POST')
 	{
+		$opt = delibera_get_config();
 		
 		if (!current_user_can('manage_options')) die(__('Você não pode editar as configurações do delibera.','delibera'));
 		check_admin_referer('delibera-config');
 			
-		foreach ( array_keys(delibera_get_config()) as $option_name
-		)
+		foreach ( array_keys($opt) as $option_name	)
 		{
 			if (isset($_POST[$option_name]))
 			{
 				$opt[$option_name] = htmlspecialchars($_POST[$option_name]);
-			}
-			else 
-			{
-				$opt[$option_name] = "N";
 			}
 		}
 
