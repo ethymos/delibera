@@ -344,7 +344,7 @@ function delibera_Add_custom_taxonomy()
 				)
 			);
 		}
-		if(isset($opt['relatoria']) && $opt['relatoria'] == 'S')
+		if($opt['relatoria'] == 'S')
 		{
 			if($opt['eleicao_relator'] == 'S')
 			{
@@ -390,7 +390,7 @@ function delibera_Add_custom_taxonomy()
 				)
 			);
 		}
-		if(isset($opt['validacao']) && $opt['validacao'] == 'S')
+		if($opt['validacao'] == 'S')
 		{
 			if(term_exists('validacao', 'situacao', null) == false)
 			{
@@ -2183,7 +2183,7 @@ function delibera_conf_page()
 				{
 					$table = apply_filters('delibera_config_form', $table, $opt);
 				}
-				delibera_postbox('delibera-config',__('Configurações para o plugin Delibera','delibera'), $table.'<div class="submit"><input type="submit" class="button-primary" name="submit" value="'.__('Save Changes').'" /></form></div>');
+				delibera_postbox('delibera-config',__('Configurações para o plugin Delibera','delibera'), $table.'<div class="submit"><input type="submit" class="button-primary" name="submit" value="'.__('Salvar as configurações do Delibera','delibera').'" /></form></div>');
 			?>
 				
 				</form>
@@ -2274,8 +2274,8 @@ function delibera_get_config()
 	$opt['cabecalho_arquivo'] = false;
 	
 	
-	$opt_conf = get_option('delibera-config', array());
-	
+	$opt_conf = get_option('delibera-config');
+	if(!is_array($opt_conf)) $opt_conf = array();
 	$opt = array_merge($opt, $opt_conf);
 	if(has_filter('delibera_get_config'))
 	{
