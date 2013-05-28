@@ -6,7 +6,18 @@ foreach ($comments_tmp as $comment) :
 	?>
 	<div class="print-comment-body <?php echo $tipo?>">
 		<p class="CommentDate">
-			<strong>#<?php echo number_format_i18n($comment_count); ?> <?php delibera_get_comment_type_label($comment, $tipo, TRUE); ?></strong> <?php _e('de', 'delibera'); ?> <u><?php comment_author(); ?></u> <?php _e('em', 'delibera'); ?> <?php comment_date(sprintf(__('%s @ %s', 'delibera'), get_option('date_format'), get_option('time_format'))); echo $ncurtiu > 0 ? ", $ncurtiu "._n('concordou', 'concordaram', $ncurtiu, 'delibera')  : '';echo " (".delibera_get_quem_curtiu($comment->comment_ID, 'comment', 'string').")";?>
+			<strong>#<?php
+				echo number_format_i18n($comment_count).' ';
+				if($tipo == 'resolucao' && !defined('RESOLUCOES')) $tipo = 'encaminhamento';
+				delibera_get_comment_type_label($comment, $tipo, TRUE);
+			?></strong> <?php
+				_e('de', 'delibera').' ';
+			?> <u><?php comment_author(); ?></u><?php
+				_e(' em ', 'delibera');
+				comment_date(sprintf(__('%s @ %s', 'delibera'), get_option('date_format'), get_option('time_format')));
+				echo $ncurtiu > 0 ? ", $ncurtiu "._n('concordou', 'concordaram', $ncurtiu, 'delibera')  : '';
+				echo " (".delibera_get_quem_curtiu($comment->comment_ID, 'comment', 'string').")";
+			?>
 		</p>
 		<div class="CommentContent">
 			<?php if ($comment->comment_approved == '0') : ?>
