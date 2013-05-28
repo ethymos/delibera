@@ -1276,7 +1276,7 @@ function delibera_comment_text($commentText)
 					}
 					$commentText = "<div id=\"delibera-comment-text-".$comment->comment_ID."\" class='".$class_comment."'>".$commentText."</div>";
 				}
-				elseif($situacao->slug == 'comresolucao')
+				elseif($situacao->slug == 'comresolucao' && !defined('PRINT'))
 				{
 					$total = get_post_meta($comment->comment_post_ID, 'delibera_numero_comments_votos', true);
 					$nvotos = get_comment_meta($comment->comment_ID, "delibera_comment_numero_votos", true);
@@ -2183,7 +2183,7 @@ function delibera_conf_page()
 				{
 					$table = apply_filters('delibera_config_form', $table, $opt);
 				}
-				delibera_postbox('delibera-config',__('Configurações para o plugin Delibera','delibera'), $table.'<div class="submit"><input type="submit" class="button-primary" name="submit" value="'.__('Salvar as configurações do Delibera','delibera').'" /></form></div>');
+				delibera_postbox('delibera-config',__('Configurações para o plugin Delibera','delibera'), $table.'<div class="submit"><input type="submit" class="button-primary" name="submit" value="'.__('Save Changes').'" /></form></div>');
 			?>
 				
 				</form>
@@ -2799,7 +2799,7 @@ function delibera_comment_number($postID, $tipo)
 			return doubleval(get_post_meta($postID, 'delibera_numero_comments_votos', true));
 		break;
 		/*case 'resolucao':
-			return doubleval(get_post_meta($postID, 'delibera_numero_comments_resolucoes', true));
+			return doubleval(get_post_meta($postID, 'delibera_numero_comments_resolucoes', true)); TODO Número de resoluções, baseado no mínimo de votos, ou marcação especial
 		break;*/
 		case 'todos':
 			return get_post($postID)->comment_count;
