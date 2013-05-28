@@ -893,17 +893,14 @@ function delibera_tratar_prazo_discussao($args)
 			if($opts['eleicao_relator'] == 'S')
 			{
 				wp_set_object_terms($post_id, 'eleicaoredator', 'situacao', false); //Mudar situação para Votação
-				//delibera_notificar_situacao($post_id);
 			}
 			elseif($opts['relatoria'] == 'S')
 			{
 				wp_set_object_terms($post_id, 'relatoria', 'situacao', false); //Mudar situação para Votação
-				//delibera_notificar_situacao($post_id);
 			}
 			else 
 			{
 				wp_set_object_terms($post_id, 'emvotacao', 'situacao', false); //Mudar situação para Votação
-				//delibera_notificar_situacao($post_id); 
 			}
 			if(has_action('delibera_discussao_concluida'))
 			{
@@ -1279,7 +1276,7 @@ function delibera_comment_text($commentText)
 					}
 					$commentText = "<div id=\"delibera-comment-text-".$comment->comment_ID."\" class='".$class_comment."'>".$commentText."</div>";
 				}
-				elseif($situacao->slug == 'comresolucao')
+				elseif($situacao->slug == 'comresolucao' && !defined('PRINT'))
 				{
 					$total = get_post_meta($comment->comment_post_ID, 'delibera_numero_comments_votos', true);
 					$nvotos = get_comment_meta($comment->comment_ID, "delibera_comment_numero_votos", true);
@@ -2802,7 +2799,7 @@ function delibera_comment_number($postID, $tipo)
 			return doubleval(get_post_meta($postID, 'delibera_numero_comments_votos', true));
 		break;
 		/*case 'resolucao':
-			return doubleval(get_post_meta($postID, 'delibera_numero_comments_resolucoes', true));
+			return doubleval(get_post_meta($postID, 'delibera_numero_comments_resolucoes', true)); TODO Número de resoluções, baseado no mínimo de votos, ou marcação especial
 		break;*/
 		case 'todos':
 			return get_post($postID)->comment_count;
