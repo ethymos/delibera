@@ -34,27 +34,30 @@ add_action('delibera_menu_itens', 'delibera_notifications_menu_action', 10, 1);
 function delibera_notifications_page()
 {
 	$mensagem = '';
-	$opt = array();
+	$opt = delibera_get_config();
+	$notification_options = delibera_notificar_get_config();
 	
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		if (!current_user_can('manage_options')) {
 			die(__('Você não pode editar as configurações do delibera.', 'delibera'));
 		}
 		check_admin_referer('delibera-notifications');
-			
-		foreach (array_keys(delibera_notificar_get_config()) as $option_name) {
+
+		foreach (array_keys($notification_options) as $option_name) {
 			if (isset($_POST[$option_name])) {
 				$opt[$option_name] = htmlspecialchars($_POST[$option_name]);
+			} else {
+			    $opt[$option_name] = 'N';
 			}
 		}
 
-		if (update_option('delibera-notifications', $opt)) {
+		if (update_option('delibera-config', $opt)) {
 			$mensagem = __('Configurações salvas!','delibera');
 		} else {
 			$mensagem = __('Erro ao salvar as configurações. Verifique os valores inseridos e tente novamente!','delibera');
 		}
 	}
-	
+
 	?>
 	<div class="wrap">
 		<h2>Notificações</h2>
@@ -81,7 +84,7 @@ function delibera_notifications_page()
 	<?php
 }
 
-function delibera_notificar_get_config()
+function delibera_notificar_get_config($config = array())
 {
 	$opt['notificacoes'] = "S";
 	foreach (delibera_nofiticar_get_tipos() as $notif)
@@ -225,8 +228,9 @@ Equipe ÀgoraDelibera
 		}
 	}
 	
-	return $opt;
+	return array_merge($opt, $config);
 }
+add_filter('delibera_get_config', 'delibera_notificar_get_config');
 
 function delibeta_nofiticar_config_page_row(&$rows, $opt, $tipo, $label = '', $lang = '')
 {
@@ -269,7 +273,7 @@ function delibera_nofiticar_config_page_campos($opt, $lang = '')
 function delibera_nofiticar_config_page()
 {
 	$table = '';
-	$opt = delibera_notificar_get_config();
+	$opt = delibera_get_config();
 	
 	$rows = array();
 	$rows[] = array(
