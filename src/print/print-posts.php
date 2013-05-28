@@ -62,6 +62,5 @@
 		<?php endif; ?>
 	</div>
 </div>
-<p style="text-align: center;"><?php echo stripslashes($print_options['disclaimer']); ?></p>
 </body>
 </html>
