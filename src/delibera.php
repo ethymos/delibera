@@ -2052,22 +2052,7 @@ function delibera_conf_page()
 			}
 		}
 
-		if(
-			isset($_POST["delibera_reinstall"]) &&
-			$_POST['delibera_reinstall'] == 'S'
-		)
-		{
-			try
-			{
-				include_once __DIR__.DIRECTORY_SEPARATOR.'delibera_reinstall.php';
-			}
-			catch (Exception $e)
-			{
-				wp_die($e->getMessage());
-			}
-		}
-		
-		if (update_option('delibera-config', $opt) || (isset($_POST["delibera_reinstall"]) && $_POST['delibera_reinstall'] == 'S'))
+		if (update_option('delibera-config', $opt))
 			$mensagem = __('Configurações salvas!','delibera');
 		else
 			$mensagem = __('Erro ao salvar as configurações. Verifique os valores inseridos e tente novamente!','delibera');
@@ -2167,11 +2152,6 @@ function delibera_conf_page()
 					"id" => "numero_max_palavras_comentario",
 					"label" => __('Número máximo de caracteres por comentário','delibera'),
 					"content" => '<input type="text" name="numero_max_palavras_comentario" id="numero_max_palavras_comentario" value="'.htmlspecialchars_decode($opt['numero_max_palavras_comentario']).'"/>'
-				);
-				$rows[] = array(
-					"id" => "delibera_reinstall",
-					"label" => __('Importar novas configurações de arquivo externo?','delibera'),
-					"content" => '<input type="checkbox" name="delibera_reinstall" value="S" />'
 				);
 				$rows[] = array(
 					"id" => "cabecalho_arquivo",
