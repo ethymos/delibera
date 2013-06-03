@@ -2148,7 +2148,7 @@ function delibera_conf_page()
 					"label" => __('Prazo para Relatoria','delibera'),
 					"content" => '<input type="text" name="dias_relatoria" id="dias_relatoria" value="'.htmlspecialchars_decode($opt['dias_relatoria']).'"/>'
 				);
-				$rows[] = array(
+				/*$rows[] = array(
 					"id" => "eleicao_relator",
 					"label" => __('Necessário Eleição de Relator?','delibera'),
 					"content" => '<input type="checkbox" name="eleicao_relator" value="S" '.(htmlspecialchars_decode($opt['eleicao_relator']) == 'S' ? 'checked="checked"' : '').' />'
@@ -2157,7 +2157,7 @@ function delibera_conf_page()
 					"id" => "dias_votacao_relator",
 					"label" => __('Prazo para Eleição de Relator','delibera'),
 					"content" => '<input type="text" name="dias_votacao_relator" id="dias_votacao_relator" value="'.htmlspecialchars_decode($opt['dias_votacao_relator']).'"/>'
-				);
+				);*/
 				$rows[] = array(
 					"id" => "limitar_tamanho_comentario",
 					"label" => __('Necessário Limitar o Tamanho do comentário visível?','delibera'),
