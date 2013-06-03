@@ -89,15 +89,6 @@ function delibera_replace_agendamentos($matches)
 }
 add_shortcode( 'delibera_lista_de_agendamentos', 'delibera_replace_agendamentos' );
 
-function delibera_replace_timeline($args)
-{
-	$atts = array('post_id' => false, 'tipo_data' => false);
-	$atts = array_merge($atts, $args);
-	
-    return delibera_timeline($atts['post_id'], $atts['tipo_data']);
-}
-add_shortcode( 'delibera_timeline', 'delibera_replace_timeline' );
-
 function delibera_replace_like($matches)
 {
 	$temp = explode(',', $matches[1]); // configurações da shorttag

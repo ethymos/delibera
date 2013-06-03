@@ -2917,12 +2917,7 @@ function delibera_ultimas($tipo = 'pauta', $args = array(), $count = 5)
 	}
 }
 
-function delibera_timeline($post_id = false, $tipo_data = false)
-{
-	require_once __DIR__.DIRECTORY_SEPARATOR.'timeline/delibera_timeline.php';
-	$timeline = new delibera_timeline();
-	$timeline->generate($post_id, $tipo_data);
-}
+require_once __DIR__.DIRECTORY_SEPARATOR.'timeline/delibera_timeline.php';
 
 function delibera_the_posts($posts)
 {
