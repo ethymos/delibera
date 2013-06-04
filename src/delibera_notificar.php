@@ -93,7 +93,7 @@ function delibera_get_notification_config($config = array())
 	}
 	
 	$opt['mensagem_criacao_pauta_assunto'] = __('Nova Pauta Criada','delibera'); 
-	$opt['mensagem_criacao_pauta'] = __('Nova Pauta:','delibera');
+	$opt['mensagem_criacao_pauta'] = __('Nova Pauta: {post_title}','delibera');
 	$opt['mensagem_validacao_assunto'] = __('Novo voto de validação: Pauta {post_title}','delibera');
 	$opt['mensagem_validacao'] = __(
 'A validação do usuário xxx na pauta {post_title} foi registrada no sistema. Acesse a pauta para verificar a situação: 
