@@ -105,87 +105,87 @@ function delibera_conf_page()
 				{
 					$rows[] = array(
 						"id" => "plan_restriction",
-						"label" => __('Sistema de planos de pagamento ativo?','delibera'),
+						"label" => __('Sistema de planos de pagamento ativo?', 'delibera'),
 						"content" => '<input type="checkbox" name="plan_restriction" id="plan_restriction" value="S" '. ( htmlspecialchars_decode($opt['plan_restriction']) == "S" ? "checked='checked'" : "" ).'/>',
 					);
 				}
 				$rows[] = array(
 					"id" => "representante_define_prazos",
-					"label" => __('Representante define prazos?','delibera'),
+					"label" => __('Representante define prazos?', 'delibera'),
 					"content" => '<input type="checkbox" name="representante_define_prazos" id="representante_define_prazos" value="S" '. ( htmlspecialchars_decode($opt['representante_define_prazos']) == "S" ? "checked='checked'" : "" ).'/>',
 				);
 				$rows[] = array(
 					"id" => "validacao",
-					"label" => __('É Necessário Validação?','delibera'),
+					"label" => __('É Necessário Validação?', 'delibera'),
 					"content" => '<input type="checkbox" name="validacao" value="S" '.(htmlspecialchars_decode($opt['validacao']) == 'S' ? 'checked="checked"' : '').' />'
 				);
 				$rows[] = array(
 					"id" => "minimo_validacao",
-					"label" => __('Mínimo de adesões para pauta','delibera'),
+					"label" => __('Mínimo de adesões para pauta:', 'delibera'),
 					"content" => '<input type="text" name="minimo_validacao" id="minimo_validacao" value="'.htmlspecialchars_decode($opt['minimo_validacao']).'"/>'
 				);
 				
 				$rows[] = array(
 					"id" => "dias_validacao",
-					"label" => __('Dias para validação da pauta','delibera'),
+					"label" => __('Dias para validação da pauta:', 'delibera'),
 					"content" => '<input type="text" name="dias_validacao" id="dias_validacao" value="'.htmlspecialchars_decode($opt['dias_validacao']).'"/>'
 				);
 				
 				$rows[] = array(
 					"id" => "dias_discussao",
-					"label" => __('Dias para discussão da pauta','delibera'),
+					"label" => __('Dias para discussão da pauta:', 'delibera'),
 					"content" => '<input type="text" name="dias_discussao" id="dias_discussao" value="'.htmlspecialchars_decode($opt['dias_discussao']).'"/>'
 				);
 				
 				$rows[] = array(
 					"id" => "dias_votacao",
-					"label" => __('Dias para votação de encaminhamentos','delibera'),
+					"label" => __('Dias para votação de encaminhamentos:', 'delibera'),
 					"content" => '<input type="text" name="dias_votacao" id="dias_votacao" value="'.htmlspecialchars_decode($opt['dias_votacao']).'"/>'
 				);
 				
 				$rows[] = array(
 					"id" => "dias_novo_prazo",
-					"label" => __('Dias para novo prazo','delibera'),
+					"label" => __('Dias para novo prazo:', 'delibera'),
 					"content" => '<input type="text" name="dias_novo_prazo" id="dias_novo_prazo" value="'.htmlspecialchars_decode($opt['dias_novo_prazo']).'"/>'
 				);
 				$rows[] = array(
 					"id" => "relatoria",
-					"label" => __('Necessário Relatoria?','delibera'),
+					"label" => __('Necessário Relatoria?', 'delibera'),
 					"content" => '<input type="checkbox" name="relatoria" value="S" '.(htmlspecialchars_decode($opt['relatoria']) == 'S' ? 'checked="checked"' : '').' />'
 				);
 				$rows[] = array(
 					"id" => "dias_relatoria",
-					"label" => __('Prazo para Relatoria','delibera'),
+					"label" => __('Prazo para Relatoria:', 'delibera'),
 					"content" => '<input type="text" name="dias_relatoria" id="dias_relatoria" value="'.htmlspecialchars_decode($opt['dias_relatoria']).'"/>'
 				);
 				$rows[] = array(
 					"id" => "eleicao_relator",
-					"label" => __('Necessário Eleição de Relator?','delibera'),
+					"label" => __('Necessário Eleição de Relator?', 'delibera'),
 					"content" => '<input type="checkbox" name="eleicao_relator" value="S" '.(htmlspecialchars_decode($opt['eleicao_relator']) == 'S' ? 'checked="checked"' : '').' />'
 				);
 				$rows[] = array(
 					"id" => "dias_votacao_relator",
-					"label" => __('Prazo para Eleição de Relator','delibera'),
+					"label" => __('Prazo para Eleição de Relator:', 'delibera'),
 					"content" => '<input type="text" name="dias_votacao_relator" id="dias_votacao_relator" value="'.htmlspecialchars_decode($opt['dias_votacao_relator']).'"/>'
 				);
 				$rows[] = array(
 					"id" => "limitar_tamanho_comentario",
-					"label" => __('Necessário Limitar o Tamanho do comentário visível?','delibera'),
+					"label" => __('Necessário Limitar o Tamanho do comentário visível?', 'delibera'),
 					"content" => '<input type="checkbox" name="limitar_tamanho_comentario" value="S" '.(htmlspecialchars_decode($opt['limitar_tamanho_comentario']) == 'S' ? 'checked="checked"' : '').' />'
 				);
 				$rows[] = array(
 					"id" => "numero_max_palavras_comentario",
-					"label" => __('Número máximo de caracteres por comentário','delibera'),
+					"label" => __('Número máximo de caracteres por comentário:', 'delibera'),
 					"content" => '<input type="text" name="numero_max_palavras_comentario" id="numero_max_palavras_comentario" value="'.htmlspecialchars_decode($opt['numero_max_palavras_comentario']).'"/>'
 				);
 				$rows[] = array(
 					"id" => "delibera_reinstall",
-					"label" => __('Importar novas configurações de arquivo externo?','delibera'),
+					"label" => __('Importar novas configurações de arquivo externo?', 'delibera'),
 					"content" => '<input type="checkbox" name="delibera_reinstall" value="S" />'
 				);
 				$rows[] = array(
 					"id" => "cabecalho_arquivo",
-					"label" => __('Cabeçalho da página de arquivo do sistema (lista de pautas)','delibera'),
+					"label" => __('Cabeçalho da página de arquivo do sistema (lista de pautas):', 'delibera'),
 					"content" => '<input type="text" name="cabecalho_arquivo" id="cabecalho_arquivo" value="'.htmlspecialchars_decode($opt['cabecalho_arquivo']).'"/>'
 				);
 				$table = delibera_form_table($rows);

@@ -2000,12 +2000,17 @@ function delibera_form_table($rows) {
 	$content = '<table class="form-table">';
 	foreach ($rows as $row) {
 		$content .= '<tr '.(array_key_exists('row-id', $row) ? 'id="'.$row['row-id'].'"' : '' ).' '.(array_key_exists('row-style', $row) ? 'style="'.$row['row-style'].'"' : '' ).' '.(array_key_exists('row-class', $row) ? 'class="'.$row['row-class'].'"' : '' ).' ><th valign="top" scrope="row">';
-		if (isset($row['id']) && $row['id'] != '')
-			$content .= '<label for="'.$row['id'].'">'.$row['label'].':</label>';
-		else
+        
+		if (isset($row['id']) && $row['id'] != '') {
+			$content .= '<label for="'.$row['id'].'">'.$row['label'].'</label>';
+		} else {
 			$content .= $row['label'];
-		if (isset($row['desc']) && $row['desc'] != '')
+		}
+        
+		if (isset($row['desc']) && $row['desc'] != '') {
 			$content .= '<br/><small>'.$row['desc'].'</small>';
+		}
+
 		$content .= '</th><td valign="top">';
 		$content .= $row['content'];
 		$content .= '</td></tr>'; 

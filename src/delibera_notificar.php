@@ -243,13 +243,13 @@ function delibeta_nofiticar_config_page_row(&$rows, $opt, $tipo, $label = '', $l
 	$rows2[] = array(
 		"id" => "mensagem_{$tipo}_assunto".$lang,
 		"row-id" => "row-mensagem_{$tipo}_assunto".$lang,
-		"label" => __('Assunto da mensagem padrão de notificação de '.$label,'delibera'),
+		"label" => __('Assunto da mensagem padrão de notificação de ' . $label . ':', 'delibera'),
 		"content" => '<input type="text" class="delibera-config-mensagem-assunto" name="mensagem_'.$tipo.'_assunto'.$lang.'" id="mensagem_'.$tipo.'_assunto'.$lang.'" value="'.htmlspecialchars_decode($opt['mensagem_'.$tipo.'_assunto'.$lang]).'"/>'
 	);
 	$rows2[] = array(
 		"id" => "mensagem_{$tipo}".$lang,
 		"row-id" => "row-mensagem_{$tipo}".$lang,
-		"label" => __('Mensagem padrão de notificação de '.$label,'delibera'),
+		"label" => __('Mensagem padrão de notificação de ' . $label . ':', 'delibera'),
 		"content" => '<textarea class="delibera-config-mensagem" name="mensagem_'.$tipo.$lang.'" id="mensagem_'.$tipo.$lang.'" >'.htmlspecialchars_decode($opt['mensagem_'.$tipo.$lang]).'</textarea>'
 	);
 	
