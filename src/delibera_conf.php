@@ -179,11 +179,6 @@ function delibera_conf_page()
 					"content" => '<input type="text" name="numero_max_palavras_comentario" id="numero_max_palavras_comentario" value="'.htmlspecialchars_decode($opt['numero_max_palavras_comentario']).'"/>'
 				);
 				$rows[] = array(
-					"id" => "delibera_reinstall",
-					"label" => __('Importar novas configurações de arquivo externo?', 'delibera'),
-					"content" => '<input type="checkbox" name="delibera_reinstall" value="S" />'
-				);
-				$rows[] = array(
 					"id" => "cabecalho_arquivo",
 					"label" => __('Cabeçalho da página de arquivo do sistema (lista de pautas):', 'delibera'),
 					"content" => '<input type="text" name="cabecalho_arquivo" id="cabecalho_arquivo" value="'.htmlspecialchars_decode($opt['cabecalho_arquivo']).'"/>'
