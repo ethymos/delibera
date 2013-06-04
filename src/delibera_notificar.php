@@ -211,14 +211,8 @@ Equipe ÀgoraDelibera
 
 ','delibera');
 	
-	$langs = array(get_locale());
-	
-	if(function_exists('qtrans_enableLanguage'))
-	{
-		global $q_config;
-		$langs = $q_config['enabled_languages'];
-	}
-		
+    $langs = delibera_get_available_languages();
+    
 	foreach ($langs as $lang)
 	{
 		foreach (delibera_nofiticar_get_tipos() as $notif)
@@ -512,7 +506,6 @@ function delibera_notificar_representantes($mensage, $tipo, $post = false, $user
 		{
 			if(user_can($user->ID, 'votar') && isset($user->user_email) && $user->ID != $autor_id)
 			{
-				///$mensage = delibera_notificar_replace_vars($mensage, $user);
 				$segue = array_search($user->ID, $seguiram);
 				
 				$user_notificacoes = get_user_meta($user->ID, 'delibera_notificacoes_email', true);
@@ -524,21 +517,20 @@ function delibera_notificar_representantes($mensage, $tipo, $post = false, $user
 				
 				$mensage_tmp = $mensage_default;
 				$subject_tmp = $subject_default;
-				if(function_exists('qtrans_enableLanguage'))
+                
+				$lang = get_user_meta($user->ID, 'user_idioma', true);
+				
+				if(strlen($lang) == 0) $lang = defined('WPLANG')? WPLANG : 'pt_BR';
+				
+				if(array_key_exists("$tipo-$lang", $options_plugin_delibera))
 				{
-					$lang = get_user_meta($user->ID, 'user_idioma', true);
-					
-					if(strlen($lang) == 0) $lang = defined('WPLANG')? WPLANG : 'pt_BR';
-					
-					if(array_key_exists("$tipo-$lang", $options_plugin_delibera))
-					{
-						$mensage_tmp = htmlspecialchars_decode($options_plugin_delibera["$tipo-$lang"]).$mensage.delibera_notificar_get_mensagem_link($post, $link);
-					}
-					if(array_key_exists("{$tipo}_assunto-$lang", $options_plugin_delibera))
-					{
-						$subject_tmp = htmlspecialchars_decode($options_plugin_delibera["{$tipo}_assunto-$lang"]);
-					}
+					$mensage_tmp = htmlspecialchars_decode($options_plugin_delibera["$tipo-$lang"]).$mensage.delibera_notificar_get_mensagem_link($post, $link);
 				}
+				if(array_key_exists("{$tipo}_assunto-$lang", $options_plugin_delibera))
+				{
+					$subject_tmp = htmlspecialchars_decode($options_plugin_delibera["{$tipo}_assunto-$lang"]);
+				}
+                
 				$subject_tmp = delibera_notificar_replace_vars($subject_tmp, $user, $post);
 				$mensage_tmp = delibera_notificar_replace_vars($mensage_tmp, $user, $post);
 				wp_mail($user->user_email, $subject_tmp, $mensage_tmp);

@@ -3037,4 +3037,21 @@ function get_page_by_slug($page_slug, $output = OBJECT, $post_type = 'page' ) {
 	return null;
 }
 
-?>
+/**
+ * Retorna a lista de idiomas disponível. Se o plugin
+ * qtrans estiver habilitado retorna os idiomas dele, se
+ * não usa o idioma definido no wp-config.php
+ * 
+ * @return array
+ */
+function delibera_get_available_languages() {
+    $langs = array(get_locale());
+    
+    if(function_exists('qtrans_enableLanguage'))
+    {
+        global $q_config;
+        $langs = $q_config['enabled_languages'];
+    }
+
+    return $langs;
+}
