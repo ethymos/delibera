@@ -512,7 +512,7 @@ function delibera_notificar_representantes($mensage, $tipo, $post = false, $user
 		{
 			if(user_can($user->ID, 'votar') && isset($user->user_email) && $user->ID != $autor_id)
 			{
-				///$mensage = delibera_notifica_replace_vars($mensage, $user);
+				///$mensage = delibera_notificar_replace_vars($mensage, $user);
 				$segue = array_search($user->ID, $seguiram);
 				
 				$user_notificacoes = get_user_meta($user->ID, 'delibera_notificacoes_email', true);
@@ -539,8 +539,8 @@ function delibera_notificar_representantes($mensage, $tipo, $post = false, $user
 						$subject_tmp = htmlspecialchars_decode($options_plugin_delibera["{$tipo}_assunto-$lang"]);
 					}
 				}
-				$subject_tmp = delibera_notifica_replace_vars($subject_tmp, $user, $post);
-				$mensage_tmp = delibera_notifica_replace_vars($mensage_tmp, $user, $post);
+				$subject_tmp = delibera_notificar_replace_vars($subject_tmp, $user, $post);
+				$mensage_tmp = delibera_notificar_replace_vars($mensage_tmp, $user, $post);
 				wp_mail($user->user_email, $subject_tmp, $mensage_tmp);
 			}
 		}
@@ -584,7 +584,7 @@ function delibera_notificar_novo_comentario($comment)
 
 }
 
-function delibera_notifica_replace_vars($subject, $user, $post)
+function delibera_notificar_replace_vars($subject, $user, $post)
 {
 	if(!is_object($post))
 	{
