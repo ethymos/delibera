@@ -132,7 +132,7 @@ falta apenas 1 dia para o fim do prazo para validação da pauta {post_title}. C
 Equipe ÀgoraDelibera
 
 ';
-	$opt['mensagem_novo_comentario_assunto'] = __('Novo Comentário','delibera');
+	$opt['mensagem_novo_comentario_assunto'] = __('Novo Comentário em {post_title}','delibera');
 	$opt['mensagem_novo_comentario'] = __('Há um novo comentário na pauta seguida: ','delibera');
 	$opt['mensagem_fim_prazo_discussao_assunto'] = 'Fim de prazo para Discussão: Pauta {post_title}';
 	$opt['mensagem_fim_prazo_discussao'] = 'Olá {first_name},
@@ -384,8 +384,9 @@ function delibera_notificar_get_mensagem_link($post, $link = false)
 	{
 		$link = get_permalink($post);
 	}
-	$mensage = '<br/><a href="'.$link.'">'.$post->post_title.'</a><br/>';
-	$mensage .= $link;
+	$mensage = '<br/><br/>Origem: <a href="'.get_post_type_archive_link('pauta').'">'.get_bloginfo('name').'</a><br/>';
+	$mensage .= 'Pauta: <a href="'.$link.'">'.$post->post_title.'</a><br/><br/>';
+	$mensage .= __('Para ver a mensagem na página, clique aqui: ', 'delibera').$link;
 	return $mensage;
 }
 
@@ -459,7 +460,6 @@ function delibera_notificar_fim_prazo($args)
 }
 function delibera_notificar_representantes($mensage, $tipo, $post = false, $users = false, $link = false)
 {
-	
 	require_once  WP_CONTENT_DIR.'/../wp-includes/pluggable.php';
 	add_filter('wp_mail_content_type',create_function('', 'return "text/html"; '));
 	
@@ -520,7 +520,7 @@ function delibera_notificar_representantes($mensage, $tipo, $post = false, $user
                 
 				$lang = get_user_meta($user->ID, 'user_idioma', true);
 				
-				if(strlen($lang) == 0) $lang = defined('WPLANG')? WPLANG : 'pt_BR';
+				if(strlen($lang) == 0) $lang = defined('WPLANG') && strlen(WPLANG) > 0 ? WPLANG : get_locale();
 				
 				if(array_key_exists("$tipo-$lang", $options_plugin_delibera))
 				{
@@ -568,7 +568,7 @@ function delibera_notificar_novo_comentario($comment)
 	$users = is_array($users) ? array_merge($users, array($autor)) : array($autor);
 	
 	$mensage = '<br/>'.__('Autor', 'delibera').": ".$autor->display_name.'<br/>';
-	$mensage = get_comment_text($comment->comment_ID);
+	$mensage .= get_comment_text($comment->comment_ID)."<br/>";
 	
 	$link = delibera_get_comment_link($comment);
 	
