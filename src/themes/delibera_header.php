@@ -18,15 +18,7 @@ $opt = delibera_get_config();
 		<div class="delibera-apresentacao">
 	        <p class="delibera-boasvindas">
     	    	<?php
-    	    		$header_archive = $opt['cabecalho_arquivo'];
-    	    		if($header_archive !== false)
-    	    		{
-    	    			echo $header_archive;
-    	    		}
-    	    		else
-    	    		{
-    	    			echo __( 'Bem-vindo a plataforma de debate do ', 'direitoamoradia' ).get_bloginfo('name');
-    	    		}
+    	    			echo $opt['cabecalho_arquivo'];
     	    	?>
         	</p>
             <p class="delibera-participacao">
