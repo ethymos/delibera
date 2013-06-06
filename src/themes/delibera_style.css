@@ -262,6 +262,7 @@ p.delibera-participacao a{
 }
 
 .entry-meta{
+	margin-top: 10px;
 
 }
 
@@ -493,6 +494,10 @@ span.delibera_seguir_text:hover {
     text-align: right;
 }
 
+.single li.comment{
+	width: 864px;
+}
+
 .single li.comment .reply a , .single-pauta .entry-utility a.comment-reply-link, .comentario_coluna2 {
     background: url('images/reply.png') center right no-repeat ;
     display:block;
@@ -509,6 +514,8 @@ span.delibera_seguir_text:hover {
     overflow:hidden;
     padding-top: 15px;
 }
+
+
 
 .author li.comment {
     border-left: 1px solid #F4F4F4;
@@ -534,12 +541,15 @@ span.delibera_seguir_text:hover {
   
 }
 
+.delibera-comment-text{
+	width: 500px;
+	margin-left: 10px;
+}
+
 .single .delibera-comment-text, .author .delibera-comment-text {
     color:#4f4f4f;
-    float:left;
-    width:600px;
-    margin-left:60px;
-    
+    clear: both;
+    width:500px;    
 }
 
 .single li.comment .reply a {
@@ -550,6 +560,7 @@ span.delibera_seguir_text:hover {
 li.comment .reply a:hover,  .single-pauta .entry-utility {
     opacity:1;
     margin-right: 30px !important;
+    margin-bottom: 20px;
 }
 
 a.comment-reply-link:hover{
@@ -668,7 +679,7 @@ span.delibera-unlike-count, .delibera_unlike span.delibera_unlike_reposta {
 .single-pauta h3#reply-title {
     color:#464646;
     font-family: 'Candal', arial, helvetica;
-    margin:10px 0;
+    margin:10px 0 0 20px;
     float: left;
 }
 
@@ -941,7 +952,7 @@ label.encaminhamento-label {
     display: block;
     font-family: 'LucidaSansDemiboldRoman', arial, helvetica;
     font-size: 10px;
-    height: 15px;
+    /*height: 15px;*/
     opacity: 0.7;
     padding-right: 23px;
     padding-top: 5px;
@@ -1022,7 +1033,7 @@ input.baseadoem-checkbox {
     padding-top:5px;*/
     text-align:right;
     text-transform:uppercase;
-    width: 236px;
+    /*width: 236px;*/
 }
 
 input#baseadoem-checkbox-9 {
@@ -1587,6 +1598,12 @@ h1.author {
 #delibera_commentform{
 	margin-left: 20px;
 	clear: both;
+}
+
+.entry-share{
+	background: none;
+	box-shadow: none;
+	padding: 0;
 }
 
 

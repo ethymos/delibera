@@ -3,3 +3,5 @@
 .DS*Store
 Thumbs.db
 .project
+.settings
+
