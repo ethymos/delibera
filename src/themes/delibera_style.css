@@ -434,7 +434,7 @@ span.delibera_seguir_text:hover {
 .single-pauta .hentry {
     float: left;
     background: #fff;
-    width: 910px;
+    width: 940px;
     border-radius: 15px;
 }
 
@@ -445,7 +445,7 @@ span.delibera_seguir_text:hover {
     float: left;
     line-height: 1.9em;
     padding: 20px 30px;
-    width: 910px;
+    width: 940px;
 }
 
 .single-pauta .entry-utility {
@@ -457,7 +457,7 @@ span.delibera_seguir_text:hover {
     padding-bottom:5px;
     padding: 0 15px;
     padding-top:1px;
-    width:910px;
+    width:940px;
     float:left;
     border:none;
 }
@@ -494,10 +494,6 @@ span.delibera_seguir_text:hover {
     text-align: right;
 }
 
-.single li.comment{
-	width: 864px;
-}
-
 .single li.comment .reply a , .single-pauta .entry-utility a.comment-reply-link, .comentario_coluna2 {
     background: url('images/reply.png') center right no-repeat ;
     display:block;
@@ -508,6 +504,10 @@ span.delibera_seguir_text:hover {
     text-transform:uppercase;
     text-align:right;
 }
+
+/*.single li.comment{
+	width: 864px;
+}*/
 
 .single li.comment, .author li.comment {
     border-bottom:1px solid #e9eeda;
@@ -720,7 +720,7 @@ span.delibera-unlike-count, .delibera_unlike span.delibera_unlike_reposta {
 }
 
 #respond input {
-    margin:0 !important;
+    margin:10px 0 !important;
     width: auto !important;
 }
 
@@ -1347,6 +1347,9 @@ input .delibera-encaminha-label {
     margin: 10px;
     margin-left: 12px;
     width: 300px !important;
+    background: transparent;
+	box-shadow: none;
+	padding: 0;
 }
 .single .entry-share {
     float:left;
@@ -1601,9 +1604,14 @@ h1.author {
 }
 
 .entry-share{
-	background: none;
+	background: transparent;
 	box-shadow: none;
 	padding: 0;
 }
 
-
+#lista-de-pautas .entry-prazo{
+	display: block;
+	color: #CD334E !important;
+	font-weight: bold;
+	
+}
