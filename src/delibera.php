@@ -1972,9 +1972,7 @@ function delibera_comments_template($path)
 
 add_filter('comments_template', 'delibera_comments_template');
 
-$filename = __DIR__.DIRECTORY_SEPARATOR.'delibera_template.php';
-//if(file_exists($filename))
-	require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_template.php';
+// require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_template.php';
 
 // Fim Inicialização do plugin
 
