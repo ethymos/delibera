@@ -197,7 +197,7 @@ function delibera_filtros_get_filtros($tax, $value = false, $linha = "<br/>")
 
 function delibera_filtros_archive_callback()
 {
-	global $wp_query;
+	global $wp_query, $deliberaThemes;
 	
 	$action = new stdClass();
 	$action->canQuery = true;
@@ -212,18 +212,7 @@ function delibera_filtros_archive_callback()
 	query_posts($args);
 	?>
 	<div id="lista-de-pautas">
-		<?php
-		// Chama o loop do arquivo
-		if(function_exists('delibera_themes_archive_pauta_loop'))
-		{
-			delibera_themes_archive_pauta_loop();
-		}
-		else
-		{
-			get_template_part( 'loop', 'archive' );
-		}
-		?>
-		
+		<?php $deliberaThemes->archiveLoop(); // Chama o loop do arquivo ?>
 		
 		<div id="nav-below" class="navigation">
 			<?php if ( function_exists( 'wp_pagenavi' ) ) wp_pagenavi(); ?>
