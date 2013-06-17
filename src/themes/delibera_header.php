@@ -1,6 +1,7 @@
 <?php
+
 function get_delibera_header() {
-$opt = delibera_get_config();
+    $opt = delibera_get_config();
 	?>
 	
 	<div id="delibera-header">
@@ -58,4 +59,3 @@ $opt = delibera_get_config();
 
 	<?php
 }
-?>
