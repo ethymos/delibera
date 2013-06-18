@@ -612,6 +612,33 @@ function delibera_get_situacao($postID)
 	return $ret;
 }
 
+/**
+ * Retorna o label do botão com a situação da
+ * pauta.
+ * 
+ * @param int $postId
+ * @return string
+ */
+function delibera_get_situation_button($postId)
+{
+    $situacao = get_the_terms($postId, 'situacao');
+    
+    if (is_array($situacao) && !empty($situacao)) {
+        $situacao = array_pop($situacao);
+    }
+
+    switch($situacao->slug) {
+        case 'emvotacao':
+            return 'Votar';
+        case 'discussao':
+            return 'Discutir';
+        case 'validacao':
+            return 'Validar';
+        default:
+            return;
+    }
+}
+
 function delibera_pauta_meta()
 {
 	global $post;
