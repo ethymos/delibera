@@ -1,11 +1,30 @@
 <?php
 
 /**
- * Controla os distintos temas do Delibera
- * disponíveis.
+ * Controla os distintos temas do Delibera disponíveis.
+ * 
+ * Os temas do Delibera podem ser salvos em dois lugares distintos.
+ * Na pasta themes dentro da pasta do plugin. Cada tema deve estar dentro
+ * de uma sub pasta cujo o nome é o nome do tema. Um tema do Delibera
+ * também pode ser salvo dentro de uma pasta chamada delibera dentro
+ * do tema atual do Wordpress.
  */
 class DeliberaThemes
 {
+    /**
+     * Diretório onde ficam os temas
+     * dentro do plugin
+     * @var string
+     */
+    public $baseDir;
+    
+    /**
+     * URL do diretório onde ficam
+     * os temas dentro do plugin
+     * @var string
+     */
+    public $baseUrl;
+    
     /**
      * Caminho para o diretório
      * do tema padrão
@@ -20,10 +39,36 @@ class DeliberaThemes
      */
     public $defaultThemeUrl;
     
+    /**
+     * Caminho para o tema do Delibera
+     * dentro do tema atual do WP.
+     * @var string
+     */
+    public $wpThemePath;
+    
+    /**
+     * Url para o diretório do tema do Delibera
+     * dentro do tema atual do WP
+     * @var string
+     */
+    public $wpThemeUrl;
+    
+    /**
+     * Nome do tema atual do Wordpress
+     * @var string
+     */
+    public $wpThemeName;
+    
     function __construct()
     {
-        $this->defaultThemePath = __DIR__ . '/themes/';
-        $this->defaultThemeUrl = plugins_url('/delibera/themes/');
+        $this->baseDir = __DIR__ . '/themes/';
+        $this->baseUrl = plugins_url('/delibera/themes/');
+        $this->defaultThemePath = $this->baseDir . 'default/';
+        $this->defaultThemeUrl = $this->baseUrl . 'default/';
+        
+        $this->wpThemePath = get_template_directory() . '/delibera';
+        $this->wpThemeUrl = get_stylesheet_directory_uri() . '/delibera';
+        $this->wpThemeName = wp_get_theme()->template;
     }
     
     /**
@@ -34,8 +79,10 @@ class DeliberaThemes
      */
     public function getThemeDir()
     {
-        if (file_exists(get_stylesheet_directory() . '/delibera_theme/')) {
-            return get_stylesheet_directory() . '/delibera_theme/';
+        $conf = delibera_get_config();
+
+        if (file_exists($conf['theme'])) {
+            return $conf['theme'];
         } else {
             return $this->defaultThemePath;
         }
@@ -49,8 +96,16 @@ class DeliberaThemes
      */
     public function getThemeUrl()
     {
-        if (file_exists(get_stylesheet_directory() . '/delibera_theme/')) {
-            return get_stylesheet_directory_uri() . '/delibera_theme/';
+        $conf = delibera_get_config();
+        if (file_exists($conf['theme'])) {
+            // TODO: melhorar a separacao entre tema distribuido junto com o plugin e tema do delibera dentro do tema do wp
+            if (strpos($conf['theme'], 'themes') !== false) {
+                // tema distribuido junto com o plugin
+                return $this->baseUrl . basename($conf['theme']);
+            } else {
+                // tema dentro do tema atual do wp
+                return $this->wpThemeUrl;
+            }
         } else {
             return $this->defaultThemeUrl;
         }
@@ -67,7 +122,7 @@ class DeliberaThemes
      */
     public function themeFilePath($fileName)
     {
-        $filePath = $this->getThemeDir() . $fileName;
+        $filePath = $this->getThemeDir() . '/' . $fileName;
         
         if (file_exists($filePath)) {
             return $filePath;
@@ -86,10 +141,10 @@ class DeliberaThemes
      */
     public function themeFileUrl($fileName)
     {
-        $filePath = $this->getThemeDir() . $fileName;
+        $filePath = $this->getThemeDir() . '/' . $fileName;
         
         if (file_exists($filePath)) {
-            return $this->getThemeUrl() . $fileName;
+            return $this->getThemeUrl() . '/' . $fileName;
         } else {
             return $this->defaultThemeUrl . $fileName;
         }
@@ -162,6 +217,50 @@ class DeliberaThemes
     public function archiveLoop()
     {
         load_template($this->themeFilePath('delibera-loop-archive.php'), true);
+    }
+    
+    /**
+     * Retorna um array com os temas disponíveis.
+     * 
+     * @return array
+     */
+    public function getAvailableThemes()
+    {
+        $themes = array();
+        $dirs = glob($this->baseDir . '*', GLOB_ONLYDIR);
+        
+        foreach ($dirs as $dir) {
+            $themes[$dir] = basename($dir);
+        }
+        
+        // adiciona o tema do delibera de dentro do tema atual do wp se um existir
+        if (file_exists($this->wpThemePath)) {
+            $themes[$this->wpThemePath] = $this->wpThemeName;
+        }
+        
+        return $themes;
+    }
+    
+    /**
+     * Gera o select box com os temas disponíveis
+     * para a interface de admin do Delibera.
+     *
+     * @param string $currentTheme o tema atual 
+     * @return string
+     */
+    public function getSelectBox($currentTheme)
+    {
+        $themes = $this->getAvailableThemes();
+        
+        $html = "<select name='theme' id='theme'>";
+        
+        foreach ($themes as $themePath => $themeName) {
+            $html .= "<option value='{$themePath}'" . selected($themePath, $currentTheme, false) . ">{$themeName}</option>";
+        }
+        
+        $html .= "</select>";
+        
+        return $html;
     }
 }
 

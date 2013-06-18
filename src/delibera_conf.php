@@ -22,6 +22,7 @@ function delibera_get_config() {
 
 function delibera_get_main_config($config = array()) {
     $opt = array();
+    $opt['theme'] = 'default';
     $opt['minimo_validacao'] = '10';
     $opt['dias_validacao'] = '5';
     $opt['dias_discussao'] = '5';
@@ -50,6 +51,8 @@ add_filter('delibera_get_config', 'delibera_get_main_config');
  */
 function delibera_conf_page()
 {
+    global $deliberaThemes;
+    
     $mensagem = '';
 
     if ($_SERVER['REQUEST_METHOD']=='POST') {
@@ -109,6 +112,11 @@ function delibera_conf_page()
 						"content" => '<input type="checkbox" name="plan_restriction" id="plan_restriction" value="S" '. ( htmlspecialchars_decode($opt['plan_restriction']) == "S" ? "checked='checked'" : "" ).'/>',
 					);
 				}
+                $rows[] = array(
+                    "id" => "theme",
+                    "label" => __('Tema', 'delibera'),
+                    "content" => $deliberaThemes->getSelectBox($opt['theme']) . '<p class="description">' . __('É possível criar um tema para o Delibera criando uma pasta com o nome "delibera" dentro da pasta do tema atual do Wordpress. Esse tema aparecerá nesta listagem com o nome do tema atual.', 'delibera'). '</p>',
+                );
 				$rows[] = array(
 					"id" => "representante_define_prazos",
 					"label" => __('Representante define prazos?', 'delibera'),

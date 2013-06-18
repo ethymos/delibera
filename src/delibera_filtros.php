@@ -2,6 +2,8 @@
 
 function delibera_filtros_gerar()
 {
+    global $deliberaThemes;
+    
 	?>
 	<div id="filtro-horizontal">
 		<h4><?php _e( 'Filtros de conteúdo', 'delibera' ); ?><span id="delibera-filtros-archive-mostrar" onclick="delibera_filtros_archive_mostrar()" class="delibera-filtros-mostrar" style="display: none" title="Mostrar Filtros" ></span><span id="delibera-filtros-archive-esconder" onclick="delibera_filtros_archive_esconder()" class="delibera-filtros-esconder" title="Esconder Filtros"></span></h4>
@@ -49,8 +51,9 @@ function delibera_filtros_gerar()
 		{
 			var html = '<div id="'+id+'">';
 			<?php
-			$iloader = get_bloginfo( 'stylesheet_directory' )."/images/ajax-loader.gif";
-			$iloader_padrao = WP_PLUGIN_URL."/delibera/themes/images/ajax-loader.gif";
+			
+			$iloader = $deliberaThemes->getThemeDir() . "/images/ajax-loader.gif";
+			$iloader_padrao = $deliberaThemes->getThemeUrl() . "/images/ajax-loader.gif";
 			if(file_exists($iloader))
 			{
 			?>
