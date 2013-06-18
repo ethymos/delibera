@@ -37,7 +37,7 @@ function delibera_get_main_config($config = array()) {
     $opt['limitar_tamanho_comentario'] = 'N';
     $opt['numero_max_palavras_comentario'] = '50';
     $opt['plan_restriction'] = 'N';
-    $opt['cabecalho_arquivo'] = __( 'Bem-vindo a plataforma de debate do ', 'direitoamoradia' ).get_bloginfo('name');
+    $opt['cabecalho_arquivo'] = __( 'Bem-vindo a plataforma de debate do ', 'delibera' ).get_bloginfo('name');
     
     return array_merge($opt, $config);
 }
