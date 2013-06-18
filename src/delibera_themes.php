@@ -163,11 +163,7 @@ class DeliberaThemes
         global $post;
     
         if (get_post_type($post) == "pauta" || is_post_type_archive('pauta')) {
-            wp_enqueue_style('delibera_style', $this->themeFileUrl('delibera_style.css'));
-            
-            if (is_post_type_archive('pauta')) {
-                $archiveTemplate = $this->themeFilePath('archive-pauta.php');
-            }
+            $archiveTemplate = $this->themeFilePath('archive-pauta.php');
         }
                 
         return $archiveTemplate;
@@ -185,15 +181,25 @@ class DeliberaThemes
     {
         global $post;
     
-        if (get_post_type($post) == "pauta" || is_post_type_archive( 'pauta' )) {
-            wp_enqueue_style('delibera_style', $this->themeFileUrl('delibera_style.css'));
-            
-            if ($post->post_type == 'pauta') {
-                $singleTemplate = $this->themeFilePath('single-pauta.php');
-            }
+        if (get_post_type($post) == "pauta" || is_post_type_archive('pauta')) {
+            $singleTemplate = $this->themeFilePath('single-pauta.php');
         }
         
         return $singleTemplate;
+    }
+    
+    /**
+     * Inclui os arquivos CSS
+     * 
+     * @return null
+     */
+    public function publicStyles()
+    {
+        global $post;
+    
+        if (get_post_type($post) == "pauta" || is_post_type_archive('pauta')) {
+            wp_enqueue_style('delibera_style', $this->themeFileUrl('delibera_style.css'));
+        }
     }
     
     /**
@@ -269,6 +275,7 @@ $deliberaThemes = new DeliberaThemes;
 add_filter('archive_template', array($deliberaThemes, 'archiveTemplate'));
 add_filter('single_template', array($deliberaThemes, 'singleTemplate'));
 add_action('admin_print_styles', array($deliberaThemes, 'adminPrintStyles'));
+add_action('wp_enqueue_scripts', array($deliberaThemes, 'publicStyles'), 100);
 
 // apenas adiciona o arquivo com a função que gera o header
-require_once($deliberaThemes->defaultThemePath . 'delibera_header.php');
+require_once($deliberaThemes->themeFilePath('delibera_header.php'));
