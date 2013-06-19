@@ -277,5 +277,7 @@ add_filter('single_template', array($deliberaThemes, 'singleTemplate'));
 add_action('admin_print_styles', array($deliberaThemes, 'adminPrintStyles'));
 add_action('wp_enqueue_scripts', array($deliberaThemes, 'publicStyles'), 100);
 
-// apenas adiciona o arquivo com a função que gera o header
-require_once($deliberaThemes->themeFilePath('delibera_header.php'));
+// adiciona functions.php do tema
+require_once($deliberaThemes->themeFilePath('functions.php'));
+
+
