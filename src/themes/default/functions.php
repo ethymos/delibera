@@ -59,3 +59,212 @@ function get_delibera_header() {
 
 	<?php
 }
+
+/**
+ * Formulário do comentário
+ * @param array $defaults
+ */
+function delibera_comment_form($defaults)
+{
+    global $post,$delibera_comments_padrao,$user_identity,$comment_footer;
+    $comment_footer = "";
+    
+    if($delibera_comments_padrao === true)
+    {
+        $defaults['fields'] = $defaults['must_log_in'];
+        if(!is_user_logged_in())
+        {
+            $defaults['comment_field'] = "";
+            $defaults['logged_in_as'] = '';
+            $defaults['comment_notes_after'] = "";
+            $defaults['label_submit'] = "";
+            $defaults['id_submit'] = "botao-oculto";
+            $defaults['comment_notes_before'] = ' ';
+        }
+        return $defaults;
+    }
+    if(get_post_type($post) == "pauta")
+    {
+        /* @var WP_User $current_user */
+        $current_user = wp_get_current_user();
+        $defaults['id_form'] = 'delibera_commentform';
+        $defaults['comment_field'] = '<div class="delibera_before_fields">'.$defaults['comment_field'];
+        $situacao = delibera_get_situacao($post->ID);
+        
+        switch ($situacao->slug)
+        { 
+            
+            case 'validacao':
+            {
+                $user_comments = delibera_get_comments($post->ID, 'validacao', array('user_id' => $current_user->ID));
+                $temvalidacao = false;
+                foreach ($user_comments as $user_comment)
+                {
+                    if(get_comment_meta($user_comment->comment_ID, 'delibera_comment_tipo', true) == 'validacao')
+                    {
+                        $temvalidacao = true;
+                        break;
+                    }
+                }
+                if($temvalidacao)
+                {
+                    $defaults['comment_notes_after'] = '
+                        <script type="text/javascript">
+                            var formdiv = document.getElementById("respond");
+                            formdiv.style.display = "none";
+                        </script>
+                    ';
+                }
+                else
+                {
+                    $defaults['title_reply'] = __('Você quer ver essa pauta posta em discussão?','delibera');
+                    $defaults['must_log_in'] = sprintf(__('Você precisar <a href="%s">estar logado</a> e ter permissão para votar.','delibera'),wp_login_url( apply_filters( 'the_permalink', get_permalink( $post->ID ))));                
+                    if (current_user_can('votar')) {
+                        $form = '
+                            <div id="painel_validacao" >
+                                <input id="delibera_aceitar" type="radio" name="delibera_validacao" value="S" checked /><label for="delibera_aceitar" class="delibera_aceitar_radio_label">'.__('Aceitar','delibera').'</label>
+                                <input id="delibera_rejeitar" type="radio" name="delibera_validacao" value="N"  /><label for="delibera_rejeitar" class="delibera_aceitar_radio_label">'.__('Rejeitar','delibera').'</label>
+                                <input name="comment" value="A validação de '.$current_user->display_name.' foi registrada no sistema." style="display:none;" />
+                                <input name="delibera_comment_tipo" value="validacao" style="display:none;" />
+                            </div>
+                        ';
+                        $defaults['comment_field'] = $form;
+                        $defaults['comment_notes_after'] = '<div class="delibera_comment_button">';;
+                        $defaults['logged_in_as'] = "";
+                        $defaults['label_submit'] = __('Votar','delibera');
+                        $comment_footer = "</div>";
+                    } else {
+                        $defaults['comment_field'] = "";
+                        $defaults['logged_in_as'] = '<p class="logged-in-as">' . sprintf( __('Você está logado como <a href="%1$s">%2$s</a> que não é um usuário autorizado a votar. <a href="%3$s" title="Sair desta conta?">Sair desta conta</a> e logar com um usuário com permissão de votar?','delibera') , admin_url( 'profile.php' ), $user_identity, wp_logout_url( apply_filters( 'the_permalink', get_permalink( $post->ID ) ) ) ) . '</p>';
+                        $defaults['comment_notes_after'] = "";
+                        $defaults['label_submit'] = "";
+                        $defaults['id_submit'] = "botao-oculto";
+                    }
+                }
+            } break;
+            case 'discussao':
+            case 'relatoria':
+            {
+                $defaults['title_reply'] = sprintf(__('Discussão em torno de "%s"','delibera'),$post->post_title);
+                $defaults['must_log_in'] = sprintf(__('Você precisar <a href="%s">estar logado</a> para contribuir com a discussão.','delibera'),wp_login_url( apply_filters( 'the_permalink', get_permalink( $post->ID ))));
+                $defaults['comment_notes_after'] = "";
+                $defaults['logged_in_as'] = "";
+                $defaults['comment_field'] = '
+                        <input name="delibera_comment_tipo" value="discussao" style="display:none;" />'.$defaults['comment_field']
+                ;
+                if($situacao->slug == 'relatoria')
+                {
+                    $defaults['comment_field'] = '
+                            <input id="delibera-baseouseem" name="delibera-baseouseem" value="" style="display:none;" autocomplete="off" />
+                            <div id="painel-baseouseem" class="painel-baseouseem"><label id="painel-baseouseem-label" class="painel-baseouseem-label" >'.__('Proposta baseada em:', 'delibera').'&nbsp;</label></div><br/>
+                            '.$defaults['comment_field']
+                    ;
+                }
+                if (current_user_can('votar'))
+                {   
+                    $replace = '
+                                '.(($situacao->slug != 'relatoria') ? '<label class="delibera-encaminha-label" ><input type="radio" name="delibera_encaminha" value="N" checked="checked" />'.__('Opinião', 'delibera').'</label>' : '').'
+                                <label class="delibera-encaminha-label" ><input type="radio" name="delibera_encaminha" value="S" '.(($situacao->slug == 'relatoria') ? ' checked="checked" ' : '').' />'.__('Proposta de encaminhamento', 'delibera').'</label>
+                    ';
+                    $defaults['comment_field'] = preg_replace ("/<label for=\"comment\">(.*?)<\/label>/", $replace, $defaults['comment_field']);
+                }
+                else
+                {
+                    $defaults['comment_field'] = "";
+                    $defaults['logged_in_as'] = '<p class="logged-in-as">' . sprintf( __('Você está logado como <a href="%1$s">%2$s</a> que não é um usuário autorizado a votar. <a href="%3$s" title="Sair desta conta?">Sair desta conta</a> e logar com usuário que possa votar?','delibera') , admin_url( 'profile.php' ), $user_identity, wp_logout_url( apply_filters( 'the_permalink', get_permalink( $post->ID ) ) ) ) . '</p>';
+                    $defaults['comment_notes_after'] = "";
+                    $defaults['label_submit'] = "";
+                    $defaults['id_submit'] = "botao-oculto";
+                }
+                if(has_filter('delibera_discussao_comment_form'))
+                {
+                    $defaults = apply_filters('delibera_discussao_comment_form', $defaults, $situacao->slug);
+                }
+            }break;
+            case 'emvotacao':
+            {
+                $user_comments = delibera_get_comments($post->ID, 'voto', array('user_id' => $current_user->ID));
+                $temvoto = false;
+                foreach ($user_comments as $user_comment)
+                {
+                    if(get_comment_meta($user_comment->comment_ID, 'delibera_comment_tipo', true) == 'voto')
+                    {
+                        $temvoto = true;
+                        break;
+                    }
+                }
+                if($temvoto)
+                {
+                    $defaults['comment_notes_after'] = '
+                        <script type="text/javascript">
+                            var formdiv = document.getElementById("respond");
+                            formdiv.style.display = "none";
+                        </script>
+                    ';
+                }
+                else
+                {
+                    $defaults['title_reply'] = sprintf(__('Regime de votação para a pauta "%s"','delibera'),$post->post_title);
+                    $defaults['must_log_in'] = sprintf(__('Você precisar <a href="%s">estar logado</a> e ter permissão para votar.'),wp_login_url( apply_filters( 'the_permalink', get_permalink( $post->ID ))));
+                    $encaminhamentos = array();
+                    if (current_user_can('votar')) {
+                        $form = '<div class="delibera_checkbox_voto">';
+                        $encaminhamentos = delibera_get_comments_encaminhamentos($post->ID);
+                        
+                        $form .= '<div class="instrucoes-votacao">'.__('Escolha os encaminhamentos que deseja aprovar e depois clique em "Votar":','delibera').'</div>';
+                        
+                        $i = 0;
+                        foreach ($encaminhamentos as $encaminhamento)
+                        {
+                            $form .= '
+                                <div class="checkbox-voto"><input type="checkbox" name="delibera_voto'.$i.'" id="delibera_voto'.$i.'" value="'.$encaminhamento->comment_ID.'" /><label for="delibera_voto'.$i++.'" class="label-voto">'.$encaminhamento->comment_content.'</label></div> 
+                            ';
+                        }
+                        $form .= '
+                                <input name="delibera_comment_tipo" value="voto" style="display:none;" />
+                                <input name="comment" value="O voto de '.$current_user->display_name.' foi registrado no sistema" style="display:none;" />
+                            </div>'
+                        ;
+                        
+                        $defaults['comment_field'] = $form;
+                        $defaults['logged_in_as'] = "";
+                        $defaults['label_submit'] = __('Votar','delibera');
+                        $defaults['comment_notes_after'] = '<div class="delibera_comment_button">';;
+                        $comment_footer = "</div>";
+                    } else {
+                        $defaults['comment_field'] = "";
+                        $defaults['logged_in_as'] = '<p class="logged-in-as">' . sprintf( __('Você está logado como <a href="%1$s">%2$s</a> que não é um usuário autorizado a votar. <a href="%3$s" title="Sair desta conta?">Sair desta conta</a> e logar com um usuário com permisão para votar?','delibera') , admin_url( 'profile.php' ), $user_identity, wp_logout_url( apply_filters( 'the_permalink', get_permalink( $post->ID ) ) ) ) . '</p>';
+                        $defaults['comment_notes_after'] = "";
+                        $defaults['label_submit'] = "";
+                        $defaults['id_submit'] = "botao-oculto";
+                    }
+                }
+                if(has_filter('delibera_resolucoes_comment_form'))
+                {
+                    $defaults = apply_filters('delibera_resolucoes_comment_form', $defaults, $temvoto, $encaminhamentos);
+                }
+            } break;
+            case 'comresolucao':
+            {
+                $defaults['comment_notes_after'] = '<script type="text/javascript">
+                    var formdiv = document.getElementById("respond");
+                    formdiv.style.display = "none";
+                </script>';
+                if(has_filter('delibera_comresolucao_comment_form'))
+                {
+                    $defaults = apply_filters('delibera_comresolucao_comment_form', $defaults);
+                }
+            }break;
+        }
+        if(!is_user_logged_in())
+        {
+            $defaults['comment_notes_before'] = '<script type="text/javascript">
+                    var formdiv = document.getElementById("respond");
+                    formdiv.style.display = "none";
+            </script>';
+        }
+    }
+    return $defaults;   
+}
+add_filter('comment_form_defaults', 'delibera_comment_form');
+
