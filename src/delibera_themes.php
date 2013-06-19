@@ -277,7 +277,8 @@ add_filter('single_template', array($deliberaThemes, 'singleTemplate'));
 add_action('admin_print_styles', array($deliberaThemes, 'adminPrintStyles'));
 add_action('wp_enqueue_scripts', array($deliberaThemes, 'publicStyles'), 100);
 
-// adiciona functions.php do tema
+// inclui arquivos específicos do tema
 require_once($deliberaThemes->themeFilePath('functions.php'));
+require_once($deliberaThemes->themeFilePath('delibera_comments_template.php'));
 
 

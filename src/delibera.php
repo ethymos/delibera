@@ -431,10 +431,7 @@ function delibera_Add_custom_taxonomy()
 	
 }
 
-if(file_exists(__DIR__.DIRECTORY_SEPARATOR.'delibera_themes.php'))
-{
-	require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_themes.php';
-}
+require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_themes.php';
 
 if(file_exists(__DIR__.DIRECTORY_SEPARATOR.'delibera_filtros.php'))
 {
@@ -2113,8 +2110,6 @@ function delibera_get_resolucoes($filtro = array())
 }
 
 require_once 'delibera_comments_template.php';
-
-
 
 function delibera_get_comments_padrao($args = array(), $file = '/comments.php' )
 {
