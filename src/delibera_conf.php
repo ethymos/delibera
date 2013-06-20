@@ -125,7 +125,7 @@ function delibera_conf_page()
 				$rows[] = array(
 					"id" => "validacao",
 					"label" => __('É necessário validação das pautas?', 'delibera'),
-					"content" => '<input type="checkbox" name="validacao" value="S" '.(htmlspecialchars_decode($opt['validacao']) == 'S' ? 'checked="checked"' : '').' />'
+					"content" => '<input type="checkbox" name="validacao" id="validacao" value="S" '.(htmlspecialchars_decode($opt['validacao']) == 'S' ? 'checked="checked"' : '').' />'
 				);
 				$rows[] = array(
 					"id" => "minimo_validacao",
@@ -159,7 +159,7 @@ function delibera_conf_page()
 				$rows[] = array(
 					"id" => "relatoria",
 					"label" => __('Necessário relatoria da discussão das pautas?', 'delibera'),
-					"content" => '<input type="checkbox" name="relatoria" value="S" '.(htmlspecialchars_decode($opt['relatoria']) == 'S' ? 'checked="checked"' : '').' />'
+					"content" => '<input type="checkbox" id="relatoria" name="relatoria" value="S" '.(htmlspecialchars_decode($opt['relatoria']) == 'S' ? 'checked="checked"' : '').' />'
 				);
 				$rows[] = array(
 					"id" => "dias_relatoria",
@@ -179,7 +179,7 @@ function delibera_conf_page()
 				$rows[] = array(
 					"id" => "limitar_tamanho_comentario",
 					"label" => __('Necessário limitar o tamanho do comentário visível?', 'delibera'),
-					"content" => '<input type="checkbox" name="limitar_tamanho_comentario" value="S" '.(htmlspecialchars_decode($opt['limitar_tamanho_comentario']) == 'S' ? 'checked="checked"' : '').' />'
+					"content" => '<input type="checkbox" name="limitar_tamanho_comentario" id="limitar_tamanho_comentario" value="S" '.(htmlspecialchars_decode($opt['limitar_tamanho_comentario']) == 'S' ? 'checked="checked"' : '').' />'
 				);
 				$rows[] = array(
 					"id" => "numero_max_palavras_comentario",
@@ -196,7 +196,7 @@ function delibera_conf_page()
 				{
 					$table = apply_filters('delibera_config_form', $table, $opt);
 				}
-				delibera_postbox('delibera-config',__('Configurações para o plugin Delibera','delibera'), $table.'<div class="submit"><input type="submit" class="button-primary" name="submit" value="'.__('Save Changes').'" /></form></div>');
+				echo $table.'<div class="submit"><input type="submit" class="button-primary" name="submit" value="'.__('Save Changes').'" /></form></div>';
 			?>
 				
 				</form>
