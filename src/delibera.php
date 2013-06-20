@@ -2134,7 +2134,7 @@ function delibera_wp_list_comments($args = array(), $comments = null)
 	if(get_post_type($post) == "pauta")
 	{
 		$situacao = delibera_get_situacao($post->ID);
-		
+
 		if($delibera_comments_padrao === true)
 		{
 			$args['post_id'] = $post->ID;
@@ -2168,13 +2168,20 @@ function delibera_wp_list_comments($args = array(), $comments = null)
 		{
 			$args['walker'] = new Delibera_Walker_Comment();
 			wp_list_comments($args, $comments);
-			$comments = delibera_get_comments_encaminhamentos($post->ID);
+            
+			$encaminhamentos = delibera_get_comments_encaminhamentos($post->ID);
+			$discussoes = delibera_get_comments_discussoes($post->ID);
 			?>
 			<div class="delibera_encaminhamentos_inferior">
-			<?php
-			wp_list_comments($args, $comments);
-			?>
+    			<?php wp_list_comments($args, $encaminhamentos); ?>
 			</div>
+			
+			<div id="comments" class="delibera_opinioes_inferior">
+			    <hr>
+			    <h2 class="comments-title bottom"><?php _e('Histórico da pauta', 'delibera'); ?></h2>
+			    <?php wp_list_comments($args, $discussoes); ?>
+			</div>
+			
 			<?php
 		}
 		else
