@@ -3,7 +3,16 @@
 <?php
 	//$rows = get_option('default_post_edit_rows');
 	//if (($rows < 3) || ($rows > 100))
-		$rows = 4;
+	
+    if (!isset($class)) {
+        $class = '';
+    }
+    
+    if (!isset($tab_index)) {
+        $tab_index = '';
+    }
+	
+	$rows = 4;
 	$id = "textarea-delibera-edit-comment-{$comment->comment_ID}";
 	$the_editor = apply_filters('the_editor', "<div id='editorcontainer-delibera-edit-comment-".$comment->comment_ID."'><textarea rows='$rows'$class cols='80' name='$id' tabindex='$tab_index' id='$id'>%s</textarea></div>\n");
 	$the_editor_content = apply_filters('the_editor_content', $comment->comment_content);
