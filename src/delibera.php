@@ -2022,21 +2022,6 @@ function delibera_form_table($rows) {
 	return $content;
 }
 
-/**
- * Create a potbox widget
- */
-function delibera_postbox($id, $title, $content) {
-?>
-	<div id="<?php echo $id; ?>" class="postbox">
-		<div class="handlediv" title="Click to toggle"><br /></div>
-		<h3 class="hndle"><span><?php echo $title; ?></span></h3>
-		<div class="inside">
-			<?php echo $content; ?>
-		</div>
-	</div>
-<?php
-}	
-
 // Scripts
 
 function delibera_scripts()
@@ -2077,7 +2062,8 @@ function delibera_admin_scripts()
 		wp_enqueue_script('jquery-ui-datepicker-ptbr', WP_CONTENT_URL.'/plugins/delibera/js/jquery.ui.datepicker-pt-BR.js', array('jquery-ui-datepicker'));
 		wp_enqueue_script('delibera-admin',WP_CONTENT_URL.'/plugins/delibera/js/admin_scripts.js', array( 'jquery-ui-datepicker-ptbr'));
 	}
-	if(isset($_REQUEST['page']) && $_REQUEST['page'] == 'delibera-config')
+	
+	if(isset($_REQUEST['page']) && $_REQUEST['page'] == 'delibera-notifications')
 	{
 		wp_enqueue_script('delibera-admin-notifica',WP_CONTENT_URL.'/plugins/delibera/js/admin_notifica_scripts.js', array('jquery'));
 	}
