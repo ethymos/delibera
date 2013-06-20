@@ -1775,18 +1775,6 @@ function delibera_pre_edit_comment($dados)
 
 //add_filter('comment_save_pre', 'delibera_pre_edit_comment'); //TODO Verificar edição
 
-function delibera_comments_template($path)
-{
-	if(get_post_type() == 'pauta')
-	{
-		$include = dirname(__FILE__).DIRECTORY_SEPARATOR."delibera_comments.php";
-		return $include;
-	}
-	return $path;
-}
-
-add_filter('comments_template', 'delibera_comments_template');
-
 // require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_template.php';
 
 // Fim Inicialização do plugin

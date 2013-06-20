@@ -281,4 +281,23 @@ add_action('wp_enqueue_scripts', array($deliberaThemes, 'publicStyles'), 100);
 require_once($deliberaThemes->themeFilePath('functions.php'));
 require_once($deliberaThemes->themeFilePath('delibera_comments_template.php'));
 
+/**
+ * Usa o templa de comentário do Delibera
+ * no lugar do padrão do Wordpress para as pautas
+ * 
+ * @param string $path
+ * @return string
+ */
+function delibera_comments_template($path)
+{
+    global $deliberaThemes;
+    
+    if (get_post_type() == 'pauta') {
+        return $deliberaThemes->themeFilePath('delibera_comments.php');
+    }
+    
+    return $path;
+}
+add_filter('comments_template', 'delibera_comments_template');
+
 
