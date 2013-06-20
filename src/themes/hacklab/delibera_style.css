@@ -207,7 +207,7 @@ div, h1, h2, h3, h4, h5, p { margin-bottom:9px; }
     padding:9px;
 }
 
-#delibera #encaminhamentos ol li.submit {
+#delibera #encaminhamentos ol li.submit, #delibera ol.encaminhamentos li.submit p {
     background:none;
     padding:0;
     text-align:center;

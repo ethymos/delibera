@@ -13,9 +13,9 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
 ?>
 
 <div class="actions">
-    <div id="comments" class="comments-area">
+    <div id="<?php echo ($situacao->slug == 'comresolucao') ? 'encaminhamentos' : 'comments'; ?>" class="comments-area">
         <?php if (have_comments()) : ?>
-            <h2 class="comments-title">Discussão sobre a pauta</h2>
+            <h2 class="comments-title"><?php echo ($situacao->slug == 'comresolucao') ? 'Encaminhamentos propostos' : 'Discussão sobre a pauta'; ?></h2>
             <ol class="commentlist">
                 <?php delibera_wp_list_comments(); ?>
             </ol>

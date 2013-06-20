@@ -174,16 +174,25 @@ function delibera_comment_form($defaults)
                     $encaminhamentos = array();
                     
                     if (current_user_can('votar')) {
-                        $form = '<div class="delibera_checkbox_voto">';
+                        $form = '<div id="encaminhamentos" class="delibera_checkbox_voto">';
                         $encaminhamentos = delibera_get_comments_encaminhamentos($post->ID);
                         
                         $form .= '<div class="instrucoes-votacao">'.__('Escolha os encaminhamentos que deseja aprovar e depois clique em "Votar":','delibera').'</div>';
+                        $form .= '<ol class="encaminhamentos">';
                         
                         $i = 0;
                         foreach ($encaminhamentos as $encaminhamento) {
-                            $form .= '<div class="checkbox-voto"><input type="checkbox" name="delibera_voto'.$i.'" id="delibera_voto'.$i.'" value="'.$encaminhamento->comment_ID.'" /><label for="delibera_voto'.$i++.'" class="label-voto">'.$encaminhamento->comment_content.'</label></div>';
+                            $form .= '<li class="encaminhamento clearfix">
+                                <div class="alignleft checkbox">
+                                    <input type="checkbox" name="delibera_voto'.$i.'" id="delibera_voto'.$i.'" value="'.$encaminhamento->comment_ID.'" />
+                                </div>
+                                <div class="alignleft content">
+                                    <label for="delibera_voto'.$i++.'" class="label-voto">'.$encaminhamento->comment_content.'</label>
+                                </div>
+                            </li>';
                         }
                         
+                        $form .= '</ol>';
                         $form .= '
                                 <input name="delibera_comment_tipo" value="voto" style="display:none;" />
                                 <input name="comment" value="O voto de '.$current_user->display_name.' foi registrado no sistema" style="display:none;" />
@@ -193,8 +202,8 @@ function delibera_comment_form($defaults)
                         $defaults['comment_field'] = $form;
                         $defaults['logged_in_as'] = "";
                         $defaults['label_submit'] = __('Votar','delibera');
-                        $defaults['comment_notes_after'] = '<div class="delibera_comment_button">';;
-                        $comment_footer = "</div>";
+                        $defaults['comment_notes_after'] = '<ol class="encaminhamentos"><li class="submit">';;
+                        $comment_footer = "</li></ol>";
                     } else {
                         $defaults['comment_field'] = "";
                         $defaults['logged_in_as'] = '<p class="logged-in-as">' . sprintf( __('Você está logado como <a href="%1$s">%2$s</a> que não é um usuário autorizado a votar. <a href="%3$s" title="Sair desta conta?">Sair desta conta</a> e logar com um usuário com permisão para votar?','delibera') , admin_url( 'profile.php' ), $user_identity, wp_logout_url( apply_filters( 'the_permalink', get_permalink( $post->ID ) ) ) ) . '</p>';
@@ -230,3 +239,14 @@ function delibera_comment_form($defaults)
     return $defaults;   
 }
 add_filter('comment_form_defaults', 'delibera_comment_form');
+
+add_action('wp_enqueue_scripts', function() {
+    global $deliberaThemes, $post;
+    
+    if (get_post_type() == 'pauta') {
+        $situation = delibera_get_situacao($post->ID);
+        
+        wp_enqueue_script('delibera-hacklab', $deliberaThemes->getThemeUrl() . '/js/delibera-hacklab.js', array('jquery'));
+        wp_localize_script('delibera-hacklab', 'delibera', array('situation' => $situation->slug));
+    }
+});

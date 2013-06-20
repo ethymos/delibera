@@ -268,3 +268,10 @@ function delibera_comment_form($defaults)
 }
 add_filter('comment_form_defaults', 'delibera_comment_form');
 
+add_action('wp_enqueue_scripts', function() {
+    global $deliberaThemes;
+    
+    if (get_post_type() == 'pauta') {
+        wp_enqueue_script('delibera-hacklab', $deliberaThemes->getThemeUrl() . '/js/delibera-default.js', array('jquery'));
+    }
+});
