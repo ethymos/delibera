@@ -1077,7 +1077,7 @@ function delibera_publish_pauta($postID, $post, $alterar = false)
 	{
 		return $postID;
 	}
-	if ($alterar || (($post->post_status == 'publish' || $_POST['publish'] == 'Publicar') && ($_POST['prev_status'] == 'draft' || $_POST['original_post_status'] == 'draft' || $_POST['original_post_status'] == 'auto-draft' || $_POST['prev_status'] == 'pending' || $_POST['original_post_status'] == 'pending' ) ))
+	if ($alterar || (($post->post_status == 'publish' || $_POST['publish'] == 'Publicar') && ((isset($_POST['prev_status']) && $_POST['prev_status'] == 'draft') || $_POST['original_post_status'] == 'draft' || $_POST['original_post_status'] == 'auto-draft' || $_POST['prev_status'] == 'pending' || $_POST['original_post_status'] == 'pending' ) ))
 	{
 		$prazo_validacao = get_post_meta($postID, 'prazo_validacao', true);
 		$prazo_discussao =  get_post_meta($postID, 'prazo_discussao', true);
