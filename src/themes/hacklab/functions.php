@@ -146,7 +146,7 @@ function delibera_comment_form($defaults)
                     $defaults['id_submit'] = "botao-oculto";
                 }
                 
-                if(has_filter('delibera_discussao_comment_form')) {
+                if (has_filter('delibera_discussao_comment_form')) {
                     $defaults = apply_filters('delibera_discussao_comment_form', $defaults, $situacao->slug);
                 }
                 break;
@@ -213,7 +213,7 @@ function delibera_comment_form($defaults)
                     }
                 }
 
-                if(has_filter('delibera_resolucoes_comment_form')) {
+                if (has_filter('delibera_resolucoes_comment_form')) {
                     $defaults = apply_filters('delibera_resolucoes_comment_form', $defaults, $temvoto, $encaminhamentos);
                 }
                 break;
@@ -222,7 +222,7 @@ function delibera_comment_form($defaults)
                     var formdiv = document.getElementById("respond");
                     formdiv.style.display = "none";
                 </script>';
-                if(has_filter('delibera_comresolucao_comment_form')) {
+                if (has_filter('delibera_comresolucao_comment_form')) {
                     $defaults = apply_filters('delibera_comresolucao_comment_form', $defaults);
                 }
                 break;
@@ -250,3 +250,43 @@ add_action('wp_enqueue_scripts', function() {
         wp_localize_script('delibera-hacklab', 'delibera', array('situation' => $situation->slug));
     }
 });
+
+/**
+ * Implementa o filtro da página de listagem de pautas
+ * 
+ * @return null
+ */
+function delibera_hacklab_filter_pautas($query) {
+    if (is_post_type_archive('pauta') && !is_admin()) {
+        $situacoes = array();
+        $temas = array();
+        $taxonomy_filters = array('relation' => 'AND');
+        
+        if (!empty($_GET['situacao_filtro'])) {
+            foreach ($_GET['situacao_filtro'] as $situacao => $value) {
+                if ($value == 'on') {
+                    $situacoes[] = $situacao;
+                }
+            }
+        }
+
+        if (!empty($_GET['tema_filtro'])) {
+            foreach ($_GET['tema_filtro'] as $tema => $value) {
+                if ($value == 'on') {
+                    $temas[] = $tema;
+                }
+            }
+        }
+
+        if (!empty($situacoes)) {
+            $taxonomy_filters[] = array('taxonomy' => 'situacao', 'field' => 'slug', 'terms' => $situacoes);
+        }
+        
+        if (!empty($temas)) {
+            $taxonomy_filters[] = array('taxonomy' => 'tema', 'field' => 'slug', 'terms' => $temas);
+        }
+        
+        $query->set('tax_query', $taxonomy_filters);
+    }
+}
+add_action('pre_get_posts', 'delibera_hacklab_filter_pautas');
