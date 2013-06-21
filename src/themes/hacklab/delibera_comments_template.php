@@ -57,7 +57,7 @@ class Delibera_Walker_Comment extends Walker_Comment
         
         ?>
 
-        <?php if (($tipo == 'resolucao' || $tipo == 'encaminhamento') && $situacao == 'comresolucao') : ?>
+        <?php if (($tipo == 'resolucao' || $tipo == 'encaminhamento') && $situacao->slug == 'comresolucao') : ?>
             <?php $nvotos = get_comment_meta($comment->comment_ID, "delibera_comment_numero_votos", true); ?>
             <li class="encaminhamento clearfix">
                 <div class="alignleft votos">
@@ -104,7 +104,7 @@ class Delibera_Walker_Comment extends Walker_Comment
                         <?php delibera_comment_edit_form(); ?>
                     </section>
                     <section class="actions clearfix">
-                        <?php if (delibera_comments_is_open($comment->comment_post_ID)) : ?>
+                        <?php if (delibera_comments_is_open($comment->comment_post_ID) && $situacao->slug != 'emvotacao') : ?>
                             <div class="bottom alignleft">
                                 <div class="reply">
                                     <?php
