@@ -1006,3 +1006,7 @@ input[type="submit"].btn.btn-mini {
      -moz-border-radius: 0 0 6px 6px;
           border-radius: 0 0 6px 6px;
 }
+
+button .delibera_like, button .delibera_unlike {
+    margin-bottom: 0px;
+}

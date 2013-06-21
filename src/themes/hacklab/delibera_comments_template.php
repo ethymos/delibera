@@ -57,14 +57,14 @@ class Delibera_Walker_Comment extends Walker_Comment
         
         ?>
 
-        <?php if ($tipo == 'resolucao' || $tipo == 'encaminhamento') : ?>
+        <?php if (($tipo == 'resolucao' || $tipo == 'encaminhamento') && $situacao == 'comresolucao') : ?>
             <?php $nvotos = get_comment_meta($comment->comment_ID, "delibera_comment_numero_votos", true); ?>
             <li class="encaminhamento clearfix">
                 <div class="alignleft votos">
                     <span><?php echo ($nvotos == 1) ? sprintf(__('%d voto', 'delibera'), $nvotos) : sprintf(__('%d votos', 'delibera'), $nvotos); ?></span>
                 </div>
                 <div class="alignleft content">
-                    <p>Integer vel magna et montes aliquet lorem arcu tempor ridiculus ultrices magnis, penatibus adipiscing vel, ac placerat turpis, dapibus cum! Rhoncus parturient sit porttitor? Odio, adipiscing mattis, amet tincidunt natoque. Nec nisi, odio porta, penatibus purus, tempor ridiculus risus tincidunt scelerisque magnis? Duis duis tempor, integer nisi, eros porttitor nunc, integer cras! Rhoncus nascetur, odio! Porta! Nisi facilisis ultricies turpis, in duis porttitor etiam, mid urna ut proin nisi hac arcu sit? Tortor lacus facilisis porta mauris cursus porta tincidunt vel, proin sed ac! Odio risus amet dis lorem velit? Eros nec! Sagittis massa aenean in vut duis lorem. Nisi turpis facilisis, scelerisque porta, cras. Aliquet cras platea? Nisi et pid in. Lectus ac augue amet tempor est quis ac.</p>
+                    <?php comment_text(); ?>
                 </div>
             </li>    
         <?php else : ?>
