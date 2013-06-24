@@ -93,6 +93,13 @@ class Delibera_Walker_Comment extends Walker_Comment
                         </div>
                         <div class="alignright textright">
                             <span class="type"><?php delibera_get_comment_type_label($comment); ?></span>
+                            <?php
+                                if ($situacao->slug == 'discussao' || ($situacao->slug == 'relatoria' && current_user_can('relatoria'))) {
+                                    echo "<br/>";
+                                    delibera_edit_comment_link(__('Edit'),'', '');
+                                    delibera_delete_comment_link(__('Delete'),'', '');
+                                }
+                            ?>
                         </di>
                     </header>
                     <section class="comment-content">
@@ -161,11 +168,6 @@ class Delibera_Walker_Comment extends Walker_Comment
                         </div>
                     </section><!-- .reply -->
                     <?php
-                    if ($situacao->slug == 'discussao' || ($situacao->slug == 'relatoria' && current_user_can('relatoria'))) {
-                        delibera_edit_comment_link(__('(Edit)'),'&nbsp;&nbsp;', '');
-                        delibera_delete_comment_link(__('(Delete)'),'&nbsp;&nbsp;', '');
-                    }
-    
                     if ($situacao->slug == 'relatoria' && current_user_can('relatoria'))    {
                         $baseouseem = get_comment_meta($comment->comment_ID, 'delibera-baseouseem', true);
                         if (strlen($baseouseem) > 0) {

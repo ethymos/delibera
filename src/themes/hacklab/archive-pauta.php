@@ -15,9 +15,9 @@ get_header();
 ?>
 
 <div id="delibera">
-	<div id="container">
-		<div id="content" role="main">
-			<?php get_delibera_header(); ?>
+    <div id="container">
+        <div id="content" role="main">
+            <?php get_delibera_header(); ?>
             <div class="clearfix">
                 <div class="filters widget-area alignleft">
                     <h2>Filtros</h2>
@@ -41,13 +41,22 @@ get_header();
                             <button type="submit" class="btn">Filtrar</button>
                         </div>
                     </form>
-                </div>					
-    			<div id="lista-de-pautas" class="site-content alignright">
-    				<?php load_template(dirname(__FILE__) . '/delibera-loop-archive.php', true); ?>
-    			</div>
-    		</div>
-		</div>
-	</div>
+                </div>
+                <div id="lista-de-pautas" class="site-content alignright">
+                    <?php load_template(dirname(__FILE__) . '/delibera-loop-archive.php', true); ?>
+                    <nav class="navigation">
+                        <ol>
+                            <li><a href="">1</a></li>
+                            <li><a href="">2</a></li>
+                            <li class="current"><a href="">3</a></li>
+                            <li><a href="">4</a></li>
+                            <li><a href="">5</a></li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <?php get_footer(); ?>

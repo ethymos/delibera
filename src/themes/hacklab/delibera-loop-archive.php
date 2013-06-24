@@ -20,6 +20,25 @@ if (have_posts()) :
             <h1><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
             <p class="meta">Discussão criada por <span class="author"><a class="url fn n" href="<?php the_author_meta('user_url'); ?>" title="<?php printf('Ver o perfil de %s', get_the_author()); ?>"><?php the_author(); ?></a></span> em <span class="date"><?php echo get_the_date('d/m/y'); ?></span></p>
             <p><?php the_excerpt(); ?></p>
+            
+            <ul class="meta meta-tags">
+                <li>Tema:</li>
+                <li><a href="">Tema 1</a>,</li>
+                <li><a href="">Tema 2</a>,</li>
+                <li><a href="">Tema 3</a>,</li>
+                <li><a href="">Tema 4</a>,</li>
+                <li><a href="">Tema 5</a></li>
+            </ul>
+            
+            <ul class="meta meta-tags">
+                <li>Tags:</li>
+                <li><a href="">Tag 1</a>,</li>
+                <li><a href="">Tag 2</a>,</li>
+                <li><a href="">Tag 3</a>,</li>
+                <li><a href="">Tag 4</a>,</li>
+                <li><a href="">Tag 5</a></li>
+            </ul>
+
             <?php if (in_array($situacao->slug, array('emvotacao', 'discussao', 'validacao'))) : ?>
                 <p class="bottom textright"><a class="btn" href="<?php the_permalink() ?>"><?php echo delibera_get_situation_button($post->ID); ?></a></p>
             <?php endif; ?>
