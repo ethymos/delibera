@@ -206,18 +206,6 @@ function delibera_Add_custom_Post()
 	);
 	
 	register_post_type("pauta", $args);
-	
-	$tags_tax = get_taxonomy('post_tag');
-	
-	$pautas_cap = array('assign_terms' => 'edit_pautas',
-		  			'edit_terms' => 'edit_pautas');
-	$args_tax = array
-	(
-		'public' => true,
-		'capabilities' => $pautas_cap
-	);
-	
-	register_taxonomy('post_tag', array('pauta','post'), $args_tax);
 }
 
 function delibera_pauta_redirect_filter($location, $post_id = null) {
