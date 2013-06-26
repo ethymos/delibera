@@ -301,6 +301,8 @@ function delibera_hacklab_filter_pautas($query) {
         }
         
         $query->set('tax_query', $taxonomy_filters);
+        
+        $query->set('showposts', 10);
     }
 }
 add_action('pre_get_posts', 'delibera_hacklab_filter_pautas');

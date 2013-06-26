@@ -1,6 +1,8 @@
 <?php if (have_posts()) :
     while (have_posts()) :
-        the_post(); ?>
+        the_post();
+        $temas = wp_get_post_terms($post->ID, 'tema');
+        ?>
 
         <div class="topic clearfix">
             <div class="meta textright clearfix">
@@ -29,16 +31,16 @@
             <div class="content"><?php the_content(); ?></div>
             
             <div class="meta">
-                <ul class="meta meta-tags">
-                    <li>Tema:</li>
-                    <li><a href="">Tema 1</a>,</li>
-                    <li><a href="">Tema 2</a>,</li>
-                    <li><a href="">Tema 3</a>,</li>
-                    <li><a href="">Tema 4</a>,</li>
-                    <li><a href="">Tema 5</a></li>
-                </ul>
+                <?php if (!empty($temas)) : ?>
+                    <ul class="meta meta-tags">
+                        <li>Tema:</li>
+                        <?php $size = count($temas) - 1; ?>
+                        <?php foreach ($temas as $key => $tema) : ?>
+                            <li><a href="<?php echo get_post_type_archive_link('pauta') . "?tema_filtro[{$tema->slug}]=on"; ?>"><?php echo $tema->name; ?></a><?php echo ($key != $size) ? ',' : ''; ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
             </div>
-            
             
             <?php comments_template( '', true ); ?>
         </div>

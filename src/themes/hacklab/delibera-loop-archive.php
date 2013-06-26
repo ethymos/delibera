@@ -3,6 +3,7 @@
 if (have_posts()) :
     while (have_posts()) :
         the_post();
+        $temas = wp_get_post_terms($post->ID, 'tema');
         
         $situacao = delibera_get_situacao($post->ID);
         ?>
@@ -20,15 +21,17 @@ if (have_posts()) :
             <h1><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
             <p class="meta">Discussão criada por <span class="author"><a class="url fn n" href="<?php the_author_meta('user_url'); ?>" title="<?php printf('Ver o perfil de %s', get_the_author()); ?>"><?php the_author(); ?></a></span> em <span class="date"><?php echo get_the_date('d/m/y'); ?></span></p>
             <p><?php the_excerpt(); ?></p>
-            
-            <ul class="meta meta-tags">
-                <li>Tema:</li>
-                <li><a href="">Tema 1</a>,</li>
-                <li><a href="">Tema 2</a>,</li>
-                <li><a href="">Tema 3</a>,</li>
-                <li><a href="">Tema 4</a>,</li>
-                <li><a href="">Tema 5</a></li>
-            </ul>
+
+            <?php if (!empty($temas)) : ?>
+                <ul class="meta meta-tags">
+                    <li>Tema:</li>
+                    <?php $size = count($temas) - 1; ?>
+                    <?php foreach ($temas as $key => $tema) : ?>
+                        <li><a href="<?php echo get_post_type_archive_link('pauta') . "?tema_filtro[{$tema->slug}]=on"; ?>"><?php echo $tema->name; ?></a><?php echo ($key != $size) ? ',' : ''; ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+
             <div class="actions bottom clearfix">
                 <div class="number-of-comments alignleft">
                     <a href="">123 comentários</a>
