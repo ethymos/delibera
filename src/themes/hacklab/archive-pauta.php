@@ -44,6 +44,20 @@ get_header();
                 </div>
                 <div id="lista-de-pautas" class="site-content alignright">
                     <?php load_template(dirname(__FILE__) . '/delibera-loop-archive.php', true); ?>
+                    <?php
+                    
+                    global $wp_query;
+                    $big = 99999999; // need an unlikely integer
+                    
+                    echo paginate_links(array(
+                        'base' => str_replace($big, '%#%', get_pagenum_link($big)),
+                        'format' => '?paged=%#%',
+                        'total' => $wp_query->max_num_pages,
+                        'current' => max(1, get_query_var('paged')),
+                    ));
+
+                    ?>
+                    
                     <nav class="navigation">
                         <ol>
                             <li><a href="">1</a></li>
