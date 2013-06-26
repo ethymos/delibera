@@ -37,15 +37,6 @@
                     <li><a href="">Tema 4</a>,</li>
                     <li><a href="">Tema 5</a></li>
                 </ul>
-            
-                <ul class="meta meta-tags">
-                    <li>Tags:</li>
-                    <li><a href="">Tag 1</a>,</li>
-                    <li><a href="">Tag 2</a>,</li>
-                    <li><a href="">Tag 3</a>,</li>
-                    <li><a href="">Tag 4</a>,</li>
-                    <li><a href="">Tag 5</a></li>
-                </ul>
             </div>
             
             

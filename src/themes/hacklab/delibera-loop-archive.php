@@ -29,19 +29,16 @@ if (have_posts()) :
                 <li><a href="">Tema 4</a>,</li>
                 <li><a href="">Tema 5</a></li>
             </ul>
-            
-            <ul class="meta meta-tags">
-                <li>Tags:</li>
-                <li><a href="">Tag 1</a>,</li>
-                <li><a href="">Tag 2</a>,</li>
-                <li><a href="">Tag 3</a>,</li>
-                <li><a href="">Tag 4</a>,</li>
-                <li><a href="">Tag 5</a></li>
-            </ul>
-
-            <?php if (in_array($situacao->slug, array('emvotacao', 'discussao', 'validacao'))) : ?>
-                <p class="bottom textright"><a class="btn" href="<?php the_permalink() ?>"><?php echo delibera_get_situation_button($post->ID); ?></a></p>
-            <?php endif; ?>
+            <div class="actions bottom clearfix">
+                <div class="number-of-comments alignleft">
+                    <a href="">123 comentários</a>
+                </div>
+                <?php if (in_array($situacao->slug, array('emvotacao', 'discussao', 'validacao'))) : ?>
+                    <div class="alignright bottom textright">
+                        <a class="btn" href="<?php the_permalink() ?>"><?php echo delibera_get_situation_button($post->ID); ?></a>
+                    </div>
+                <?php endif; ?>
+            </div>
         </div>
     <?php
     endwhile;
