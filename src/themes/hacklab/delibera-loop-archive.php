@@ -32,9 +32,16 @@ if (have_posts()) :
                 </ul>
             <?php endif; ?>
 
-            <?php if (in_array($situacao->slug, array('emvotacao', 'discussao', 'validacao'))) : ?>
-                <p class="bottom textright"><a class="btn" href="<?php the_permalink() ?>"><?php echo delibera_get_situation_button($post->ID); ?></a></p>
-            <?php endif; ?>
+            <div class="actions bottom clearfix">
+                <div class="number-of-comments alignleft">
+                    <a href="">123 comentários</a>
+                </div>
+                <?php if (in_array($situacao->slug, array('emvotacao', 'discussao', 'validacao'))) : ?>
+                    <div class="alignright bottom textright">
+                        <a class="btn" href="<?php the_permalink() ?>"><?php echo delibera_get_situation_button($post->ID); ?></a>
+                    </div>
+                <?php endif; ?>
+            </div>
         </div>
     <?php
     endwhile;

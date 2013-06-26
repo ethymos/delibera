@@ -104,6 +104,25 @@ div, h1, h2, h3, h4, h5, p { margin-bottom:9px; }
     text-transform:uppercase;
 }
 
+#delibera .topic .actions > div {
+    margin-top:20px;
+}
+
+#delibera .topic .number-of-comments {
+    background-color:#ddd;
+    border-radius:4px;
+    color:#333;
+    cursor:pointer;
+    display:inline-block;
+    font-size:14px;
+    line-height:20px;
+    margin-bottom:0;
+    padding:5px 12px;
+    text-align:center;
+    text-decoration:none;
+    vertical-align:middle;
+}
+
 #delibera .topic .meta-tags li {
     display:inline-block;
     font-size:12px;
@@ -175,6 +194,21 @@ div, h1, h2, h3, h4, h5, p { margin-bottom:9px; }
     border-top:1px solid #ededed;
     margin-top:18px;
     padding-top:18px;
+}
+
+
+.single #delibera .votes {
+    border-top:1px solid #ededed;
+    margin-top:18px;
+    padding-top:18px;
+}
+
+.single #delibera .votes ul li {
+    display:block;
+    float:left;
+    line-height:1;
+    margin:0 3px 3px 0;
+    padding:0;
 }
 
 #delibera #comments li.comment {
