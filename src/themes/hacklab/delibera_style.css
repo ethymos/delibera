@@ -211,6 +211,10 @@ div, h1, h2, h3, h4, h5, p { margin-bottom:9px; }
     padding:0;
 }
 
+#delibera #comments header {
+    padding:0;
+}
+
 #delibera #comments li.comment {
     background:#ededed;
 }

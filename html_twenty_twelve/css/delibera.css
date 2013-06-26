@@ -157,6 +157,10 @@ div, h1, h2, h3, h4, h5, p { margin-bottom:9px; }
     padding-top:18px;
 }
 
+#delibera #comments header {
+    padding:0;
+}
+
 #delibera #comments li.comment {
     background:#ededed;
 }
@@ -245,6 +249,24 @@ div, h1, h2, h3, h4, h5, p { margin-bottom:9px; }
 #delibera #encaminhamentos ol li .content p:last-child {
     margin-bottom:0;
     padding-bottom:0;
+}
+
+#delibera #new-encaminhamento {
+    background:#fff;
+    bottom:0;
+    box-shadow:1px 1px 10px #333;
+    height:35%;
+    min-height:300px;
+    left:0;
+    position:fixed;
+    right:0;
+    z-index:10;
+}
+
+#delibera #new-encaminhamento textarea {
+    height:180px;
+    margin-bottom:9px;
+    width:98.6%;
 }
 
 
