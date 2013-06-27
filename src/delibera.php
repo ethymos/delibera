@@ -462,6 +462,58 @@ function delibera_get_comment_type_label($comment, $tipo = false, $echo = true)
 	}
 }
 
+/**
+ * Retorna uma string com a quantidade de comentários
+ * associados a pauta do tipo correspondente a situação
+ * atual.
+ * 
+ * @param int $postId
+ * @return string (exemplo: "5 votos")
+ */
+function delibera_get_comments_count_by_type($postId)
+{
+    $situacao = delibera_get_situacao($postId);
+    
+    switch ($situacao->slug) {
+        case 'validacao':
+            $count = count(delibera_get_comments_validacoes($postId));
+            
+            if ($count == 0) {
+                $label = __('Nenhuma validação', 'delibera');
+            } else if ($count == 1) {
+                $label = __('1 validação', 'delibera');
+            } else {
+                $label = sprintf(__('%d validações', 'delibera'), $count);
+            }
+            
+            return $label;
+        case 'discussao':
+            $count = count(delibera_get_comments_discussoes($postId));
+            
+            if ($count == 0) {
+                $label = __('Nenhum comentário', 'delibera');
+            } else if ($count == 1) {
+                $label = __('1 comentário', 'delibera');
+            } else {
+                $label = sprintf(__('%d comentários', 'delibera'), $count);
+            }
+            
+            return $label;
+        case 'emvotacao':
+            $count = count(delibera_get_comments_votacoes($postId));
+            
+            if ($count == 0) {
+                $label = __('Nenhum voto', 'delibera');
+            } else if ($count == 1) {
+                $label = __('1 voto', 'delibera');
+            } else {
+                $label = sprintf(__('%d votos', 'delibera'), $count);
+            }
+            
+            return $label;
+    }
+}
+
 function delibera_get_comments_types()
 {
 	return array('validacao', 'discussao', 'encaminhamento', 'voto', 'resolucao');

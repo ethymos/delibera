@@ -33,9 +33,12 @@ if (have_posts()) :
             <?php endif; ?>
 
             <div class="actions bottom clearfix">
-                <div class="number-of-comments alignleft">
-                    <a href="">123 comentários</a>
-                </div>
+                <?php $label = delibera_get_comments_count_by_type($post->ID); ?>
+                <?php if ($label) : ?>
+                    <div class="number-of-comments alignleft">
+                        <a href="<?php the_permalink(); ?>#comments"><?php echo $label; ?></a>
+                    </div>
+                <?php endif; ?>
                 <?php if (in_array($situacao->slug, array('emvotacao', 'discussao', 'validacao'))) : ?>
                     <div class="alignright bottom textright">
                         <a class="btn" href="<?php the_permalink() ?>"><?php echo delibera_get_situation_button($post->ID); ?></a>
