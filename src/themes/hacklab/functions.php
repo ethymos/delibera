@@ -100,8 +100,9 @@ function delibera_comment_form($defaults)
                     if (current_user_can('votar')) {
                         $form = '
                             <div id="painel_validacao" class="actions textcenter">
-                                <button class="btn btn-success"><input id="delibera_aceitar" type="radio" name="delibera_validacao" value="S" checked style="display: none;" />Sim</button>
-                                <button class="btn btn-danger"><input id="delibera_rejeitar" type="radio" name="delibera_validacao" value="N" style="display: none;" />Não</button>
+                                <button class="btn btn-success">Sim</button>
+                                <button class="btn btn-danger">Não</button>
+                                <input type="hidden" name="delibera_validacao" id="delibera_validacao" />
                                 <input name="comment" value="A validação de '.$current_user->display_name.' foi registrada no sistema." style="display:none;" />
                                 <input name="delibera_comment_tipo" value="validacao" style="display:none;" />
                             </div>
