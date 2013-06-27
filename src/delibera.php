@@ -2556,6 +2556,15 @@ add_filter('the_posts', 'delibera_the_posts'); // the_posts gets triggered befor
 
 // Validadores
 
+/**
+ * Sempre que um usuário valida uma pauta
+ * verifica se o número mínimo de validações foi
+ * atingido e se sim muda a situação da pauta de
+ * "emvotacao" para "discussao".
+ * 
+ * @param unknown $post
+ * @return null
+ */
 function delibera_valida_validacoes($post)
 {
 	$validacoes = get_post_meta($post, 'numero_validacoes', true);
