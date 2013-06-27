@@ -196,13 +196,6 @@ div, h1, h2, h3, h4, h5, p { margin-bottom:9px; }
     padding-top:18px;
 }
 
-
-.single #delibera .votes {
-    border-top:1px solid #ededed;
-    margin-top:18px;
-    padding-top:18px;
-}
-
 .single #delibera .votes ul li {
     display:block;
     float:left;

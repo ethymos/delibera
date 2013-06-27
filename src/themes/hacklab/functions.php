@@ -105,22 +105,7 @@ function delibera_comment_form($defaults)
                                 <input type="hidden" name="delibera_validacao" id="delibera_validacao" />
                                 <input name="comment" value="A validação de '.$current_user->display_name.' foi registrada no sistema." style="display:none;" />
                                 <input name="delibera_comment_tipo" value="validacao" style="display:none;" />
-                            </div>
-                            <div class="votes">
-                                <div class="votes-agree">
-                                    <h3>Pessoas que votaram a favor (123)</h3>
-                                    <ul class="clearfix">
-                                        <li><img src="http://1.gravatar.com/avatar/9450ed14e26e47efb94ae3cc40d1e891?s=44&d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&r=G" alt="Nome Sobrenome" title="Nome Sobrenome"/></li>
-                                    </ul>
-                                </div>
-                                <div class="votes-disagree">
-                                    <h3>Pessoas que votaram contra (321)</h3>
-                                    <ul class="clearfix">
-                                        <li><img src="http://1.gravatar.com/avatar/9450ed14e26e47efb94ae3cc40d1e891?s=44&d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&r=G" alt="Nome Sobrenome" title="Nome Sobrenome"/></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        ';
+                            </div>';
                         $defaults['comment_field'] = $form;
                         $defaults['comment_notes_after'] = '<script type="text/javascript">jQuery(document).ready(function() { jQuery(\'input[name="submit"]\').hide(); });</script><div class="delibera_comment_button">';;
                         $defaults['logged_in_as'] = "";
