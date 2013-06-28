@@ -275,3 +275,45 @@ add_action('wp_enqueue_scripts', function() {
         wp_enqueue_script('delibera-hacklab', $deliberaThemes->getThemeUrl() . '/js/delibera-default.js', array('jquery'));
     }
 });
+
+/**
+ * Gera código html para criação do botão seguir do sistema delibera
+ *
+ * @param $ID post_ID
+ * @return string
+ */
+function delibera_gerar_seguir($ID)
+{
+    if(is_user_logged_in())
+    {
+        global $post;
+
+        if(is_object($ID))
+        {
+            $ID = $ID->ID;
+        }
+
+        $user_id = get_current_user_id();
+        $situacao = is_object($post) ? delibera_get_situacao($post->ID) : '';
+
+        $seguir = false;
+        if(!delibera_ja_seguiu($ID, $user_id) && (is_object($situacao) && $situacao->slug != 'relatoria'))
+        {
+            $seguir = true;
+        }
+
+        $html = '<div id="delibera_seguir" class="delibera_seguir">
+            <span id="delibera-seguir-text" class="delibera_seguir_text" ' . (($seguir == false) ? 'style="display: none;"' : '') . '>' . __('Seguir','delibera') . '</span>'
+            . '<span id="delibera-seguindo-text" class="delibera_seguir_text" ' . (($seguir == true) ? 'style="display: none;"' : '') . '>' . __('Seguindo','delibera') . '<span class="delibera_seguir_cancel">&nbsp;('.__('Cancelar', 'delibera').')</span></span>'
+            . '</div>';
+        
+        return $html;
+    }
+    else
+    {
+        $html = '<div id="delibera_seguir" class="delibera_seguir" ><a class="delibera-seguir-login" href="';
+        $html .= wp_login_url( get_post_type() == "pauta" ? get_permalink() : delibera_get_comment_link());
+        $html .= '" ><span class="delibera_seguir_text">'.__('Seguir','delibera').'</span></a></div>';
+        return $html;
+    }
+}

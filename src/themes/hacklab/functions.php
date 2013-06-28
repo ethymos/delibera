@@ -241,13 +241,10 @@ function delibera_comment_form($defaults)
 add_filter('comment_form_defaults', 'delibera_comment_form');
 
 add_action('wp_enqueue_scripts', function() {
-    global $deliberaThemes, $post;
+    global $deliberaThemes;
     
     if (get_post_type() == 'pauta') {
-        $situation = delibera_get_situacao($post->ID);
-        
-        wp_enqueue_script('delibera-hacklab', $deliberaThemes->getThemeUrl() . '/js/delibera-hacklab.js', array('jquery'));
-        wp_localize_script('delibera-hacklab', 'delibera', array('situation' => $situation->slug));
+        wp_enqueue_script('delibera-hacklab', $deliberaThemes->getThemeUrl() . '/js/delibera-hacklab.js', array('jquery', 'delibera'));
     }
 });
 
