@@ -97,7 +97,7 @@ class Delibera_Walker_Comment extends Walker_Comment
                                 if ($situacao->slug == 'discussao' || ($situacao->slug == 'relatoria' && current_user_can('relatoria'))) {
                                     echo "<br/>";
                                     delibera_edit_comment_link(__('Edit'),'', '');
-                                    delibera_delete_comment_link(__('Delete'),'', '');
+                                    delibera_delete_comment_link(__('Deletar'),'', '');
                                 }
                             ?>
                         </di>
