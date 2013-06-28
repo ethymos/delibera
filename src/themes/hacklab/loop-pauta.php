@@ -23,7 +23,7 @@
                 <a href="" class="btn btn-twitter">Twitter</a>
                 <a href="" class="btn btn-google-plus">Google+</a>
                 <div class="alignright bottom">
-                    <a href="" class="btn"><i class="icon-print"></i> Imprimir</a>
+                    <a href="?delibera_print=1" class="btn"><i class="icon-print"></i> Imprimir</a>
                     <a href="" class="btn"><i class="icon-star-empty"></i> Seguir</a>
                 </div>
             </div>
