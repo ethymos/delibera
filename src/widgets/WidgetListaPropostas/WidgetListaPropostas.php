@@ -5,28 +5,45 @@ class WidgetListaPropostas extends WP_Widget
 	public function getDefaults()
 	{
 		return array(
-			'number' => 5,
 			'title' => __( 'Delibera Lista de Propostas', 'delibera' ),
 			'show_summary' => 1,
 			'show_author' => 1,
-			'show_date' => 1
+			'show_date' => 1,
+			'show_prazo' => 1,
+			'show_comment_link' => 1,
+			'show_situacao' => 1,
+			'items' => 10,
+			'situacao' => 'todas'
 		);
 	}
 	
 	public function __construct()
 	{
 		parent::__construct(
-				'WidgetListaPropostas', // Base ID
-				'Delibera Lista de Propostas', // Name
-				array( 'description' => __( 'Listas as Propostas de Pauta do Delibera', 'delibera' ), ) // Args
+			'WidgetListaPropostas', // Base ID
+			'Delibera Lista de Propostas', // Name
+			array( 'description' => __( 'Listas as Propostas de Pauta do Delibera', 'delibera' ), ) // Args
 		);
 	}
 	
 	public function widget( $args, $instance )
 	{
-		$param = array(); //TODO parametros do formulário
+		$params = array_merge($this->getDefaults(), $instance);
 		
-		$wp_posts = delibera_get_propostas($param);
+		if($params['situacao'] == 'todas')
+		{
+			$terms = get_terms('situacao');
+			$params['situacao'] = array();
+			foreach ($terms as $term)
+			{
+				$params['situacao'][] = $term->slug;
+			}
+		}
+		
+		extract($params);
+		
+		/* @var $wp_posts WP_Query */ 
+		$wp_posts = delibera_get_pautas_em(array('posts_per_page'  => $items), $params['situacao']);
 		
 		include 'view.php';
 	}
@@ -34,24 +51,21 @@ class WidgetListaPropostas extends WP_Widget
 	public function form( $instance )
 	{
 		$default_inputs = $this->getDefaults();
-		if(!is_array($instance))
-		{
-			$instance = $default_inputs;
-		}
-		print_r($instance);
 		
-		$args = $instance; 
+		$args = array_merge($default_inputs, $instance); 
 		
 		extract( $args );
 		
-		$number = esc_attr( $number );
 		$title  = esc_attr( $title );
 		$items  = (int) $items;
 		if ( $items < 1 || 20 < $items )
 			$items  = 10;
-		$show_summary   = (int) $show_summary;
-		$show_author    = (int) $show_author;
-		$show_date      = (int) $show_date;
+		$show_summary   	= (int) $show_summary;
+		$show_author    	= (int) $show_author;
+		$show_date      	= (int) $show_date;
+		$show_prazo 		= (int) $show_prazo;
+		$show_comment_link 	= (int) $show_comment_link;
+		$show_situacao 		= (int) $show_situacao;
 		
 		if ( !empty($error) )
 			echo '<p class="widget-error"><strong>' . sprintf( __('RSS Error: %s'), $error) . '</strong></p>';
