@@ -2,6 +2,14 @@
     while (have_posts()) :
         the_post();
         $temas = wp_get_post_terms($post->ID, 'tema');
+        
+        $user_id = get_current_user_id();
+        $situacao = delibera_get_situacao($post->ID);
+        
+        $seguir = false;
+        if (!delibera_ja_seguiu($post->ID, $user_id) && $situacao->slug != 'relatoria') {
+            $seguir = true;
+        }
         ?>
 
         <div class="topic clearfix">
@@ -24,7 +32,10 @@
                 <a href="" class="btn btn-google-plus">Google+</a>
                 <div class="alignright bottom">
                     <a href="?delibera_print=1" class="btn"><i class="icon-print"></i> Imprimir</a>
-                    <a href="" class="btn"><i class="icon-star-empty"></i> Seguir</a>
+                    <button id="delibera_seguir" href="" class="btn">
+                        <span id="delibera-seguir-text" <?php if (!$seguir) echo ' style="display: none;" ';?>><i class="icon-star-empty"></i> Seguir</span>
+                        <span id="delibera-seguindo-text"  <?php if ($seguir) echo ' style="display: none;" ';?>><i class="icon-star"></i> Seguindo</span>
+                    </button>
                 </div>
             </div>
 
