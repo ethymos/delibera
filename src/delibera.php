@@ -670,7 +670,7 @@ function delibera_get_situation_button($postId)
         case 'discussao':
             return 'Discutir';
         case 'validacao':
-            return 'Validar';
+            return 'Votar';
         default:
             return;
     }
