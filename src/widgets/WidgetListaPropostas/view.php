@@ -1,4 +1,5 @@
 <div id="lista-de-pautas">
+<h2 class="list-title delibera-widget-list-title"><?php echo $title; ?></h2>
 <?php
 global $post;
 foreach ( $wp_posts as $wp_post )
