@@ -24,7 +24,7 @@
                 </span>
             </div>
             <h1><a href=""><?php the_title(); ?></a></h1>
-            <p class="meta clearfix">Discussão criada por <span class="author"><a class="url fn n" href="<?php the_author_meta('user_url'); ?>" title="<?php printf('Ver o perfil de %s', get_the_author()); ?>"><?php the_author(); ?></a></span> em <span class="date"><?php the_date('d/m/y'); ?></span></p>
+            <p class="meta clearfix">Discussão criada por <span class="author"><?php the_author(); ?></span> em <span class="date"><?php the_date('d/m/y'); ?></span></p>
 
             <div class="meta meta-social clearfix">
                 <a href="" class="btn btn-facebook">Facebook</a>
