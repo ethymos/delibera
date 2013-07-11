@@ -1875,15 +1875,17 @@ function delibera_scripts()
 		wp_enqueue_script('jquery-expander', WP_CONTENT_URL.'/plugins/delibera/js/jquery.expander.js', array('jquery'));
 		wp_enqueue_script('delibera', WP_CONTENT_URL.'/plugins/delibera/js/scripts.js', array('jquery-expander'));
 		wp_enqueue_script('delibera-seguir', WP_CONTENT_URL . '/plugins/delibera/js/delibera_seguir.js', array('delibera'));
+		wp_enqueue_script('delibera-concordar', WP_CONTENT_URL . '/plugins/delibera/js/delibera_concordar.js', array('delibera'));
 
 		$situation = delibera_get_situacao($post->ID);
-		wp_localize_script('delibera', 'delibera',
-			array(
-				'post_id' => $post->ID,
-				'ajax_url' => admin_url('admin-ajax.php'),
-				'situation' => $situation->slug
-			)
+		
+		$data = array(
+			'post_id' => $post->ID,
+			'ajax_url' => admin_url('admin-ajax.php'),
+			'situation' => $situation->slug
 		);
+		
+		wp_localize_script('delibera', 'delibera', $data);
 	}
 }
 add_action( 'wp_print_scripts', 'delibera_scripts' );

@@ -317,3 +317,126 @@ function delibera_gerar_seguir($ID)
         return $html;
     }
 }
+
+/**
+ * Gera código html para criação do botão curtir/concordar do sistema delibera
+ * 
+ * @param $ID post_ID ou comment_ID
+ * @param $type 'pauta' ou 'comment'
+ */
+function delibera_gerar_curtir($ID, $type ='pauta')
+{
+    global $post;
+    
+    $situacoes_validas = array('validacao' => false, 'discussao' => true, 'emvotacao' => false, 'comresolucao' => true);
+    
+    $postID = 0;
+    if(is_object($ID))
+    {
+        if($type == 'post' || $type == 'pauta')
+        {
+            $ID = $ID->ID;
+            $postID = $ID;
+        }
+        else
+        {
+            $postID = $ID->comment_post_ID;
+            $ID = $ID->comment_ID;
+        }
+    }
+    
+    $ncurtiu = intval($type == 'pauta' || $type == 'post' ? get_post_meta($ID, 'delibera_numero_curtir', true) : get_comment_meta($ID, 'delibera_numero_curtir', true));
+    $ndiscordou = intval($type == 'pauta' || $type == 'post' ? get_post_meta($ID, 'delibera_numero_discordar', true) : get_comment_meta($ID, 'delibera_numero_discordar', true));
+    $situacao = delibera_get_situacao($postID);
+
+    $html = ($ncurtiu > 0 ? '<span class="delibera-like-count" >' . "$ncurtiu " . ($ncurtiu > 1 ? __('concordaram', 'delibera') : __('concordou', 'delibera')).'</span>' : '');    
+    $html .= ($ndiscordou > 0 ? '<span class="delibera-unlike-count" >' . "$ndiscordou " . ($ndiscordou > 1 ? __('discordaram', 'delibera') : __('discordou', 'delibera')).'</span>' : '');
+    
+    if (is_user_logged_in()) {
+        $user_id = get_current_user_id();
+        $ip = $_SERVER['REMOTE_ADDR'];
+        
+        if(
+            !delibera_ja_curtiu($ID, $user_id, $ip, $type) && // Ainda não curitu
+            (is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas)) && $situacoes_validas[$situacao->slug] && // é uma situação válida
+            !(delibera_ja_discordou($ID, $user_id, $ip, $type)) // não discordou
+        )
+        {
+            $html .= '<div id="thebutton'.$type.$ID.'" class="delibera_like" ><span class="delibera_like_text">'.__('Concordo','delibera').'</span>';
+            $html .= "<input type='hidden' name='object_id' value='{$ID}' />";
+            $html .= "<input type='hidden' name='type' value='{$type}' />";
+            $html .= '</div>';
+        }
+    } else {
+        $html .= '<div id="thebutton'.$type.$ID.'" class="delibera_like" >';
+        if (is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas) && $situacoes_validas[$situacao->slug]) { // é uma situação válida
+            $html .= '<a class="delibera-like-login" href="';
+            $html .= wp_login_url( $type == "pauta" ? get_permalink() : delibera_get_comment_link());
+            $html .= '" ><span class="delibera_like_text">'.__('Concordo','delibera').'</span></a>';
+        }
+    }
+    
+    return $html;
+}
+
+/**
+ * 
+ * Gera código html para criação do botão discordar do sistema delibera
+ * @param $ID int post_ID ou comment_ID
+ * @param $type string 'pauta' ou 'comment'
+ */
+function delibera_gerar_discordar($ID, $type ='pauta')
+{
+    global $post;
+    
+    $situacoes_validas = array('validacao' => false, 'discussao' => true, 'emvotacao' => false, 'comresolucao' => true);
+    
+    $postID = 0;
+    if(is_object($ID))
+    {
+        if($type == 'post' || $type == 'pauta')
+        {
+            $ID = $ID->ID;
+            $postID = $ID;
+        }
+        else
+        {
+            $postID = $ID->comment_post_ID;
+            $ID = $ID->comment_ID;
+        }
+    }
+    
+    $situacao = delibera_get_situacao($postID);
+    
+    if(is_user_logged_in())
+    {
+        $user_id = get_current_user_id();
+        $ip = $_SERVER['REMOTE_ADDR'];
+        
+        if(
+            !delibera_ja_discordou($ID, $user_id, $ip, $type) && // Ainda não curitu
+            (is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas)) && $situacoes_validas[$situacao->slug] &&// é uma situação válida
+            !(delibera_ja_curtiu($ID, $user_id, $ip, $type)) // não discordou
+        )
+        {
+            $html = '<div id="thebuttonDiscordo'.$type.$ID.'" class="delibera_unlike" ><span class="delibera_unlike_text">'.__('Discordo','delibera').'</span>';
+            $html .= "<input type='hidden' name='object_id' value='{$ID}' />";
+            $html .= "<input type='hidden' name='type' value='{$type}' />";
+            $html .= '</div>';
+            
+            return $html;
+        }
+    }
+    else 
+    {
+        $html = '<div id="thebuttonDiscordo'.$type.$ID.'" class="delibera_unlike" >';
+        if(is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas) && $situacoes_validas[$situacao->slug]) // é uma situação válida
+        {
+            $html .= '<a class="delibera-unlike-login" href="';
+            $html .= wp_login_url( $type == "pauta" ? get_permalink() : delibera_get_comment_link());
+            $html .= '" ><span class="delibera_unlike_text">'.__('Discordo','delibera').'</span></a>';
+        }
+
+        return $html;
+    }
+}

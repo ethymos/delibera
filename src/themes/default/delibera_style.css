@@ -567,7 +567,7 @@ a.comment-reply-link:hover{
 	
 }
 
-.delibera_like, .delibera_unlike {
+.delibera_like, .delibera_unlike, span.delibera-unlike-count, span.delibera-like-count {
     clear:right;
     color:#4F4F4F !important;
     font-family: 'LucidaSansDemiboldRoman', arial, helvetica;
@@ -581,7 +581,7 @@ a.comment-reply-link:hover{
     text-transform:uppercase;
 }
 
-.delibera_like span {
+.delibera_like span, span.delibera-unlike-count, span.delibera-like-count {
     display:block;
     padding-top:4px;
     padding-right:22px;

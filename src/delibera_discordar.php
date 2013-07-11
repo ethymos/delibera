@@ -17,8 +17,10 @@ function delibera_discordar_comment_meta($comment_id)
 	}
 }
 
-function delibera_discordar($ID, $type ='pauta', $user_id = false, $ip = false)
+function delibera_discordar($ID, $type ='pauta')
 {
+	$user_id = get_current_user_id();
+	$ip = $_SERVER['REMOTE_ADDR'];
 	
 	if(!delibera_ja_discordou($ID, $user_id, $ip, $type) && !(function_exists('delibera_ja_curtiu') && delibera_ja_curtiu($ID, $user_id, $ip, $type)) )
 	{
@@ -34,7 +36,6 @@ function delibera_discordar($ID, $type ='pauta', $user_id = false, $ip = false)
 			if(!array_key_exists($hora, $discordaram)) $discordaram[$hora] = array();
 			$discordaram[$hora][] = array('user' => $user_id, 'ip' => $ip);
 			update_post_meta($postID, 'delibera_discordaram', $discordaram);
-			return $ndiscordar;
 		}
 		elseif($type == 'comment')
 		{
@@ -48,8 +49,9 @@ function delibera_discordar($ID, $type ='pauta', $user_id = false, $ip = false)
 			if(!array_key_exists($hora, $discordaram)) $discordaram[$hora] = array();
 			$discordaram[$hora][] = array('user' => $user_id, 'ip' => $ip);
 			update_comment_meta($comment_id, 'delibera_discordaram', $discordaram);
-			return $ndiscordar;
 		}
+		
+		return sprintf(_n('%d discordou', '%d discordaram', $ndiscordar, 'delibera'), $ndiscordar);
 	}
 }
 
@@ -99,109 +101,11 @@ function delibera_ja_discordou($postID, $user_id, $ip, $type)
 	return false;
 }
 
-/**
- * 
- * Gera código html/js para criação do botão discordar do sistema delibra
- * @param $ID int post_ID ou comment_ID
- * @param $type string 'pauta' ou 'comment'
- */
-function delibera_gerar_discordar($ID, $type ='pauta')
-{
-	global $post;
-	
-	$situacoes_validas = array('validacao' => false, 'discussao' => true, 'emvotacao' => false, 'comresolucao' => true);
-	
-	$postID = 0;
-	if(is_object($ID))
-	{
-		if($type == 'post' || $type == 'pauta')
-		{
-			$ID = $ID->ID;
-			$postID = $ID;
-		}
-		else
-		{
-			$postID = $ID->comment_post_ID;
-			$ID = $ID->comment_ID;
-		}
-	}
-	
-	$ndiscordou = intval($type == 'pauta' || $type == 'post' ? get_post_meta($ID, 'delibera_numero_discordar', true) : get_comment_meta($ID, 'delibera_numero_discordar', true));
-	$situacao = delibera_get_situacao($postID);
-	
-	if(is_user_logged_in())
-	{
-		$user_id = get_current_user_id();
-		$ip = $_SERVER['REMOTE_ADDR'];
-		
-		if(
-			!delibera_ja_discordou($ID, $user_id, $ip, $type) && // Ainda não curitu
-			(is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas)) && $situacoes_validas[$situacao->slug] &&// é uma situação válida
-			!(function_exists('delibera_ja_curtiu') && delibera_ja_curtiu($ID, $user_id, $ip, $type)) // não discordou
-		)
-		{
-			$html = '<div id="thebuttonDiscordo'.$type.$ID.'" class="delibera_unlike" ><span class="delibera_unlike_text">'.__('Discordo','delibera').'</span>';
-			$html .= ( $ndiscordou > 0 ? '<span class="delibera-unlike-count" >'."$ndiscordou ".($ndiscordou > 1 ? __('discordaram','delibera') : __('discordou','delibera')).'</span>' : '').'</div>';
-			
-			$JS = '
-				<script type="text/javascript">
-				    jQuery(function ()
-				    {
-				        jQuery("#thebuttonDiscordo'.$type.$ID.'")
-				            .click(function ()
-				            {
-								jQuery.post("'.home_url( "/" ).'/wp-admin/admin-ajax.php", 
-									{
-										action : "delibera_discordar" ,
-									    like_id : "'.$ID.'",
-									    type : "'.$type.'",
-									    user_id: "'.$user_id.'",
-									    ip: "'.$ip.'"
-									},
-									function(response)
-									{
-										var html_resp = "<div id=\"thebuttonDiscordo'.$type.$ID.'\" class=\"delibera_unlike\" ><span class=\"delibera_unlike_reposta\">";
-										html_resp += response;
-										html_resp += " "+(response > 1 ? "'.__('discordaram','delibera').'" : "'.__('discordou','delibera').'");
-										html_resp += "</span></div>";
-										
-										jQuery("#thebuttonDiscordo'.$type.$ID.'").replaceWith( html_resp );
-										if(jQuery(".delibera_like").length) jQuery(".delibera_like").hide();
-									}
-								);
-				            });
-				    });
-				</script>
-			';
-			$JS = str_replace("\n", " ", $JS);
-			$JS = str_replace("\r", " ", $JS);
-			return $JS.$html;
-		}
-		else 
-		{
-			$html = '<div id="thebuttonDiscordo'.$type.$ID.'" class="delibera_unlike" ><span class="delibera_unlike_reposta">'."$ndiscordou ".($ndiscordou > 1 ? __('discordaram','delibera') : __('discordou','delibera')).'</span></div>';
-			return $ndiscordou > 0 ? $html : '';
-		}
-	}
-	else 
-	{
-		$html = '<div id="thebuttonDiscordo'.$type.$ID.'" class="delibera_unlike" >';
-		if(is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas) && $situacoes_validas[$situacao->slug]) // é uma situação válida
-		{
-			$html .= '<a class="delibera-unlike-login" href="';
-			$html .= wp_login_url( $type == "pauta" ? get_permalink() : delibera_get_comment_link());
-			$html .= '" ><span class="delibera_unlike_text">'.__('Discordo','delibera').'</span></a>';
-		}
-		$html .= ( $ndiscordou > 0 ? '<span class="delibera-unlike-count" >'."$ndiscordou ".($ndiscordou > 1 ? __('discordaram','delibera') : __('discordou','delibera')).'</span>' : '').'</div>';
-		return $html;
-	}
-}
-
 function delibera_discordar_callback()
 {
 	if(array_key_exists('like_id', $_POST) && array_key_exists('type', $_POST))
 	{
-		echo delibera_discordar($_POST['like_id'], $_POST['type'], $_POST['user_id'], $_POST['ip']);
+		echo delibera_discordar($_POST['like_id'], $_POST['type']);
 	}
 	die();
 }
