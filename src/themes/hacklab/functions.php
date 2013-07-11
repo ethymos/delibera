@@ -288,3 +288,98 @@ function delibera_hacklab_filter_pautas($query) {
     }
 }
 add_action('pre_get_posts', 'delibera_hacklab_filter_pautas');
+
+/* Gera código html para criação do botão curtir/concordar do sistema delibera
+ * 
+ * @param $ID post_ID ou comment_ID
+ * @param $type 'pauta' ou 'comment'
+ */
+function delibera_gerar_curtir($ID, $type ='pauta')
+{
+    global $post;
+    
+    $situacoes_validas = array('validacao' => false, 'discussao' => true, 'emvotacao' => false, 'comresolucao' => true);
+    
+    $postID = 0;
+    
+    if (is_object($ID)) {
+        if($type == 'post' || $type == 'pauta') {
+            $ID = $ID->ID;
+            $postID = $ID;
+        } else {
+            $postID = $ID->comment_post_ID;
+            $ID = $ID->comment_ID;
+        }
+    }
+    
+    $ncurtiu = intval($type == 'pauta' || $type == 'post' ? get_post_meta($ID, 'delibera_numero_curtir', true) : get_comment_meta($ID, 'delibera_numero_curtir', true));
+    $ndiscordou = intval($type == 'pauta' || $type == 'post' ? get_post_meta($ID, 'delibera_numero_discordar', true) : get_comment_meta($ID, 'delibera_numero_discordar', true));
+    $situacao = delibera_get_situacao($postID);
+
+    $html = ($ncurtiu > 0 ? '<div class="delibera-like-count" >' . "$ncurtiu " . ($ncurtiu > 1 ? __('concordaram', 'delibera') : __('concordou', 'delibera')).'</div>' : '');    
+    $html .= ($ndiscordou > 0 ? '<div class="delibera-unlike-count" >' . "$ndiscordou " . ($ndiscordou > 1 ? __('discordaram', 'delibera') : __('discordou', 'delibera')).'</div>' : '');
+    
+    if (is_user_logged_in()) {
+        $user_id = get_current_user_id();
+        $ip = $_SERVER['REMOTE_ADDR'];
+        
+        if (!delibera_ja_curtiu($ID, $user_id, $ip, $type) && // Ainda não curitu
+            (is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas)) && $situacoes_validas[$situacao->slug] && // é uma situação válida
+            !(delibera_ja_discordou($ID, $user_id, $ip, $type))) // não discordou
+        {
+            $html .= '<button class="btn btn-mini btn-success delibera_like"><span class="delibera_like_text">' . __('Concordo', 'delibera') . '</span>';
+            $html .= "<input type='hidden' name='object_id' value='{$ID}' />";
+            $html .= "<input type='hidden' name='type' value='{$type}' />";
+            $html .= '</button>';
+        }
+    }
+    
+    return $html;
+}
+
+/**
+ * 
+ * Gera código html para criação do botão discordar do sistema delibera
+ * @param $ID int post_ID ou comment_ID
+ * @param $type string 'pauta' ou 'comment'
+ */
+function delibera_gerar_discordar($ID, $type ='pauta')
+{
+    global $post;
+    
+    $situacoes_validas = array('validacao' => false, 'discussao' => true, 'emvotacao' => false, 'comresolucao' => true);
+    
+    $postID = 0;
+    if(is_object($ID))
+    {
+        if($type == 'post' || $type == 'pauta')
+        {
+            $ID = $ID->ID;
+            $postID = $ID;
+        }
+        else
+        {
+            $postID = $ID->comment_post_ID;
+            $ID = $ID->comment_ID;
+        }
+    }
+    
+    $situacao = delibera_get_situacao($postID);
+    
+    if(is_user_logged_in()) {
+        $user_id = get_current_user_id();
+        $ip = $_SERVER['REMOTE_ADDR'];
+        
+        if (!delibera_ja_discordou($ID, $user_id, $ip, $type) && // Ainda não curitu
+            (is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas)) && $situacoes_validas[$situacao->slug] &&// é uma situação válida
+            !(delibera_ja_curtiu($ID, $user_id, $ip, $type))) // não discordou
+        {
+            $html = '<button class="btn btn-mini btn-danger delibera_unlike"><span class="delibera_unlike_text">' . __('Discordo','delibera') . '</span>';
+            $html .= "<input type='hidden' name='object_id' value='{$ID}' />";
+            $html .= "<input type='hidden' name='type' value='{$type}' />";
+            $html .= '</button>';
+            
+            return $html;
+        }
+    }
+}

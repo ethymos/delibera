@@ -154,15 +154,11 @@ class Delibera_Walker_Comment extends Walker_Comment
                             $discordar = delibera_gerar_discordar($comment->comment_ID, 'comment');
                             
                             if ($curtir) {
-                                ?>
-                                <button class="btn btn-mini btn-success"><?php echo $curtir; ?></button>
-                                <?php
+                                echo $curtir;
                             }
                             
                             if ($discordar) {
-                                ?>
-                                <button class="btn btn-mini btn-danger"><?php echo $discordar; ?></button>
-                                <?php
+                                echo $discordar;
                             }                                                
                             ?>
                         </div>

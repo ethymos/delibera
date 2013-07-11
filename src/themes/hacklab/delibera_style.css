@@ -693,6 +693,7 @@ input[type="button"].btn-block {
   background-color:#942a25 \9;
 }
 
+
 .btn-success {
   color:#ffffff;
   text-shadow:0 -1px 0 rgba(0, 0, 0, 0.25);
@@ -1735,4 +1736,8 @@ button .delibera_like, button .delibera_unlike {
     border-radius:4px;
     color:#fff;
     text-shadow:none;
+}
+
+.delibera_like {
+    margin-right: 4px;
 }
