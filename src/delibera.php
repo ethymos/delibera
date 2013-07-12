@@ -2604,6 +2604,9 @@ function delibera_comment_number($postID, $tipo)
 
 function delibera_comment_number_filtro($count, $postID)
 {
+	if (!is_pauta()) {
+		return $count;
+	}
 	$situacao = delibera_get_situacao($postID);
 	
 	if (!$situacao) {
@@ -2788,9 +2791,9 @@ function delibera_valida_validacoes($post)
  */
 function delibera_valida_permissoes($comment_ID)
 {
-	if (!current_user_can('votar'))
+	if (get_post_type() == 'pauta' && !current_user_can('votar'))
 	{
-		if ($_REQUEST['delibera_validacao'] || $_REQUEST['delibera_encaminha'])
+		if (array_key_exists('delibera_validacao', $_REQUEST) || array_key_exists('delibera_encaminha', $_REQUEST) )
 			wp_die("Nananina não! Você não tem que ter permissão pra votar.","Tocooo!!");	
 	}
 }
