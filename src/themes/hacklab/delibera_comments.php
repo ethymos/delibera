@@ -13,6 +13,8 @@ if ($situacao->slug == 'comresolucao') {
     $votes = delibera_get_comments_validacoes($post->ID);
     $approvals = (int) get_post_meta($post->ID, 'numero_validacoes', true);
     $rejections = (int) get_post_meta($post->ID, 'delibera_numero_comments_validacoes', true) - $approvals;
+} else if ($situacao->slug == 'relatoria') {
+    $title = 'Relatoria da pauta';
 } else {
     $title = 'Discussão sobre a pauta';
 }
