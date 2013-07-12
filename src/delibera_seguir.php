@@ -1,6 +1,9 @@
 <?php
-function delibera_seguir($ID, $type ='seguir', $user_id = false, $ip = false)
+function delibera_seguir($ID, $type = 'seguir')
 {
+	$user_id = get_current_user_id();
+	$ip = $_SERVER['REMOTE_ADDR'];
+	
 	if($type == 'seguir')
 	{
 		$postID = $ID;
@@ -47,7 +50,7 @@ function delibera_numero_seguir($ID)
 	return $nseguir;
 }
 
-function delibera_ja_seguiu($postID, $user_id, $ip)
+function delibera_ja_seguiu($postID, $user_id)
 {
 	$seguiram = get_post_meta($postID, 'delibera_seguiram', true);
 	if(!is_array($seguiram)) $seguiram = array();
@@ -64,96 +67,11 @@ function delibera_ja_seguiu($postID, $user_id, $ip)
 	return false;
 }
 
-/**
- * 
- * Gera código html/js para criação do botão seguir do sistema delibra
- * @param $ID post_ID ou comment_ID
- * @param $type 'pauta' ou 'comment'
- */
-function delibera_gerar_seguir($ID)
-{
-	if(is_user_logged_in())
-	{
-		
-		global $post;
-		if(is_object($ID))
-		{
-			$ID = $ID->ID;
-		}
-		
-		$type = "seguir";
-		$user_id = get_current_user_id();
-		$ip = $_SERVER['REMOTE_ADDR'];
-		$situacao = is_object($post) ? delibera_get_situacao($post->ID) : '';
-		
-		$seguir = false;
-		if(!delibera_ja_seguiu($ID, $user_id, $ip) && (is_object($situacao) && $situacao->slug != 'relatoria'))
-		{
-			$seguir = true;
-		}
-	
-		$html = '<div id="thebuttonSeguir'.$ID.'" class="delibera_seguir" ><span id="delibera-seguir-text-'.$ID.'" class="delibera_seguir_text">'.( $seguir ? __('Seguir','delibera') : __('Seguindo','delibera')).'</span>'.($seguir ? '' : '<span id="delibera-seguir-cancel-'.$ID.'" class="delibera_seguir_cancel">&nbsp;('.__('Cancelar', 'delibera').')').'</div>';
-		
-		$JS = '
-			<script type="text/javascript">
-				var type_'.$ID.' = "'.($seguir ? "seguir" : "nao_seguir").'";
-			    jQuery(function ()
-			    {
-					jQuery("#thebuttonSeguir'.$ID.'")
-			            .click(function ()
-			            	{
-								jQuery.post("'.home_url( "/" ).'/wp-admin/admin-ajax.php", 
-								{
-										action : "delibera_seguir" ,
-									    seguir_id : "'.$ID.'",
-									    type : type_'.$ID.',
-									    user_id: "'.$user_id.'",
-									    ip: "'.$ip.'"
-								},
-								function(response)
-								{
-									var html_resp = "<span id=\"delibera-seguir-text-'.$ID.'\" class=\"delibera_seguir_text\">";
-									if(type_'.$ID.' == "seguir")
-									{
-										html_resp += "'.__('Seguindo','delibera').'";
-										type_'.$ID.' = "nao_seguir";
-										html_resp += "</span>";
-										html_resp += "<span id=\"delibera-seguir-cancel-'.$ID.'\" class=\"delibera_seguir_cancel\">&nbsp;('.__('Cancelar', 'delibera').')";
-										 
-									}
-									else
-									{
-										html_resp += "'.__('Seguir','delibera').'";
-										type_'.$ID.' = "seguir";
-										jQuery("#delibera-seguir-cancel-'.$ID.'").remove();
-									}
-									html_resp += "</span>";
-									
-									jQuery("#delibera-seguir-text-'.$ID.'").replaceWith( html_resp );
-								}
-							);
-						});
-			    });
-			</script>
-		';
-		$JS = str_replace("\n", " ", $JS);
-		$JS = str_replace("\r", " ", $JS);
-		return $JS.$html;
-	}
-	else 
-	{
-		$html = '<div id="thebuttonSeguir'.$ID.'" class="delibera_seguir" ><a class="delibera-seguir-login" href="';
-		$html .= wp_login_url( get_post_type() == "pauta" ? get_permalink() : delibera_get_comment_link());
-		$html .= '" ><span class="delibera_seguir_text">'.__('Seguir','delibera').'</span></a></div>';
-		return $html;
-	}
-}
-
 function delibera_seguir_callback()
 {
 	if(array_key_exists('seguir_id', $_POST) && array_key_exists('type', $_POST))
 	{
-		echo delibera_seguir($_POST['seguir_id'], $_POST['type'], $_POST['user_id'], $_POST['ip']);
+		echo delibera_seguir($_POST['seguir_id'], $_POST['type']);
 	}
 	die();
 }

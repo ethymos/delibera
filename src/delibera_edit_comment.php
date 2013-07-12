@@ -121,7 +121,7 @@ function delibera_delete_comment_link( $link = null, $before = '', $after = '' )
 		return;
 
 	if ( null === $link )
-		$link = __('Delete', delibera);
+		$link = __('Deletar', delibera);
 
 	$html = '<div id="delibera-delete-comment-button-'.$comment->comment_ID.'" class="delibera-delete-comment-button"><span class="delibera-delete-comment-button" >'.$link.'</span></div>';
 	echo $html;
