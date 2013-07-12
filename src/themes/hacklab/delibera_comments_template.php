@@ -111,19 +111,11 @@ class Delibera_Walker_Comment extends Walker_Comment
                         <?php delibera_comment_edit_form(); ?>
                     </section>
                     <section class="actions clearfix">
-                        <?php if (delibera_comments_is_open($comment->comment_post_ID) && $situacao->slug != 'emvotacao') : ?>
+                        <?php if (delibera_comments_is_open($comment->comment_post_ID) && $situacao->slug != 'emvotacao' && $situacao->slug != 'relatoria') : ?>
                             <div class="bottom alignleft">
                                 <div class="reply">
                                     <?php
-                                    if ($situacao->slug == 'relatoria' && is_user_logged_in()) {
-                                        if ($tipo == 'encaminhamento' && current_user_can('relatoria')) {
-                                            ?>
-                                            <button class="btn btn-mini btn-info comment-reply-link">
-                                                <?php edit_comment_link(__('Editar Encaminhamento', 'delibera'), '<p>', '</p>'); ?>
-                                            </button>
-                                            <?php
-                                        }
-                                    } else if ($situacao->slug != 'validacao' && is_user_logged_in()) {            
+                                    if ($situacao->slug != 'validacao' && is_user_logged_in()) {            
                                         $args['reply_text'] = __("Responder", 'delibera');
                                         ?>
                                         <button class="btn btn-mini btn-info comment-reply-link"> 
