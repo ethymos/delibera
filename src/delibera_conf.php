@@ -188,7 +188,7 @@ function delibera_conf_page()
 				);
 				$rows[] = array(
 					"id" => "cabecalho_arquivo",
-					"label" => __('Cabeçalho da página de arquivo do sistema (lista de pautas):', 'delibera'),
+					"label" => __('Título da página de listagem de pautas e da página de uma pauta:', 'delibera'),
 					"content" => '<input type="text" name="cabecalho_arquivo" id="cabecalho_arquivo" value="'.htmlspecialchars_decode($opt['cabecalho_arquivo']).'"/>'
 				);
 				$table = delibera_form_table($rows);
