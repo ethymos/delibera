@@ -7,16 +7,16 @@ global $delibera_comments_padrao;
 $situacao = delibera_get_situacao($id);
 
 if ($situacao->slug == 'comresolucao') {
-    $title = 'Encaminhamentos propostos';
+    $title = __('Encaminhamentos propostos', 'delibera');
 } else if ($situacao->slug == 'validacao') {
     $title = '';
     $votes = delibera_get_comments_validacoes($post->ID);
     $approvals = (int) get_post_meta($post->ID, 'numero_validacoes', true);
     $rejections = (int) get_post_meta($post->ID, 'delibera_numero_comments_validacoes', true) - $approvals;
 } else if ($situacao->slug == 'relatoria') {
-    $title = 'Relatoria da pauta';
+    $title = __('Encaminhamentos propostos na discussão', 'delibera');
 } else {
-    $title = 'Discussão sobre a pauta';
+    $title = __('Discussão sobre a pauta', 'delibera');
 }
 
 if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$delibera_comments_padrao === true) {
@@ -70,6 +70,21 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
                         <?php endif; ?>
                     </div>
                 </div>
+            <?php elseif ($situacao->slug == 'relatoria') : ?>
+                <?
+                $args['walker'] = new Delibera_Walker_Comment();
+                
+                $encaminhamentos = delibera_get_comments_encaminhamentos($post->ID);
+                $discussoes = delibera_get_comments_discussoes($post->ID);
+                ?>
+                <ol class="commentslist">
+                    <?php wp_list_comments($args, $encaminhamentos); ?>
+                </ol>
+                
+                <h2 class="comments-title"><?php _e('Discussão sobre a pauta', 'delibera'); ?></h2>
+                <ol class="commentslist">
+                    <?php wp_list_comments($args, $discussoes); ?>
+                </ol>
             <?php else : ?>
                 <ol class="commentlist">
                     <?php delibera_wp_list_comments(); ?>
@@ -81,12 +96,18 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
             <?php endif; // end ! comments_open() ?>
         <?php endif; // end have_comments() ?>
         
-        <?php if (($situacao->slug != "validacao" && $situacao->slug != "emvotacao" && $situacao->slug != "naovalidada") || $delibera_comments_padrao === true) {
+        <?php if ($situacao->slug == 'relatoria' && current_user_can('relatoria')) : ?>
+            <div class="new-encaminhamento">
+                <div class="box">
+                    <?php comment_form(); ?>
+                </div>
+            </div>
+        <?php elseif (($situacao->slug != "validacao" && $situacao->slug != "emvotacao" && $situacao->slug != "naovalidada" && $situacao->slug != 'relatoria') || $delibera_comments_padrao === true) :
             comment_form();
             if (function_exists('ecu_upload_form_default')) {
                 ecu_upload_form_default();
             } 
-        } ?>
+        endif; ?>
     </div>
 </div>
 

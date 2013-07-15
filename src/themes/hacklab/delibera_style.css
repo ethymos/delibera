@@ -298,9 +298,46 @@ div, h1, h2, h3, h4, h5, p { margin-bottom:9px; }
     padding-bottom:0;
 }
 
-
 #respond form .comment-form-type label {
     display:inline-block;
+}
+
+#delibera #new-encaminhamento {
+    background:#fff;
+    bottom:0;
+    box-shadow:1px 1px 10px #333;
+    height:35%;
+    min-height:300px;
+    left:0;
+    position:fixed;
+    right:0;
+    z-index:10;
+    margin-bottom: 0px;
+}
+
+#delibera #new-encaminhamento textarea {
+    height:180px;
+    margin-bottom:9px;
+    width:98.6%;
+}
+
+#delibera #new-encaminhamento #respond {
+    margin-top: 0px;
+}
+
+#delibera #new-encaminhamento #delibera_commentform {
+    margin-top: 0px;
+}
+
+#delibera #new-encaminhamento #reply-title {
+    margin-bottom: 0px;
+}
+
+#delibera .new-encaminhamento #reply-title {
+    text-align: left;
+    font-size: 18px;
+    line-height: 1.25;
+    font-weight: normal;
 }
 
 form.delibera-edit-comment-form textarea {
@@ -1740,4 +1777,8 @@ button .delibera_like, button .delibera_unlike {
 
 .delibera_like {
     margin-right: 4px;
+}
+
+#botao-oculto {
+    display: none;
 }

@@ -69,7 +69,7 @@ class Delibera_Walker_Comment extends Walker_Comment
             </li>    
         <?php else : ?>
             <li <?php comment_class($classes)?>>
-                <article>
+                <article id="delibera-comment-<?php echo $comment->comment_ID; ?>">
                     <header class="coment-meta comment-author vcard clearfix">
                         <div class="alignleft">
                             <?php echo get_avatar($comment, 44); ?>
@@ -139,6 +139,38 @@ class Delibera_Walker_Comment extends Walker_Comment
                                 </div>
                             </div>
                         <?php endif; ?>
+                        <?php
+                        if ($situacao->slug == 'relatoria' && current_user_can('relatoria'))    {
+                            $baseouseem = get_comment_meta($comment->comment_ID, 'delibera-baseouseem', true);
+                            if (!empty($baseouseem)) {
+                                $elements = explode(',', $baseouseem);
+                                $result = '';
+                                $count = count($elements);
+                                
+                                foreach ($elements as $key => $element) {
+                                    $comment = get_comment($element);
+                                    $result .= "<a href='#delibera-comment-{$comment->comment_ID}'>{$comment->comment_author}</a>";
+                                    
+                                    if ($key + 1 < $count) {
+                                        $result .= ', ';
+                                    }
+                                }
+                                echo '<div>'.__('Proposta baseada em:', 'delibera') . '&nbsp;' . $result . '</div>';
+                            }
+                        }
+                        
+                        if ($tipo == "encaminhamento" && current_user_can('relatoria') && $situacao->slug == "relatoria") {
+                            ?>
+                            <div class="bottom alignleft">
+                                <label>
+                                    <input id="baseadoem-checkbox-<?php echo $comment->comment_ID; ?>" type="checkbox" name="baseadoem-checkbox[]" value="<?php echo $comment->comment_ID; ?>" class="baseadoem-checkbox" autocomplete="off" />
+                                    <?php _e('Criar novo encaminhamento baseado neste', 'delibera'); ?>
+                                </label>
+                            </div>
+                            <?php 
+                        }
+                        
+                        ?>
                         <div class="bottom alignright">
                             <?php
                             
@@ -155,25 +187,6 @@ class Delibera_Walker_Comment extends Walker_Comment
                             ?>
                         </div>
                     </section><!-- .reply -->
-                    <?php
-                    if ($situacao->slug == 'relatoria' && current_user_can('relatoria'))    {
-                        $baseouseem = get_comment_meta($comment->comment_ID, 'delibera-baseouseem', true);
-                        if (strlen($baseouseem) > 0) {
-                            $baseouseem_elements = "";
-                            foreach (explode(',', $baseouseem) as $baseouseem_element) {
-                                $baseouseem_elements .= do_shortcode($baseouseem_element);
-                            }
-                            echo '<div id="comment-painel-baseouseem" class="comment-painel-baseouseem"><label id="painel-baseouseem-label" class="painel-baseouseem-label" >'.__('Proposta baseada em:', 'delibera').'&nbsp;</label>'.$baseouseem_elements.'</div>';
-                        }
-                    }
-                    
-                    if ($tipo == "encaminhamento" && current_user_can('relatoria') && $situacao->slug == "relatoria") {
-                        ?>
-                        <div class="baseadoem-checkbox-div"><label class="baseadoem-checkbox-label"><input id="baseadoem-checkbox-<?php echo $comment->comment_ID; ?>" type="checkbox" name="baseadoem-checkbox[]" value="<?php echo $comment->comment_ID; ?>" class="baseadoem-checkbox" autocomplete="off" /><?php _e('basear-se neste encaminhamento?', 'delibera'); ?></label></div>
-                        <?php 
-                    }
-                    
-                    ?>
                 </article>
             </li>
         <?php

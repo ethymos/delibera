@@ -2606,11 +2606,6 @@ function delibera_the_posts($posts)
 		wp_enqueue_script( 'jquery-ui-draggable');
 	}
 	
-	if($relatoria)
-	{
-			wp_enqueue_script( 'delibera_relatoria_js', WP_CONTENT_URL.'/plugins/delibera/js/delibera_relatoria.js', array( 'jquery' ));
-	}
- 
 	return $posts;
 }
 

@@ -121,29 +121,24 @@ function delibera_comment_form($defaults)
                 break;
             case 'discussao':
             case 'relatoria':
-                $defaults['title_reply'] = sprintf(__('Discussão em torno de "%s"','delibera'),$post->post_title);
+                $defaults['title_reply'] = __('Novo encaminhamento', 'delibera');
                 $defaults['must_log_in'] = sprintf(__('Você precisar <a href="%s">estar logado</a> para contribuir com a discussão.','delibera'), wp_login_url(apply_filters('the_permalink', get_permalink($post->ID))));
-                $defaults['comment_notes_after'] = "";
-                $defaults['logged_in_as'] = "";
+                $defaults['comment_notes_after'] = '<p class="bottom textright">
+                    <button id="new-encaminhamento-cancel" type="reset" class="btn btn-danger" style="display: none;">Cancelar</button>
+                    <button id="new-encaminhamento-save" type="submit" class="btn btn-success">Salvar</button>
+                </p>';
+                $defaults['logged_in_as'] = '';
                 $defaults['comment_field'] = '<input name="delibera_comment_tipo" value="discussao" style="display:none;" />' . $defaults['comment_field'];
+                $defaults['id_submit'] = "botao-oculto";
                 
-                if($situacao->slug == 'relatoria') {
-                    $defaults['comment_field'] = '<input id="delibera-baseouseem" name="delibera-baseouseem" value="" style="display:none;" autocomplete="off" />
-                        <div id="painel-baseouseem" class="painel-baseouseem"><label id="painel-baseouseem-label" class="painel-baseouseem-label" >' . __('Proposta baseada em:', 'delibera') . '&nbsp;</label></div><br/>'
+                if ($situacao->slug == 'relatoria') {
+                    $defaults['comment_field'] = '<input id="delibera-baseouseem" name="delibera-baseouseem" type="hidden" value="" />'
+                        . '<p id="baseadoem-title" style="display: none;"><strong>' . __('Proposta de encaminhamento baseado no(s) encaminhamento(s) da(s) seguinte(s) pessoa(s):', 'delibera') . '</strong> <span id="baseadoem-list"></span></p>'
                         . $defaults['comment_field'];
                 }
                 
-                if (current_user_can('votar')) {   
-                    $replace = '' . (($situacao->slug != 'relatoria') ? '<label class="delibera-encaminha-label" /><input type="radio" name="delibera_encaminha" value="N" checked="checked" />' . __('Opinião', 'delibera') . '</label>' : '') 
-                    . '<label class="delibera-encaminha-label" ><input type="radio" name="delibera_encaminha" value="S" ' . (($situacao->slug == 'relatoria') ? ' checked="checked" ' : '') . ' />' . __('Proposta de encaminhamento', 'delibera') . '</label>';
-                    $defaults['comment_field'] = preg_replace ("/<label for=\"comment\">(.*?)<\/label>/", $replace, $defaults['comment_field']);
-                } else {
-                    $defaults['comment_field'] = "";
-                    $defaults['logged_in_as'] = '<p class="logged-in-as">' . sprintf( __('Você está logado como <a href="%1$s">%2$s</a> que não é um usuário autorizado a votar. <a href="%3$s" title="Sair desta conta?">Sair desta conta</a> e logar com usuário que possa votar?','delibera') , admin_url( 'profile.php' ), $user_identity, wp_logout_url( apply_filters( 'the_permalink', get_permalink( $post->ID ) ) ) ) . '</p>';
-                    $defaults['comment_notes_after'] = "";
-                    $defaults['label_submit'] = "";
-                    $defaults['id_submit'] = "botao-oculto";
-                }
+                $replace = '<input type="hidden" name="delibera_encaminha" value="S" />';
+                $defaults['comment_field'] = preg_replace("/<label for=\"comment\">(.*?)<\/label>/", $replace, $defaults['comment_field']);
                 
                 if (has_filter('delibera_discussao_comment_form')) {
                     $defaults = apply_filters('delibera_discussao_comment_form', $defaults, $situacao->slug);
@@ -240,10 +235,16 @@ function delibera_comment_form($defaults)
 add_filter('comment_form_defaults', 'delibera_comment_form');
 
 add_action('wp_enqueue_scripts', function() {
-    global $deliberaThemes;
+    global $deliberaThemes, $post;
+    
+    $situacao = delibera_get_situacao($post->ID);
     
     if (get_post_type() == 'pauta') {
-        wp_enqueue_script('delibera-hacklab', $deliberaThemes->getThemeUrl() . '/js/delibera-hacklab.js', array('jquery', 'delibera'));
+        wp_enqueue_script('delibera-hacklab', $deliberaThemes->getThemeUrl() . '/js/delibera-hacklab.js', array('delibera'));
+        
+        if ($situacao->slug == 'relatoria') {
+            wp_enqueue_script('hacklab-relatoria', $deliberaThemes->getThemeUrl() . '/js/hacklab-relatoria.js', array('delibera'));
+        }
     }
 });
 
