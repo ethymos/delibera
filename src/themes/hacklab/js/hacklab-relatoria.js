@@ -30,6 +30,26 @@ jQuery(document).ready(function() {
     
         jQuery('#delibera-baseouseem').val(baseadoem_list.join(','));
     });
+    
+    jQuery('.usar-na-votacao').click(function() {
+        var data = {
+            action : "delibera_definir_votacao",
+            post_id : delibera.post_id,
+            'encaminhamentos[]' : []
+        };
+        
+        jQuery('.usar-na-votacao:checked').each(function() {
+            data['encaminhamentos[]'].push(jQuery(this).val());
+        });
+        
+        jQuery.post(
+            delibera.ajax_url,
+            data, 
+            function(response) {
+                alert('ok');
+            }
+        );
+    });
 });
 
 /**

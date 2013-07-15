@@ -148,8 +148,8 @@ class Delibera_Walker_Comment extends Walker_Comment
                                 $count = count($elements);
                                 
                                 foreach ($elements as $key => $element) {
-                                    $comment = get_comment($element);
-                                    $result .= "<a href='#delibera-comment-{$comment->comment_ID}'>{$comment->comment_author}</a>";
+                                    $reference_comment = get_comment($element);
+                                    $result .= "<a href='#delibera-comment-{$reference_comment->comment_ID}'>{$reference_comment->comment_author}</a>";
                                     
                                     if ($key + 1 < $count) {
                                         $result .= ', ';
@@ -160,12 +160,17 @@ class Delibera_Walker_Comment extends Walker_Comment
                         }
                         
                         if ($tipo == "encaminhamento" && current_user_can('relatoria') && $situacao->slug == "relatoria") {
+                            $selecionados = get_post_meta($comment->comment_post_ID, '_usar_na_votacao', true);
                             ?>
                             <div class="bottom alignleft">
-                                <label>
+                                <p>
                                     <input id="baseadoem-checkbox-<?php echo $comment->comment_ID; ?>" type="checkbox" name="baseadoem-checkbox[]" value="<?php echo $comment->comment_ID; ?>" class="baseadoem-checkbox" autocomplete="off" />
-                                    <?php _e('Criar novo encaminhamento baseado neste', 'delibera'); ?>
-                                </label>
+                                    <label for="baseadoem-checkbox-<?php echo $comment->comment_ID; ?>"><?php _e('Criar novo encaminhamento baseado neste', 'delibera'); ?></label>
+                                </p>
+                                <p>
+                                    <input id="usar-na-votacao-<?php echo $comment->comment_ID; ?>" class="usar-na-votacao" type="checkbox" name="usar_na_votacao[]" value="<?php echo $comment->comment_ID; ?>" <?php echo (in_array($comment->comment_ID, $selecionados)) ? ' checked="checked" ' : ''; ?> />
+                                    <label for="usar-na-votacao-<?php echo $comment->comment_ID; ?>"><?php _e('Usar este encaminhamento na votação', 'delibera'); ?></label>
+                                </p>
                             </div>
                             <?php 
                         }

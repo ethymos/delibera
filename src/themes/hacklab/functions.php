@@ -384,3 +384,25 @@ function delibera_gerar_discordar($ID, $type ='pauta')
         }
     }
 }
+
+/**
+ * Salva quais encaminhamentos o relator escolheu para
+ * serem usados na votação.
+ */
+function delibera_usar_na_votacao()
+{
+    if (current_user_can('relatoria') && !empty($_POST['encaminhamentos'])) {
+        $encaminhamentos = array();
+        $post_id = filter_input(INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT);
+       
+        foreach ($_POST['encaminhamentos'] as $encaminhamento) {
+            $encaminhamentos[] = filter_var($encaminhamento, FILTER_SANITIZE_NUMBER_INT);
+        }
+        
+        update_post_meta($post_id, '_usar_na_votacao', $encaminhamentos);
+    }
+    
+    die();
+}
+add_action('wp_ajax_delibera_definir_votacao', 'delibera_usar_na_votacao');
+add_action('wp_ajax_nopriv_delibera_definir_votacao', 'delibera_usar_na_votacao');
