@@ -161,6 +161,10 @@ class Delibera_Walker_Comment extends Walker_Comment
                         
                         if ($tipo == "encaminhamento" && current_user_can('relatoria') && $situacao->slug == "relatoria") {
                             $selecionados = get_post_meta($comment->comment_post_ID, '_usar_na_votacao', true);
+                            
+                            if (!$selecionados) {
+                                $selecionados = array();
+                            }
                             ?>
                             <div class="bottom alignleft">
                                 <p>
