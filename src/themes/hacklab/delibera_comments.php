@@ -71,7 +71,7 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
                     </div>
                 </div>
             <?php elseif ($situacao->slug == 'relatoria') : ?>
-                <?
+                <?php
                 $args['walker'] = new Delibera_Walker_Comment();
                 
                 $encaminhamentos = delibera_get_comments_encaminhamentos($post->ID);
