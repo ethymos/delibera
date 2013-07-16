@@ -120,6 +120,34 @@ function delibera_comment_form($defaults)
                 }
                 break;
             case 'discussao':
+                $defaults['title_reply'] = sprintf(__('Discussão em torno de "%s"','delibera'),$post->post_title);
+                $defaults['must_log_in'] = sprintf(__('Você precisar <a href="%s">estar logado</a> para contribuir com a discussão.','delibera'), wp_login_url(apply_filters('the_permalink', get_permalink($post->ID))));
+                $defaults['comment_notes_after'] = "";
+                $defaults['logged_in_as'] = "";
+                $defaults['comment_field'] = '<input name="delibera_comment_tipo" value="discussao" style="display:none;" />' . $defaults['comment_field'];
+                
+                if($situacao->slug == 'relatoria') {
+                    $defaults['comment_field'] = '<input id="delibera-baseouseem" name="delibera-baseouseem" value="" style="display:none;" autocomplete="off" />
+                        <div id="painel-baseouseem" class="painel-baseouseem"><label id="painel-baseouseem-label" class="painel-baseouseem-label" >' . __('Proposta baseada em:', 'delibera') . '&nbsp;</label></div><br/>'
+                        . $defaults['comment_field'];
+                }
+                
+                if (current_user_can('votar')) {   
+                    $replace = '' . (($situacao->slug != 'relatoria') ? '<label class="delibera-encaminha-label" /><input type="radio" name="delibera_encaminha" value="N" checked="checked" />' . __('Opinião', 'delibera') . '</label>' : '') 
+                    . '<label class="delibera-encaminha-label" ><input type="radio" name="delibera_encaminha" value="S" ' . (($situacao->slug == 'relatoria') ? ' checked="checked" ' : '') . ' />' . __('Proposta de encaminhamento', 'delibera') . '</label>';
+                    $defaults['comment_field'] = preg_replace ("/<label for=\"comment\">(.*?)<\/label>/", $replace, $defaults['comment_field']);
+                } else {
+                    $defaults['comment_field'] = "";
+                    $defaults['logged_in_as'] = '<p class="logged-in-as">' . sprintf( __('Você está logado como <a href="%1$s">%2$s</a> que não é um usuário autorizado a votar. <a href="%3$s" title="Sair desta conta?">Sair desta conta</a> e logar com usuário que possa votar?','delibera') , admin_url( 'profile.php' ), $user_identity, wp_logout_url( apply_filters( 'the_permalink', get_permalink( $post->ID ) ) ) ) . '</p>';
+                    $defaults['comment_notes_after'] = "";
+                    $defaults['label_submit'] = "";
+                    $defaults['id_submit'] = "botao-oculto";
+                }
+                
+                if (has_filter('delibera_discussao_comment_form')) {
+                    $defaults = apply_filters('delibera_discussao_comment_form', $defaults, $situacao->slug);
+                }
+                break;
             case 'relatoria':
                 $defaults['title_reply'] = __('Novo encaminhamento', 'delibera');
                 $defaults['must_log_in'] = sprintf(__('Você precisar <a href="%s">estar logado</a> para contribuir com a discussão.','delibera'), wp_login_url(apply_filters('the_permalink', get_permalink($post->ID))));
