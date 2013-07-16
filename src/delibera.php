@@ -1882,8 +1882,11 @@ function delibera_scripts()
 		$data = array(
 			'post_id' => $post->ID,
 			'ajax_url' => admin_url('admin-ajax.php'),
-			'situation' => $situation->slug
 		);
+		
+		if (is_object($situation)) {
+			$data['situation'] = $situation->slug;
+		}
 		
 		wp_localize_script('delibera', 'delibera', $data);
 	}
