@@ -356,8 +356,10 @@ form.delibera-edit-comment-form textarea {
 .navigation a:hover {
     color:#777;
 }
-.navigation li.current a {
+.navigation li span.current {
     color:#21759b;
+    font-weight: bold;
+    font-size: 16px;
 }
 .navigation ol {
     text-align:center;
