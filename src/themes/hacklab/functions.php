@@ -204,7 +204,9 @@ function delibera_comment_form($defaults)
                         
                         $i = 0;
                         foreach ($encaminhamentos as $encaminhamento) {
-                            $form .= '<li class="encaminhamento clearfix">
+                            $tipo = get_comment_meta($encaminhamento->comment_ID, 'delibera_comment_tipo', true);
+                            
+                            $form .= '<li class="encaminhamento clearfix' . (($tipo == 'encaminhamento') ? ' encaminhamentos-selecionados ' : '') . '">
                                 <div class="alignleft checkbox">
                                     <input type="checkbox" name="delibera_voto'.$i.'" id="delibera_voto'.$i.'" value="'.$encaminhamento->comment_ID.'" />
                                 </div>

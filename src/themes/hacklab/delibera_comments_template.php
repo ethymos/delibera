@@ -55,7 +55,7 @@ class Delibera_Walker_Comment extends Walker_Comment
             $classes[] = 'encaminhamento';
             
             if (in_array($situacao->slug, array('comresolucao', 'emvotacao'))) {
-                $classes[] = 'encaminhamento-selecionados';
+                $classes[] = 'encaminhamentos-selecionados';
             }
         }
         
@@ -63,7 +63,8 @@ class Delibera_Walker_Comment extends Walker_Comment
 
         <?php if (($tipo == 'resolucao' || $tipo == 'encaminhamento') && $situacao->slug == 'comresolucao') : ?>
             <?php $nvotos = get_comment_meta($comment->comment_ID, "delibera_comment_numero_votos", true); ?>
-            <li class="encaminhamento clearfix">
+            <?php $classes[] = 'clearfix'; ?>
+            <li <?php comment_class($classes); ?>>
                 <div class="alignleft votos">
                     <span><?php echo ($nvotos == 1) ? sprintf(__('%d voto', 'delibera'), $nvotos) : sprintf(__('%d votos', 'delibera'), $nvotos); ?></span>
                 </div>
@@ -72,7 +73,7 @@ class Delibera_Walker_Comment extends Walker_Comment
                 </div>
             </li>    
         <?php else : ?>
-            <li <?php comment_class($classes)?>>
+            <li <?php comment_class($classes); ?>>
                 <article id="delibera-comment-<?php echo $comment->comment_ID; ?>">
                     <header class="coment-meta comment-author vcard clearfix">
                         <div class="alignleft">
