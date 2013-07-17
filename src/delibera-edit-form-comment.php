@@ -42,25 +42,12 @@ do_meta_boxes('comment', 'normal', $comment);
 						    comment_ID : "<?php echo $comment->comment_ID;?>",
 						    user_id: "<?php echo get_current_user_id(); ?>",
 						    text: jQuery('#textarea-delibera-edit-comment-<?php echo $comment->comment_ID;?>').val(),
-						    proposta: jQuery('#delibera_encaminha-<?php echo $comment->comment_ID;?>').is(':checked') ? 'encaminhamento' : 'discussao',
+						    proposta: jQuery('input[name=delibera_encaminha]:checked', '#delibera-edit-comment-<?php echo $comment->comment_ID;?>').val() == 'S' ? 'encaminhamento' : 'discussao', 
 							security: "<?php echo wp_create_nonce("comment-edit-delibera-{$comment->comment_ID}-".get_current_user_id()); ?>"
 						},
 						function(response)
 						{
-							delibera_edit_comment_show('<?php echo $comment->comment_ID;?>');
-							jQuery('#textarea-delibera-edit-comment-<?php echo $comment->comment_ID;?>').val(response);
-
-							var html = '<div id="delibera-comment-text-<?php echo $comment->comment_ID;?>" class="encaminhamento delibera-comment-text">' + response + '</div>';
-							
-							jQuery('#delibera-comment-text-<?php echo $comment->comment_ID;?>').replaceWith( html );
-							if(jQuery('#delibera_encaminha-<?php echo $comment->comment_ID;?>').is(':checked'))
-							{
-								jQuery('#checkbox-encaminhamento-<?php echo $comment->comment_ID;?>').show();
-							}
-							else
-							{
-								jQuery('#checkbox-encaminhamento-<?php echo $comment->comment_ID;?>').hide();
-							}
+							location.reload();
 						}
 					);
 	            });
@@ -72,7 +59,7 @@ do_meta_boxes('comment', 'normal', $comment);
 						action : "delibera_delete_comment" ,
 					    comment_ID : "<?php echo $comment->comment_ID;?>",
 					    user_id: "<?php echo get_current_user_id(); ?>",
-					    proposta: jQuery('#delibera_encaminha-<?php echo $comment->comment_ID;?>').is(':checked') ? 'encaminhamento' : 'discussao',
+					    proposta: jQuery('input[name=delibera_encaminha]:checked', '#delibera-edit-comment-<?php echo $comment->comment_ID;?>').val() == 'S' ? 'encaminhamento' : 'discussao',
 						security: "<?php echo wp_create_nonce("comment-delete-delibera-{$comment->comment_ID}-".get_current_user_id()); ?>"
 					},
 					function(response)

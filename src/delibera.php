@@ -1587,7 +1587,13 @@ function delibera_edit_comment($comment)
 				$tipo = get_comment_meta($comment->comment_ID, "delibera_comment_tipo", true);
 				$checked = $tipo == "discussao" ? "" : ' checked="checked" ';
 				?>
-				<span class="checkbox-encaminhamento"><input id="delibera_encaminha-<?php echo $comment->comment_ID ?>" type="checkbox" name="delibera_encaminha" value="S" <?php echo $checked ?> /><?php _e('proposta de encaminhamento','delibera'); ?></span>
+				<label class="delibera-encaminha-label">
+					<input type="radio" name="delibera_encaminha" value="N" <?php checked($tipo, 'discussao'); ?> /><?php _e('Opinião', 'delibera'); ?>
+				</label> 
+				<label class="delibera-encaminha-label">
+					<input type="radio" name="delibera_encaminha" value="S" <?php checked($tipo, 'encaminhamento'); ?> /><?php _e('Proposta de encaminhamento', 'delibera'); ?>
+				</label>
+				
 				<?php 
 			}break;
 		}
