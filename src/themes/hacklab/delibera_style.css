@@ -521,3 +521,8 @@ div.delibera-delete-comment-button:hover {
 .delibera_before_fields .form-submit {
     text-align:right;
 }
+
+.encaminhamentos-selecionados {
+    margin:0 0 3px 0 !important;
+    padding:9px 6px 6px 6px!important;
+}
