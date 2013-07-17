@@ -463,36 +463,36 @@ div.delibera-delete-comment-button:hover {
 
 
 .btn-facebook, .btn-facebook:hover {
-    background-color:rgb(60, 91, 156);
-    background-image:linear-gradient(rgb(69, 104, 178), rgb(48, 72, 123));
-    background-position:0% 0%;
-    background-repeat:repeat-x;
-    border:1px solid rgb(33,50,86);
-    border-radius:4px;
-    color:#fff;
-    text-shadow:none;
+    background-color:rgb(60, 91, 156) !important;
+    background-image:linear-gradient(rgb(69, 104, 178), rgb(48, 72, 123)) !important;
+    background-position:0% 0% !important;
+    background-repeat:repeat-x !important;
+    border:1px solid rgb(33,50,86) !important;
+    border-radius:4px !important;
+    color:#fff !important;
+    text-shadow:none !important;
 }
 
 .btn-twitter, .btn-twitter:hover {
-    background-color:rgb(11, 184, 231);
-    background-image:linear-gradient(rgb(18, 204, 255), rgb(0, 154, 196));
-    background-position:0% 0%;
-    background-repeat:repeat-x;
-    border:1px solid rgb(0,114,145);
-    border-radius:4px;
-    color:#fff;
-    text-shadow:none;
+    background-color:rgb(11, 184, 231) !important;
+    background-image:linear-gradient(rgb(18, 204, 255), rgb(0, 154, 196)) !important;
+    background-position:0% 0% !important;
+    background-repeat:repeat-x !important;
+    border:1px solid rgb(0,114,145) !important;
+    border-radius:4px !important;
+    color:#fff !important;
+    text-shadow:none !important;
 }
 
 .btn-google-plus, .btn-google-plus:hover {
-    background-color:rgb(209, 72, 54);
-    background-image:linear-gradient(rgb(209, 72, 54), rgb(178, 54, 45));
-    background-position:0% 0%;
-    background-repeat:repeat-x;
-    border:1px solid rgb(137, 38, 31);
-    border-radius:4px;
-    color:#fff;
-    text-shadow:none;
+    background-color:rgb(209, 72, 54) !important;
+    background-image:linear-gradient(rgb(209, 72, 54), rgb(178, 54, 45)) !important;
+    background-position:0% 0% !important;
+    background-repeat:repeat-x !important;
+    border:1px solid rgb(137, 38, 31) !important;
+    border-radius:4px !important;
+    color:#fff !important;
+    text-shadow:none !important;
 }
 
 .delibera_like {
@@ -501,4 +501,16 @@ div.delibera-delete-comment-button:hover {
 
 #botao-oculto {
     display: none;
+}
+
+
+.delibera-like-count, .delibera-unlike-count {
+    display:inline-block;
+    font-size:11px;
+    font-weight:bold;
+/*    text-transform:uppercase;*/
+}
+
+.delibera-unlike-count {
+    margin-left:18px;
 }
