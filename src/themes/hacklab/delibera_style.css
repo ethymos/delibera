@@ -516,3 +516,6 @@ div.delibera-delete-comment-button:hover {
 .delibera-edit-comment-form #delibera-publishing-action {
     float:right;
 }
+.delibera_before_fields .form-submit {
+    text-align:right;
+}
