@@ -1,5 +1,5 @@
 <form name="delibera-edit-comment-<?php echo $comment->comment_ID;?>" action="comment.php" method="post" id="delibera-edit-comment-<?php echo $comment->comment_ID;?>" style="display:none;" class="delibera-edit-comment-form" >
-<div id="div-delibera-edit-comment-{$comment->comment_ID}" class="delibera-edit-comment">
+<div id="div-delibera-edit-comment-<?php echo $comment->comment_ID; ?>" class="delibera-edit-comment">
 <?php
 	//$rows = get_option('default_post_edit_rows');
 	//if (($rows < 3) || ($rows > 100))
