@@ -327,7 +327,7 @@ function delibera_gerar_curtir($ID, $type ='pauta')
 {
     global $post;
     
-    $situacoes_validas = array('validacao' => false, 'discussao' => true, 'emvotacao' => false, 'comresolucao' => true);
+    $situacoes_validas = array('validacao' => false, 'discussao' => true, 'emvotacao' => false);
     
     $postID = 0;
     
@@ -376,7 +376,7 @@ function delibera_gerar_discordar($ID, $type ='pauta')
 {
     global $post;
     
-    $situacoes_validas = array('validacao' => false, 'discussao' => true, 'emvotacao' => false, 'comresolucao' => true);
+    $situacoes_validas = array('validacao' => false, 'discussao' => true, 'emvotacao' => false);
     
     $postID = 0;
     if(is_object($ID))
