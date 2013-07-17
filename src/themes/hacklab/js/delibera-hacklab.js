@@ -18,4 +18,7 @@ jQuery(document).ready(function() {
     if (delibera.situation == 'comresolucao') {
         jQuery('.comentario_coluna2').hide();
     }
+    
+    // adiciona classes no botão de responder um comentário gerado pelo WP
+    jQuery('.comment-reply-link').addClass('btn btn-mini btn-info');
 });

@@ -118,9 +118,7 @@ class Delibera_Walker_Comment extends Walker_Comment
                                     if ($situacao->slug != 'validacao' && is_user_logged_in()) {            
                                         $args['reply_text'] = __("Responder", 'delibera');
                                         ?>
-                                        <button class="btn btn-mini btn-info comment-reply-link"> 
-                                            <?php comment_reply_link(array_merge($args, array('add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth']))); ?>
-                                        </button>
+                                        <?php comment_reply_link(array_merge($args, array('add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth']))); ?>
                                         <?php
                                     } else if (is_user_logged_in()) {
                                         ?>
