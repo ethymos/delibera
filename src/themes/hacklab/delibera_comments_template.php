@@ -53,6 +53,10 @@ class Delibera_Walker_Comment extends Walker_Comment
         
         if ($tipo == 'encaminhamento' || $tipo == 'resolucao') {
             $classes[] = 'encaminhamento';
+            
+            if (in_array($situacao->slug, array('comresolucao', 'emvotacao'))) {
+                $classes[] = 'encaminhamento-selecionados';
+            }
         }
         
         ?>
