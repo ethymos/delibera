@@ -454,13 +454,6 @@ div.delibera-delete-comment-button:hover {
     display:none;
 }
 
-::selection {
-    background:transparent;
-}
-
-
-
-
 
 .btn-facebook, .btn-facebook:hover {
     background-color:rgb(60, 91, 156) !important;
@@ -513,4 +506,13 @@ div.delibera-delete-comment-button:hover {
 
 .delibera-unlike-count {
     margin-left:18px;
+}
+
+
+
+.delibera-edit-comment-form .checkbox-encaminhamento {
+    float:left;
+}
+.delibera-edit-comment-form #delibera-publishing-action {
+    float:right;
 }
