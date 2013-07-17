@@ -74,7 +74,7 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
                 <?php
                 $args['walker'] = new Delibera_Walker_Comment();
                 
-                $encaminhamentos = delibera_get_comments_encaminhamentos($post->ID);
+                $encaminhamentos = delibera_get_comments_all_encaminhamentos($post->ID);
                 $discussoes = delibera_get_comments_discussoes($post->ID);
                 ?>
                 <ol class="commentslist">
