@@ -500,7 +500,7 @@ div.delibera-delete-comment-button:hover {
 }
 
 #botao-oculto {
-    display: none;
+    display: none !important;
 }
 
 

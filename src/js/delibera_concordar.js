@@ -1,4 +1,5 @@
 jQuery(document).ready(function() {
+	
     jQuery(".delibera_like").click(function() {
         var container = jQuery(this);
         
@@ -10,8 +11,8 @@ jQuery(document).ready(function() {
                 type : jQuery(this).children('input[name="type"]').val(),
             },
             function(response) {
-                jQuery(container).children('.delibera_like_text').hide();
-                jQuery(container).parent().children(".delibera_unlike").hide();
+                jQuery(container).attr('id', "botao-oculto");
+                jQuery(container).parent().children(".delibera_unlike").attr('id', "botao-oculto");
                 jQuery(container).parent().children('.delibera-like-count').text(response);
             }
         );
@@ -28,8 +29,8 @@ jQuery(document).ready(function() {
                 type : jQuery(this).children('input[name="type"]').val(),
             },
             function(response) {
-                jQuery(container).children('.delibera_unlike_text').hide();
-                jQuery(container).parent().children(".delibera_like").hide();
+                jQuery(container).attr('id', "botao-oculto");
+                jQuery(container).parent().children(".delibera_like").attr('id', "botao-oculto");
                 jQuery(container).parent().children('.delibera-unlike-count').text(response);
             }
         );

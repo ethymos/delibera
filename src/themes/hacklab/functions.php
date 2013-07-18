@@ -356,6 +356,7 @@ function delibera_gerar_curtir($ID, $type ='pauta')
             (is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas)) && $situacoes_validas[$situacao->slug] && // é uma situação válida
             !(delibera_ja_discordou($ID, $user_id, $ip, $type))) // não discordou
         {
+			$html .= (!$ncurtiu ? '<div class="delibera-like-count"></div>' : '');
             $html .= '<button class="btn btn-mini btn-success delibera_like"><span class="delibera_like_text">' . __('Concordo', 'delibera') . '</span>';
             $html .= "<input type='hidden' name='object_id' value='{$ID}' />";
             $html .= "<input type='hidden' name='type' value='{$type}' />";
@@ -377,7 +378,7 @@ function delibera_gerar_discordar($ID, $type ='pauta')
     global $post;
     
     $situacoes_validas = array('validacao' => false, 'discussao' => true, 'emvotacao' => false);
-    
+    $ndiscordou = intval($type == 'pauta' || $type == 'post' ? get_post_meta($ID, 'delibera_numero_discordar', true) : get_comment_meta($ID, 'delibera_numero_discordar', true));
     $postID = 0;
     if(is_object($ID))
     {
@@ -403,7 +404,9 @@ function delibera_gerar_discordar($ID, $type ='pauta')
             (is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas)) && $situacoes_validas[$situacao->slug] &&// é uma situação válida
             !(delibera_ja_curtiu($ID, $user_id, $ip, $type))) // não discordou
         {
-            $html = '<button class="btn btn-mini btn-danger delibera_unlike"><span class="delibera_unlike_text">' . __('Discordo','delibera') . '</span>';
+			$html = '';
+			$html .= (!$ndiscordou ? '<div class="delibera-unlike-count"></div>' : '');
+            $html .= '<button class="btn btn-mini btn-danger delibera_unlike"><span class="delibera_unlike_text">' . __('Discordo','delibera') . '</span>';
             $html .= "<input type='hidden' name='object_id' value='{$ID}' />";
             $html .= "<input type='hidden' name='type' value='{$type}' />";
             $html .= '</button>';
