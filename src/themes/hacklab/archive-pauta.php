@@ -49,24 +49,26 @@ get_header();
                     global $wp_query;
                     $big = 99999999; // need an unlikely integer
                     
-                    echo paginate_links(array(
+                    $links = paginate_links(array(
                         'base' => str_replace($big, '%#%', get_pagenum_link($big)),
                         'format' => '?paged=%#%',
                         'total' => $wp_query->max_num_pages,
                         'current' => max(1, get_query_var('paged')),
+                        'type' => 'array',
+                        'prev_next' => false,
                     ));
 
                     ?>
                     
-                    <nav class="navigation">
-                        <ol>
-                            <li><a href="">1</a></li>
-                            <li><a href="">2</a></li>
-                            <li class="current"><a href="">3</a></li>
-                            <li><a href="">4</a></li>
-                            <li><a href="">5</a></li>
-                        </ol>
-                    </nav>
+                    <?php if (!empty($links)) : ?>
+                        <nav class="navigation">
+                            <ol>
+                                <?php foreach ($links as $link) : ?>
+                                    <li><?php echo $link; ?></li>
+                                <?php endforeach; ?>
+                            </ol>
+                        </nav>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

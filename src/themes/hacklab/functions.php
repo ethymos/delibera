@@ -197,14 +197,16 @@ function delibera_comment_form($defaults)
                     
                     if (current_user_can('votar')) {
                         $form = '<div id="encaminhamentos" class="delibera_checkbox_voto">';
-                        $encaminhamentos = delibera_get_comments_encaminhamentos($post->ID);
+                        $encaminhamentos = delibera_get_comments_encaminhamentos_selecionados($post->ID);
                         
                         $form .= '<div class="instrucoes-votacao">'.__('Escolha os encaminhamentos que deseja aprovar e depois clique em "Votar":','delibera').'</div>';
                         $form .= '<ol class="encaminhamentos">';
                         
                         $i = 0;
                         foreach ($encaminhamentos as $encaminhamento) {
-                            $form .= '<li class="encaminhamento clearfix">
+                            $tipo = get_comment_meta($encaminhamento->comment_ID, 'delibera_comment_tipo', true);
+                            
+                            $form .= '<li class="encaminhamento clearfix' . (($tipo == 'encaminhamento') ? ' encaminhamentos-selecionados ' : '') . '">
                                 <div class="alignleft checkbox">
                                     <input type="checkbox" name="delibera_voto'.$i.'" id="delibera_voto'.$i.'" value="'.$encaminhamento->comment_ID.'" />
                                 </div>
@@ -422,15 +424,15 @@ function delibera_gerar_discordar($ID, $type ='pauta')
  */
 function delibera_usar_na_votacao()
 {
-    if (current_user_can('relatoria') && !empty($_POST['encaminhamentos'])) {
-        $encaminhamentos = array();
-        $post_id = filter_input(INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT);
+    if (current_user_can('relatoria')) {
+        $comment_id = filter_input(INPUT_POST, 'comment_id', FILTER_SANITIZE_NUMBER_INT);
+        $checked = filter_input(INPUT_POST, 'checked', FILTER_SANITIZE_NUMBER_INT);
        
-        foreach ($_POST['encaminhamentos'] as $encaminhamento) {
-            $encaminhamentos[] = filter_var($encaminhamento, FILTER_SANITIZE_NUMBER_INT);
+        if ($checked) {
+            update_comment_meta($comment_id, 'delibera_comment_tipo', 'encaminhamento_selecionado');
+        } else {
+            update_comment_meta($comment_id, 'delibera_comment_tipo', 'encaminhamento');
         }
-        
-        update_post_meta($post_id, '_usar_na_votacao', $encaminhamentos);
     }
     
     die();

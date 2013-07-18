@@ -34,13 +34,9 @@ jQuery(document).ready(function() {
     jQuery('.usar-na-votacao').click(function() {
         var data = {
             action : "delibera_definir_votacao",
-            post_id : delibera.post_id,
-            'encaminhamentos[]' : []
+            comment_id : jQuery(this).val(),
+            checked : jQuery(this).is(':checked') ? 1 : 0,
         };
-        
-        jQuery('.usar-na-votacao:checked').each(function() {
-            data['encaminhamentos[]'].push(jQuery(this).val());
-        });
         
         jQuery.post(
             delibera.ajax_url,

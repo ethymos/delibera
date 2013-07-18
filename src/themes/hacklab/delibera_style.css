@@ -256,7 +256,7 @@ div, h1, h2, h3, h4, h5, p { margin-bottom:9px; }
 #delibera #encaminhamentos ol li {
     background:#d9edf7;
     margin:1.714285714rem 0;
-    padding:9px;
+    padding:0 9px;
 }
 
 #delibera #encaminhamentos ol li.submit, #delibera ol.encaminhamentos li.submit p {
@@ -356,8 +356,10 @@ form.delibera-edit-comment-form textarea {
 .navigation a:hover {
     color:#777;
 }
-.navigation li.current a {
+.navigation li span.current {
     color:#21759b;
+    font-weight: bold;
+    font-size: 16px;
 }
 .navigation ol {
     text-align:center;
@@ -454,13 +456,6 @@ div.delibera-delete-comment-button:hover {
     display:none;
 }
 
-::selection {
-    background:transparent;
-}
-
-
-
-
 
 .btn-facebook, .btn-facebook:hover {
     background-color:rgb(60, 91, 156) !important;
@@ -513,4 +508,19 @@ div.delibera-delete-comment-button:hover {
 
 .delibera-unlike-count {
     margin-left:18px;
+}
+
+.delibera-edit-comment-form .checkbox-encaminhamento {
+    float:left;
+}
+.delibera-edit-comment-form #delibera-publishing-action {
+    float:right;
+}
+.delibera_before_fields .form-submit {
+    text-align:right;
+}
+
+.encaminhamentos-selecionados {
+    margin:0 0 3px 0 !important;
+    padding:9px 6px 6px 6px!important;
 }

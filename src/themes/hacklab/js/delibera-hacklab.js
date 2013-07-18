@@ -21,5 +21,8 @@ jQuery(document).ready(function() {
     
     // adiciona classes no botão de responder um comentário gerado pelo WP
     jQuery('.comment-reply-link').addClass('btn btn-mini btn-info');
-    jQuery('.delibera_before_fields > .form-submit > #submit').addClass('btn');
+    jQuery('.delibera_before_fields > .form-submit > #submit').addClass('btn btn-info');
+    jQuery('.submit-edit-comment-button').addClass('bottom');
+    jQuery('.submit-edit-comment-button-text').addClass('btn btn-info');
+    jQuery('.delibera-edit-comment-form').addClass('clearfix');
 });

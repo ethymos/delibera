@@ -442,6 +442,7 @@ function delibera_get_comment_type_label($comment, $tipo = false, $echo = true)
 			if($echo) _e('Validação', 'delibera');
 			return __('Validação', 'delibera');
 		break;
+		case 'encaminhamento_selecionado':
 		case 'encaminhamento':
 			if($echo) _e('Proposta', 'delibera');
 			return __('Proposta', 'delibera');
@@ -516,7 +517,7 @@ function delibera_get_comments_count_by_type($postId)
 
 function delibera_get_comments_types()
 {
-	return array('validacao', 'discussao', 'encaminhamento', 'voto', 'resolucao');
+	return array('validacao', 'discussao', 'encaminhamento', 'encaminhamento_selecionado', 'voto', 'resolucao');
 }
 
 function delibera_pauta_custom_meta()
@@ -1587,7 +1588,13 @@ function delibera_edit_comment($comment)
 				$tipo = get_comment_meta($comment->comment_ID, "delibera_comment_tipo", true);
 				$checked = $tipo == "discussao" ? "" : ' checked="checked" ';
 				?>
-				<span class="checkbox-encaminhamento"><input id="delibera_encaminha-<?php echo $comment->comment_ID ?>" type="checkbox" name="delibera_encaminha" value="S" <?php echo $checked ?> /><?php _e('proposta de encaminhamento','delibera'); ?></span>
+				<label class="delibera-encaminha-label">
+					<input type="radio" name="delibera_encaminha" value="N" <?php checked($tipo, 'discussao'); ?> /><?php _e('Opinião', 'delibera'); ?>
+				</label> 
+				<label class="delibera-encaminha-label">
+					<input type="radio" name="delibera_encaminha" value="S" <?php checked($tipo, 'encaminhamento'); ?> /><?php _e('Proposta de encaminhamento', 'delibera'); ?>
+				</label>
+				
 				<?php 
 			}break;
 		}
@@ -2148,16 +2155,26 @@ function delibera_get_comments_padrao($args = array(), $file = '/comments.php' )
 	$delibera_comments_padrao = false;
 }
 
+/**
+ * Retorna comentários do Delibera de acordo com o tipo.
+ * 
+ * @param int $post_id
+ * @param string|array $tipo um tipo ou um array de tipos
+ * @return array 
+ */
 function delibera_get_comments($post_id, $tipo, $args = array())
 {
+	if (is_string($tipo)) {
+		$tipo = array($tipo);
+	}
+	
 	$args = array_merge(array('post_id' => $post_id), $args);
 	$comments = get_comments($args);
 	$ret = array();
 	foreach ($comments as $comment)
 	{
-		$tipo_tmp = get_comment_meta($comment->comment_ID, 'delibera_comment_tipo', true);
-		if($tipo_tmp == $tipo)
-		{
+		$comment_tipo = get_comment_meta($comment->comment_ID, 'delibera_comment_tipo', true);
+		if (in_array($comment_tipo, $tipo)) {
 			$ret[] = $comment;
 		}
 	}
@@ -2272,6 +2289,32 @@ function delibera_get_comments_encaminhamentos($post_id)
 {
 	return delibera_get_comments($post_id, 'encaminhamento');
 }
+
+/**
+ * Retorna os encaminhamentos dos tipos 'encaminhamento' e
+ * 'encaminhamento_selecionado' (aqueles que foram selecionados
+ * pelo relator para ir para votação).
+ * 
+ * @param int $post_id
+ * @return array
+ */
+function delibera_get_comments_all_encaminhamentos($post_id)
+{
+    return delibera_get_comments($post_id, array('encaminhamento', 'encaminhamento_selecionado'));
+}
+
+/**
+ * Retorna os encaminhamentos do tipo 'encaminhamento_selecionado'
+ * (aqueles que foram selecionados pelo relator para ir para votação).
+ * 
+ * @param int $post_id
+ * @return array
+ */
+function delibera_get_comments_encaminhamentos_selecionados($post_id)
+{
+    return delibera_get_comments($post_id, 'encaminhamento_selecionado');
+}
+
 
 function delibera_get_comments_votacoes($post_id)
 {
