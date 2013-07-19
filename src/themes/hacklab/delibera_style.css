@@ -495,7 +495,7 @@ div.delibera-delete-comment-button:hover {
 }
 
 #botao-oculto {
-    display: none;
+    display: none !important;
 }
 
 
@@ -509,8 +509,6 @@ div.delibera-delete-comment-button:hover {
 .delibera-unlike-count {
     margin-left:18px;
 }
-
-
 
 .delibera-edit-comment-form .checkbox-encaminhamento {
     float:left;

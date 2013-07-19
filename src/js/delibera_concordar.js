@@ -1,4 +1,5 @@
 jQuery(document).ready(function() {
+	
     jQuery(".delibera_like").click(function() {
         var container = jQuery(this);
         
