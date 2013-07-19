@@ -127,15 +127,11 @@ class Delibera_Walker_Comment extends Walker_Comment
                                         <?php
                                     } else if (is_user_logged_in()) {
                                         ?>
-                                        <button class="btn btn-mini btn-info comment-reply-link">
-                                            <a href="<?php delibera_get_comment_link();?>#respond" class="comment-reply-link"><?php _e('De sua opinião', 'delibera'); ?></a>
-                                        </button>
+                                        <a href="<?php delibera_get_comment_link();?>#respond" class="comment-reply-link"><?php _e('De sua opinião', 'delibera'); ?></a>
                                         <?php
                                     } else {
                                         ?>
-                                        <button class="btn btn-mini btn-info comment-reply-link">
-                                            <a href="<?php echo wp_login_url(delibera_get_comment_link());?>#respond" class="comment-reply-link"><?php _e('Faça login e de sua opinião', 'delibera'); ?></a>
-                                        </button>
+                                        <a href="<?php echo wp_login_url(delibera_get_comment_link());?>#respond" class="comment-reply-link"><?php _e('Faça login e de sua opinião', 'delibera'); ?></a>
                                         <?php
                                     }
                                     ?>
