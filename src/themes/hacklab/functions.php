@@ -120,7 +120,7 @@ function delibera_comment_form($defaults)
                 }
                 break;
             case 'discussao':
-                $defaults['title_reply'] = sprintf(__('Discussão em torno de "%s"','delibera'),$post->post_title);
+                $defaults['title_reply'] = __('Discussão da pauta','delibera');
                 $defaults['must_log_in'] = sprintf(__('Você precisar <a href="%s">estar logado</a> para contribuir com a discussão.','delibera'), wp_login_url(apply_filters('the_permalink', get_permalink($post->ID))));
                 $defaults['comment_notes_after'] = "";
                 $defaults['logged_in_as'] = "";
