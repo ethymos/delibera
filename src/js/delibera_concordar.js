@@ -10,9 +10,10 @@ jQuery(document).ready(function() {
                 type : jQuery(this).children('input[name="type"]').val(),
             },
             function(response) {
-                jQuery(container).children('.delibera_like_text').hide();
-                jQuery(container).parent().children(".delibera_unlike").hide();
+                jQuery(container).parent().children(".delibera_unlike").remove();
                 jQuery(container).parent().children('.delibera-like-count').text(response);
+                jQuery(container).parent().children('.delibera-like-count').show();
+                jQuery(container).remove();
             }
         );
     });
@@ -28,9 +29,10 @@ jQuery(document).ready(function() {
                 type : jQuery(this).children('input[name="type"]').val(),
             },
             function(response) {
-                jQuery(container).children('.delibera_unlike_text').hide();
-                jQuery(container).parent().children(".delibera_like").hide();
+                jQuery(container).parent().children(".delibera_like").remove();
                 jQuery(container).parent().children('.delibera-unlike-count').text(response);
+                jQuery(container).parent().children('.delibera-unlike-count').show();
+                jQuery(container).remove();
             }
         );
     });

@@ -347,8 +347,8 @@ function delibera_gerar_curtir($ID, $type ='pauta')
     $ndiscordou = intval($type == 'pauta' || $type == 'post' ? get_post_meta($ID, 'delibera_numero_discordar', true) : get_comment_meta($ID, 'delibera_numero_discordar', true));
     $situacao = delibera_get_situacao($postID);
 
-    $html = ($ncurtiu > 0 ? '<div class="delibera-like-count" >' . "$ncurtiu " . ($ncurtiu > 1 ? __('concordaram', 'delibera') : __('concordou', 'delibera')).'</div>' : '');    
-    $html .= ($ndiscordou > 0 ? '<div class="delibera-unlike-count" >' . "$ndiscordou " . ($ndiscordou > 1 ? __('discordaram', 'delibera') : __('discordou', 'delibera')).'</div>' : '');
+    $html = '<div class="delibera-like-count">' . ($ncurtiu > 0 ? sprintf(_n('%d concordou', '%d concordaram', $ncurtiu, 'delibera'), $ncurtiu) : '') . '</div>';    
+    $html .= '<div class="delibera-unlike-count">' . ($ndiscordou > 0 ? sprintf(_n('%d discordou', '%d discordaram', $ndiscordou, 'delibera'), $ndiscordou) : '') . '</div>';
     
     if (is_user_logged_in()) {
         $user_id = get_current_user_id();
