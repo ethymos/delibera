@@ -191,7 +191,7 @@ function delibera_comment_form($defaults)
                         </script>
                     ';
                 } else {
-                    $defaults['title_reply'] = sprintf(__('Regime de votação para a pauta "%s"','delibera'), $post->post_title);
+                    $defaults['title_reply'] = __('Votação dos encaminhamentos propostos', 'delibera');
                     $defaults['must_log_in'] = sprintf(__('Você precisar <a href="%s">estar logado</a> e ter permissão para votar.'), wp_login_url(apply_filters('the_permalink', get_permalink($post->ID))));
                     $encaminhamentos = array();
                     
@@ -206,7 +206,7 @@ function delibera_comment_form($defaults)
                         foreach ($encaminhamentos as $encaminhamento) {
                             $tipo = get_comment_meta($encaminhamento->comment_ID, 'delibera_comment_tipo', true);
                             
-                            $form .= '<li class="encaminhamento clearfix' . (($tipo == 'encaminhamento') ? ' encaminhamentos-selecionados ' : '') . '">
+                            $form .= '<li class="encaminhamento clearfix' . (($tipo == 'encaminhamento_selecionado') ? ' encaminhamentos-selecionados ' : '') . '">
                                 <div class="alignleft checkbox">
                                     <input type="checkbox" name="delibera_voto'.$i.'" id="delibera_voto'.$i.'" value="'.$encaminhamento->comment_ID.'" />
                                 </div>
