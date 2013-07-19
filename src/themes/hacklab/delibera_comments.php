@@ -70,8 +70,7 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
                         <?php endif; ?>
                     </div>
                 </div>
-            <?php elseif ($situacao->slug == 'relatoria') : ?>
-                <?php
+            <?php elseif ($situacao->slug == 'relatoria') :
                 $args['walker'] = new Delibera_Walker_Comment();
                 
                 $encaminhamentos = delibera_get_comments_all_encaminhamentos($post->ID);
@@ -95,6 +94,18 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
                <p class="nocomments"><?php _e( 'Comments are closed.', 'twentyten' ); ?></p>
             <?php endif; // end ! comments_open() ?>
         <?php endif; // end have_comments() ?>
+ 
+        <?php if ($situacao->slug == 'emvotacao') :
+            $args['walker'] = new Delibera_Walker_Comment();
+            $comments = delibera_get_comments($post->ID, array('discussao', 'encaminhamento', 'encaminhamento_selecionado'));
+            ?>
+            
+            <h2 class="comments-title bottom"><?php _e('Histórico da pauta', 'delibera'); ?></h2>
+            
+            <ol class="commentslist">
+                <?php wp_list_comments($args, $comments); ?>
+            </ol>
+        <?php endif; ?>
         
         <?php if ($situacao->slug == 'relatoria' && current_user_can('relatoria')) : ?>
             <div class="new-encaminhamento">
