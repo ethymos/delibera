@@ -199,6 +199,12 @@ function delibera_comment_form($defaults)
                         $form = '<div id="encaminhamentos" class="delibera_checkbox_voto">';
                         $encaminhamentos = delibera_get_comments_encaminhamentos_selecionados($post->ID);
                         
+                        if (empty($encaminhamentos)) {
+                            // se acabar o prazo e o relator não selecionar nenhum encaminhamento
+                            // coloca todos os encaminhamentos para votacao
+                            $encaminhamentos = delibera_get_comments_encaminhamentos($post->ID);
+                        }
+                        
                         $form .= '<div class="instrucoes-votacao">'.__('Escolha os encaminhamentos que deseja aprovar e depois clique em "Votar":','delibera').'</div>';
                         $form .= '<ol class="encaminhamentos">';
                         
