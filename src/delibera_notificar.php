@@ -678,15 +678,15 @@ function delibera_nofiticar_get_tipos()
 			'tipo' => 'criacao_pauta',
 			'mensagem' => 'mensagem_criacao_pauta',
 			'dica' => __('criação de pauta', 'delibera'),
-			'dica_permicao' => __('Permitir notificações na criação de um Pauta?', 'delibera'),
-			'user_panel_text' => __('Receber mensagem de criação de novas pauta?', 'delibera')
+			'dica_permicao' => __('Permitir notificações na criação de uma pauta?', 'delibera'),
+			'user_panel_text' => __('Receber mensagem de criação de novas pautas?', 'delibera')
 		),
 		array(
 			'tipo' => 'validacao',
 			'mensagem' => 'mensagem_validacao',
 			'dica' => __('quando a pauta recebe uma validação', 'delibera'),
 			'dica_permicao' => __('Permitir notificações de cada validação de uma pauta?', 'delibera'),
-			'user_panel_text' => __('Receber mensagem para cada validação?', 'delibera')
+			'user_panel_text' => __('Receber mensagem para cada validação de uma pauta?', 'delibera')
 		),
 		array(
 			'tipo' => 'validacao_concluida',
@@ -734,8 +734,8 @@ function delibera_nofiticar_get_tipos()
 			'tipo' => 'discussao_concluida_rel',
 			'mensagem' => 'mensagem_discussao_concluida_rel',
 			'dica' => __('', 'delibera'),
-			'dica_permicao' => __('Permitir notificações quando a discussão for encerrada e ira começar a relatoria?', 'delibera'),
-			'user_panel_text' => __('Receber mensagem quando a discussão for encerrada e ira começar a relatoria?', 'delibera')
+			'dica_permicao' => __('Permitir notificações quando a discussão for encerrada?', 'delibera'),
+			'user_panel_text' => __('Receber mensagem quando a discussão for encerrada?', 'delibera')
 		),
 		array(
 			'tipo' => 'relatoria_concluida',

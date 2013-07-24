@@ -132,9 +132,11 @@ function delibera_extra_profile_fields( $user )
 	if($campos > 0)
 	{
 		?>
-			<h3>Delibera Extra profile informations</h3>
-		
-			<table class="Delibera-user-form-table">
+		<h3><?php _e('Notificações por e-mail do Delibera', 'delibera'); ?></h3>
+	
+		<p><?php _e('Escolha abaixo para quais eventos do sistema do Delibera você deseja receber notificações por e-mail. As opções selecionadas aqui serão aplicadas para todas as pautas. É posssível também seguir as pautas individualmente. Para isso clique no botão "Seguir" na página de uma pauta.', 'delibera'); ?></p>
+	
+		<table class="Delibera-user-form-table">
 		<?php
 		foreach ($campos as $campo)
 		{
@@ -230,7 +232,7 @@ function delibera_extra_profile_fields( $user )
 			}
 		}
 		?>
-			</table>
+		</table>
 		<?php
 	}
 }
