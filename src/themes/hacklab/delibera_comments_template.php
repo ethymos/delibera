@@ -178,22 +178,26 @@ class Delibera_Walker_Comment extends Walker_Comment
                             <?php 
                         }
                         
-                        ?>
-                        <div class="bottom alignright">
-                            <?php
-                            
-                            $curtir = delibera_gerar_curtir($comment->comment_ID, 'comment');
-                            $discordar = delibera_gerar_discordar($comment->comment_ID, 'comment');
-                            
-                            if ($curtir) {
-                                echo $curtir;
-                            }
-                            
-                            if ($discordar) {
-                                echo $discordar;
-                            }                                                
-                            ?>
-                        </div>
+                        $ncurtiu = get_comment_meta($comment->comment_ID, 'delibera_numero_curtir', true);
+                        $ndiscordou = get_comment_meta($comment->comment_ID, 'delibera_numero_discordar', true);
+                        
+                        if (is_user_logged_in() || $ncurtiu || $ndiscordou) : ?>
+                            <div class="bottom alignright">
+                                <?php
+                                
+                                $curtir = delibera_gerar_curtir($comment->comment_ID, 'comment');
+                                $discordar = delibera_gerar_discordar($comment->comment_ID, 'comment');
+                                
+                                if ($curtir) {
+                                    echo $curtir;
+                                }
+                                
+                                if ($discordar) {
+                                    echo $discordar;
+                                }                                                
+                                ?>
+                            </div>
+                        <?php endif; ?>
                     </section><!-- .reply -->
                 </article>
             </li>
