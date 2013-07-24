@@ -15,6 +15,8 @@ if ($situacao->slug == 'comresolucao') {
     $rejections = (int) get_post_meta($post->ID, 'delibera_numero_comments_validacoes', true) - $approvals;
 } else if ($situacao->slug == 'relatoria') {
     $title = __('Encaminhamentos propostos na discussão', 'delibera');
+} else if ($situacao->slug == 'emvotacao') {
+    $title = __('Usuários que já votaram', 'delibera');
 } else {
     $title = __('Discussão sobre a pauta', 'delibera');
 }
@@ -37,13 +39,7 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
                             <ul class="clearfix">
                                 <?php foreach ($votes as $vote) : ?>
                                     <?php if (get_comment_meta($vote->comment_ID, 'delibera_validacao', true) == 'S') : ?>
-                                        <?php
-                                        $authorName = get_the_author_meta('display_name', $vote->user_id);
-                                        $avatar = get_avatar($vote->user_id, 44, '', $authorName);
-                                        // parseia a tag <img> com o avatar do usuário para poder adicionar o atributo
-                                        // title já que não existe uma função no wp que retorna apenas a url do avatar do usuário
-                                        $avatar = preg_replace('|/>$|', " title='{$authorName}' />", $avatar);
-                                        ?>
+                                        <?php $avatar = get_avatar_with_title($vote->user_id); ?>
                                         <li><?php echo $avatar; ?></li>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
@@ -56,13 +52,7 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
                             <ul class="clearfix">
                                 <?php foreach ($votes as $vote) : ?>
                                     <?php if (get_comment_meta($vote->comment_ID, 'delibera_validacao', true) == 'N') : ?>
-                                        <?php
-                                        $authorName = get_the_author_meta('display_name', $vote->user_id);
-                                        $avatar = get_avatar($vote->user_id, 44, '', $authorName);
-                                        // parseia a tag <img> com o avatar do usuário para poder adicionar o atributo
-                                        // title já que não existe uma função no wp que retorna apenas a url do avatar do usuário
-                                        $avatar = preg_replace('|/>$|', " title='{$authorName}' />", $avatar);
-                                        ?>
+                                        <?php $avatar = get_avatar_with_title($vote->user_id); ?>
                                         <li><?php echo $avatar; ?></li>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
@@ -84,6 +74,23 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
                 <ol class="commentslist">
                     <?php wp_list_comments($args, $discussoes); ?>
                 </ol>
+            <?php elseif ($situacao->slug == 'emvotacao') : ?>
+                <div class="votes">
+                    <ul class="clearfix">
+                        <?php delibera_wp_list_comments(); ?>
+                    </ul>
+                </div>
+                
+                <?php
+                $args['walker'] = new Delibera_Walker_Comment();
+                $comments = delibera_get_comments($post->ID, array('discussao', 'encaminhamento', 'encaminhamento_selecionado'));
+                ?>
+                
+                <h2 class="comments-title bottom"><?php _e('Histórico da pauta', 'delibera'); ?></h2>
+                
+                <ol class="commentslist">
+                    <?php wp_list_comments($args, $comments); ?>
+                </ol>
             <?php else : ?>
                 <ol class="commentlist">
                     <?php delibera_wp_list_comments(); ?>
@@ -95,18 +102,6 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
             <?php endif; // end ! comments_open() ?>
         <?php endif; // end have_comments() ?>
  
-        <?php if ($situacao->slug == 'emvotacao') :
-            $args['walker'] = new Delibera_Walker_Comment();
-            $comments = delibera_get_comments($post->ID, array('discussao', 'encaminhamento', 'encaminhamento_selecionado'));
-            ?>
-            
-            <h2 class="comments-title bottom"><?php _e('Histórico da pauta', 'delibera'); ?></h2>
-            
-            <ol class="commentslist">
-                <?php wp_list_comments($args, $comments); ?>
-            </ol>
-        <?php endif; ?>
-        
         <?php if ($situacao->slug == 'relatoria' && current_user_can('relatoria')) : ?>
             <div class="new-encaminhamento">
                 <div class="box">

@@ -58,7 +58,7 @@ class Delibera_Walker_Comment extends Walker_Comment
                 $classes[] = 'encaminhamentos-selecionados';
             }
         }
-        
+
         ?>
 
         <?php if (($tipo == 'resolucao' || $tipo == 'encaminhamento') && $situacao->slug == 'comresolucao') : ?>
@@ -71,7 +71,10 @@ class Delibera_Walker_Comment extends Walker_Comment
                 <div class="alignleft content">
                     <?php comment_text(); ?>
                 </div>
-            </li>    
+            </li>
+        <?php  elseif ($situacao->slug == 'emvotacao' && $tipo == 'voto') : ?>
+            <?php $avatar = get_avatar_with_title($comment->user_id); ?>
+            <li><?php echo $avatar; ?></li>
         <?php else : ?>
             <li <?php comment_class($classes); ?>>
                 <article id="delibera-comment-<?php echo $comment->comment_ID; ?>">
