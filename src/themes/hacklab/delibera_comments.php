@@ -28,6 +28,10 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
 ?>
 
 <div class="actions">
+    <?php if ($situacao->slug == 'relatoria' && !current_user_can('relatoria')) : ?>
+        <h2>Pauta em relatoria</h2>
+    <?php endif; ?>
+    
     <div id="<?php echo ($situacao->slug == 'comresolucao') ? 'encaminhamentos' : 'comments'; ?>" class="comments-area">
         <?php if (have_comments()) : ?>
             <h2 class="comments-title"><?php echo $title; ?></h2>
