@@ -520,7 +520,7 @@ div.delibera-delete-comment-button:hover {
     text-align:right;
 }
 
-.encaminhamentos-selecionados {
+.encaminhamentos .encaminhamentos-selecionados {
     margin:0 0 3px 0 !important;
     padding:9px 6px 6px 6px!important;
 }

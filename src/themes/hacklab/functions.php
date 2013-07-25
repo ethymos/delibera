@@ -199,6 +199,12 @@ function delibera_comment_form($defaults)
                         $form = '<div id="encaminhamentos" class="delibera_checkbox_voto">';
                         $encaminhamentos = delibera_get_comments_encaminhamentos_selecionados($post->ID);
                         
+                        if (empty($encaminhamentos)) {
+                            // se acabar o prazo e o relator não selecionar nenhum encaminhamento
+                            // coloca todos os encaminhamentos para votacao
+                            $encaminhamentos = delibera_get_comments_encaminhamentos($post->ID);
+                        }
+                        
                         $form .= '<div class="instrucoes-votacao">'.__('Escolha os encaminhamentos que deseja aprovar e depois clique em "Votar":','delibera').'</div>';
                         $form .= '<ol class="encaminhamentos">';
                         
@@ -439,3 +445,22 @@ function delibera_usar_na_votacao()
 }
 add_action('wp_ajax_delibera_definir_votacao', 'delibera_usar_na_votacao');
 add_action('wp_ajax_nopriv_delibera_definir_votacao', 'delibera_usar_na_votacao');
+
+/**
+ * Parseia a tag <img> com o avatar do usuário para poder
+ * adicionar o atributo title já que não existe uma função
+ * no wp que retorna apenas a url do avatar do usuário
+ * 
+ * @see http://core.trac.wordpress.org/ticket/21195
+ * @param int $user_id
+ * @return string
+ */
+function get_avatar_with_title($user_id)
+{
+    $authorName = get_the_author_meta('display_name', $user_id);
+    $avatar = get_avatar($user_id, 44, '', $authorName);
+    
+    $avatar = preg_replace('|/>$|', " title='{$authorName}' />", $avatar);
+    
+    return $avatar;
+}
