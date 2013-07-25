@@ -354,7 +354,7 @@ function delibera_gerar_curtir($ID, $type ='pauta')
     $situacao = delibera_get_situacao($postID);
 
     $html = '<div class="delibera-like-count">' . ($ncurtiu > 0 ? sprintf(_n('%d concordou', '%d concordaram', $ncurtiu, 'delibera'), $ncurtiu) : '') . '</div>';    
-    $html .= '<div class="delibera-unlike-count">' . ($ndiscordou > 0 ? sprintf(_n('%d discordou', '%d discordaram', $ndiscordou, 'delibera'), $ndiscordou) : '') . '</div>';
+    $html .= '<div class="delibera-unlike-count">' . ($ndiscordou > 0 ? sprintf(_n('%d discordou', '%d discordaram', $ndiscordou, 'delibera'), $ndiscordou) : '') . '</div><br/>';
     
     if (is_user_logged_in()) {
         $user_id = get_current_user_id();
@@ -364,7 +364,7 @@ function delibera_gerar_curtir($ID, $type ='pauta')
             (is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas)) && $situacoes_validas[$situacao->slug] && // é uma situação válida
             !(delibera_ja_discordou($ID, $user_id, $ip, $type))) // não discordou
         {
-			$html .= (!$ncurtiu ? '<div class="delibera-like-count"></div>' : '');
+            // $html .= (!$ncurtiu ? '<div class="delibera-like-count"></div>' : '');
             $html .= '<button class="btn btn-mini btn-success delibera_like"><span class="delibera_like_text">' . __('Concordo', 'delibera') . '</span>';
             $html .= "<input type='hidden' name='object_id' value='{$ID}' />";
             $html .= "<input type='hidden' name='type' value='{$type}' />";
@@ -413,7 +413,7 @@ function delibera_gerar_discordar($ID, $type ='pauta')
             !(delibera_ja_curtiu($ID, $user_id, $ip, $type))) // não discordou
         {
 			$html = '';
-			$html .= (!$ndiscordou ? '<div class="delibera-unlike-count"></div>' : '');
+            // $html .= (!$ndiscordou ? '<div class="delibera-unlike-count"></div>' : '');
             $html .= '<button class="btn btn-mini btn-danger delibera_unlike"><span class="delibera_unlike_text">' . __('Discordo','delibera') . '</span>';
             $html .= "<input type='hidden' name='object_id' value='{$ID}' />";
             $html .= "<input type='hidden' name='type' value='{$type}' />";

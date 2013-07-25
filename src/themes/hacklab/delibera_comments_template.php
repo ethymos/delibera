@@ -185,7 +185,7 @@ class Delibera_Walker_Comment extends Walker_Comment
                         $ndiscordou = get_comment_meta($comment->comment_ID, 'delibera_numero_discordar', true);
                         
                         if (is_user_logged_in() || $ncurtiu || $ndiscordou) : ?>
-                            <div class="bottom alignright">
+                            <div class="bottom alignright textright">
                                 <?php
                                 
                                 $curtir = delibera_gerar_curtir($comment->comment_ID, 'comment');
