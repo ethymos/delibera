@@ -14,6 +14,12 @@ div, h1, h2, h3, h4, h5, p { margin-bottom:9px; }
     line-height:1.5;
 }
 
+#delibera .filters h2 {
+    border-top:1px solid #ededed;
+    margin-top:18px;
+    padding-top:18px;
+}
+
 #delibera .filters ul {
     border-bottom:1px solid #ededed;
     margin-bottom:10px;

@@ -20,7 +20,9 @@ get_header();
             <?php get_delibera_header(); ?>
             <div class="clearfix">
                 <div class="filters widget-area alignleft">
-                    <h2>Filtros</h2>
+                    <p><a href="" class="btn btn-info">Criar uma nova pauta</a></p>
+                    
+                    <h2>Filtrar Pautas</h2>
                     <form>
                         <ul class="status">
                             <?php foreach (get_terms('situacao') as $situacao) : ?>
