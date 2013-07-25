@@ -2,6 +2,7 @@
 @import url(css/bootstrap-buttons.css);
 
 div, h1, h2, h3, h4, h5, p { margin-bottom:9px; }
+
 #delibera #content header {
     border-bottom:1px solid #ededed;
     margin-bottom:18px;
