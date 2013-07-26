@@ -34,7 +34,7 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
     
     <div id="<?php echo ($situacao->slug == 'comresolucao') ? 'encaminhamentos' : 'comments'; ?>" class="comments-area">
         <?php if (have_comments()) : ?>
-            <h2 class="comments-title"><?php echo $title; ?></h2>
+            <h2 class="comments-title bottom"><?php echo $title; ?></h2>
             <?php if ($situacao->slug == 'validacao') : ?>
                 <div class="votes">
                     <div class="votes-agree">
@@ -74,7 +74,7 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
                     <?php wp_list_comments($args, $encaminhamentos); ?>
                 </ol>
                 
-                <h2 class="comments-title"><?php _e('Discussão sobre a pauta', 'delibera'); ?></h2>
+                <h2 class="comments-title bottom"><?php _e('Discussão sobre a pauta', 'delibera'); ?></h2>
                 <ol class="commentslist">
                     <?php wp_list_comments($args, $discussoes); ?>
                 </ol>
