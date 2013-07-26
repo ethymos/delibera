@@ -21,6 +21,7 @@ class Delibera_Walker_Comment extends Walker_Comment
      */
     function start_el(&$output, $comment, $depth, $args)
     {
+        global $deliberaThemes;
         $depth++;
         $GLOBALS['comment_depth'] = $depth;
         $args['avatar_size'] = '85';
@@ -176,6 +177,7 @@ class Delibera_Walker_Comment extends Walker_Comment
                                 <p>
                                     <input id="usar-na-votacao-<?php echo $comment->comment_ID; ?>" class="usar-na-votacao" type="checkbox" name="usar_na_votacao[]" value="<?php echo $comment->comment_ID; ?>" <?php echo (in_array($comment->comment_ID, $selecionados)) ? ' checked="checked" ' : ''; ?> />
                                     <label for="usar-na-votacao-<?php echo $comment->comment_ID; ?>"><?php _e('Usar este encaminhamento na votação', 'delibera'); ?></label>
+                                    <img class="usar-na-votacao-feedback" src="<?php echo $deliberaThemes->getThemeUrl(); ?>/img/accept.png" style="display: none;" />
                                 </p>
                             </div>
                             <?php 

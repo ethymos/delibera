@@ -32,17 +32,21 @@ jQuery(document).ready(function() {
     });
     
     jQuery('.usar-na-votacao').click(function() {
+        jQuery('body').css('cursor', 'progress');
+        var checkbox = jQuery(this);
         var data = {
-            action : "delibera_definir_votacao",
+            action : 'delibera_definir_votacao',
             comment_id : jQuery(this).val(),
             checked : jQuery(this).is(':checked') ? 1 : 0,
         };
         
         jQuery.post(
             delibera.ajax_url,
-            data, 
+            data,
             function(response) {
-                alert('ok');
+                checkbox.siblings('.usar-na-votacao-feedback').show();
+                checkbox.siblings('.usar-na-votacao-feedback').delay(1500).fadeOut('slow');
+                jQuery('body').css('cursor', 'auto');
             }
         );
     });
