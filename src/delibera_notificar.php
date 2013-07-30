@@ -102,7 +102,7 @@ function delibera_get_notification_config($config = array())
 Equipe ÀgoraDelibera','delibera');
 	$opt['mensagem_validacao_concluida_assunto'] = __('Nova pauta validada: Pauta {post_title}','delibera');
 	$opt['mensagem_validacao_concluida'] = __(
-'Olá {first_name},
+'Olá {display_name},
 a pauta "{post_title}" foi validada, agora você poderá fazer comentários e propostas. Além disto poderá inserir arquivos em diversos formatos, seja em texto, imagem, áudio ou vídeo. 
 Seus comentários poderão ser avaliados pelos demais membros, já as propostas, além de avaliadas previamente, poderão ir a votação onde todos os usuários poderão votar. Caso exista uma relatoria, esta poderá fazer a sistematização, mesclando propostas similares e ajustando a redação para a melhor compreensão, tudo garantindo o controle social do processo com o histórico de propostas originais. 
 
@@ -113,7 +113,7 @@ Agora vai em frente! Debata, proponha, fortaleça a democracia digital!
 Equipe ÀgoraDelibera','delibera');
 	$opt['mensagem_pauta_recusada_assunto'] = __('Pauta Recusada: Pauta {post_title}','delibera');
 	$opt['mensagem_pauta_recusada'] = __(
-'Olá {first_name},
+'Olá {display_name},
 
 a pauta {post_title} não obteve o apoio necessário, por isto ela não entrará em debate desta vez. 
 
@@ -123,7 +123,7 @@ Equipe ÀgoraDelibera
 ','delibera');
 
 	$opt['mensagem_fim_prazo_validacao_assunto'] = 'Fim de prazo para Validação: Pauta {post_title}';
-	$opt['mensagem_fim_prazo_validacao'] = 'Olá {first_name},
+	$opt['mensagem_fim_prazo_validacao'] = 'Olá {display_name},
 
 falta apenas 1 dia para o fim do prazo para validação da pauta {post_title}. Caso não tenha votado aproveite agora para fazê-lo, ou chame seus conhecidos! 
 
@@ -135,7 +135,7 @@ Equipe ÀgoraDelibera
 	$opt['mensagem_novo_comentario_assunto'] = __('Novo Comentário em {post_title}','delibera');
 	$opt['mensagem_novo_comentario'] = __('Há um novo comentário na pauta seguida: ','delibera');
 	$opt['mensagem_fim_prazo_discussao_assunto'] = 'Fim de prazo para Discussão: Pauta {post_title}';
-	$opt['mensagem_fim_prazo_discussao'] = 'Olá {first_name},
+	$opt['mensagem_fim_prazo_discussao'] = 'Olá {display_name},
 
 falta apenas 1 dia para o fim do prazo de discussão da pauta {post_title}. Caso ainda queira comentar aproveite agora para fazê-lo agora!
 
@@ -145,7 +145,7 @@ Equipe ÀgoraDelibera
 ';
 	$opt['mensagem_discussao_concluida_rel_assunto'] = __('Término da Discussão e início da relatoria: Pauta {post_title}','delibera');
 	$opt['mensagem_discussao_concluida_rel'] = __(
-'Olá {first_name},
+'Olá {display_name},
 
 o prazo para discussão da pauta {post_title} terminou, agora o relator terá o prazo de {report_deadline} para sistematizar as propostas e colocar em votação. Você continua pondendo visualizar o que foi discutido nesta pauta:
 
@@ -156,7 +156,7 @@ Equipe ÀgoraDelibera
 ','delibera');
 	$opt['mensagem_discussao_concluida_assunto'] = __('Término da Discussão: Pauta {post_title}','delibera');
 	$opt['mensagem_discussao_concluida'] = __(
-'Olá {first_name},
+'Olá {display_name},
 
 o prazo para discussão da pauta {post_title} terminou, agora você poderá votar nas propostas que foram encaminhadas durante o processo de discussão. 
 
@@ -167,7 +167,7 @@ Equipe ÀgoraDelibera
 ','delibera');
 	$opt['mensagem_relatoria_concluida_assunto'] = __('Fim do prazo da relatoria: Pauta {post_title}','delibera');
 	$opt['mensagem_relatoria_concluida'] = __(
-'Olá {first_name},
+'Olá {display_name},
 
 o prazo para a relatoria da pauta {post_title} terminou, agora você poderá votar nas propostas que foram encaminhadas durante o processo de discussão e sistematizadas pela relatoria. 
 Você pode acompanhar a origem de todas as propostas, de modo que garanta o controle social da sistematização das propostas.
@@ -178,7 +178,7 @@ Equipe ÀgoraDelibera
 
 ','delibera');
 	$opt['mensagem_fim_prazo_relatoria_assunto'] = 'Fim do prazo da relatoria: Pauta {post_title}';
-	$opt['mensagem_fim_prazo_relatoria'] = 'Olá {first_name},
+	$opt['mensagem_fim_prazo_relatoria'] = 'Olá {display_name},
 
 o prazo para a relatoria da pauta {post_title} terminou, agora você poderá votar nas propostas que foram encaminhadas durante o processo de discussão e sistematizadas pela relatoria. 
 Você pode acompanhar a origem de todas as propostas, de modo que garanta o controle social da sistematização das propostas.
@@ -189,7 +189,7 @@ Equipe ÀgoraDelibera
 
 ';
 	$opt['mensagem_fim_prazo_votacao_assunto'] = 'Fim de prazo para Votação: Pauta {post_title}';
-	$opt['mensagem_fim_prazo_votacao'] = 'Olá {first_name},
+	$opt['mensagem_fim_prazo_votacao'] = 'Olá {display_name},
 
 falta apenas 1 dia para o fim do prazo de votação da pauta {post_title}. Se ainda não votou,  aproveite agora para fazê-lo agora. Sua participação é muito importante!
 
@@ -200,7 +200,7 @@ Equipe ÀgoraDelibera
 ';
 	$opt['mensagem_votacao_concluida_assunto'] = __('Votação Concluída, veja as resoluções: Pauta {post_title}','delibera');
 	$opt['mensagem_votacao_concluida'] = __(
-'Olá {first_name},
+'Olá {display_name},
 
 O prazo para votação da pauta {post_title} encerrou, confira as resoluções do processo. 
 Obrigado por sua participação!
