@@ -817,6 +817,7 @@ function delibera_tratar_data($data, $int = true, $full = true)
  */
 function delibera_criar_agenda($postID, $prazo_validacao, $prazo_discussao, $prazo_votacao, $prazo_relatoria = false, $prazo_eleicao_relator = false)
 {
+    
 	if($prazo_validacao !== false)
 	{
 		delibera_add_cron(
@@ -1038,12 +1039,14 @@ function delibera_reabrir_pauta($postID)
  */
 function delibera_save_post($post_id, $post)
 {
-	if(get_post_type( ) != "pauta")
+    if(get_post_type( $post_id ) != "pauta")
 	{
 		return $post_id;
 	}
 	$opt = delibera_get_config();
 	$autosave = ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE );
+    
+    
 	if(
 		( // Se tem validação, tem que ter o prazo
 			$opt['validacao'] == 'N' || 
@@ -1064,8 +1067,7 @@ function delibera_save_post($post_id, $post)
 		array_key_exists('prazo_votacao', $_POST)
 	)
 	{
-		
-		$events_meta = array();
+        $events_meta = array();
 	
 		$validacoes = get_post_meta($post_id, 'numero_validacoes', true);
 		if($validacoes == "" || $validacoes === false || is_null($validacoes))
@@ -1116,7 +1118,7 @@ function delibera_save_post($post_id, $post)
 	    if($post->post_status == 'publish' && !$autosave)
 	    {
 	    	delibera_del_cron($post->ID);
-	    	delibera_publish_pauta($post->ID, $post, true);
+            delibera_publish_pauta($post->ID, $post, true);
 	    }
 	    
 	}
@@ -1138,10 +1140,11 @@ if(file_exists(__DIR__.DIRECTORY_SEPARATOR.'mailer') && file_exists(__DIR__.DIRE
 
 function delibera_publish_pauta($postID, $post, $alterar = false)
 {
-	if(get_post_type( ) != "pauta")
+	if(get_post_type( $postID ) != "pauta")
 	{
 		return $postID;
 	}
+    
 	if ($alterar || (($post->post_status == 'publish' || $_POST['publish'] == 'Publicar') && ((isset($_POST['prev_status']) && $_POST['prev_status'] == 'draft') || $_POST['original_post_status'] == 'draft' || $_POST['original_post_status'] == 'auto-draft' || $_POST['prev_status'] == 'pending' || $_POST['original_post_status'] == 'pending' ) ))
 	{
 		$prazo_validacao = get_post_meta($postID, 'prazo_validacao', true);
@@ -1155,8 +1158,10 @@ function delibera_publish_pauta($postID, $post, $alterar = false)
 		{
 			if(!$alterar)
 			{
+                
 				wp_set_object_terms($post->ID, 'validacao', 'situacao', false);
 			}
+            
 	    	delibera_criar_agenda(
 	    		$post->ID,
 	    		$prazo_validacao,
@@ -2957,3 +2962,126 @@ function delibera_get_available_languages() {
 
     return $langs;
 }
+
+
+
+
+// Interface pública para a criação de novas pautas
+
+add_action('generate_rewrite_rules', 'delibera_nova_pauta_generate_rewrite_rules');
+
+function delibera_nova_pauta_generate_rewrite_rules($wp_rewrite) {
+    $new_rules = array(
+        "nova-pauta/?$" => "index.php?&tpl=nova-pauta",
+        
+    );
+    $wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
+}
+
+add_filter('query_vars', 'delibera_nova_pauta_query_vars');
+
+function delibera_nova_pauta_query_vars($public_query_vars) {
+    $public_query_vars[] = "tpl";
+    
+    return $public_query_vars;
+}
+
+add_action('template_redirect', 'delibera_nova_pauta_template_redirect_intercept');
+
+function delibera_nova_pauta_template_redirect_intercept() {
+    global $wp_query, $wpdb;
+
+    $tpl = $wp_query->get('tpl');
+    
+    if ($tpl && $tpl === 'nova-pauta') {
+        $options = delibera_get_config();
+        if(isset($options['criar_pauta_pelo_front_end']) && $options['criar_pauta_pelo_front_end'] == 'S'){
+    
+            global $deliberaThemes;
+
+            include $deliberaThemes->themeFilePath('delibera_nova_pauta.php');
+            die;
+        }
+    }
+}
+
+add_action('init', 'delibera_nova_pauta_create_action');
+function delibera_nova_pauta_create_action(){
+    $opt = delibera_get_config();
+    if($opt['criar_pauta_pelo_front_end'] == 'S' && is_user_logged_in() && wp_verify_nonce($_POST['_wpnonce'], 'delibera_nova_pauta')){
+        $title = $_POST['nova-pauta-titulo'];
+        $content = $_POST['nova-pauta-conteudo'];
+        $excerpt = $_POST['nova-pauta-resumo'];
+        
+        $pauta = array();
+        $pauta['post_title'] = $title;
+        $pauta['post_content'] = $content;
+        $pauta['post_excerpt'] = $excerpt;
+        $pauta['post_type'] = 'pauta';
+        $pauta['post_status'] = 'draft';
+        
+        
+        $pauta_id = wp_insert_post($pauta);
+        
+        if(is_int($pauta_id) && $pauta_id > 0){
+            
+            /* Os valores adicionados ao array $_POST são baseados no if da função delibera_save_post(), comentado abaixo
+            ( // Se tem validação, tem que ter o prazo
+                $opt['validacao'] == 'N' || 
+                (array_key_exists('prazo_validacao', $_POST) && array_key_exists('min_validacoes', $_POST) )
+            ) &&
+            ( // Se tem relatoria, tem que ter o prazo
+                $opt['relatoria'] == 'N' ||
+                array_key_exists('prazo_relatoria', $_POST)
+            ) &&
+            ( // Se tem relatoria, e é preciso eleger o relator, tem que ter o prazo para eleição
+                $opt['relatoria'] == 'N' ||
+                (
+                    $opt['eleicao_relator'] == 'N' || 
+                    array_key_exists('prazo_eleicao_relator', $_POST)
+                )
+            ) &&
+            array_key_exists('prazo_discussao', $_POST) &&
+            array_key_exists('prazo_votacao', $_POST)
+            */
+            
+            if($opt['validacao'] == 'S'){
+                $_POST['prazo_validacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_validacao'].' DAYS'));
+                $_POST['min_validacoes'] = $opt['minimo_validacao'];
+            }
+            
+            if($opt['relatoria'] == 'S'){
+                $_POST['prazo_relatoria'] = date('d/m/Y', strtotime ('+'.$opt['dias_relatoria'].' DAYS'));
+                if($opt['eleicao_relator'] == 'S'){
+                    $_POST['prazo_eleicao_relator'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao_relator'].' DAYS'));
+                }
+            }
+            
+            $_POST['prazo_discussao'] = date('d/m/Y', strtotime ('+'.$opt['dias_discussao'].' DAYS'));
+            $_POST['prazo_votacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao'].' DAYS'));
+            
+            $_POST['publish'] = 'Publicar';
+             $_POST['prev_status'] = 'draft';
+            
+            wp_publish_post($pauta_id);
+            //delibera_save_post();
+            /*
+            global $post;
+            $posts = new WP_Query('p='.$pauta_id.'&post_type=pauta');
+            while($posts->have_posts()){
+                $posts->the_post();
+                $post = $posts->post;
+                
+                delibera_save_post($post->ID, $post);
+            }
+            wp_reset_postdata();
+             * 
+             */
+        }else{
+            die("ERRO");
+        }
+    }
+}
+
+
+// END - Interface pública para a criação de novas pautas
