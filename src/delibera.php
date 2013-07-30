@@ -1208,7 +1208,7 @@ function delibera_check_post_data($data, $postarr)
 			$valida = delibera_tratar_data($value);
 			if(!$autosave && ($valida === false || $valida < 1))
 			{
-				$erros[] = __("É necessário definir corretamente o prazo de Validação", "delibera"); 
+				$erros[] = __("É necessário definir corretamente o prazo de validação", "delibera"); 
 			} 
 		}
 		$value = $_POST['prazo_discussao'];
