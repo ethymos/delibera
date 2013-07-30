@@ -486,7 +486,7 @@ function delibera_notificar_representantes($mensage, $tipo, $post = false, $user
 				
 				if(array_key_exists("$tipo-$lang", $options_plugin_delibera))
 				{
-					$mensage_tmp = htmlspecialchars_decode($options_plugin_delibera["$tipo-$lang"]).$mensage.delibera_notificar_get_mensagem_link($post, $link);
+					$mensage_tmp = htmlspecialchars_decode($options_plugin_delibera["$tipo-$lang"]).$mensage;
 				}
 				if(array_key_exists("{$tipo}_assunto-$lang", $options_plugin_delibera))
 				{

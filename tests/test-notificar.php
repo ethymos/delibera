@@ -21,8 +21,7 @@ O prazo para a relatoria da pauta "Post title 1" terminou, agora você poderá v
 Você pode acompanhar a origem de todas as propostas, de modo que garanta o controle social da sistematização das propostas.
 
 <br/><br/>Origem: <a href="http://example.org/?post_type=pauta">Test Blog</a><br/>Pauta: <a href="http://example.org/?pauta=post-title-1">Post title 1</a><br/><br/>Para ver a mensagem na página, clique aqui: http://example.org/?pauta=post-title-1
-
-<br/><br/>Equipe ÀgoraDelibera';
+';
         
         wp_set_object_terms($this->post_id, 'relatoria', 'situacao', false);
         
