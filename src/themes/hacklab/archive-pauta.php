@@ -20,7 +20,9 @@ get_header();
             <?php get_delibera_header(); ?>
             <div class="clearfix">
                 <div class="filters widget-area alignleft">
-                    <p><a href="" class="btn btn-info">Criar uma nova pauta</a></p>
+                    <?php if (is_user_logged_in()) : ?>
+                        <p><a href="" class="btn btn-info">Criar uma nova pauta</a></p>
+                    <?php endif; ?>
                     
                     <h2>Filtrar Pautas</h2>
                     <form>
