@@ -19,7 +19,15 @@ $resumo     = isset($_POST['nova-pauta-resumo'])    ? stripslashes($_POST['nova-
             <textarea name="nova-pauta-resumo" id="nova-pauta-resumo"><?php echo htmlentities($resumo) ?></textarea>
         </p>
         
-        <?php // delibera_pauta_meta() ?>
+        <p>
+            <?php $temas = get_terms('tema', array('hide_empty'    => true)); ?>
+            Temas:
+            <ul>
+                <?php foreach($temas as $tema): ?>
+                <li><label><input type="checkbox" name="tema[]" value="<?php echo $tema->term_id; ?>" /> <?php echo $tema->name ?></label></li>
+                <?php endforeach; ?>
+            </ul>
+        </p>
         
         <input type="submit" value="<?php _e( 'Criar pauta', 'delibera' ); ?>"/>
     </form>

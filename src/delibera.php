@@ -3018,31 +3018,36 @@ function delibera_nova_pauta_create_action(){
         $pauta['post_content'] = $content;
         $pauta['post_excerpt'] = $excerpt;
         $pauta['post_type'] = 'pauta';
-        $pauta['post_status'] = 'draft';
         
+        // para que a situação da pauta seja criada corretamente, 
+        // é necessário criar a pauta como rascunho para deppois publicar no final desta função
+        $pauta['post_status'] = 'draft';
         
         $pauta_id = wp_insert_post($pauta);
         
         if(is_int($pauta_id) && $pauta_id > 0){
             
-            /* Os valores adicionados ao array $_POST são baseados no if da função delibera_save_post(), comentado abaixo
-            ( // Se tem validação, tem que ter o prazo
-                $opt['validacao'] == 'N' || 
-                (array_key_exists('prazo_validacao', $_POST) && array_key_exists('min_validacoes', $_POST) )
-            ) &&
-            ( // Se tem relatoria, tem que ter o prazo
-                $opt['relatoria'] == 'N' ||
-                array_key_exists('prazo_relatoria', $_POST)
-            ) &&
-            ( // Se tem relatoria, e é preciso eleger o relator, tem que ter o prazo para eleição
-                $opt['relatoria'] == 'N' ||
-                (
-                    $opt['eleicao_relator'] == 'N' || 
-                    array_key_exists('prazo_eleicao_relator', $_POST)
-                )
-            ) &&
-            array_key_exists('prazo_discussao', $_POST) &&
-            array_key_exists('prazo_votacao', $_POST)
+            /* Os valores adicionados ao array $_POST são baseados no if da função delibera_save_post(), 
+             * comentado abaixo
+            if(  
+                ( // Se tem validação, tem que ter o prazo
+                    $opt['validacao'] == 'N' || 
+                    (array_key_exists('prazo_validacao', $_POST) && array_key_exists('min_validacoes', $_POST) )
+                ) &&
+                ( // Se tem relatoria, tem que ter o prazo
+                    $opt['relatoria'] == 'N' ||
+                    array_key_exists('prazo_relatoria', $_POST)
+                ) &&
+                ( // Se tem relatoria, e é preciso eleger o relator, tem que ter o prazo para eleição
+                    $opt['relatoria'] == 'N' ||
+                    (
+                        $opt['eleicao_relator'] == 'N' || 
+                        array_key_exists('prazo_eleicao_relator', $_POST)
+                    )
+                ) &&
+                array_key_exists('prazo_discussao', $_POST) &&
+                array_key_exists('prazo_votacao', $_POST)
+             )
             */
             
             if($opt['validacao'] == 'S'){
@@ -3060,25 +3065,37 @@ function delibera_nova_pauta_create_action(){
             $_POST['prazo_discussao'] = date('d/m/Y', strtotime ('+'.$opt['dias_discussao'].' DAYS'));
             $_POST['prazo_votacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao'].' DAYS'));
             
-            $_POST['publish'] = 'Publicar';
-             $_POST['prev_status'] = 'draft';
             
+            // isto é necessário por causa do if da função delibera_publish_pauta()
+            $_POST['publish'] = 'Publicar';
+            $_POST['prev_status'] = 'draft';
+            
+            // verifica se todos os temas enviados por post são válidos
+            $temas = get_terms('tema', array('hide_empty'    => true));
+            $temas_ids = array();
+            
+            if(isset($_POST['tema']) && is_array($_POST['tema']))
+                foreach($temas as $tema)
+                    if(in_array ($tema->term_id, $_POST['tema']))
+                        $temas_ids[] = $tema->term_id;
+            
+            // coloca os termos de temas no post
+            wp_set_post_terms($pauta_id, $temas_ids, 'tema');
+            
+            // publica o post 
             wp_publish_post($pauta_id);
-            //delibera_save_post();
-            /*
-            global $post;
-            $posts = new WP_Query('p='.$pauta_id.'&post_type=pauta');
-            while($posts->have_posts()){
-                $posts->the_post();
-                $post = $posts->post;
-                
-                delibera_save_post($post->ID, $post);
-            }
-            wp_reset_postdata();
-             * 
-             */
-        }else{
-            die("ERRO");
+            
+            // isto serve para criar o slug corretamente, 
+            // já que no wp_insert_post não cria o slug quando o status é draft e o wp_publish_post tb não cria o slug
+            unset($pauta['post_status']);
+            $pauta['ID'] = $pauta_id;
+            $pauta['post_name'] = sanitize_post_field('post_name', $title, $pauta_id, 'save');
+            wp_update_post($pauta);
+            
+            // redireciona para a pauta criada
+            $permalink = get_post_permalink($pauta_id);
+            wp_safe_redirect($permalink);
+            die;
         }
     }
 }
