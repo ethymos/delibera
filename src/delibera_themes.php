@@ -195,9 +195,9 @@ class DeliberaThemes
      */
     public function publicStyles()
     {
-        global $post;
-    
-        if (get_post_type($post) == "pauta" || is_post_type_archive('pauta')) {
+        global $post, $wp_query;
+        
+        if (get_post_type($post) == "pauta" || is_post_type_archive('pauta') || $wp_query->get('tpl') === 'nova-pauta') {
             wp_enqueue_style('delibera_style', $this->themeFileUrl('delibera_style.css'));
         }
     }
