@@ -3008,7 +3008,7 @@ function delibera_nova_pauta_template_redirect_intercept() {
 add_action('init', 'delibera_nova_pauta_create_action');
 function delibera_nova_pauta_create_action(){
     $opt = delibera_get_config();
-    if($opt['criar_pauta_pelo_front_end'] == 'S' && is_user_logged_in() && wp_verify_nonce($_POST['_wpnonce'], 'delibera_nova_pauta')){
+    if ($opt['criar_pauta_pelo_front_end'] == 'S' && is_user_logged_in() && isset($_POST['_wpnonce']) && wp_verify_nonce($_POST['_wpnonce'], 'delibera_nova_pauta')) {
         $title = $_POST['nova-pauta-titulo'];
         $content = $_POST['nova-pauta-conteudo'];
         $excerpt = $_POST['nova-pauta-resumo'];
