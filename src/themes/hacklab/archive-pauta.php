@@ -21,7 +21,7 @@ get_header();
             <div class="clearfix">
                 <div class="filters widget-area alignleft">
                     <?php if (is_user_logged_in()) : ?>
-                        <p><a href="" class="btn btn-info">Criar uma nova pauta</a></p>
+                        <p><a href="<?php echo site_url('nova-pauta'); ?>" class="btn btn-info">Criar uma nova pauta</a></p>
                     <?php endif; ?>
                     
                     <h2>Filtrar Pautas</h2>
