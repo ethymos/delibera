@@ -80,6 +80,9 @@ function delibera_conf_page()
                 wp_die($e->getMessage());
             }
         }
+        
+        // atualiza os permalinks por conta da opção "criar_pauta_pelo_front_end"
+        flush_rewrite_rules();
 
         if (update_option('delibera-config', $opt) || (isset($_POST["delibera_reinstall"]) && $_POST['delibera_reinstall'] == 'S'))
             $mensagem = __('Configurações salvas!','delibera');
