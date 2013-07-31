@@ -534,3 +534,49 @@ div.delibera-delete-comment-button:hover {
     margin:0 0 3px 0 !important;
     padding:9px 6px 6px 6px!important;
 }
+
+#nova-pauta-form .alignleft {
+    margin-right:5%;
+    width:65%;
+}
+
+#nova-pauta-form .alignright {
+    width:30%;
+}
+
+#nova-pauta-form .wp-editor-tools {
+    margin-bottom:0;
+}
+
+#nova-pauta-form .divider {
+    border-bottom:1px solid #eee;
+    height:0;
+    margin:18px 0;
+    padding:0;
+}
+
+#nova-pauta-form label {
+    display:inline-block;
+    font-weight:bold;
+    margin-bottom:9px;
+}
+
+#nova-pauta-form label.checkbox {
+    font-weight:normal;
+}
+
+#nova-pauta-form input[type="text"] {
+    font-size:16px;
+    margin:3px 0;
+    max-width:946px;
+    padding:3px 0;
+    width:100%;
+}
+
+#nova-pauta-form textarea#nova-pauta-resumo {
+    height:120px;
+    margin:0;
+    max-width:946px;
+    padding:0;
+    width:100%;
+}
