@@ -1,6 +1,9 @@
-<?php get_header(); ?>
+<?php 
+get_header(); 
+$situacao = delibera_get_situacao(get_the_ID());
+?>
 
-<div id="delibera">
+<div id="delibera" class="situacao-<?php echo $situacao->slug; ?>">
     <div id="container">
     	<div id="content" role="main">
     		<?php
