@@ -29,7 +29,7 @@ class WidgetListaPropostas extends WP_Widget
 	
 	public function styles()
 	{
-		wp_register_style('WidgetListaPropostas', plugin_dir_url(__FILE__)."/WidgetListaPropostas.css");
+		wp_register_style('WidgetListaPropostas', WP_PLUGIN_URL."/delibera/widgets/WidgetListaPropostas/WidgetListaPropostas.css");
 		wp_enqueue_style('WidgetListaPropostas');
 	}
 	
