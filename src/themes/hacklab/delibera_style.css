@@ -580,3 +580,7 @@ div.delibera-delete-comment-button:hover {
     padding:0;
     width:100%;
 }
+
+#delibera.situacao-relatoria {
+    margin-bottom:180px;
+}
