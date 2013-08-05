@@ -1927,6 +1927,21 @@ add_action( 'admin_print_scripts', 'delibera_admin_scripts' );
 
 // Fim Scripts
 
+/**
+ * Criar a página about
+ */
+function delibera_create_about_page()
+{
+	$post = array(
+			'post_name' => DELIBERA_ABOUT_PAGE,
+			'post_title' => __('Sobre a plataforma', 'delibera'),
+			'post_content' => __('Use está página para explicar para os usuários como utilizar o sistema', 'delibera'),
+			'post_type' => 'page',
+			'post_status' => 'publish',
+	);
+	wp_insert_post($post);
+}
+
 /*
  * Rotinas de instalação do plugin
  */
@@ -1942,14 +1957,7 @@ function delibera_instalacao()
 	}
 	
 	if (!get_page_by_slug(DELIBERA_ABOUT_PAGE)) {
-		$post = array(
-			'post_name' => DELIBERA_ABOUT_PAGE,
-			'post_title' => __('Sobre a plataforma', 'delibera'),
-	        'post_content' => __('Use está página para explicar para os usuários como utilizar o sistema', 'delibera'),
-	        'post_type' => 'page',
-	        'post_status' => 'publish',
-		);
-		wp_insert_post($post);
+		delibera_create_about_page();
 	}
 }
 register_activation_hook(__FILE__, 'delibera_instalacao');

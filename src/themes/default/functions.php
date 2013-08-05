@@ -23,7 +23,16 @@ function get_delibera_header() {
     	    	?>
         	</p>
             <p class="delibera-participacao">
-            	<a href="<?php echo get_page_link( get_page_by_slug( DELIBERA_ABOUT_PAGE )->ID ); ?>"><?php _e( 'Saiba por que e como participar', 'delibera' ); ?></a>
+            	<?php
+            		$about =  get_page_by_slug( DELIBERA_ABOUT_PAGE );
+            		if(is_null)
+            		{
+            			delibera_create_about_page();
+            			$about =  get_page_by_slug( DELIBERA_ABOUT_PAGE );
+            		}
+            		
+            	?>
+            	<a href="<?php echo get_page_link($about->ID); ?>"><?php _e( 'Saiba por que e como participar', 'delibera' ); ?></a>
             </p>
         </div>
 		<p class="delibera-login">
