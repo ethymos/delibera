@@ -25,7 +25,7 @@ function get_delibera_header() {
             <p class="delibera-participacao">
             	<?php
             		$about =  get_page_by_slug( DELIBERA_ABOUT_PAGE );
-            		if(is_null)
+            		if(is_null($about))
             		{
             			delibera_create_about_page();
             			$about =  get_page_by_slug( DELIBERA_ABOUT_PAGE );

@@ -1932,6 +1932,8 @@ add_action( 'admin_print_scripts', 'delibera_admin_scripts' );
  */
 function delibera_create_about_page()
 {
+	global $post;
+	$post_tmp = $post;
 	$post = array(
 			'post_name' => DELIBERA_ABOUT_PAGE,
 			'post_title' => __('Sobre a plataforma', 'delibera'),
@@ -1940,6 +1942,7 @@ function delibera_create_about_page()
 			'post_status' => 'publish',
 	);
 	wp_insert_post($post);
+	$post = $post_tmp;
 }
 
 /*
