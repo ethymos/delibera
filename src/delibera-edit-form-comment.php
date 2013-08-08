@@ -1,5 +1,5 @@
 <form name="delibera-edit-comment-<?php echo $comment->comment_ID;?>" action="comment.php" method="post" id="delibera-edit-comment-<?php echo $comment->comment_ID;?>" style="display:none;" class="delibera-edit-comment-form" >
-<div id="div-delibera-edit-comment-{$comment->comment_ID}" class="delibera-edit-comment">
+<div id="div-delibera-edit-comment-<?php echo $comment->comment_ID; ?>" class="delibera-edit-comment">
 <?php
 	//$rows = get_option('default_post_edit_rows');
 	//if (($rows < 3) || ($rows > 100))
@@ -42,44 +42,33 @@ do_meta_boxes('comment', 'normal', $comment);
 						    comment_ID : "<?php echo $comment->comment_ID;?>",
 						    user_id: "<?php echo get_current_user_id(); ?>",
 						    text: jQuery('#textarea-delibera-edit-comment-<?php echo $comment->comment_ID;?>').val(),
-						    proposta: jQuery('#delibera_encaminha-<?php echo $comment->comment_ID;?>').is(':checked') ? 'encaminhamento' : 'discussao',
+						    proposta: jQuery('input[name=delibera_encaminha]:checked', '#delibera-edit-comment-<?php echo $comment->comment_ID;?>').val() == 'S' ? 'encaminhamento' : 'discussao', 
 							security: "<?php echo wp_create_nonce("comment-edit-delibera-{$comment->comment_ID}-".get_current_user_id()); ?>"
 						},
 						function(response)
 						{
-							delibera_edit_comment_show('<?php echo $comment->comment_ID;?>');
-							jQuery('#textarea-delibera-edit-comment-<?php echo $comment->comment_ID;?>').val(response);
-
-							var html = '<div id="delibera-comment-text-<?php echo $comment->comment_ID;?>" class="encaminhamento delibera-comment-text">' + response + '</div>';
-							
-							jQuery('#delibera-comment-text-<?php echo $comment->comment_ID;?>').replaceWith( html );
-							if(jQuery('#delibera_encaminha-<?php echo $comment->comment_ID;?>').is(':checked'))
-							{
-								jQuery('#checkbox-encaminhamento-<?php echo $comment->comment_ID;?>').show();
-							}
-							else
-							{
-								jQuery('#checkbox-encaminhamento-<?php echo $comment->comment_ID;?>').hide();
-							}
+							location.reload();
 						}
 					);
 	            });
 	        jQuery("#delibera-delete-comment-button-<?php echo $comment->comment_ID;?>")
             .click(function ()
             {
-				jQuery.post("<?php echo home_url( "/" );?>/wp-admin/admin-ajax.php", 
-					{
-						action : "delibera_delete_comment" ,
-					    comment_ID : "<?php echo $comment->comment_ID;?>",
-					    user_id: "<?php echo get_current_user_id(); ?>",
-					    proposta: jQuery('#delibera_encaminha-<?php echo $comment->comment_ID;?>').is(':checked') ? 'encaminhamento' : 'discussao',
-						security: "<?php echo wp_create_nonce("comment-delete-delibera-{$comment->comment_ID}-".get_current_user_id()); ?>"
-					},
-					function(response)
-					{
-						jQuery('#delibera-comment-<?php echo $comment->comment_ID;?>').remove();
-					}
-				);
+		        if (confirm("<?php _e('Tem certeza que deseja remover este item?'); ?>")) {
+    				jQuery.post("<?php echo home_url( "/" );?>/wp-admin/admin-ajax.php", 
+    					{
+    						action : "delibera_delete_comment" ,
+    					    comment_ID : "<?php echo $comment->comment_ID;?>",
+    					    user_id: "<?php echo get_current_user_id(); ?>",
+    					    proposta: jQuery('input[name=delibera_encaminha]:checked', '#delibera-edit-comment-<?php echo $comment->comment_ID;?>').val() == 'S' ? 'encaminhamento' : 'discussao',
+    						security: "<?php echo wp_create_nonce("comment-delete-delibera-{$comment->comment_ID}-".get_current_user_id()); ?>"
+    					},
+    					function(response)
+    					{
+    						jQuery('#delibera-comment-<?php echo $comment->comment_ID;?>').remove();
+    					}
+    				);
+    			}
             });
 	    });
 	</script>

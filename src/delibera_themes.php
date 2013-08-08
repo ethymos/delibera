@@ -195,9 +195,9 @@ class DeliberaThemes
      */
     public function publicStyles()
     {
-        global $post;
-    
-        if (get_post_type($post) == "pauta" || is_post_type_archive('pauta')) {
+        global $post, $wp_query;
+        
+        if (get_post_type($post) == "pauta" || is_post_type_archive('pauta') || $wp_query->get('tpl') === 'nova-pauta') {
             wp_enqueue_style('delibera_style', $this->themeFileUrl('delibera_style.css'));
         }
     }
@@ -282,7 +282,7 @@ require_once($deliberaThemes->themeFilePath('functions.php'));
 require_once($deliberaThemes->themeFilePath('delibera_comments_template.php'));
 
 /**
- * Usa o templa de comentário do Delibera
+ * Usa o template de comentário do Delibera
  * no lugar do padrão do Wordpress para as pautas
  * 
  * @param string $path

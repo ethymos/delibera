@@ -120,8 +120,7 @@ function delibera_comment_form($defaults)
                 }
                 break;
             case 'discussao':
-            case 'relatoria':
-                $defaults['title_reply'] = sprintf(__('Discussão em torno de "%s"','delibera'),$post->post_title);
+                $defaults['title_reply'] = __('Discussão da pauta','delibera');
                 $defaults['must_log_in'] = sprintf(__('Você precisar <a href="%s">estar logado</a> para contribuir com a discussão.','delibera'), wp_login_url(apply_filters('the_permalink', get_permalink($post->ID))));
                 $defaults['comment_notes_after'] = "";
                 $defaults['logged_in_as'] = "";
@@ -149,6 +148,30 @@ function delibera_comment_form($defaults)
                     $defaults = apply_filters('delibera_discussao_comment_form', $defaults, $situacao->slug);
                 }
                 break;
+            case 'relatoria':
+                $defaults['title_reply'] = __('Novo encaminhamento', 'delibera');
+                $defaults['must_log_in'] = sprintf(__('Você precisar <a href="%s">estar logado</a> para contribuir com a discussão.','delibera'), wp_login_url(apply_filters('the_permalink', get_permalink($post->ID))));
+                $defaults['comment_notes_after'] = '<p class="bottom textright">
+                    <button id="new-encaminhamento-cancel" type="reset" class="btn btn-danger" style="display: none;">Cancelar</button>
+                    <button id="new-encaminhamento-save" type="submit" class="btn btn-success">Salvar</button>
+                </p>';
+                $defaults['logged_in_as'] = '';
+                $defaults['comment_field'] = '<input name="delibera_comment_tipo" value="discussao" style="display:none;" />' . $defaults['comment_field'];
+                $defaults['id_submit'] = "botao-oculto";
+                
+                if ($situacao->slug == 'relatoria') {
+                    $defaults['comment_field'] = '<input id="delibera-baseouseem" name="delibera-baseouseem" type="hidden" value="" />'
+                        . '<p id="baseadoem-title" style="display: none;"><strong>' . __('Proposta de encaminhamento baseado no(s) encaminhamento(s) da(s) seguinte(s) pessoa(s):', 'delibera') . '</strong> <span id="baseadoem-list"></span></p>'
+                        . $defaults['comment_field'];
+                }
+                
+                $replace = '<input type="hidden" name="delibera_encaminha" value="S" />';
+                $defaults['comment_field'] = preg_replace("/<label for=\"comment\">(.*?)<\/label>/", $replace, $defaults['comment_field']);
+                
+                if (has_filter('delibera_discussao_comment_form')) {
+                    $defaults = apply_filters('delibera_discussao_comment_form', $defaults, $situacao->slug);
+                }
+                break;
             case 'emvotacao':
                 $user_comments = delibera_get_comments($post->ID, 'voto', array('user_id' => $current_user->ID));
                 $temvoto = false;
@@ -168,20 +191,28 @@ function delibera_comment_form($defaults)
                         </script>
                     ';
                 } else {
-                    $defaults['title_reply'] = sprintf(__('Regime de votação para a pauta "%s"','delibera'), $post->post_title);
+                    $defaults['title_reply'] = __('Votação dos encaminhamentos propostos', 'delibera');
                     $defaults['must_log_in'] = sprintf(__('Você precisar <a href="%s">estar logado</a> e ter permissão para votar.'), wp_login_url(apply_filters('the_permalink', get_permalink($post->ID))));
                     $encaminhamentos = array();
                     
                     if (current_user_can('votar')) {
                         $form = '<div id="encaminhamentos" class="delibera_checkbox_voto">';
-                        $encaminhamentos = delibera_get_comments_encaminhamentos($post->ID);
+                        $encaminhamentos = delibera_get_comments_encaminhamentos_selecionados($post->ID);
+                        
+                        if (empty($encaminhamentos)) {
+                            // se acabar o prazo e o relator não selecionar nenhum encaminhamento
+                            // coloca todos os encaminhamentos para votacao
+                            $encaminhamentos = delibera_get_comments_encaminhamentos($post->ID);
+                        }
                         
                         $form .= '<div class="instrucoes-votacao">'.__('Escolha os encaminhamentos que deseja aprovar e depois clique em "Votar":','delibera').'</div>';
                         $form .= '<ol class="encaminhamentos">';
                         
                         $i = 0;
                         foreach ($encaminhamentos as $encaminhamento) {
-                            $form .= '<li class="encaminhamento clearfix">
+                            $tipo = get_comment_meta($encaminhamento->comment_ID, 'delibera_comment_tipo', true);
+                            
+                            $form .= '<li class="encaminhamento clearfix' . (($tipo == 'encaminhamento_selecionado') ? ' encaminhamentos-selecionados ' : '') . '">
                                 <div class="alignleft checkbox">
                                     <input type="checkbox" name="delibera_voto'.$i.'" id="delibera_voto'.$i.'" value="'.$encaminhamento->comment_ID.'" />
                                 </div>
@@ -240,10 +271,16 @@ function delibera_comment_form($defaults)
 add_filter('comment_form_defaults', 'delibera_comment_form');
 
 add_action('wp_enqueue_scripts', function() {
-    global $deliberaThemes;
+    global $deliberaThemes, $post;
+    
+    $situacao = delibera_get_situacao($post->ID);
     
     if (get_post_type() == 'pauta') {
-        wp_enqueue_script('delibera-hacklab', $deliberaThemes->getThemeUrl() . '/js/delibera-hacklab.js', array('jquery', 'delibera'));
+        wp_enqueue_script('delibera-hacklab', $deliberaThemes->getThemeUrl() . '/js/delibera-hacklab.js', array('delibera'));
+        
+        if ($situacao->slug == 'relatoria') {
+            wp_enqueue_script('hacklab-relatoria', $deliberaThemes->getThemeUrl() . '/js/hacklab-relatoria.js', array('delibera'));
+        }
     }
 });
 
@@ -298,7 +335,7 @@ function delibera_gerar_curtir($ID, $type ='pauta')
 {
     global $post;
     
-    $situacoes_validas = array('validacao' => false, 'discussao' => true, 'emvotacao' => false, 'comresolucao' => true);
+    $situacoes_validas = array('validacao' => false, 'discussao' => true, 'emvotacao' => false);
     
     $postID = 0;
     
@@ -316,8 +353,8 @@ function delibera_gerar_curtir($ID, $type ='pauta')
     $ndiscordou = intval($type == 'pauta' || $type == 'post' ? get_post_meta($ID, 'delibera_numero_discordar', true) : get_comment_meta($ID, 'delibera_numero_discordar', true));
     $situacao = delibera_get_situacao($postID);
 
-    $html = ($ncurtiu > 0 ? '<div class="delibera-like-count" >' . "$ncurtiu " . ($ncurtiu > 1 ? __('concordaram', 'delibera') : __('concordou', 'delibera')).'</div>' : '');    
-    $html .= ($ndiscordou > 0 ? '<div class="delibera-unlike-count" >' . "$ndiscordou " . ($ndiscordou > 1 ? __('discordaram', 'delibera') : __('discordou', 'delibera')).'</div>' : '');
+    $html = '<div class="delibera-like-count">' . ($ncurtiu > 0 ? sprintf(_n('%d concordou', '%d concordaram', $ncurtiu, 'delibera'), $ncurtiu) : '') . '</div>';    
+    $html .= '<div class="delibera-unlike-count">' . ($ndiscordou > 0 ? sprintf(_n('%d discordou', '%d discordaram', $ndiscordou, 'delibera'), $ndiscordou) : '') . '</div><br/>';
     
     if (is_user_logged_in()) {
         $user_id = get_current_user_id();
@@ -327,6 +364,7 @@ function delibera_gerar_curtir($ID, $type ='pauta')
             (is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas)) && $situacoes_validas[$situacao->slug] && // é uma situação válida
             !(delibera_ja_discordou($ID, $user_id, $ip, $type))) // não discordou
         {
+            // $html .= (!$ncurtiu ? '<div class="delibera-like-count"></div>' : '');
             $html .= '<button class="btn btn-mini btn-success delibera_like"><span class="delibera_like_text">' . __('Concordo', 'delibera') . '</span>';
             $html .= "<input type='hidden' name='object_id' value='{$ID}' />";
             $html .= "<input type='hidden' name='type' value='{$type}' />";
@@ -347,8 +385,8 @@ function delibera_gerar_discordar($ID, $type ='pauta')
 {
     global $post;
     
-    $situacoes_validas = array('validacao' => false, 'discussao' => true, 'emvotacao' => false, 'comresolucao' => true);
-    
+    $situacoes_validas = array('validacao' => false, 'discussao' => true, 'emvotacao' => false);
+    $ndiscordou = intval($type == 'pauta' || $type == 'post' ? get_post_meta($ID, 'delibera_numero_discordar', true) : get_comment_meta($ID, 'delibera_numero_discordar', true));
     $postID = 0;
     if(is_object($ID))
     {
@@ -374,7 +412,9 @@ function delibera_gerar_discordar($ID, $type ='pauta')
             (is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas)) && $situacoes_validas[$situacao->slug] &&// é uma situação válida
             !(delibera_ja_curtiu($ID, $user_id, $ip, $type))) // não discordou
         {
-            $html = '<button class="btn btn-mini btn-danger delibera_unlike"><span class="delibera_unlike_text">' . __('Discordo','delibera') . '</span>';
+			$html = '';
+            // $html .= (!$ndiscordou ? '<div class="delibera-unlike-count"></div>' : '');
+            $html .= '<button class="btn btn-mini btn-danger delibera_unlike"><span class="delibera_unlike_text">' . __('Discordo','delibera') . '</span>';
             $html .= "<input type='hidden' name='object_id' value='{$ID}' />";
             $html .= "<input type='hidden' name='type' value='{$type}' />";
             $html .= '</button>';
@@ -382,4 +422,45 @@ function delibera_gerar_discordar($ID, $type ='pauta')
             return $html;
         }
     }
+}
+
+/**
+ * Salva quais encaminhamentos o relator escolheu para
+ * serem usados na votação.
+ */
+function delibera_usar_na_votacao()
+{
+    if (current_user_can('relatoria')) {
+        $comment_id = filter_input(INPUT_POST, 'comment_id', FILTER_SANITIZE_NUMBER_INT);
+        $checked = filter_input(INPUT_POST, 'checked', FILTER_SANITIZE_NUMBER_INT);
+       
+        if ($checked) {
+            update_comment_meta($comment_id, 'delibera_comment_tipo', 'encaminhamento_selecionado');
+        } else {
+            update_comment_meta($comment_id, 'delibera_comment_tipo', 'encaminhamento');
+        }
+    }
+    
+    die();
+}
+add_action('wp_ajax_delibera_definir_votacao', 'delibera_usar_na_votacao');
+add_action('wp_ajax_nopriv_delibera_definir_votacao', 'delibera_usar_na_votacao');
+
+/**
+ * Parseia a tag <img> com o avatar do usuário para poder
+ * adicionar o atributo title já que não existe uma função
+ * no wp que retorna apenas a url do avatar do usuário
+ * 
+ * @see http://core.trac.wordpress.org/ticket/21195
+ * @param int $user_id
+ * @return string
+ */
+function get_avatar_with_title($user_id)
+{
+    $authorName = get_the_author_meta('display_name', $user_id);
+    $avatar = get_avatar($user_id, 44, '', $authorName);
+    
+    $avatar = preg_replace('|/>$|', " title='{$authorName}' />", $avatar);
+    
+    return $avatar;
 }

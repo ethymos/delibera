@@ -21,6 +21,7 @@ class Delibera_Walker_Comment extends Walker_Comment
      */
     function start_el(&$output, $comment, $depth, $args)
     {
+        global $deliberaThemes;
         $depth++;
         $GLOBALS['comment_depth'] = $depth;
         $args['avatar_size'] = '85';
@@ -51,25 +52,33 @@ class Delibera_Walker_Comment extends Walker_Comment
             $classes[] = 'parent';
         }
         
-        if ($tipo == 'encaminhamento' || $tipo == 'resolucao') {
+        if ($tipo == 'encaminhamento' || $tipo == 'resolucao' || $tipo == 'encaminhamento_selecionado') {
             $classes[] = 'encaminhamento';
+            
+            if (in_array($situacao->slug, array('comresolucao', 'emvotacao'))) {
+                $classes[] = 'encaminhamentos-selecionados';
+            }
         }
-        
+
         ?>
 
         <?php if (($tipo == 'resolucao' || $tipo == 'encaminhamento') && $situacao->slug == 'comresolucao') : ?>
             <?php $nvotos = get_comment_meta($comment->comment_ID, "delibera_comment_numero_votos", true); ?>
-            <li class="encaminhamento clearfix">
+            <?php $classes[] = 'clearfix'; ?>
+            <li <?php comment_class($classes); ?>>
                 <div class="alignleft votos">
                     <span><?php echo ($nvotos == 1) ? sprintf(__('%d voto', 'delibera'), $nvotos) : sprintf(__('%d votos', 'delibera'), $nvotos); ?></span>
                 </div>
                 <div class="alignleft content">
                     <?php comment_text(); ?>
                 </div>
-            </li>    
+            </li>
+        <?php  elseif ($situacao->slug == 'emvotacao' && $tipo == 'voto') : ?>
+            <?php $avatar = get_avatar_with_title($comment->user_id); ?>
+            <li><?php echo $avatar; ?></li>
         <?php else : ?>
-            <li <?php comment_class($classes)?>>
-                <article>
+            <li <?php comment_class($classes); ?>>
+                <article id="delibera-comment-<?php echo $comment->comment_ID; ?>">
                     <header class="coment-meta comment-author vcard clearfix">
                         <div class="alignleft">
                             <?php echo get_avatar($comment, 44); ?>
@@ -111,77 +120,90 @@ class Delibera_Walker_Comment extends Walker_Comment
                         <?php delibera_comment_edit_form(); ?>
                     </section>
                     <section class="actions clearfix">
-                        <?php if (delibera_comments_is_open($comment->comment_post_ID) && $situacao->slug != 'emvotacao') : ?>
+                        <?php if (delibera_comments_is_open($comment->comment_post_ID) && $situacao->slug != 'emvotacao' && $situacao->slug != 'relatoria') : ?>
                             <div class="bottom alignleft">
                                 <div class="reply">
                                     <?php
-                                    if ($situacao->slug == 'relatoria' && is_user_logged_in()) {
-                                        if ($tipo == 'encaminhamento' && current_user_can('relatoria')) {
-                                            ?>
-                                            <button class="btn btn-mini btn-info comment-reply-link">
-                                                <?php edit_comment_link(__('Editar Encaminhamento', 'delibera'), '<p>', '</p>'); ?>
-                                            </button>
-                                            <?php
-                                        }
-                                    } else if ($situacao->slug != 'validacao' && is_user_logged_in()) {            
+                                    if ($situacao->slug != 'validacao' && is_user_logged_in()) {            
                                         $args['reply_text'] = __("Responder", 'delibera');
                                         ?>
-                                        <button class="btn btn-mini btn-info comment-reply-link"> 
-                                            <?php comment_reply_link(array_merge($args, array('add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth']))); ?>
-                                        </button>
+                                        <?php comment_reply_link(array_merge($args, array('add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth']))); ?>
                                         <?php
                                     } else if (is_user_logged_in()) {
                                         ?>
-                                        <button class="btn btn-mini btn-info comment-reply-link">
-                                            <a href="<?php delibera_get_comment_link();?>#respond" class="comment-reply-link"><?php _e('De sua opinião', 'delibera'); ?></a>
-                                        </button>
+                                        <a href="<?php delibera_get_comment_link();?>#respond" class="comment-reply-link"><?php _e('De sua opinião', 'delibera'); ?></a>
                                         <?php
                                     } else {
                                         ?>
-                                        <button class="btn btn-mini btn-info comment-reply-link">
-                                            <a href="<?php echo wp_login_url(delibera_get_comment_link());?>#respond" class="comment-reply-link"><?php _e('Faça login e de sua opinião', 'delibera'); ?></a>
-                                        </button>
+                                        <a href="<?php echo wp_login_url(delibera_get_comment_link());?>#respond" class="comment-reply-link"><?php _e('Faça login e de sua opinião', 'delibera'); ?></a>
                                         <?php
                                     }
                                     ?>
                                 </div>
                             </div>
                         <?php endif; ?>
-                        <div class="bottom alignright">
-                            <?php
-                            
-                            $curtir = delibera_gerar_curtir($comment->comment_ID, 'comment');
-                            $discordar = delibera_gerar_discordar($comment->comment_ID, 'comment');
-                            
-                            if ($curtir) {
-                                echo $curtir;
+                        <?php
+                        if ($situacao->slug == 'relatoria' && current_user_can('relatoria'))    {
+                            $baseouseem = get_comment_meta($comment->comment_ID, 'delibera-baseouseem', true);
+                            if (!empty($baseouseem)) {
+                                $elements = explode(',', $baseouseem);
+                                $result = '';
+                                $count = count($elements);
+                                
+                                foreach ($elements as $key => $element) {
+                                    $reference_comment = get_comment($element);
+                                    $result .= "<a href='#delibera-comment-{$reference_comment->comment_ID}'>{$reference_comment->comment_author}</a>";
+                                    
+                                    if ($key + 1 < $count) {
+                                        $result .= ', ';
+                                    }
+                                }
+                                echo '<div>'.__('Proposta baseada em:', 'delibera') . '&nbsp;' . $result . '</div>';
                             }
-                            
-                            if ($discordar) {
-                                echo $discordar;
-                            }                                                
-                            ?>
-                        </div>
-                    </section><!-- .reply -->
-                    <?php
-                    if ($situacao->slug == 'relatoria' && current_user_can('relatoria'))    {
-                        $baseouseem = get_comment_meta($comment->comment_ID, 'delibera-baseouseem', true);
-                        if (strlen($baseouseem) > 0) {
-                            $baseouseem_elements = "";
-                            foreach (explode(',', $baseouseem) as $baseouseem_element) {
-                                $baseouseem_elements .= do_shortcode($baseouseem_element);
-                            }
-                            echo '<div id="comment-painel-baseouseem" class="comment-painel-baseouseem"><label id="painel-baseouseem-label" class="painel-baseouseem-label" >'.__('Proposta baseada em:', 'delibera').'&nbsp;</label>'.$baseouseem_elements.'</div>';
                         }
-                    }
-                    
-                    if ($tipo == "encaminhamento" && current_user_can('relatoria') && $situacao->slug == "relatoria") {
-                        ?>
-                        <div class="baseadoem-checkbox-div"><label class="baseadoem-checkbox-label"><input id="baseadoem-checkbox-<?php echo $comment->comment_ID; ?>" type="checkbox" name="baseadoem-checkbox[]" value="<?php echo $comment->comment_ID; ?>" class="baseadoem-checkbox" autocomplete="off" /><?php _e('basear-se neste encaminhamento?', 'delibera'); ?></label></div>
-                        <?php 
-                    }
-                    
-                    ?>
+                        
+                        if (($tipo == "encaminhamento" || $tipo == 'encaminhamento_selecionado') && current_user_can('relatoria') && $situacao->slug == "relatoria") {
+                            $selecionados = get_post_meta($comment->comment_post_ID, '_usar_na_votacao', true);
+                            
+                            if (!$selecionados) {
+                                $selecionados = array();
+                            }
+                            ?>
+                            <div class="bottom alignleft">
+                                <p>
+                                    <input id="baseadoem-checkbox-<?php echo $comment->comment_ID; ?>" type="checkbox" name="baseadoem-checkbox[]" value="<?php echo $comment->comment_ID; ?>" class="baseadoem-checkbox" autocomplete="off" />
+                                    <label for="baseadoem-checkbox-<?php echo $comment->comment_ID; ?>"><?php _e('Criar novo encaminhamento baseado neste', 'delibera'); ?></label>
+                                </p>
+                                <p>
+                                    <input id="usar-na-votacao-<?php echo $comment->comment_ID; ?>" class="usar-na-votacao" type="checkbox" name="usar_na_votacao[]" value="<?php echo $comment->comment_ID; ?>" <?php echo (in_array($comment->comment_ID, $selecionados)) ? ' checked="checked" ' : ''; ?> />
+                                    <label for="usar-na-votacao-<?php echo $comment->comment_ID; ?>"><?php _e('Usar este encaminhamento na votação', 'delibera'); ?></label>
+                                    <img class="usar-na-votacao-feedback" src="<?php echo $deliberaThemes->getThemeUrl(); ?>/img/accept.png" style="display: none;" />
+                                </p>
+                            </div>
+                            <?php 
+                        }
+                        
+                        $ncurtiu = get_comment_meta($comment->comment_ID, 'delibera_numero_curtir', true);
+                        $ndiscordou = get_comment_meta($comment->comment_ID, 'delibera_numero_discordar', true);
+                        
+                        if (is_user_logged_in() || $ncurtiu || $ndiscordou) : ?>
+                            <div class="bottom alignright textright">
+                                <?php
+                                
+                                $curtir = delibera_gerar_curtir($comment->comment_ID, 'comment');
+                                $discordar = delibera_gerar_discordar($comment->comment_ID, 'comment');
+                                
+                                if ($curtir) {
+                                    echo $curtir;
+                                }
+                                
+                                if ($discordar) {
+                                    echo $discordar;
+                                }                                                
+                                ?>
+                            </div>
+                        <?php endif; ?>
+                    </section><!-- .reply -->
                 </article>
             </li>
         <?php

@@ -27,6 +27,7 @@ function delibera_get_main_config($config = array()) {
     $opt['dias_validacao'] = '5';
     $opt['dias_discussao'] = '5';
     $opt['dias_votacao'] = '5';
+    $opt['criar_pauta_pelo_front_end'] = 'N';
     $opt['representante_define_prazos'] = 'N';
     $opt['dias_novo_prazo'] = '2';
     $opt['validacao'] = 'S';
@@ -79,6 +80,9 @@ function delibera_conf_page()
                 wp_die($e->getMessage());
             }
         }
+        
+        // atualiza os permalinks por conta da opção "criar_pauta_pelo_front_end"
+        flush_rewrite_rules();
 
         if (update_option('delibera-config', $opt) || (isset($_POST["delibera_reinstall"]) && $_POST['delibera_reinstall'] == 'S'))
             $mensagem = __('Configurações salvas!','delibera');
@@ -117,6 +121,11 @@ function delibera_conf_page()
                     "label" => __('Tema', 'delibera'),
                     "content" => $deliberaThemes->getSelectBox($opt['theme']) . '<p class="description">' . __('É possível criar um tema para o Delibera criando uma pasta com o nome "delibera" dentro da pasta do tema atual do Wordpress. Esse tema aparecerá nesta listagem com o nome do tema atual.', 'delibera'). '</p>',
                 );
+				$rows[] = array(
+					"id" => "criar_pauta_pelo_front_end",
+					"label" => __('Habilitar a criação de pautas pelo front-end?', 'delibera'),
+					"content" => '<input type="checkbox" name="criar_pauta_pelo_front_end" id="criar_pauta_pelo_front_end" value="S" '. ( htmlspecialchars_decode($opt['criar_pauta_pelo_front_end']) == "S" ? "checked='checked'" : "" ).'/>',
+				);
 				$rows[] = array(
 					"id" => "representante_define_prazos",
 					"label" => __('Representante define prazos?', 'delibera'),

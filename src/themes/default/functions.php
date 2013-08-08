@@ -278,10 +278,16 @@ function delibera_comment_form($defaults)
 add_filter('comment_form_defaults', 'delibera_comment_form');
 
 add_action('wp_enqueue_scripts', function() {
-    global $deliberaThemes;
+    global $deliberaThemes, $post;
+    
+    $situacao = delibera_get_situacao($post->ID);
     
     if (get_post_type() == 'pauta') {
-        wp_enqueue_script('delibera-hacklab', $deliberaThemes->getThemeUrl() . '/js/delibera-default.js', array('jquery'));
+        wp_enqueue_script('delibera-default', $deliberaThemes->getThemeUrl() . '/js/delibera-default.js', array('jquery'));
+        
+        if ($situacao->slug == 'relatoria') {
+            wp_enqueue_script('delibera_relatoria_js', WP_CONTENT_URL . '/plugins/delibera/js/delibera_relatoria.js', array('jquery'));
+        }
     }
 });
 
@@ -358,8 +364,17 @@ function delibera_gerar_curtir($ID, $type ='pauta')
     $ndiscordou = intval($type == 'pauta' || $type == 'post' ? get_post_meta($ID, 'delibera_numero_discordar', true) : get_comment_meta($ID, 'delibera_numero_discordar', true));
     $situacao = delibera_get_situacao($postID);
 
-    $html = ($ncurtiu > 0 ? '<span class="delibera-like-count" >' . "$ncurtiu " . ($ncurtiu > 1 ? __('concordaram', 'delibera') : __('concordou', 'delibera')).'</span>' : '');    
-    $html .= ($ndiscordou > 0 ? '<span class="delibera-unlike-count" >' . "$ndiscordou " . ($ndiscordou > 1 ? __('discordaram', 'delibera') : __('discordou', 'delibera')).'</span>' : '');
+    if ($ncurtiu > 0) {
+        $html = '<span class="delibera-like-count">' . "$ncurtiu " . ($ncurtiu > 1 ? __('concordaram', 'delibera') : __('concordou', 'delibera')) . '</span>';
+    } else {
+        $html = '<span class="delibera-like-count" style="display: none;"></span>';
+    }
+
+    if ($ndiscordou > 0) {
+        $html .= '<span class="delibera-unlike-count">' . "$ndiscordou " . ($ndiscordou > 1 ? __('discordaram', 'delibera') : __('discordou', 'delibera')) . '</span>';
+    } else {
+        $html .= '<span class="delibera-unlike-count" style="display: none;"></span>';
+    }
     
     if (is_user_logged_in()) {
         $user_id = get_current_user_id();

@@ -189,7 +189,6 @@ function delibera_mailer_mailer($id,$comment_parent,$comment_post, $tipo = 'repl
 		}
 		
 		$subject_default = htmlspecialchars_decode($options_plugin_delibera["mailer_{$tipo}_assunto"]);
-		//$mensage_default = htmlspecialchars_decode($options_plugin_delibera[$tipo]).$mensage.delibera_notificar_get_mensagem_link($post, $link);
 		$mensage_default = '';
 	
 		$users = get_users();
