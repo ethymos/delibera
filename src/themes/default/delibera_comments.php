@@ -44,10 +44,6 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
                 <div class="nav-next"><?php next_comments_link(__('Newer Comments <span class="meta-nav">&rarr;</span>', 'twentyten')); ?></div>
             </div><!-- .navigation -->
         <?php endif; ?>
-    <?php else : 
-        if (!comments_open()) : ?>
-           <p class="nocomments"><?php _e( 'Comments are closed.', 'twentyten' ); ?></p>
-        <?php endif; // end ! comments_open() ?>
     <?php endif; // end have_comments() ?>
 
     <?php
@@ -59,3 +55,12 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
     }
     ?>
 </div><!-- #comments -->
+<?php
+	if ( !is_user_logged_in() )
+	{
+		printf(
+        __( 'Para participar, você precisa <a href="%1$s" title="Faça o login">fazer o login</a> ou <a href="%2$s" title="Registre-se" class="register">registrar-se no site</a>.', 'delibera' ), 
+        wp_login_url( get_permalink() ),
+        site_url('wp-login.php?action=register', 'login')."&lang=");
+	}
+	
