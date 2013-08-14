@@ -19,7 +19,7 @@ class Delibera_Walker_Comment extends Walker_Comment
      * @param int $depth Depth of comment in reference to parents.
      * @param array $args
      */
-    function start_el(&$output, $comment, $depth, $args)
+    function start_el(&$output, $comment, $depth = 0, $args = array(), $current_object_id = 0)
     {
         global $deliberaThemes;
         $depth++;
