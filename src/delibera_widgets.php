@@ -41,7 +41,8 @@
 		//-->
 		</script>
 	    <div class="custom-meta-box" id="custom-meta-box">
-			<button class="button-secondary submit-add-to-menu" onclick="delibera_addMenuItemToBottom();"><?php _e('Adicionar o Delibera ao menu')?></button> 
+			<p><?php _e('Clique no botão abaixo para adicionar um link para a página que lista as pautas no menu.')?></p>
+			<button class="button-secondary submit-add-to-menu" onclick="delibera_addMenuItemToBottom();"><?php _e('Adicionar')?></button> 
 	    </div>
 	    <?php
 	}
