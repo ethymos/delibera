@@ -138,7 +138,7 @@ function delibera_conf_page()
 				);
 				$rows[] = array(
 					"id" => "minimo_validacao",
-					"label" => __('Mínimo de adesões para pauta:', 'delibera'),
+					"label" => __('Mínimo de validações para uma pauta:', 'delibera'),
 					"content" => '<input type="text" name="minimo_validacao" id="minimo_validacao" value="'.htmlspecialchars_decode($opt['minimo_validacao']).'"/>'
 				);
 				
