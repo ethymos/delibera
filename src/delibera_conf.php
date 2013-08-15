@@ -187,12 +187,12 @@ function delibera_conf_page()
 				);*/
 				$rows[] = array(
 					"id" => "limitar_tamanho_comentario",
-					"label" => __('Necessário limitar o tamanho do comentário visível?', 'delibera'),
+					"label" => __('Limitar o tamanho do comentário visível?', 'delibera'),
 					"content" => '<input type="checkbox" name="limitar_tamanho_comentario" id="limitar_tamanho_comentario" value="S" '.(htmlspecialchars_decode($opt['limitar_tamanho_comentario']) == 'S' ? 'checked="checked"' : '').' />'
 				);
 				$rows[] = array(
 					"id" => "numero_max_palavras_comentario",
-					"label" => __('Número máximo de caracteres por comentário:', 'delibera'),
+					"label" => __('Número máximo de caracteres exibidos por comentário:', 'delibera'),
 					"content" => '<input type="text" name="numero_max_palavras_comentario" id="numero_max_palavras_comentario" value="'.htmlspecialchars_decode($opt['numero_max_palavras_comentario']).'"/>'
 				);
 				$rows[] = array(
