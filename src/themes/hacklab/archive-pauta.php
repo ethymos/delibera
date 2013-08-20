@@ -12,6 +12,8 @@ if (!isset($_GET['tema_filtro'])) {
 
 get_header();
 
+$options = delibera_get_config();
+
 ?>
 
 <div id="delibera">
@@ -20,7 +22,7 @@ get_header();
             <?php get_delibera_header(); ?>
             <div class="clearfix">
                 <div class="filters widget-area alignleft">
-                    <?php if (is_user_logged_in()) : ?>
+                    <?php if (is_user_logged_in() && isset($options['criar_pauta_pelo_front_end']) && $options['criar_pauta_pelo_front_end'] == 'S') : ?>
                         <p><a href="<?php echo site_url('nova-pauta'); ?>" class="btn btn-info">Criar uma nova pauta</a></p>
                     <?php endif; ?>
                     
