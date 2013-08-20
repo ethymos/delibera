@@ -109,7 +109,6 @@ function delibera_comment_form($defaults)
                         $defaults['comment_notes_after'] = '<script type="text/javascript">jQuery(document).ready(function() { jQuery(\'input[name="submit"]\').hide(); });</script><div class="delibera_comment_button">';;
                         $defaults['logged_in_as'] = "";
                         $defaults['label_submit'] = "__('Votar','delibera')";
-                        $comment_footer = "</div>";
                     } else {
                         $defaults['comment_field'] = "";
                         $defaults['logged_in_as'] = '<p class="logged-in-as">' . sprintf( __('Você está logado como <a href="%1$s">%2$s</a> que não é um usuário autorizado a votar. <a href="%3$s" title="Sair desta conta?">Sair desta conta</a> e logar com um usuário com permissão de votar?','delibera') , admin_url('profile.php'), $user_identity, wp_logout_url(apply_filters('the_permalink', get_permalink($post->ID)))) . '</p>';
