@@ -446,6 +446,26 @@ add_action('wp_ajax_delibera_definir_votacao', 'delibera_usar_na_votacao');
 add_action('wp_ajax_nopriv_delibera_definir_votacao', 'delibera_usar_na_votacao');
 
 /**
+ * Retorna apenas os encaminhamentos ids dos comentários do tipo
+ * 'encaminhamento_selecionado' (aqueles que foram selecionados 
+ * pelo relator para ir para votação).
+ * 
+ * @param int $post_id
+ * @return array array de ids dos encaminhamentos
+ */
+function delibera_get_comments_encaminhamentos_selecionados_ids($post_id)
+{
+    $ids = array();
+    $comments = delibera_get_comments($post_id, 'encaminhamento_selecionado');
+    
+    foreach ($comments as $comment) {
+        $ids[] = $comment->comment_ID;
+    }
+    
+    return $ids;
+}
+
+/**
  * Parseia a tag <img> com o avatar do usuário para poder
  * adicionar o atributo title já que não existe uma função
  * no wp que retorna apenas a url do avatar do usuário

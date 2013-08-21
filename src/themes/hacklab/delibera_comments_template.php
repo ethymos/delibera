@@ -163,7 +163,7 @@ class Delibera_Walker_Comment extends Walker_Comment
                         }
                         
                         if (($tipo == "encaminhamento" || $tipo == 'encaminhamento_selecionado') && current_user_can('relatoria') && $situacao->slug == "relatoria") {
-                            $selecionados = get_post_meta($comment->comment_post_ID, '_usar_na_votacao', true);
+                            $selecionados = delibera_get_comments_encaminhamentos_selecionados_ids($comment->comment_post_ID);
                             
                             if (!$selecionados) {
                                 $selecionados = array();
