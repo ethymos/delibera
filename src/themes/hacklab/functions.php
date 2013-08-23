@@ -1,7 +1,12 @@
 <?php
 
 function get_delibera_header() {
+    global $wp;
+    
     $opt = delibera_get_config();
+    
+    $current_url = add_query_arg($wp->query_string, '', home_url($wp->request));
+    
 	?>
 	
 	<header class="clearfix">
@@ -22,11 +27,11 @@ function get_delibera_header() {
                 } else {   
                     printf(
                         __('Para participar, você precisa <a href="%1$s" title="Faça o login">fazer o login</a> ou <a href="%2$s" title="Registre-se" class="register">registrar-se no site</a>.', 'delibera'), 
-                        wp_login_url(get_permalink()),
+                        wp_login_url($current_url),
                         site_url('wp-login.php?action=register', 'login')."&lang="
                     );
                 }
-                ?>          
+                ?>
             </p>
         </div>
         <div class="alignright">
