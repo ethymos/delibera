@@ -280,10 +280,10 @@ add_action('wp_enqueue_scripts', function() {
     $situacao = delibera_get_situacao($post->ID);
     
     if (get_post_type() == 'pauta') {
-        wp_enqueue_script('delibera-hacklab', $deliberaThemes->getThemeUrl() . '/js/delibera-hacklab.js', array('delibera'));
+        wp_enqueue_script('creta', $deliberaThemes->getThemeUrl() . '/js/creta.js', array('delibera'));
         
         if ($situacao->slug == 'relatoria') {
-            wp_enqueue_script('hacklab-relatoria', $deliberaThemes->getThemeUrl() . '/js/hacklab-relatoria.js', array('delibera'));
+            wp_enqueue_script('creta-relatoria', $deliberaThemes->getThemeUrl() . '/js/creta-relatoria.js', array('delibera'));
         }
     }
 });
@@ -293,7 +293,7 @@ add_action('wp_enqueue_scripts', function() {
  * 
  * @return null
  */
-function delibera_hacklab_filter_pautas($query) {
+function delibera_creta_filter_pautas($query) {
     if (is_post_type_archive('pauta') && !is_admin()) {
         $situacoes = array();
         $temas = array();
@@ -328,7 +328,7 @@ function delibera_hacklab_filter_pautas($query) {
         $query->set('showposts', 10);
     }
 }
-add_action('pre_get_posts', 'delibera_hacklab_filter_pautas');
+add_action('pre_get_posts', 'delibera_creta_filter_pautas');
 
 /* Gera código html para criação do botão curtir/concordar do sistema delibera
  * 

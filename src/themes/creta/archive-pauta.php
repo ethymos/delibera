@@ -1,6 +1,6 @@
 <?php
 
-wp_enqueue_script('hacklab-filters', $deliberaThemes->getThemeUrl() . '/js/hacklab-filters.js', array('jquery'));
+wp_enqueue_script('creta-filters', $deliberaThemes->getThemeUrl() . '/js/creta-filters.js', array('jquery'));
 
 if (!isset($_GET['situacao_filtro'])) {
     $_GET['situacao_filtro'] = array();
