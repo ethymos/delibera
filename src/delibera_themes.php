@@ -72,17 +72,24 @@ class DeliberaThemes
     }
     
     /**
-     * Retorna o diretório do tema
-     * atual.
+     * Retorna o diretório de um tema. 
+     * Se não um nome de tema for passado como
+     * parâmetro, retorna o diretório do tema atual.
      * 
+     * @param string $themeName
      * @return string
      */
-    public function getThemeDir()
+    public function getThemeDir($themeName = '')
     {
-        $conf = delibera_get_config();
+        if (!empty($themeName)) {
+            $themePath = $this->baseDir . $themeName;
+        } else {
+            $conf = delibera_get_config();
+            $themePath = $conf['theme'];
+        }
 
-        if (file_exists($conf['theme'])) {
-            return $conf['theme'];
+        if (file_exists($themePath)) {
+            return $themePath;
         } else {
             return $this->defaultThemePath;
         }
