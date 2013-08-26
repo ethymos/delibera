@@ -283,7 +283,7 @@ add_action('wp_enqueue_scripts', function() {
     $situacao = delibera_get_situacao($post->ID);
     
     if (get_post_type() == 'pauta') {
-        wp_enqueue_script('delibera-default', $deliberaThemes->getThemeUrl() . '/js/delibera-default.js', array('jquery'));
+        wp_enqueue_script('atenas', $deliberaThemes->getThemeUrl() . '/js/atenas.js', array('jquery'));
         
         if ($situacao->slug == 'relatoria') {
             wp_enqueue_script('delibera_relatoria_js', WP_CONTENT_URL . '/plugins/delibera/js/delibera_relatoria.js', array('jquery'));
