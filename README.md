@@ -3,4 +3,4 @@ Delibera
 
 Plugin Wordpress para democracia online
 
-Veja a documentação no [wiki](https://github.com/ethymos/delibera/wiki).
+Veja a documentação [nesta página](http://culturadigital.br/plataformascolaborativas/delibera-democracia-digital/).
