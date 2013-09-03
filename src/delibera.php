@@ -2212,7 +2212,7 @@ function delibera_wp_list_comments($args = array(), $comments = null)
 		if($delibera_comments_padrao === true)
 		{
 			$args['post_id'] = $post->ID;
-			$args['walker'] = new Deliera_Walker_Comment_padrao();
+			$args['walker'] = new Delibera_Walker_Comment_padrao();
 			$comments = get_comments($args);
 			$ret = array();
 			foreach ($comments as $comment)

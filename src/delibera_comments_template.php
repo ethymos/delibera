@@ -1,6 +1,6 @@
 <?php
 
-class Deliera_Walker_Comment_padrao extends Walker_Comment
+class Delibera_Walker_Comment_padrao extends Walker_Comment
 {
 
     /**
