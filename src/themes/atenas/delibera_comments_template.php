@@ -164,8 +164,10 @@ class Delibera_Walker_Comment extends Walker_Comment
 				</div>
 		<?php
 			}
-			echo delibera_gerar_curtir($comment->comment_ID, 'comment');
-			echo delibera_gerar_discordar($comment->comment_ID, 'comment');
+			echo '<div id="delibera-comment-botoes-'.$comment->comment_ID.'" class="delibera-comment-botoes" >';
+				echo delibera_gerar_curtir($comment->comment_ID, 'comment');
+				echo delibera_gerar_discordar($comment->comment_ID, 'comment');
+			echo '</div>';
 			?>
 		
 		<?php if ( 'div' != $args['style'] ) : ?>
