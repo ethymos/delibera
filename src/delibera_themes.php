@@ -169,8 +169,16 @@ class DeliberaThemes
     {
         global $post;
     
-        if (get_post_type($post) == "pauta" || is_post_type_archive('pauta')) {
-            $archiveTemplate = $this->themeFilePath('archive-pauta.php');
+        if (get_post_type($post) == "pauta" || is_post_type_archive('pauta'))
+        {
+        	if(file_exists(get_stylesheet_directory()."/archive-pauta.php"))
+        	{	
+        		$archive_template = get_stylesheet_directory()."/archive-pauta.php";
+        	}
+        	else 
+        	{
+        		$archiveTemplate = $this->themeFilePath('archive-pauta.php');
+        	}
         }
                 
         return $archiveTemplate;
@@ -188,8 +196,16 @@ class DeliberaThemes
     {
         global $post;
     
-        if (get_post_type($post) == "pauta" || is_post_type_archive('pauta')) {
-            $singleTemplate = $this->themeFilePath('single-pauta.php');
+        if (get_post_type($post) == "pauta" || is_post_type_archive('pauta'))
+        {
+        	if(file_exists(get_stylesheet_directory()."/single-pauta.php"))
+        	{	
+        		$singleTemplate = get_stylesheet_directory()."/single-pauta.php";
+        	}
+        	else
+        	{
+        		$singleTemplate = $this->themeFilePath('single-pauta.php');
+        	}
         }
         
         return $singleTemplate;
@@ -204,8 +220,16 @@ class DeliberaThemes
     {
         global $post, $wp_query;
         
-        if (get_post_type($post) == "pauta" || is_post_type_archive('pauta') || $wp_query->get('tpl') === 'nova-pauta') {
-            wp_enqueue_style('delibera_style', $this->themeFileUrl('delibera_style.css'));
+        if (get_post_type($post) == "pauta" || is_post_type_archive('pauta') || $wp_query->get('tpl') === 'nova-pauta')
+        {
+        	if(file_exists(get_stylesheet_directory()."/delibera_style.css"))
+        	{
+        		wp_enqueue_style('delibera_style', get_stylesheet_directory_uri()."/delibera_style.css");
+        	}
+        	else
+        	{
+        		wp_enqueue_style('delibera_style', $this->themeFileUrl('delibera_style.css'));
+        	}
         }
     }
     
@@ -229,7 +253,14 @@ class DeliberaThemes
      */
     public function archiveLoop()
     {
-        load_template($this->themeFilePath('delibera-loop-archive.php'), true);
+    	if(file_exists(get_stylesheet_directory()."/loop-pauta.php"))
+    	{
+    		load_template(get_stylesheet_directory()."/loop-pauta.php");
+    	}
+    	else
+    	{
+       		load_template($this->themeFilePath('delibera-loop-archive.php'), true);
+    	}
     }
     
     /**
