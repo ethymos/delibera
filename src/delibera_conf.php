@@ -26,7 +26,7 @@ function delibera_get_main_config($config = array()) {
     if(!is_object($deliberaThemes)) $deliberaThemes = new DeliberaThemes;
     
     $opt = array();
-    $opt['theme'] = $delibearaThemes->getThemeDir('creta');
+    $opt['theme'] = $deliberaThemes->getThemeDir('creta');
     $opt['minimo_validacao'] = '10';
     $opt['dias_validacao'] = '5';
     $opt['dias_discussao'] = '5';
