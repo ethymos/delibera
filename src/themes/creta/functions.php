@@ -277,9 +277,9 @@ add_filter('comment_form_defaults', 'delibera_comment_form');
 add_action('wp_enqueue_scripts', function() {
     global $deliberaThemes, $post;
     
-    $situacao = delibera_get_situacao($post->ID);
-    
-    if (get_post_type() == 'pauta') {
+    if (get_post_type() == 'pauta')
+    {
+    	$situacao = delibera_get_situacao($post->ID);
         wp_enqueue_script('creta', $deliberaThemes->getThemeUrl() . '/js/creta.js', array('delibera'));
         
         if ($situacao->slug == 'relatoria') {
