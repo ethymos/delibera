@@ -433,6 +433,14 @@ function delibera_get_comment_type($comment)
 	return get_comment_meta($comment_ID, "delibera_comment_tipo", true);
 }
 
+/**
+ * Retorna o nome "amigável" do tipo de um comentário.
+ * 
+ * @param object $comment
+ * @param string $tipo
+ * @param bool $echo
+ * @return string
+ */
 function delibera_get_comment_type_label($comment, $tipo = false, $echo = true)
 {
 	if($tipo === false) $tipo = get_comment_meta($comment->comment_ID, "delibera_comment_tipo", true);
@@ -2609,6 +2617,9 @@ require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_notificar.php';
  * Perfil do usuário
  */
 require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_user_painel.php';
+
+// gerar relatório em um arquivo xls
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_relatorio.php';
 
 /**
  * 
