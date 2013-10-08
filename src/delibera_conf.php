@@ -167,7 +167,7 @@ function delibera_conf_page()
 				$rows[] = array(
 					"id" => "dias_novo_prazo",
 					"label" => __('Dias para novo prazo:', 'delibera'),
-					"content" => '<input type="text" name="dias_novo_prazo" id="dias_novo_prazo" value="'.htmlspecialchars_decode($opt['dias_novo_prazo']).'"/>'
+					"content" => '<input type="text" name="dias_novo_prazo" id="dias_novo_prazo" value="'.htmlspecialchars_decode($opt['dias_novo_prazo']).'"/><p class="description">' . __('Utilizado para as pautas em discussão, em relatoria e em votação para dar mais alguns dias quando uma condição mínima não é atingida até o fim do prazo. Por exemplo, quando acaba o prazo de uma pauta em discussão ou relatoria e ela não tem nenhuma proposta de encaminhamento. Utilizado também quando uma pauta não validada é reaberta.', 'delibera'). '</p>'
 				);
 				$rows[] = array(
 					"id" => "relatoria",
