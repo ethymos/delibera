@@ -91,7 +91,7 @@ function add_author_name(checkbox) {
         new_element.append(', ');
     }
     
-    new_element.append('<a href="#delibera-comment-' + comment_id + '">' + author + '</a>')
+    new_element.append('<a href="#delibera-comment-' + comment_id + '">' + author + '</a>');
     
     jQuery('#baseadoem-list').append(new_element);
 }

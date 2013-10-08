@@ -8,4 +8,4 @@ jQuery(document).ready(function() {
             jQuery(this).children('input').val('on');
         }
     });
-})
+});
