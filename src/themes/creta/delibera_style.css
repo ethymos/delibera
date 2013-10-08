@@ -406,6 +406,10 @@ div.delibera-delete-comment-button:hover {
     color:#21759b;
 }
 
+.delibera-slide:hover {
+    cursor: pointer;
+}
+
 /* = Clearfix
 ================================================ */
 .clearfix:after, .container:after {
