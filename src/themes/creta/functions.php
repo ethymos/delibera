@@ -209,6 +209,7 @@ function delibera_comment_form($defaults)
                             $encaminhamentos = delibera_get_comments_encaminhamentos($post->ID);
                         }
                         
+                        $form .= '<div id="nenhum-voto" class="error" style="display: none;"><p><strong>' . __('Você precisa selecionar pelo menos um encaminhamento.', 'delibera') . '</strong></p></div>';
                         $form .= '<div class="instrucoes-votacao">'.__('Escolha os encaminhamentos que deseja aprovar e depois clique em "Votar":','delibera').'</div>';
                         $form .= '<ol class="encaminhamentos">';
                         
@@ -284,6 +285,8 @@ add_action('wp_enqueue_scripts', function() {
         
         if ($situacao->slug == 'relatoria') {
             wp_enqueue_script('creta-relatoria', $deliberaThemes->getThemeUrl() . '/js/creta-relatoria.js', array('delibera'));
+        } else if ($situacao->slug == 'emvotacao') {
+            wp_enqueue_script('creta-votacao', $deliberaThemes->getThemeUrl() . '/js/creta-votacao.js', array('delibera'));
         }
     }
 });

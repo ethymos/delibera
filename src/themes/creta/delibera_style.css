@@ -588,3 +588,19 @@ div.delibera-delete-comment-button:hover {
 #delibera.situacao-relatoria {
     margin-bottom:180px;
 }
+
+div.error {
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    border-width: 1px;
+    border-style: solid;
+    padding: 0 0.6em;
+    margin: 5px 15px 2px;
+    background-color: #ffebe8;
+    border-color: #c00;
+}
+
+div.error p {
+    margin: 0.5em 0;
+    padding: 2px;
+}
