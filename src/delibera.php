@@ -2812,7 +2812,8 @@ function delibera_computa_votos($postID, $votos = null)
 		add_comment_meta($encaminhamentos_voto_key, 'delibera_comment_numero_votos', $encaminhamentos_voto_valor, true);
 	}
 	
-	if(count($iguais) > 0) // Empato
+	// nao finaliza a votacao caso haja um empate, exceto quando o administrador clicar no botão "Forçar fim do prazo"
+	if(count($iguais) > 0 && !(isset($_REQUEST['action']) && $_REQUEST['action'] == 'delibera_forca_fim_prazo_action')) // Empato
 	{
 		delibera_novo_prazo($postID);
 	}
