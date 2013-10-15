@@ -101,7 +101,7 @@ function delibera_comment_form($defaults)
                 } else {
                     $defaults['title_reply'] = __('Você quer ver essa pauta posta em discussão?','delibera');
                     $defaults['must_log_in'] = sprintf(__('Você precisar <a href="%s">estar logado</a> e ter permissão para votar.','delibera'), wp_login_url(apply_filters('the_permalink', get_permalink($post->ID))));                
-                    if (current_user_can('votar')) {
+                    if (delibera_current_user_can_participate()) {
                         $form = '
                             <div id="painel_validacao" class="actions textcenter">
                                 <button class="btn btn-success">Sim</button>
@@ -136,7 +136,7 @@ function delibera_comment_form($defaults)
                         . $defaults['comment_field'];
                 }
                 
-                if (current_user_can('votar')) {   
+                if (delibera_current_user_can_participate()) {
                     $replace = '' . (($situacao->slug != 'relatoria') ? '<label class="delibera-encaminha-label" /><input type="radio" name="delibera_encaminha" value="N" checked="checked" />' . __('Opinião', 'delibera') . '</label>' : '') 
                     . '<label class="delibera-encaminha-label" ><input type="radio" name="delibera_encaminha" value="S" ' . (($situacao->slug == 'relatoria') ? ' checked="checked" ' : '') . ' />' . __('Proposta de encaminhamento', 'delibera') . '</label>';
                     $defaults['comment_field'] = preg_replace ("/<label for=\"comment\">(.*?)<\/label>/", $replace, $defaults['comment_field']);
@@ -199,7 +199,7 @@ function delibera_comment_form($defaults)
                     $defaults['must_log_in'] = sprintf(__('Você precisar <a href="%s">estar logado</a> e ter permissão para votar.'), wp_login_url(apply_filters('the_permalink', get_permalink($post->ID))));
                     $encaminhamentos = array();
                     
-                    if (current_user_can('votar')) {
+                    if (delibera_current_user_can_participate()) {
                         $form = '<div id="encaminhamentos" class="delibera_checkbox_voto">';
                         $encaminhamentos = delibera_get_comments_encaminhamentos_selecionados($post->ID);
                         
@@ -363,7 +363,7 @@ function delibera_gerar_curtir($ID, $type ='pauta')
     $html = '<div class="delibera-like-count">' . ($ncurtiu > 0 ? sprintf(_n('%d concordou', '%d concordaram', $ncurtiu, 'delibera'), $ncurtiu) : '') . '</div>';    
     $html .= '<div class="delibera-unlike-count">' . ($ndiscordou > 0 ? sprintf(_n('%d discordou', '%d discordaram', $ndiscordou, 'delibera'), $ndiscordou) : '') . '</div><br/>';
     
-    if (is_user_logged_in()) {
+    if (delibera_current_user_can_participate()) {
         $user_id = get_current_user_id();
         $ip = $_SERVER['REMOTE_ADDR'];
         
@@ -411,7 +411,7 @@ function delibera_gerar_discordar($ID, $type ='pauta')
     
     $situacao = delibera_get_situacao($postID);
     
-    if(is_user_logged_in()) {
+    if(delibera_current_user_can_participate()) {
         $user_id = get_current_user_id();
         $ip = $_SERVER['REMOTE_ADDR'];
         

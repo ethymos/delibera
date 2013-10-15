@@ -1629,7 +1629,7 @@ function delibera_can_comment($postID = '')
 	
 	if(array_key_exists($situacao->slug, $situacoes_validas))
 	{
-		return current_user_can('votar');
+		return delibera_current_user_can_participate();
 	}
 	elseif($situacao->slug == 'relatoria')
 	{
@@ -2728,7 +2728,7 @@ function delibera_valida_validacoes($post)
  */
 function delibera_valida_permissoes($comment_ID)
 {
-	if (get_post_type() == 'pauta' && !current_user_can('votar'))
+	if (get_post_type() == 'pauta' && !delibera_current_user_can_participate())
 	{
 		if (array_key_exists('delibera_validacao', $_REQUEST) || array_key_exists('delibera_encaminha', $_REQUEST) )
 			wp_die("Nananina não! Você não tem que ter permissão pra votar.","Tocooo!!");	
@@ -2986,7 +2986,23 @@ function delibera_get_available_languages() {
     return $langs;
 }
 
-
+/**
+ * Verifica se o usuário atual pode participar das discussão
+ * de uma pauta votando ou discutindo.
+ * 
+ * Por padrão retorna true apenas de o usuário tiver a capability 'votar',
+ * mas se a opção "Todos os usuários da rede podem participar" estiver habilitada
+ * retorna true para todos os usuários logados.
+ */
+function delibera_current_user_can_participate() {
+    $options = delibera_get_config();
+    
+    if (is_multisite() && $options['todos_usuarios_logados_podem_participar'] == 'S') {
+        return is_user_logged_in();
+    } else {
+        return current_user_can('votar');
+    }
+}
 
 
 // Interface pública para a criação de novas pautas

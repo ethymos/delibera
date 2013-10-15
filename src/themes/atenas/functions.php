@@ -128,7 +128,7 @@ function delibera_comment_form($defaults)
                 {
                     $defaults['title_reply'] = __('Você quer ver essa pauta posta em discussão?','delibera');
                     $defaults['must_log_in'] = sprintf(__('Você precisar <a href="%s">estar logado</a> e ter permissão para votar.','delibera'),wp_login_url( apply_filters( 'the_permalink', get_permalink( $post->ID ))));                
-                    if (current_user_can('votar')) {
+                    if (delibera_current_user_can_participate()) {
                         $form = '
                             <div id="painel_validacao" >
                                 <input id="delibera_aceitar" type="radio" name="delibera_validacao" value="S" checked /><label for="delibera_aceitar" class="delibera_aceitar_radio_label">'.__('Aceitar','delibera').'</label>
@@ -169,7 +169,7 @@ function delibera_comment_form($defaults)
                             '.$defaults['comment_field']
                     ;
                 }
-                if (current_user_can('votar'))
+                if (delibera_current_user_can_participate())
                 {   
                     $replace = '
                                 '.(($situacao->slug != 'relatoria') ? '<label class="delibera-encaminha-label" ><input type="radio" name="delibera_encaminha" value="N" checked="checked" />'.__('Opinião', 'delibera').'</label>' : '').'
@@ -216,7 +216,7 @@ function delibera_comment_form($defaults)
                     $defaults['title_reply'] = sprintf(__('Regime de votação para a pauta "%s"','delibera'),$post->post_title);
                     $defaults['must_log_in'] = sprintf(__('Você precisar <a href="%s">estar logado</a> e ter permissão para votar.'),wp_login_url( apply_filters( 'the_permalink', get_permalink( $post->ID ))));
                     $encaminhamentos = array();
-                    if (current_user_can('votar')) {
+                    if (delibera_current_user_can_participate()) {
                         $form = '<div class="delibera_checkbox_voto">';
                         $encaminhamentos = delibera_get_comments_encaminhamentos($post->ID);
                         

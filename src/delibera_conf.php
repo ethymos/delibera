@@ -43,6 +43,7 @@ function delibera_get_main_config($config = array()) {
     $opt['numero_max_palavras_comentario'] = '50';
     $opt['plan_restriction'] = 'N';
     $opt['cabecalho_arquivo'] = __( 'Bem-vindo a plataforma de debate do ', 'delibera' ).get_bloginfo('name');
+    $opt['todos_usuarios_logados_podem_participar'] = 'N';
     
     return array_merge($opt, $config);
 }
@@ -204,6 +205,13 @@ function delibera_conf_page()
 					"label" => __('Título da página de listagem de pautas e da página de uma pauta:', 'delibera'),
 					"content" => '<input type="text" name="cabecalho_arquivo" id="cabecalho_arquivo" value="'.htmlspecialchars_decode($opt['cabecalho_arquivo']).'"/>'
 				);
+				if (is_multisite()) {
+					$rows[] = array(
+						"id" => "todos_usuarios_logados_podem_participar",
+						"label" => __('Todos os usuários logados na rede podem participar?', 'delibera'),
+						"content" => '<input type="checkbox" name="todos_usuarios_logados_podem_participar" id="todos_usuarios_logados_podem_participar" value="S" '.(htmlspecialchars_decode($opt['todos_usuarios_logados_podem_participar']) == 'S' ? 'checked="checked"' : '').' /><p class="description">' . __('Se essa opção estiver habilitada qualquer usuário logado da rede de sites poderá participar discutindo e votando nas pautas. Caso contrário a participação fica restrita aos usuários deste site.', 'delibera'). '</p>'
+					);
+				}
 				$table = delibera_form_table($rows);
 				if(has_filter('delibera_config_form'))
 				{
