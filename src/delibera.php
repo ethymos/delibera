@@ -3159,5 +3159,24 @@ function delibera_nova_pauta_create_action(){
     }
 }
 
-
 // END - Interface pública para a criação de novas pautas
+
+/**
+ * Redireciona usuários que não são membros do site
+ * onde o Delibera foi instalado para a página de pautas após o
+ * login se a opção "Todos os usuários logados na rede podem participar?"
+ * estiver habilitada.
+ * 
+ * Se não fizermos esse redicionamento estes usuários serão redirecionados
+ * para suas páginas de perfil fora do site onde o Delibera está instalado.
+ */
+add_filter('login_redirect', function($redirect_to, $request, $user) {
+    $options = delibera_get_config();
+    
+    if ($options['todos_usuarios_logados_podem_participar'] == 'S' && !is_user_member_of_blog()) {
+        return site_url('pauta');
+    } else {
+        return $redirect_to;
+    }
+}, 10, 3);
+
