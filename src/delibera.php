@@ -2993,11 +2993,20 @@ function delibera_get_available_languages() {
  * Por padrão retorna true apenas de o usuário tiver a capability 'votar',
  * mas se a opção "Todos os usuários da rede podem participar" estiver habilitada
  * retorna true para todos os usuários logados.
+ * 
+ * Quando estiver na single da pauta, retorna false sempre que ela
+ * estiver com o prazo encerrado.
+ * 
+ * @return bool
  */
 function delibera_current_user_can_participate() {
+    global $post;
+    
     $options = delibera_get_config();
     
-    if (is_multisite() && $options['todos_usuarios_logados_podem_participar'] == 'S') {
+    if (is_singular('pauta') && delibera_get_prazo($post->ID) == 0) {
+        return false;
+    } else if (is_multisite() && $options['todos_usuarios_logados_podem_participar'] == 'S') {
         return is_user_logged_in();
     } else {
         return current_user_can('votar');
