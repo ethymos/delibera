@@ -102,13 +102,17 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
             <?php endif; ?>
         <?php else : 
             if (!comments_open()) : ?>
-               <p class="nocomments">
-                   <?php printf(
-                        __('Para participar, você precisa <a href="%1$s" title="Faça o login">fazer o login</a> ou <a href="%2$s" title="Registre-se" class="register">registrar-se no site</a>.', 'delibera'), 
-                        wp_login_url(get_permalink()),
-                        site_url('wp-login.php?action=register', 'login')."&lang="
-                    ); ?>
-               </p>
+                <p class="nocomments">
+                    <?php if (!is_user_logged_in()) : ?>
+                        <?php printf(
+                            __('Para participar, você precisa <a href="%1$s" title="Faça o login">fazer o login</a> ou <a href="%2$s" title="Registre-se" class="register">registrar-se no site</a>.', 'delibera'), 
+                            wp_login_url(get_permalink()),
+                            site_url('wp-login.php?action=register', 'login')."&lang="
+                        ); ?>
+                    <?php else : ?>
+                        <?php _e('Você não tem permissão para participar desta discussão.', 'delibera'); ?>
+                    <?php endif; ?>
+                </p>
             <?php endif; // end ! comments_open() ?>
         <?php endif; // end have_comments() ?>
  
