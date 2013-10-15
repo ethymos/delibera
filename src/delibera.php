@@ -2426,6 +2426,17 @@ function delibera_get_comments_filter($comments)
 
 add_filter('comments_array', 'delibera_get_comments_filter');
 
+/**
+ * Retorna um inteiro indicando quantos dias faltam para o fim do prazo
+ * de uma pauta.
+ * 
+ * Se o parâmetro $data for passado por referência o prazo para o fim da
+ * pauta é associado a ele.
+ * 
+ * @param int $postID
+ * @param string $data
+ * @return int
+ */
 function delibera_get_prazo($postID, &$data = null)
 {
 	$situacao = delibera_get_situacao($postID);
