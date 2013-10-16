@@ -3,7 +3,7 @@
 Plugin Name: Delibera
 Plugin URI: http://www.ethymos.com.br
 Description: O Plugin Delibera extende as funções padrão do WordPress e cria um ambiente de deliberação.
-Version: 0.2
+Version: 1.0.3
 Author: Ethymos
 Author URI: http://www.ethymos.com.br
 
