@@ -22,8 +22,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Defines
 
-
-
 if(!defined('__DIR__')) {
     $iPos = strrpos(__FILE__, DIRECTORY_SEPARATOR);
     define("__DIR__", substr(__FILE__, 0, $iPos) . DIRECTORY_SEPARATOR);
@@ -66,35 +64,8 @@ function delibera_init()
 }
 add_action('init','delibera_init');
 
-/** 
- * 	Para Multisites
- */
-
-function delibera_wpmu_new_blog($blog_id, $user_id = 0, $domain = '', $path = '', $site_id = '', $meta = '' )
-{
-	/** Antes de mudar **/
-	$permalink_structure = get_option('permalink_structure');
-	$qtrans = array();
-	if(function_exists('qtrans_enableLanguage'))
-	{
-		$qtrans['enabled_languages'] = get_option('qtranslate_enabled_languages');
-		$qtrans['default_language'] = get_option('qtranslate_default_language');
-	}
-	
-	switch_to_blog($blog_id);
-		/** Depois de mudar de blog **/
-		
-		if(function_exists('qtrans_enableLanguage'))
-		{
-			update_option('qtranslate_enabled_languages', $qtrans['enabled_languages']); 
-			update_option('qtranslate_default_language', $qtrans['default_language']);
-		}
-		update_option('permalink_structure', $permalink_structure);
-		flush_rewrite_rules();
-	restore_current_blog();
-}
-
-add_action('wpmu_new_blog','delibera_wpmu_new_blog',90,6);
+// setup plugin
+require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_setup.php';
 
 /**
 	 * 
@@ -1949,140 +1920,6 @@ function delibera_admin_scripts()
 add_action( 'admin_print_scripts', 'delibera_admin_scripts' );
 
 // Fim Scripts
-
-/**
- * Criar a página about
- */
-function delibera_create_about_page()
-{
-	global $post;
-	$post_tmp = $post;
-	$post = array(
-			'post_name' => DELIBERA_ABOUT_PAGE,
-			'post_title' => __('Sobre a plataforma', 'delibera'),
-			'post_content' => __('Use está página para explicar para os usuários como utilizar o sistema', 'delibera'),
-			'post_type' => 'page',
-			'post_status' => 'publish',
-	);
-	wp_insert_post($post);
-	$post = $post_tmp;
-}
-
-/*
- * Rotinas de instalação do plugin
- */
-
-function delibera_instalacao() 
-{ 
-	if(is_multisite())
-	{
-		$id = get_current_blog_id();
-		switch_to_blog(1);
-		delibera_wpmu_new_blog($id);
-		restore_current_blog();
-	}
-	
-	if (!get_page_by_slug(DELIBERA_ABOUT_PAGE)) {
-		delibera_create_about_page();
-	}
-}
-register_activation_hook(__FILE__, 'delibera_instalacao');
-
-function delibera_install_roles()
-{
-	// simple check to see if pautas capabilities are in place. We only set them if not.
-	$Role = get_role('administrator');
-	if(!$Role->has_cap('publish_pautas'))
-	{
-	    // Inicialização das configurações padrão
-	    $opt = delibera_get_config();
-	    	
-	    update_option('delibera-config', $opt);
-	    if(file_exists(__DIR__.DIRECTORY_SEPARATOR.'delibera_roles.php'))
-	    {
-	        $delibera_permissoes = array();
-	        require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_roles.php';
-	        delibera_roles_install($delibera_permissoes);
-	    }
-	}
-}
-add_action('admin_init', 'delibera_install_roles');
-
-function delibera_roles_install($delibera_permissoes)
-{
-	
-	// Criação das regras
-	foreach ($delibera_permissoes as $nome => $permisao)
-	{
-		if($permisao['Novo'] == true)
-		{
-			$Role = get_role($permisao['From']);
-			
-			if(!is_object($Role))
-			{
-				throw new Exception(sprintf(__('Permissão original (%s) não localizada','delibera'),$permisao['From']));
-			}
-			
-			$cap = $Role->capabilities;
-			add_role($nome, $permisao["nome"], $cap);
-		}
-		
-		$Role = get_role($nome);
-		if(!is_object($Role))
-		{
-			throw new Exception(sprintf(__('Permissão %s não localizada','delibera'),$nome));
-		}
-		
-		foreach ($permisao['Caps'] as $cap)
-		{	
-			
-			$Role->add_cap($cap);
-		}
-	}
-	
-}
-
-function delibera_roles_uninstall($delibera_permissoes)
-{
-
-	foreach ($delibera_permissoes as $nome => $permisao)
-	{
-		if($permisao['Novo'] == true)
-		{
-			remove_role($nome);
-		}
-		else 
-		{
-			$Role = get_role($nome);
-			if(!is_object($Role))
-			{
-				throw new Exception(sprintf(__('Permissão %s não localizada','delibera'),$nome));
-			}
-		
-			foreach ($permisao['Caps'] as $cap)
-			{
-				$Role->remove_cap($cap);
-			}
-		}
-	}
-	
-}
-
-/*
- * Desinstalação do Plugin 
- */
-function delibera_desinstalacao()
-{
-	delete_option('delibera-config');
-	if(file_exists(__DIR__.DIRECTORY_SEPARATOR.'delibera_roles.php'))
-	{
-		$delibera_permissoes = array();
-		require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_roles.php';
-		delibera_roles_uninstall($delibera_permissoes);	
-	}
-}
-register_deactivation_hook( __FILE__, 'delibera_desinstalacao' );
-
 
 // Funções de conteudo
 
