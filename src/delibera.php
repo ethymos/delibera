@@ -621,6 +621,13 @@ function delibera_get_situacao($postID)
 		$ret = array_pop($situacao);
 	}
 	
+	if(!is_object($ret)) // if term situacao does not exists
+	{
+		$ret = new stdClass();
+		$ret->slug = '';
+		$ret->name = '';
+	}
+	
 	if(has_filter('delibera_get_situacao'))
 	{
 		return apply_filters('delibera_get_situacao', $ret);
@@ -2279,37 +2286,42 @@ function delibera_get_prazo($postID, &$data = null)
 	$situacao = delibera_get_situacao($postID);
 	$prazo = "";
 	$idata = strtotime(date('Y/m/d').' 23:59:59');
+	$diff = -1;
 	
-	switch ($situacao->slug)
-	{ 
-		case 'validacao':
-		{
-			$prazo = get_post_meta($postID, 'prazo_validacao', true);
-		} break;
-		case 'discussao':
-		{
-			$prazo = get_post_meta($postID, 'prazo_discussao', true);
-		}break;
-		case 'elegerelator':
-		{
-			$prazo = get_post_meta($postID, 'prazo_eleicao_relator', true);
-		}break;
-		case 'relatoria':
-		{
-			$prazo = get_post_meta($postID, 'prazo_relatoria', true);
-		}break;
-		case 'emvotacao':
-		{
-			$prazo = get_post_meta($postID, 'prazo_votacao', true);
-		} break;
+	if(is_object($situacao))
+	{
+		switch ($situacao->slug)
+		{ 
+			case 'validacao':
+			{
+				$prazo = get_post_meta($postID, 'prazo_validacao', true);
+			} break;
+			case 'discussao':
+			{
+				$prazo = get_post_meta($postID, 'prazo_discussao', true);
+			}break;
+			case 'elegerelator':
+			{
+				$prazo = get_post_meta($postID, 'prazo_eleicao_relator', true);
+			}break;
+			case 'relatoria':
+			{
+				$prazo = get_post_meta($postID, 'prazo_relatoria', true);
+			}break;
+			case 'emvotacao':
+			{
+				$prazo = get_post_meta($postID, 'prazo_votacao', true);
+			} break;
+		}
+	
+		$iprazo = strtotime(substr($prazo, 6).substr($prazo, 2, 4).substr($prazo, 0, 2).' 23:59:59');
+	
+		$diff = $iprazo - $idata;
 	}
-	
-	$iprazo = strtotime(substr($prazo, 6).substr($prazo, 2, 4).substr($prazo, 0, 2).' 23:59:59');
-	
-	$diff = $iprazo - $idata;
 	$dias = 0;
 	
-	if($diff > 0) $dias = ceil($diff/(60*60*24));
+	if($diff >= 0) $dias = ceil($diff/(60*60*24));
+	else $dias = -1;
 	
 	if(!is_null($data)) $data = $prazo;
 		
@@ -2847,17 +2859,17 @@ function delibera_get_available_languages() {
  * 
  * @return bool
  */
-function delibera_current_user_can_participate() {
+function delibera_current_user_can_participate($permissao = 'votar') {
     global $post;
     
     $options = delibera_get_config();
     
-    if (is_singular('pauta') && delibera_get_prazo($post->ID) == 0) {
+    if (is_singular('pauta') && delibera_get_prazo($post->ID) == -1) {
         return false;
     } else if (is_multisite() && $options['todos_usuarios_logados_podem_participar'] == 'S') {
         return is_user_logged_in();
     } else {
-        return current_user_can('votar');
+        return current_user_can($permissao);
     }
 }
 

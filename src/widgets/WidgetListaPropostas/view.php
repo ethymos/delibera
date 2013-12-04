@@ -36,7 +36,7 @@ foreach ( $wp_posts as $wp_post )
 				?>
 				<span class="entry-prazo delibera-widget-entry-prazo">
 					<?php
-						if ( delibera_get_prazo( $post->ID ) == 0 )
+						if ( delibera_get_prazo( $post->ID ) == -1 )
 							_e( 'Prazo encerrado', 'delibera' );
 						else
 							printf( _n( 'Encerra em um dia', 'Encerra em %1$s dias', delibera_get_prazo( $post->ID ), 'delibera' ), number_format_i18n( delibera_get_prazo( $post->ID ) ) );

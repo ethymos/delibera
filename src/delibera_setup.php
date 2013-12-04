@@ -137,10 +137,10 @@ function delibera_wpmu_new_blog($blog_id)
 {
 	if($blog_id != 1)
 	{
-		$id = get_current_blog_id();
+		$id = get_current_blog_id(); // Qual o blog que chamou essa função
 		if($id != 1)
 		{
-			switch_to_blog(1);
+			switch_to_blog(1); // Precisamos pegar o permalink e as linguas no caso do qtranlate ativo do blog raíz 
 		}
 		/** Antes de mudar **/
 		$permalink_structure = get_option('permalink_structure');
@@ -151,14 +151,14 @@ function delibera_wpmu_new_blog($blog_id)
 			$qtrans['default_language'] = get_option('qtranslate_default_language');
 		}
 		
-		/** Depois de mudar de blog **/
+		/** Depois de mudar de blog temos que ir para o novo blog onde o plugin foi ativado **/
 		if($id != 1)
 		{
-			restore_current_blog();
+			restore_current_blog(); // Volta se antes estava no blog novo
 		}
 		else
 		{
-			switch_to_blog($blog_id);
+			switch_to_blog($blog_id); // Ou vai se não estava
 		}
 		
 		if(function_exists('qtrans_enableLanguage'))
@@ -168,11 +168,11 @@ function delibera_wpmu_new_blog($blog_id)
 		}
 		update_option('permalink_structure', $permalink_structure);
 		
-		delibera_init();
+		delibera_init(); // Criando o post type
 		
 		flush_rewrite_rules();
 		
-		if($id == 1)
+		if($id == 1) // se estávamos no blog 1, vamos voltar para ele
 		{
 			restore_current_blog();
 		}

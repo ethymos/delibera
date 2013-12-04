@@ -16,7 +16,7 @@
             <div class="meta textright clearfix">
                 <span class="status"><?php echo delibera_get_situacao($post->ID)->name; ?></span>
                 <span class="deadline">
-                    <?php if (delibera_get_prazo($post->ID) == 0) {
+                    <?php if (delibera_get_prazo($post->ID) == -1) {
                         echo 'Prazo encerrado';
                     } else {
                         printf(_n('Encerra em um dia', 'Encerra em %1$s dias', delibera_get_prazo($post->ID), 'delibera'), number_format_i18n(delibera_get_prazo($post->ID)));
