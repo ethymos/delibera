@@ -2318,10 +2318,9 @@ function delibera_get_prazo($postID, &$data = null)
 	
 		$diff = $iprazo - $idata;
 	}
-	$dias = 0;
+	$dias = -1;
 	
 	if($diff >= 0) $dias = ceil($diff/(60*60*24));
-	else $dias = -1;
 	
 	if(!is_null($data)) $data = $prazo;
 		
@@ -2353,9 +2352,13 @@ function delibera_post_custom_column($column)
 		case 'prazo':
 			$data = "";
 			$prazo = delibera_get_prazo($post->ID, $data);
-			if($data != "")
+			if($prazo == -1)
 			{
-				echo $data." (".$prazo.($prazo == 1 ? " dia" : " dias").")";
+				echo __('Encerrado', 'delibera');
+			}
+			elseif($data != "")
+			{
+				echo $data." (".$prazo.($prazo == 1 ? __(" dia", 'delibera') : __(" dias", 'delibera')).")";
 			}
 			break;
 	}
@@ -2928,7 +2931,7 @@ function delibera_nova_pauta_create_action(){
         $pauta['post_type'] = 'pauta';
         
         // para que a situação da pauta seja criada corretamente, 
-        // é necessário criar a pauta como rascunho para deppois publicar no final desta função
+        // é necessário criar a pauta como rascunho para depois publicar no final desta função
         $pauta['post_status'] = 'draft';
         
         $pauta_id = wp_insert_post($pauta);
