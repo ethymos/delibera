@@ -169,7 +169,7 @@ add_action('delibera_nova_interacao', 'delibera_mailer_reply');
  */
 function delibera_mailer_mailer($id,$comment_parent,$comment_post, $tipo = 'reply')
 {
-	require_once  WPINC.'/pluggable.php';
+	require( ABSPATH . WPINC . '/pluggable.php' );
 	add_filter('wp_mail_content_type',create_function('', 'return "text/html"; '));
 	
 	$comment = get_comment($id);

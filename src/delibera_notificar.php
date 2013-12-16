@@ -422,7 +422,7 @@ function delibera_notificar_fim_prazo($args)
 }
 function delibera_notificar_representantes($mensage, $tipo, $post = false, $users = false, $link = false)
 {
-	require_once  WPINC.'/pluggable.php';
+	require( ABSPATH . WPINC . '/pluggable.php' );
 	add_filter('wp_mail_content_type',create_function('', 'return "text/html"; '));
 
 	if($post === false)
