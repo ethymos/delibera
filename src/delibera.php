@@ -3021,7 +3021,7 @@ function delibera_nova_pauta_create_action(){
  * 
  * Se não fizermos esse redicionamento estes usuários serão redirecionados
  * para suas páginas de perfil fora do site onde o Delibera está instalado.
- */
+ *
 add_filter('login_redirect', function($redirect_to, $request, $user) {
     $options = delibera_get_config();
     
@@ -3031,4 +3031,6 @@ add_filter('login_redirect', function($redirect_to, $request, $user) {
         return $redirect_to;
     }
 }, 10, 3);
+TODO mundo redirecionado para a lista de pauta, talvez uma nova opções */
 
+?>
