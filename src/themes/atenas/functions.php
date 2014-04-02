@@ -277,15 +277,17 @@ function delibera_comment_form($defaults)
 }
 add_filter('comment_form_defaults', 'delibera_comment_form');
 
-add_action('wp_enqueue_scripts', function() {
-    global $deliberaThemes, $post;
-    
-    $situacao = delibera_get_situacao($post->ID);
-    
-    if (get_post_type() == 'pauta') {
+add_action('wp_enqueue_scripts', function()
+{
+    if (get_post_type() == 'pauta')
+    {
+    	global $deliberaThemes, $post;
+    	
+    	$situacao = delibera_get_situacao($post->ID);
         wp_enqueue_script('atenas', $deliberaThemes->getThemeUrl() . '/js/atenas.js', array('jquery'));
         
-        if ($situacao->slug == 'relatoria') {
+        if ($situacao->slug == 'relatoria')
+        {
             wp_enqueue_script('delibera_relatoria_js', WP_CONTENT_URL . '/plugins/delibera/js/delibera_relatoria.js', array('jquery'));
         }
     }
