@@ -1138,8 +1138,9 @@ function delibera_publish_pauta($postID, $post, $alterar = false)
 						(
 							array_key_exists('prev_status', $_POST) && 
 							(
-								$_POST['prev_status'] == 'draft') ||
+								$_POST['prev_status'] == 'draft' ||
 								$_POST['prev_status'] == 'pending'
+							)
 						) ||
 						(
 							array_key_exists('original_post_status', $_POST) && (
