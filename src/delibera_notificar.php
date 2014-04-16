@@ -429,7 +429,8 @@ function delibera_notificar_representantes($mensage, $tipo, $post = false, $user
 	{
 		$post = get_post();
 	}
-	elseif(is_int($post))
+	
+	if(is_numeric($post))
 	{
 		$post = get_post($post);
 	}
