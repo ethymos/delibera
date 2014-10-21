@@ -33,6 +33,7 @@ function delibera_get_main_config($config = array()) {
     $opt['dias_votacao'] = '5';
     $opt['criar_pauta_pelo_front_end'] = 'N';
     $opt['representante_define_prazos'] = 'N';
+    $opt['pauta_suporta_encaminhamento'] = 'S';
     $opt['dias_novo_prazo'] = '2';
     $opt['validacao'] = 'S';
     $opt['dias_relatoria'] = '2';
@@ -136,6 +137,11 @@ function delibera_conf_page()
 					"label" => __('Representante define prazos?', 'delibera'),
 					"content" => '<input type="checkbox" name="representante_define_prazos" id="representante_define_prazos" value="S" '. ( htmlspecialchars_decode($opt['representante_define_prazos']) == "S" ? "checked='checked'" : "" ).'/>',
 				);
+                $rows[] = array(
+                    "id" => "pauta_suporta_encaminhamento",
+                    "label" => __('Pautas suportam sugestão de encaminhamento?', 'delibera'),
+                    "content" => '<input type="checkbox" name="pauta_suporta_encaminhamento" id="pauta_suporta_encaminhamento" value="S" '. ( htmlspecialchars_decode($opt['pauta_suporta_encaminhamento']) == "S" ? "checked='checked'" : "" ).'/>',
+                );
 				$rows[] = array(
 					"id" => "validacao",
 					"label" => __('É necessário validação das pautas?', 'delibera'),
