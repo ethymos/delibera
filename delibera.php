@@ -3052,4 +3052,21 @@ add_filter('login_redirect', function($redirect_to, $request, $user) {
 }, 10, 3);
 TODO mundo redirecionado para a lista de pauta, talvez uma nova opções */
 
+/***
+ * Verifica se as pautas devem suportar sugestão de encaminhamento ou se
+ * as propostas entram apenas como opinião. Muito útil para consultas públicas.
+ *
+ * @return bool
+ */
+function delibera_pautas_suportam_encaminhamento()
+{
+    $options = delibera_get_config();
+
+    if ( $options['pauta_suporta_encaminhamento'] == 'S' ) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 ?>
