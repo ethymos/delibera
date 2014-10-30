@@ -43,6 +43,12 @@ require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_widgets.php';
 
 // End Parse widgets
 
+// Parse rewrite-rules
+
+require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_rewrite_rules.php';
+
+// End Parse rewrite-rules
+
 // pagina de configuracao do plugin
 require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_conf.php';
 
@@ -2892,46 +2898,6 @@ function delibera_current_user_can_participate($permissao = 'votar') {
         return is_user_logged_in();
     } else {
         return current_user_can($permissao);
-    }
-}
-
-
-// Interface pública para a criação de novas pautas
-
-add_action('generate_rewrite_rules', 'delibera_nova_pauta_generate_rewrite_rules');
-
-function delibera_nova_pauta_generate_rewrite_rules($wp_rewrite) {
-    $new_rules = array(
-        "nova-pauta/?$" => "index.php?&tpl=nova-pauta",
-        
-    );
-    $wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
-}
-
-add_filter('query_vars', 'delibera_nova_pauta_query_vars');
-
-function delibera_nova_pauta_query_vars($public_query_vars) {
-    $public_query_vars[] = "tpl";
-    
-    return $public_query_vars;
-}
-
-add_action('template_redirect', 'delibera_nova_pauta_template_redirect_intercept');
-
-function delibera_nova_pauta_template_redirect_intercept() {
-    global $wp_query, $wpdb;
-
-    $tpl = $wp_query->get('tpl');
-    
-    if ($tpl && $tpl === 'nova-pauta') {
-        $options = delibera_get_config();
-        if(isset($options['criar_pauta_pelo_front_end']) && $options['criar_pauta_pelo_front_end'] == 'S'){
-    
-            global $deliberaThemes;
-
-            include $deliberaThemes->themeFilePath('delibera_nova_pauta.php');
-            die;
-        }
     }
 }
 
