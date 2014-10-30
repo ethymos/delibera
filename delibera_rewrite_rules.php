@@ -50,8 +50,9 @@ function delibera_nova_pauta_template_redirect_intercept() {
 add_action('generate_rewrite_rules', 'delibera_temas_generate_rewrite_rules');
 
 function delibera_temas_generate_rewrite_rules($wp_rewrite) {
+    // Cat = 1 é um POG para o WordPress que essa é uma página de archive
     $new_rules = array(
-        "temas/?$" => "index.php?&tpl=temas",
+        "temas/?$" => "index.php?&tpl=temas&cat=1",
 
     );
     $wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
