@@ -1,0 +1,20 @@
+{
+    "name": "pensandoodireito/marcocivil-delibera-tema",
+    "version": "0.0.1",
+    "type": "delibera-theme",
+    "description": "Tema delibera para a consulta do marco civil",
+    "keywords": ["theme", "wordpress", "democracy", "participação"],
+    "homepage": "https://github.com/pensandoodireito/marcocivil-delibera-tema",
+    "license": "GPL-3",
+    "authors": [
+        {
+            "name": "Marco Antonio Konopacki",
+            "email": "marco.konopacki@mj.gov.br",
+            "homepage": "http://participacao.mj.gov.br/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "composer/installers": "~1.0"
+    }
+}
