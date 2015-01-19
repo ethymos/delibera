@@ -66,9 +66,9 @@ class DeliberaThemes
         $this->defaultThemePath = $this->baseDir . 'atenas/';
         $this->defaultThemeUrl = $this->baseUrl . 'atenas/';
         
-        $this->wpThemePath = get_template_directory() . '/delibera';
+        $this->wpThemePath = get_stylesheet_directory() . '/delibera';
         $this->wpThemeUrl = get_stylesheet_directory_uri() . '/delibera';
-        $this->wpThemeName = wp_get_theme()->template;
+        $this->wpThemeName = wp_get_theme()->get_stylesheet();
     }
     
     /**
