@@ -104,9 +104,10 @@ class DeliberaThemes
     public function getThemeUrl()
     {
         $conf = delibera_get_config();
+
         if (file_exists($conf['theme'])) {
             // TODO: melhorar a separacao entre tema distribuido junto com o plugin e tema do delibera dentro do tema do wp
-            if (strpos($conf['theme'], 'themes') !== false) {
+            if (strpos($conf['theme'], '/wp-content/themes') === false) {
                 // tema distribuido junto com o plugin
                 return $this->baseUrl . basename($conf['theme']);
             } else {
