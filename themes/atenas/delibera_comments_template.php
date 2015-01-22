@@ -47,6 +47,8 @@ class Delibera_Walker_Comment extends Walker_Comment
 			$tag = 'li';
 			$add_below = 'div-comment';
 		}
+
+        ob_start();
 ?>
 		<<?php echo $tag ?> <?php comment_class(empty( $args['has_children'] ) ? '' : 'parent') ?> id="delibera-comment-<?php comment_ID() ?>">
 		<?php if ( 'div' != $args['style'] ) : ?>
@@ -172,8 +174,9 @@ class Delibera_Walker_Comment extends Walker_Comment
 		
 		<?php if ( 'div' != $args['style'] ) : ?>
 		</div>
-		<?php endif; ?>
-<?php
+		<?php endif;
+
+        $output .= ob_get_clean();
 	}
 
 	
