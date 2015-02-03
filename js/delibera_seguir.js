@@ -1,5 +1,8 @@
 jQuery(document).ready(function() {
-    jQuery('#delibera_seguir').click(function() {
+    jQuery('#delibera_seguir').click(function(event) {
+
+        event.preventDefault();
+
         if (jQuery('#delibera-seguir-text').is(':visible')) {
             var type = 'seguir';
         } else {
@@ -11,7 +14,7 @@ jQuery(document).ready(function() {
             {
                 action : "delibera_seguir" ,
                 seguir_id : delibera.post_id,
-                type : type,
+                type : type
             },
             function() {
                 jQuery('#delibera-seguir-text').toggle();
