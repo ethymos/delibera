@@ -2772,25 +2772,7 @@ function delibera_novo_prazo($postID)
 		case 'relatoria':
 			$inova_data = strtotime("+{$opts['dias_novo_prazo']} days");
 			$nova_data = date("d/m/Y", $inova_data);
-			update_post_meta($postID, 'prazo_discussao', $nova_data);
-			$nova_eleicao_rel = false;
-			$nova_relatoria = false;
-			if($opts['relatoria'] == "S") // Adiciona prazo de relatoria se for necessário
-			{
-				$opts['dias_votacao'] += $opts['dias_relatoria'];
-				if($opts['eleicao_relator'] == "S") // Adiciona prazo de vatacao relator se for necessário
-				{
-					$opts['dias_votacao'] += $opts['dias_votacao_relator'];
-					$opts['dias_relatoria'] += $opts['dias_votacao_relator'];
-					$nova_eleicao_rel = date("d/m/Y", strtotime("+{$opt['dias_votacao_relator']} days", $inova_data));
-				}
-				$nova_relatoria = date("d/m/Y", strtotime("+{$opts['dias_relatoria']} days", $inova_data));
-			}
-			$inova_data_votacao = strtotime("+{$opts['dias_votacao']} days", $inova_data);
-			$nova_data_votacao = date("d/m/Y", $inova_data_votacao);
-			update_post_meta($postID, 'prazo_votacao', $nova_data_votacao);
-			delibera_del_cron($postID);
-			delibera_criar_agenda($postID, false, $nova_data, $nova_data_votacao, $nova_relatoria, $nova_eleicao_rel);
+			delibera_set_novo_prazo_discussao_relatoria($postID, $nova_data, $opts);
 		break;
 		case 'emvotacao':
 			$inova_data = strtotime("+{$opts['dias_novo_prazo']} days");
@@ -2801,7 +2783,35 @@ function delibera_novo_prazo($postID)
 		break;
 	}
 	//delibera_notificar_situacao($postID);
-} 
+}
+
+/**
+ * @param $postID
+ * @param $opts
+ */
+function delibera_set_novo_prazo_discussao_relatoria($postID, $nova_data, $opts)
+{
+
+	update_post_meta($postID, 'prazo_discussao', $nova_data);
+	$nova_eleicao_rel = false;
+	$nova_relatoria = false;
+	if ($opts['relatoria'] == "S") // Adiciona prazo de relatoria se for necessário
+	{
+		$opts['dias_votacao'] += $opts['dias_relatoria'];
+		if ($opts['eleicao_relator'] == "S") // Adiciona prazo de vatacao relator se for necessário
+		{
+			$opts['dias_votacao'] += $opts['dias_votacao_relator'];
+			$opts['dias_relatoria'] += $opts['dias_votacao_relator'];
+			$nova_eleicao_rel = date("d/m/Y", strtotime("+{$opts['dias_votacao_relator']} days", $inova_data));
+		}
+		$nova_relatoria = date("d/m/Y", strtotime("+{$opts['dias_relatoria']} days", $inova_data));
+	}
+	$inova_data_votacao = strtotime("+{$opts['dias_votacao']} days", $inova_data);
+	$nova_data_votacao = date("d/m/Y", $inova_data_votacao);
+	update_post_meta($postID, 'prazo_votacao', $nova_data_votacao);
+	delibera_del_cron($postID);
+	delibera_criar_agenda($postID, false, $nova_data, $nova_data_votacao, $nova_relatoria, $nova_eleicao_rel);
+}
 
 function delibera_footer() {
 	
