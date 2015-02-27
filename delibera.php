@@ -2969,11 +2969,16 @@ function delibera_nova_pauta_create_action(){
                     $_POST['prazo_eleicao_relator'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao_relator'].' DAYS'));
                 }
             }
-            
-            $_POST['prazo_discussao'] = date('d/m/Y', strtotime ('+'.$opt['dias_discussao'].' DAYS'));
-            $_POST['prazo_votacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao'].' DAYS'));
-            
-            
+
+			if (trim($opt['data_fixa_nova_pauta_externa']) != '') {
+				$prazo_discussao = DateTime::createFromFormat('d/m/Y', $opt['data_fixa_nova_pauta_externa']);
+				$_POST['prazo_discussao'] = $prazo_discussao->format('d/m/Y');
+				$_POST['prazo_votacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao'].' DAYS', $prazo_discussao->getTimestamp()));
+			} else {
+				$_POST['prazo_discussao'] = date('d/m/Y', strtotime ('+'.$opt['dias_discussao'].' DAYS'));
+				$_POST['prazo_votacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao'].' DAYS'));
+			}
+
             // isto é necessário por causa do if da função delibera_publish_pauta()
             $_POST['publish'] = 'Publicar';
             $_POST['prev_status'] = 'draft';
