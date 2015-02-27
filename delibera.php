@@ -56,6 +56,8 @@ require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_conf.php';
 
 require_once __DIR__.'/print/wp-print.php';
 
+require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_admin_functions.php';
+
 function delibera_init()
 {
 	add_action('admin_menu', 'delibera_config_menu');
