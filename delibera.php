@@ -2773,8 +2773,7 @@ function delibera_novo_prazo($postID)
 		case 'discussao':
 		case 'relatoria':
 			$inova_data = strtotime("+{$opts['dias_novo_prazo']} days");
-			$nova_data = date("d/m/Y", $inova_data);
-			delibera_set_novo_prazo_discussao_relatoria($postID, $nova_data, $opts);
+			delibera_set_novo_prazo_discussao_relatoria($postID, $inova_data, $opts);
 		break;
 		case 'emvotacao':
 			$inova_data = strtotime("+{$opts['dias_novo_prazo']} days");
@@ -2791,9 +2790,9 @@ function delibera_novo_prazo($postID)
  * @param $postID
  * @param $opts
  */
-function delibera_set_novo_prazo_discussao_relatoria($postID, $nova_data, $opts)
+function delibera_set_novo_prazo_discussao_relatoria($postID, $inova_data, $opts)
 {
-
+	$nova_data = date("d/m/Y", $inova_data);
 	update_post_meta($postID, 'prazo_discussao', $nova_data);
 	$nova_eleicao_rel = false;
 	$nova_relatoria = false;

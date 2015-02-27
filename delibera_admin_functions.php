@@ -48,11 +48,12 @@ function delibera_custom_bulk_action() {
 
             $pautas_ids = $_REQUEST['post'];
             $novo_prazo_discussao = $_REQUEST['novo_prazo_discussao'];
+            $inovo_prazo_discussao = DateTime::createFromFormat('d/m/Y', $novo_prazo_discussao)->getTimestamp();
             $pautas_afetadas = 0;
 
             foreach($pautas_ids as $pauta_id) {
 
-                delibera_set_novo_prazo_discussao_relatoria($pauta_id, $novo_prazo_discussao, delibera_get_config());
+                delibera_set_novo_prazo_discussao_relatoria($pauta_id, $inovo_prazo_discussao, delibera_get_config());
 
                 $pautas_afetadas++;
             }
