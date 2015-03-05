@@ -30,7 +30,8 @@ function delibera_mesclar_pauta_callback( $post ) {
                             'post__not_in' => array($post->ID),
                             'post_type' => 'pauta',
                             'post_status' => 'publish',
-                            'posts_per_page' => 10
+                            'posts_per_page' => 10,
+                            'paged' => 1
                         ) );
 ?>
     <div id="mesclar-pautas" class="categorydiv">
@@ -41,7 +42,7 @@ function delibera_mesclar_pauta_callback( $post ) {
 ?>
             <li id="pauta-<?php the_ID(); ?>" >
                 <label>
-                    <input class="in-mesclar-pauta" id="in-pauta-<?php the_ID(); ?>" value="<?php the_ID(); ?>" type="checkbox">
+                    <input name="pautas_para_mesclar[]" class="in-mesclar-pauta" id="in-pauta-<?php the_ID(); ?>" value="<?php the_ID(); ?>" type="checkbox">
                     <?php the_title(); ?> </label>
             </li>
 
@@ -50,12 +51,12 @@ function delibera_mesclar_pauta_callback( $post ) {
         <div><a class="button button-large" href="#" id="carregar-mais-pautas">Carregar mais pautas</a></div>
     </div>
     <script>
-        var pageNumber = 1;
+        var pageNumber = 2;
         var maxPages = <?php echo $pautas->max_num_pages; ?>;
 
         jQuery(function(){
             function check_show_mais_pautas() {
-                if (pageNumber >= maxPages) {
+                if (pageNumber > maxPages) {
                     jQuery("#carregar-mais-pautas").hide();
                 }
             }
@@ -64,7 +65,7 @@ function delibera_mesclar_pauta_callback( $post ) {
                 jQuery.ajax({
                     url: ajaxurl,
                     type: 'POST',
-                    data: "action=delibera_get_more_pautas&paged="+ pageNumber,
+                    data: "action=delibera_get_more_pautas&post_atual=<?php echo $post->ID; ?>&paged="+ pageNumber,
                     success: function(html){
                         jQuery("#mesclar-pauta-checklist").append(html);
                         jQuery("#carregar-mais-pautas").text("Carregar mais pautas")
@@ -83,7 +84,7 @@ function delibera_mesclar_pauta_callback( $post ) {
             jQuery("#publish").click(function(){
                 if (jQuery(".in-mesclar-pauta:checked").length > 0) {
                     if (confirm("Você selecionou pautas a serem mescladas. Todos os comentários das pautas selecionadas " +
-                    "serão mesclados com a pauta atual, deseja continuar?")) {
+                    "serão mesclados com a pauta atual e os posts mesclados serão postos na lixeira, deseja continuar?")) {
                         return true;
                     } else {
                         return false;
@@ -102,56 +103,98 @@ function delibera_mesclar_pauta_callback( $post ) {
  *
  * @param int $post_id The ID of the post being saved.
  */
-function myplugin_save_meta_box_data( $post_id ) {
+function delibera_salvar_pautas_mescladas( $post_id ) {
+    global $wpdb;
 
-    /*
-     * We need to verify this came from our screen and with proper authorization,
-     * because the save_post action can be triggered at other times.
-     */
-
-    // Check if our nonce is set.
-    if ( ! isset( $_POST['myplugin_meta_box_nonce'] ) ) {
+    if ( "pauta" != get_post_type() ) {
         return;
     }
 
-    // Verify that the nonce is valid.
-    if ( ! wp_verify_nonce( $_POST['myplugin_meta_box_nonce'], 'myplugin_meta_box' ) ) {
+    // Verificar o nonce
+    if ( ! isset( $_POST['delibera_mesclar_pautas_meta_box_nonce'] ) ) {
         return;
     }
 
-    // If this is an autosave, our form has not been submitted, so we don't want to do anything.
+    if ( ! wp_verify_nonce( $_POST['delibera_mesclar_pautas_meta_box_nonce'], 'delibera_mesclar_pautas_meta_box' ) ) {
+        return;
+    }
+
+    // Verificar se esse não é um autosave
     if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
         return;
     }
 
-    // Check the user's permissions.
-    if ( isset( $_POST['post_type'] ) && 'page' == $_POST['post_type'] ) {
+    // Verificar permissões
+    if ( isset( $_POST['post_type'] ) && 'pauta' == $_POST['post_type'] ) {
 
-        if ( ! current_user_can( 'edit_page', $post_id ) ) {
+        if ( ! current_user_can( 'edit_pauta', $post_id ) ) {
             return;
         }
 
     } else {
 
-        if ( ! current_user_can( 'edit_post', $post_id ) ) {
+        if ( ! current_user_can( 'edit_pauta', $post_id ) ) {
             return;
         }
     }
 
-    /* OK, it's safe for us to save the data now. */
-
     // Make sure that it is set.
-    if ( ! isset( $_POST['myplugin_new_field'] ) ) {
+    if ( ! isset( $_POST['pautas_para_mesclar'] ) ) {
         return;
     }
 
-    // Sanitize user input.
-    $my_data = sanitize_text_field( $_POST['myplugin_new_field'] );
+    $pautas_para_mesclar = $_POST['pautas_para_mesclar'];
 
-    // Update the meta field in the database.
-    update_post_meta( $post_id, '_my_meta_value_key', $my_data );
+    foreach($pautas_para_mesclar as $pauta_id) {
+        $wpdb->query("  INSERT INTO " . $wpdb->prefix . "comments
+                            (comment_post_ID,
+                            comment_author,
+                            comment_author_email,
+                            comment_author_url,
+                            comment_author_IP,
+                            comment_date,
+                            comment_date_gmt,
+                            comment_content,
+                            comment_karma,
+                            comment_approved,
+                            comment_agent,
+                            comment_type,
+                            comment_parent,
+                            user_id)
+                        SELECT $post_id,
+                            comment_author,
+                            comment_author_email,
+                            comment_author_url,
+                            comment_author_IP,
+                            comment_date,
+                            comment_date_gmt,
+                            comment_content,
+                            comment_karma,
+                            comment_approved,
+                            comment_agent,
+                            'mesclagem',
+                            comment_parent,
+                            user_id
+                        FROM " . $wpdb->prefix . "comments
+                        WHERE comment_post_ID = $pauta_id");
+
+        // Importar também os comment metas
+
+        // Atualizar contagem de comentários do post
+
+        remove_action('save_post', 'delibera_salvar_pautas_mescladas');
+
+        wp_update_post( array(
+            'ID'           => $pauta_id,
+            'post_status' => 'trash'
+        ));
+
+        add_action('save_post', 'delibera_salvar_pautas_mescladas');
+    }
+
+    update_post_meta( $post_id, '_pautas_mescladas', $pautas_para_mesclar );
 }
-add_action( 'save_post', 'myplugin_save_meta_box_data' );
+add_action( 'save_post', 'delibera_salvar_pautas_mescladas' );
 
 /**
  * Função ajax pra recuperar novas pautas
@@ -162,7 +205,9 @@ function delibera_get_more_pautas(){
     $args = array(
         'paged' => $paged,
         'posts_per_page' => 10,
-        'post__not_in' => $_POST['post_atual']
+        'post__not_in' => array($_POST['post_atual']),
+        'post_type' => 'pauta',
+        'post_status' => 'publish',
     );
     $pautas = new WP_Query($args);
 
@@ -172,7 +217,7 @@ function delibera_get_more_pautas(){
 ?>
             <li id="pauta-<?php the_ID(); ?>" >
                 <label>
-                    <input id="in-pauta-<?php the_ID(); ?>" value="<?php the_ID(); ?>" type="checkbox">
+                    <input name="pautas_para_mesclar[]" class="in-mesclar-pauta" id="in-pauta-<?php the_ID(); ?>" value="<?php the_ID(); ?>" type="checkbox">
                     <?php the_title(); ?> </label>
             </li>
 
