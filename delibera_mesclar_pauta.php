@@ -178,9 +178,16 @@ function delibera_salvar_pautas_mescladas( $post_id ) {
                         FROM " . $wpdb->prefix . "comments
                         WHERE comment_post_ID = $pauta_id");
 
+        $total_comments = $wpdb->get_var("SELECT COUNT(*) FROM " . $wpdb->prefix . "comments
+                                            WHERE comment_post_ID = $pauta_id AND comment_approved = 1");
+        $wpdb->query("UPDATE " . $wpdb->prefix . "posts SET comment_count = $total_comments
+                      WHERE ID=$post_id");
+
         // Importar também os comment metas
 
-        // Atualizar contagem de comentários do post
+        // A criação de novos comentários gerou um problema com a organização de IDs e hierarquia
+        // Solução pensnda é usar o comment+type pra guardar que ele é do tipo mesclagem
+        // mais o ID da pauta original
 
         remove_action('save_post', 'delibera_salvar_pautas_mescladas');
 
