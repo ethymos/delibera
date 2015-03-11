@@ -101,9 +101,9 @@ function delibera_mesclar_pauta_callback( $post ) {
 /**
  * When the post is saved, saves our custom data.
  *
- * @param int $post_id The ID of the post being saved.
+ * @param int $pauta_master_id The ID of the post being saved.
  */
-function delibera_salvar_pautas_mescladas( $post_id ) {
+function delibera_salvar_pautas_mescladas( $pauta_master_id ) {
     global $wpdb;
 
     if ( "pauta" != get_post_type() ) {
@@ -127,13 +127,13 @@ function delibera_salvar_pautas_mescladas( $post_id ) {
     // Verificar permissões
     if ( isset( $_POST['post_type'] ) && 'pauta' == $_POST['post_type'] ) {
 
-        if ( ! current_user_can( 'edit_pauta', $post_id ) ) {
+        if ( ! current_user_can( 'edit_pauta', $pauta_master_id ) ) {
             return;
         }
 
     } else {
 
-        if ( ! current_user_can( 'edit_pauta', $post_id ) ) {
+        if ( ! current_user_can( 'edit_pauta', $pauta_master_id ) ) {
             return;
         }
     }
@@ -145,61 +145,44 @@ function delibera_salvar_pautas_mescladas( $post_id ) {
 
     $pautas_para_mesclar = $_POST['pautas_para_mesclar'];
 
-    foreach($pautas_para_mesclar as $pauta_id) {
-        $wpdb->query("  INSERT INTO " . $wpdb->prefix . "comments
-                            (comment_post_ID,
-                            comment_author,
-                            comment_author_email,
-                            comment_author_url,
-                            comment_author_IP,
-                            comment_date,
-                            comment_date_gmt,
-                            comment_content,
-                            comment_karma,
-                            comment_approved,
-                            comment_agent,
-                            comment_type,
-                            comment_parent,
-                            user_id)
-                        SELECT $post_id,
-                            comment_author,
-                            comment_author_email,
-                            comment_author_url,
-                            comment_author_IP,
-                            comment_date,
-                            comment_date_gmt,
-                            comment_content,
-                            comment_karma,
-                            comment_approved,
-                            comment_agent,
-                            'mesclagem',
-                            comment_parent,
-                            user_id
-                        FROM " . $wpdb->prefix . "comments
-                        WHERE comment_post_ID = $pauta_id");
+    foreach($pautas_para_mesclar as $pauta_mesclagem_id) {
 
-        $total_comments = $wpdb->get_var("SELECT COUNT(*) FROM " . $wpdb->prefix . "comments
-                                            WHERE comment_post_ID = $pauta_id AND comment_approved = 1");
-        $wpdb->query("UPDATE " . $wpdb->prefix . "posts SET comment_count = $total_comments
-                      WHERE ID=$post_id");
+        $comments2update =  $wpdb->get_col("SELECT comment_ID FROM " . $wpdb->prefix . "comments
+                                            WHERE comment_post_ID=$pauta_mesclagem_id");
 
-        // Importar também os comment metas
+        $wpdb->query("  UPDATE " . $wpdb->prefix . "comments
+                        SET comment_post_ID = $pauta_master_id
+                        WHERE comment_post_ID = $pauta_mesclagem_id");
 
-        // A criação de novos comentários gerou um problema com a organização de IDs e hierarquia
-        // Solução pensnda é usar o comment+type pra guardar que ele é do tipo mesclagem
-        // mais o ID da pauta original
+        $post_slug = $wpdb->get_var("SELECT post_name FROM " . $wpdb->prefix . "posts
+                                    WHERE ID = $pauta_mesclagem_id");
 
         remove_action('save_post', 'delibera_salvar_pautas_mescladas');
 
+        foreach ($comments2update as $comment_ID) {
+            delibera_save_comment_metas($comment_ID);
+            add_comment_meta($comment_ID, 'pauta_original', $pauta_master_id);
+        }
+
         wp_update_post( array(
-            'ID'           => $pauta_id,
+            'ID'           => $pauta_mesclagem_id,
             'post_status' => 'trash'
         ));
 
         add_action('save_post', 'delibera_salvar_pautas_mescladas');
+
+        // Limpa qualquer direcionamento anterior
+        $wpdb->query("DELETE FROM " . $wpdb->prefix . "postmeta WHERE meta_value = '$post_slug'");
+        // Linka nova pauta a pauta corrente para que seja feito o direcionamento e não se quebre o permalink
+        add_post_meta( $pauta_master_id, '_wp_old_slug', $post_slug);
+
+        // Redireciona qualquer post_name anterior para o novo post para não haver quebra de permalink
+        $wpdb->query("UPDATE " . $wpdb->prefix . "postmeta SET post_id = $pauta_master_id
+                  WHERE meta_key='_wp_old_slug' AND post_id=$pauta_mesclagem_id");
     }
 
-    update_post_meta( $post_id, '_pautas_mescladas', $pautas_para_mesclar );
+    update_post_meta( $pauta_master_id, '_pautas_mescladas', $pautas_para_mesclar );
+
 }
 add_action( 'save_post', 'delibera_salvar_pautas_mescladas' );
 
