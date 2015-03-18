@@ -54,6 +54,7 @@ function delibera_get_main_config($config = array()) {
     $opt['plan_restriction'] = 'N';
     $opt['cabecalho_arquivo'] = __( 'Bem-vindo a plataforma de debate do ', 'delibera' ).get_bloginfo('name');
     $opt['todos_usuarios_logados_podem_participar'] = 'N';
+	$opt['data_fixa_nova_pauta_externa'] = '';
     
     return array_merge($opt, $config);
 }
@@ -219,6 +220,11 @@ function delibera_conf_page()
 					"id" => "cabecalho_arquivo",
 					"label" => __('Título da página de listagem de pautas e da página de uma pauta:', 'delibera'),
 					"content" => '<input type="text" name="cabecalho_arquivo" id="cabecalho_arquivo" value="'.htmlspecialchars_decode($opt['cabecalho_arquivo']).'"/>'
+				);
+				$rows[] = array(
+					"id" => "data_fixa_nova_pauta_externa",
+					"label" => __('Data fixa para pauta externa:', 'delibera'),
+					"content" => '<input type="text" name="data_fixa_nova_pauta_externa" id="data_fixa_nova_pauta_externa" value="'.htmlspecialchars_decode($opt['data_fixa_nova_pauta_externa']).'"/>'
 				);
 				if (is_multisite()) {
 					$rows[] = array(

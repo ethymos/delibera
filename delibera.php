@@ -56,6 +56,8 @@ require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_conf.php';
 
 require_once __DIR__.'/print/wp-print.php';
 
+require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_admin_functions.php';
+
 function delibera_init()
 {
 	add_action('admin_menu', 'delibera_config_menu');
@@ -2771,26 +2773,7 @@ function delibera_novo_prazo($postID)
 		case 'discussao':
 		case 'relatoria':
 			$inova_data = strtotime("+{$opts['dias_novo_prazo']} days");
-			$nova_data = date("d/m/Y", $inova_data);
-			update_post_meta($postID, 'prazo_discussao', $nova_data);
-			$nova_eleicao_rel = false;
-			$nova_relatoria = false;
-			if($opts['relatoria'] == "S") // Adiciona prazo de relatoria se for necessário
-			{
-				$opts['dias_votacao'] += $opts['dias_relatoria'];
-				if($opts['eleicao_relator'] == "S") // Adiciona prazo de vatacao relator se for necessário
-				{
-					$opts['dias_votacao'] += $opts['dias_votacao_relator'];
-					$opts['dias_relatoria'] += $opts['dias_votacao_relator'];
-					$nova_eleicao_rel = date("d/m/Y", strtotime("+{$opt['dias_votacao_relator']} days", $inova_data));
-				}
-				$nova_relatoria = date("d/m/Y", strtotime("+{$opts['dias_relatoria']} days", $inova_data));
-			}
-			$inova_data_votacao = strtotime("+{$opts['dias_votacao']} days", $inova_data);
-			$nova_data_votacao = date("d/m/Y", $inova_data_votacao);
-			update_post_meta($postID, 'prazo_votacao', $nova_data_votacao);
-			delibera_del_cron($postID);
-			delibera_criar_agenda($postID, false, $nova_data, $nova_data_votacao, $nova_relatoria, $nova_eleicao_rel);
+			delibera_set_novo_prazo_discussao_relatoria($postID, $inova_data, $opts);
 		break;
 		case 'emvotacao':
 			$inova_data = strtotime("+{$opts['dias_novo_prazo']} days");
@@ -2801,7 +2784,35 @@ function delibera_novo_prazo($postID)
 		break;
 	}
 	//delibera_notificar_situacao($postID);
-} 
+}
+
+/**
+ * @param $postID
+ * @param $opts
+ */
+function delibera_set_novo_prazo_discussao_relatoria($postID, $inova_data, $opts)
+{
+	$nova_data = date("d/m/Y", $inova_data);
+	update_post_meta($postID, 'prazo_discussao', $nova_data);
+	$nova_eleicao_rel = false;
+	$nova_relatoria = false;
+	if ($opts['relatoria'] == "S") // Adiciona prazo de relatoria se for necessário
+	{
+		$opts['dias_votacao'] += $opts['dias_relatoria'];
+		if ($opts['eleicao_relator'] == "S") // Adiciona prazo de vatacao relator se for necessário
+		{
+			$opts['dias_votacao'] += $opts['dias_votacao_relator'];
+			$opts['dias_relatoria'] += $opts['dias_votacao_relator'];
+			$nova_eleicao_rel = date("d/m/Y", strtotime("+{$opts['dias_votacao_relator']} days", $inova_data));
+		}
+		$nova_relatoria = date("d/m/Y", strtotime("+{$opts['dias_relatoria']} days", $inova_data));
+	}
+	$inova_data_votacao = strtotime("+{$opts['dias_votacao']} days", $inova_data);
+	$nova_data_votacao = date("d/m/Y", $inova_data_votacao);
+	update_post_meta($postID, 'prazo_votacao', $nova_data_votacao);
+	delibera_del_cron($postID);
+	delibera_criar_agenda($postID, false, $nova_data, $nova_data_votacao, $nova_relatoria, $nova_eleicao_rel);
+}
 
 function delibera_footer() {
 	
@@ -2957,11 +2968,16 @@ function delibera_nova_pauta_create_action(){
                     $_POST['prazo_eleicao_relator'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao_relator'].' DAYS'));
                 }
             }
-            
-            $_POST['prazo_discussao'] = date('d/m/Y', strtotime ('+'.$opt['dias_discussao'].' DAYS'));
-            $_POST['prazo_votacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao'].' DAYS'));
-            
-            
+
+			if (trim($opt['data_fixa_nova_pauta_externa']) != '') {
+				$prazo_discussao = DateTime::createFromFormat('d/m/Y', $opt['data_fixa_nova_pauta_externa']);
+				$_POST['prazo_discussao'] = $prazo_discussao->format('d/m/Y');
+				$_POST['prazo_votacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao'].' DAYS', $prazo_discussao->getTimestamp()));
+			} else {
+				$_POST['prazo_discussao'] = date('d/m/Y', strtotime ('+'.$opt['dias_discussao'].' DAYS'));
+				$_POST['prazo_votacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao'].' DAYS'));
+			}
+
             // isto é necessário por causa do if da função delibera_publish_pauta()
             $_POST['publish'] = 'Publicar';
             $_POST['prev_status'] = 'draft';
