@@ -14,6 +14,15 @@ function delibera_get_config() {
     $opt = apply_filters('delibera_get_config', $opt);
     
     $opt_conf = get_option('delibera-config', array());
+    
+    if(!is_array($opt_conf))
+    {
+    	$opt_conf = array();
+    }
+    if(!is_array($opt))
+    {
+    	$opt = array();
+    }
 
     $opt = array_merge($opt, $opt_conf);
     
