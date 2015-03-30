@@ -1124,6 +1124,12 @@ function delibera_save_post($post_id, $post)
                 wp_die('Erro ao salvar arquivo para Web. O erro foi: ' . $upload_pauta_pdf['error']);
             } else {
                 $events_meta['pauta_pdf_contribution'] = $upload_pauta_pdf['url'];
+
+                remove_action ('save_post', 'delibera_save_post', 1, 2);
+
+                wp_update_post(array('ID' => $post->ID, 'post_content' => '[embed width="100%"]' . $upload_pauta_pdf['url'] . '[/embed]'));
+
+                add_action ('save_post', 'delibera_save_post', 1, 2);
             }
 
             /* ######### FOR PDF UPLOAD FILE ######### */
