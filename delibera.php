@@ -183,7 +183,7 @@ function delibera_Add_custom_Post()
 		//'_edit_link' => '' // Core
 	
 	);
-	
+
 	register_post_type("pauta", $args);
 }
 
@@ -671,9 +671,15 @@ function delibera_get_situation_button($postId)
     }
 }
 
+function update_edit_form() {
+    echo ' enctype="multipart/form-data"';
+} // end update_edit_form
+add_action('post_edit_form_tag', 'update_edit_form');
+
 function delibera_pauta_meta()
 {
 	global $post;
+
 	$custom = get_post_custom($post->ID);
 	$options_plugin_delibera = delibera_get_config();
 	
@@ -688,7 +694,17 @@ function delibera_pauta_meta()
 	$dias_discussao = intval(htmlentities($options_plugin_delibera['dias_discussao']));
 	$dias_relatoria = intval(htmlentities($options_plugin_delibera['dias_relatoria']));
 	$dias_votacao_relator = intval(htmlentities($options_plugin_delibera['dias_votacao_relator']));
-	
+
+    $pauta_pdf_file = get_post_meta($post->ID, 'pauta_pdf_contribution', true);
+
+    // Recupera arquivo caso já tenha sido adicionados
+    $pdf_html  = "<p><label>Pauta em PDF</label>";
+    if( $pauta_pdf_file ) {
+        $pdf_html .= "<a href='" . $pauta_pdf_file . "' target='_blank'>Arquivo Atual</a><br/>";
+    }
+    $pdf_html .= "<input type='file' name='pauta_pdf_contribution' id='pauta_pdf_contribution' value='' size='25'/></p>";
+    echo $pdf_html;
+
 	if($options_plugin_delibera['validacao'] == "S") // Adiciona prazo de validação se for necessário
 	{
 		$dias_discussao += $dias_validacao;
@@ -1040,7 +1056,6 @@ function delibera_save_post($post_id, $post)
 	$opt = delibera_get_config();
 	$autosave = ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE );
     
-    
 	if(
 		( // Se tem validação, tem que ter o prazo
 			$opt['validacao'] == 'N' || 
@@ -1086,20 +1101,46 @@ function delibera_save_post($post_id, $post)
 		$events_meta['prazo_eleicao_relator'] = $opt['relatoria'] == 'S' && $opt['eleicao_relator'] == 'S' ? $_POST['prazo_eleicao_relator'] : date('d/m/Y');
 		$events_meta['prazo_votacao'] = $_POST['prazo_votacao'];
 		$events_meta['min_validacoes'] = $opt['validacao'] == 'S' ? $_POST['min_validacoes'] : 10;
-		
-		
+
+        /* ######### START ######### */
+            /* ######### FOR PDF UPLOAD FILE ######### */
+            // Setup the array of supported file types. In this case, it's just PDF.
+            $supported_types = array('application/pdf');
+
+            // Get the file type of the upload
+            $arr_uploaded_file_type = wp_check_filetype(basename($_FILES['pauta_pdf_contribution']['name']));
+            $uploaded_file_type = $arr_uploaded_file_type['type'];
+
+            if( !in_array($uploaded_file_type, $supported_types) ) {
+                //TODO: Improve this message and avoid wp_die
+                wp_die("O arquivo para web não é um PDF (formato permitido).");
+            }
+
+            // Use the WordPress API to upload the file
+            $upload_pauta_pdf = wp_upload_bits($_FILES['pauta_pdf_contribution']['name'], null, file_get_contents($_FILES['pauta_pdf_contribution']['tmp_name']));
+
+            if(isset($upload_pauta_pdf['error']) && $upload_pauta_pdf['error'] != 0) {
+                $events_meta['pauta_pdf_contribution'] = none;
+                wp_die('Erro ao salvar arquivo para Web. O erro foi: ' . $upload_pauta_pdf['error']);
+            } else {
+                $events_meta['pauta_pdf_contribution'] = $upload_pauta_pdf['url'];
+            }
+
+            /* ######### FOR PDF UPLOAD FILE ######### */
+        /* ######### END ######### */
+
 		foreach ($events_meta as $key => $value) // Buscar dados
 		{
 	        if(get_post_meta($post->ID, $key, true)) // Se já existe
-	        { 
-	            update_post_meta($post->ID, $key, $value); // Atualiza
+	        {
+                update_post_meta($post->ID, $key, $value); // Atualiza
 	        }
 	        else 
-	        { 
-	            add_post_meta($post->ID, $key, $value, true); // Se não cria
+	        {
+                add_post_meta($post->ID, $key, $value, true); // Senão, cria
 	        }
 	    }
-	    	    
+
 	    if(
 	    	array_key_exists('delibera_fim_prazo', $_POST) &&
 	    	$_POST['delibera_fim_prazo'] == 'S' &&
@@ -1116,8 +1157,7 @@ function delibera_save_post($post_id, $post)
 	    }
 	    
 	}
-	
-	
+
 }
 
 add_action ('save_post', 'delibera_save_post', 1, 2);
@@ -2922,10 +2962,33 @@ function delibera_nova_pauta_create_action(){
         
         $pauta = array();
         $pauta['post_title'] = $title;
-        $pauta['post_content'] = $content;
         $pauta['post_excerpt'] = $excerpt;
         $pauta['post_type'] = 'pauta';
-        
+
+        //Check if there is any file uploaded
+        // If there is any, then ignore 'content' and use File.
+        // else do add 'pauta' with the text content
+        if(!empty($_FILES['post_pdf_contribution']['name'])) {
+            // Setup the array of supported file types. In this case, it's just PDF.
+            $supported_types = array('application/pdf');
+            // Get the file type of the upload
+            $pdf_contribution = wp_check_filetype(basename($_FILES['post_pdf_contribution']['name']));
+            $sent_file_type = $pdf_contribution['type'];
+            // Check if the type is supported. If not, throw an error.
+            if (!in_array($sent_file_type, $supported_types)) {
+                //TODO: Improve this message and avoid wp_die
+                wp_die("O arquivo para web não é um PDF (formato permitido).");
+            }
+            $uploaded_file = wp_upload_bits($_FILES['pauta_pdf_contribution']['name'], null, file_get_contents($_FILES['pauta_pdf_contribution']['tmp_name']));
+            if(isset($uploaded_file['error']) && $uploaded_file['error'] != 0) {
+                wp_die('Erro ao salvar arquivo para Web. O erro foi: ' . $upload['error']);
+            } else {
+                $pauta['pauta_pdf_contribution'] = $uploaded_file['url'];
+            }
+        } else {
+            $pauta['post_content'] = $content;
+        }
+
         // para que a situação da pauta seja criada corretamente, 
         // é necessário criar a pauta como rascunho para depois publicar no final desta função
         $pauta['post_status'] = 'draft';
