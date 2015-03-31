@@ -1103,23 +1103,25 @@ function delibera_save_post($post_id, $post)
 		$events_meta['min_validacoes'] = $opt['validacao'] == 'S' ? $_POST['min_validacoes'] : 10;
 
         /* ######### START ######### */
-            /* ######### FOR PDF UPLOAD FILE ######### */
-            // Setup the array of supported file types. In this case, it's just PDF.
-            $supported_types = array('application/pdf');
+        /* ######### FOR PDF UPLOAD FILE ######### */
+        // Setup the array of supported file types. In this case, it's just PDF.
+        $supported_types = array('application/pdf');
 
-            // Get the file type of the upload
-            $arr_uploaded_file_type = wp_check_filetype(basename($_FILES['pauta_pdf_contribution']['name']));
-            $uploaded_file_type = $arr_uploaded_file_type['type'];
+        // Get the file type of the upload
+        $arr_uploaded_file_type = wp_check_filetype(basename($_FILES['pauta_pdf_contribution']['name']));
+        $uploaded_file_type = $arr_uploaded_file_type['type'];
 
-            if( !in_array($uploaded_file_type, $supported_types) ) {
+        if (isset ($_FILES['pauta_pdf_contribution']['name']) && $_FILES['pauta_pdf_contribution']['name'] != '') {
+            if (!in_array($uploaded_file_type, $supported_types)) {
                 //TODO: Improve this message and avoid wp_die
                 wp_die("O arquivo para web não é um PDF (formato permitido).");
             }
 
+
             // Use the WordPress API to upload the file
             $upload_pauta_pdf = wp_upload_bits($_FILES['pauta_pdf_contribution']['name'], null, file_get_contents($_FILES['pauta_pdf_contribution']['tmp_name']));
 
-            if(isset($upload_pauta_pdf['error']) && $upload_pauta_pdf['error'] != 0) {
+            if (isset($upload_pauta_pdf['error']) && $upload_pauta_pdf['error'] != 0) {
                 $events_meta['pauta_pdf_contribution'] = none;
                 wp_die('Erro ao salvar arquivo para Web. O erro foi: ' . $upload_pauta_pdf['error']);
             } else {
@@ -1127,10 +1129,10 @@ function delibera_save_post($post_id, $post)
 
                 global $wpdb;
 
-                $wpdb->query($wpdb->prepare("UPDATE ". $wpdb->prefix ."posts SET post_content=%s WHERE ID=%d", '<iframe id="pauta-pdf-content" src="https://docs.google.com/viewer?url=' . urlencode($upload_pauta_pdf['url']) . '&amp;embedded=true" style="width: 100%; min-height: 400px; max-height: 800px; ">' . $upload_pauta_pdf['url'] . '</iframe>', $post->ID));
+                $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "posts SET post_content=%s WHERE ID=%d", '<iframe id="pauta-pdf-content" src="https://docs.google.com/viewer?url=' . urlencode($upload_pauta_pdf['url']) . '&amp;embedded=true" style="width: 100%; min-height: 400px; max-height: 800px; ">' . $upload_pauta_pdf['url'] . '</iframe>', $post->ID));
             }
-
-            /* ######### FOR PDF UPLOAD FILE ######### */
+        }
+        /* ######### FOR PDF UPLOAD FILE ######### */
         /* ######### END ######### */
 
 		foreach ($events_meta as $key => $value) // Buscar dados
