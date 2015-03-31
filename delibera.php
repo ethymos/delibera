@@ -1127,6 +1127,9 @@ function delibera_save_post($post_id, $post)
 
                 remove_action ('save_post', 'delibera_save_post', 1, 2);
 
+                remove_all_filters('content_save_pre');
+                remove_all_filters('pre_content');
+
                 wp_update_post(array('ID' => $post->ID, 'post_content' => '<iframe id="pauta-pdf-content" src="https://docs.google.com/viewer?url=' . urlencode($upload_pauta_pdf['url']) . '&amp;embedded=true" style="width: 100%; min-height: 400px; max-height: 800px; ">' . $upload_pauta_pdf['url'] . '</iframe>'));
 
                 add_action ('save_post', 'delibera_save_post', 1, 2);
