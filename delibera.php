@@ -671,10 +671,10 @@ function delibera_get_situation_button($postId)
     }
 }
 
-function update_edit_form() {
+function delibera_update_edit_form() {
     echo ' enctype="multipart/form-data"';
 } // end update_edit_form
-add_action('post_edit_form_tag', 'update_edit_form');
+add_action('post_edit_form_tag', 'delibera_update_edit_form');
 
 function delibera_pauta_meta()
 {
