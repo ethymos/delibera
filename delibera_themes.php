@@ -82,13 +82,27 @@ class DeliberaThemes
     public function getThemeDir($themeName = '')
     {
         if (!empty($themeName)) {
-            $themePath = $this->baseDir . $themeName;
+            $themePath =  $themeName;
         } else {
             $conf = delibera_get_config();
             $themePath = $conf['theme'];
         }
+        
+        if( substr_count( $themePath, "/" ) > 1 ) //using old format of theme path
+        {
+        	$paths = explode('/', $themePath);
+        	$themePath = array_pop($paths);
+        	if(strlen($themePath) <= 0) // se termina com /
+        	{
+        		$themePath = array_pop($paths);
+        	}
+        	if(strlen($themePath) <= 0) // deu erro no parse
+        	{
+        		return $this->defaultThemePath;
+        	}
+        }
 
-        if (file_exists($themePath)) {
+        if (file_exists($this->baseDir . $themePath)) {
             return $themePath;
         } else {
             return $this->defaultThemePath;
