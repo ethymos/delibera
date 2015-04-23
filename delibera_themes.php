@@ -119,7 +119,7 @@ class DeliberaThemes
     {
         $conf = delibera_get_config();
 
-        if (file_exists($conf['theme'])) {
+        if (file_exists( $this->baseDir . basename($conf['theme'])) ) {
             // TODO: melhorar a separacao entre tema distribuido junto com o plugin e tema do delibera dentro do tema do wp
             if (strpos($conf['theme'], '/wp-content/themes') === false) {
                 // tema distribuido junto com o plugin
