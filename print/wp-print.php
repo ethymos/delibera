@@ -32,6 +32,7 @@ add_filter('query_vars', 'print_variables');
 function print_variables($public_query_vars) {
 	$public_query_vars[] = 'delibera_print';
 	$public_query_vars[] = 'delibera_printpage';
+    $public_query_vars[] = 'number-options';
 	return $public_query_vars;
 }
 
@@ -40,6 +41,9 @@ function delibera_print()
 {
 	if(intval(get_query_var('delibera_print')) == 1 || intval(get_query_var('delibera_printpage')) == 1)
 	{
+        global $wp_query;
+        $wp_query->set('posts_per_page', get_query_var('number-options'));
+        query_posts($wp_query->query_vars);
 		include(WP_PLUGIN_DIR.'/delibera/print/print.php');
 		exit();
 	}
