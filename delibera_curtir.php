@@ -130,7 +130,7 @@ function delibera_get_quem_curtiu($ID, $type = 'pauta', $return = 'array')
 				foreach ($curtiuem as $curtiu)
 				{
 					if (strlen($ret) > 0) $ret .= ", ";
-					$ret .= (($curtiu['user'] == false || $curtiu['user'] == 0) ? $curtiu['ip'] : get_author_name($curtiu['user']));
+					$ret .= (($curtiu['user'] == false || $curtiu['user'] == 0) ? $curtiu['ip'] : get_the_author_meta('display_name', $curtiu['user']));
 				}
 			}
 			return $ret;
