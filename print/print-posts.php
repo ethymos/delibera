@@ -46,7 +46,6 @@
 					<p id="BlogTitle"><?php the_title(); ?></p>
 					<p id="BlogDate"><?php _e('Postado por', 'delibera'); ?> <u><?php the_author(); ?></u> <?php _e('em', 'delibera'); ?> <?php the_time(sprintf(__('%s @ %s', 'delibera'), get_option('date_format'), get_option('time_format'))); ?> <?php _e('na', 'delibera'); ?> <?php print_categories('<u>', '</u>'); ?> | <u><a href='#comments_controls'><?php print_comments_number(); ?></a></u></p>
 					<div id="BlogContent"><?php print_content(); ?></div>
-			<?php endwhile; ?>
 			<hr class="Divider" style="text-align: center;" />
 			<?php if(print_can('comments')): ?>
 				<?php comments_template(); ?>
@@ -55,7 +54,8 @@
 			<p><?php _e('URL da pauta', 'delibera'); ?>: <strong dir="ltr"><?php the_permalink(); ?></strong></p>
 			<?php if(print_can('links')): ?>
 				<p><?php print_links(); ?></p>
-			<?php endif; ?>
+			<?php endif;
+			endwhile; ?>
 			<p style="text-align: <?php echo ('rtl' == $text_direction) ? 'left' : 'right'; ?>;" id="print-link"><?php _e('Click', 'delibera'); ?> <a href="#Print" onclick="window.print(); return false;" title="<?php _e('Click aqui para imprimir.', 'delibera'); ?>"><?php _e('aqui', 'delibera'); ?></a> <?php _e('para imprimir.', 'delibera'); ?></p>
 		<?php else: ?>
 				<p><?php _e('Não há pautas relacionadas a esse critério.', 'delibera'); ?></p>

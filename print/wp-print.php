@@ -49,6 +49,10 @@ add_action('template_redirect', 'delibera_print', 5);
 ### Function: Print Content
 function print_content($display = true) {
 	global $links_text, $link_number, $max_link_number, $matched_links,  $pages, $multipage, $numpages, $post;
+    if (!isset($link_text) && isset($link_url)) {
+        $link_text = $link_url;
+    }
+
 	if (!isset($matched_links)) {
 		$matched_links = array();
 	}
@@ -131,6 +135,10 @@ function print_categories($before = '', $after = '', $parents = '')
 ### Function: Print Comments Content
 function print_comments_content($display = true) {
 	global $links_text, $link_number, $max_link_number, $matched_links;
+    if (!isset($link_text) && isset($link_url)) {
+        $link_text = $link_url;
+    }
+
 	if (!isset($matched_links)) {
 		$matched_links = array();
 	}
