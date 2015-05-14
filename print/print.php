@@ -31,6 +31,9 @@ remove_filter('comments_array', 'delibera_get_comments_filter');
 
 define('PRINT', true);
 
+global $withcomments;
+$withcomments = true;
+
 ### Load Print Post/Page Template
 if(file_exists(TEMPLATEPATH.'/print-posts.php')) {
 	include(TEMPLATEPATH.'/print-posts.php');
