@@ -1649,17 +1649,24 @@ function delibera_edit_comment($comment)
 			case 'discussao':
 			case 'encaminhamento':
 			{
-				$tipo = get_comment_meta($comment->comment_ID, "delibera_comment_tipo", true);
-				$checked = $tipo == "discussao" ? "" : ' checked="checked" ';
-				?>
-				<label class="delibera-encaminha-label">
-					<input type="radio" name="delibera_encaminha" value="N" <?php checked($tipo, 'discussao'); ?> /><?php _e('Opinião', 'delibera'); ?>
-				</label> 
-				<label class="delibera-encaminha-label">
-					<input type="radio" name="delibera_encaminha" value="S" <?php checked($tipo, 'encaminhamento'); ?> /><?php _e('Proposta de encaminhamento', 'delibera'); ?>
-				</label>
-				
-				<?php 
+                if (delibera_pautas_suportam_encaminhamento()) {
+                    $tipo = get_comment_meta($comment->comment_ID, "delibera_comment_tipo", true);
+                    $checked = $tipo == "discussao" ? "" : ' checked="checked" ';
+                    ?>
+                    <label class="delibera-encaminha-label">
+                        <input type="radio" name="delibera_encaminha"
+                               value="N" <?php checked($tipo, 'discussao'); ?> /><?php _e('Opinião', 'delibera'); ?>
+                    </label>
+                    <label class="delibera-encaminha-label">
+                        <input type="radio" name="delibera_encaminha"
+                               value="S" <?php checked($tipo, 'encaminhamento'); ?> /><?php _e('Proposta de encaminhamento', 'delibera'); ?>
+                    </label>
+
+                <?php
+
+                } else { ?>
+                    <input type="hidden" name="delibera_encaminha" value="N" />
+                <?php }
 			}break;
 		}
 	}
