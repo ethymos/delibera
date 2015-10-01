@@ -24,6 +24,6 @@
     ],
     "require": {
         "composer/installers": "~1.0",
-        "wordpress": ">=3.8"
+        "johnpbloch/wordpress": ">=3.8"
     }
 }
