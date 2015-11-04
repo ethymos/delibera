@@ -409,6 +409,7 @@ function delibera_gerar_curtir($ID, $type ='pauta')
             $html .= wp_login_url( $type == "pauta" ? get_permalink() : delibera_get_comment_link());
             $html .= '" ><span class="delibera_like_text">'.__('Concordo','delibera').'</span></a>';
         }
+        $html .= '</div>';
     }
     
     return $html;
