@@ -294,7 +294,7 @@ function delibera_get_print_link($texto = false, $imagem = false)
 	elseif($texto !== false && $imagem === false)
 	{
 		$html = '
-			<a href="'.$url.$e.'delibera_print=1" class="delibera-print-link"><label class="delibera-print-link-label" >'.$texto.'</label></a>
+			<a href="'.$url.$e.'delibera_print=1" class="delibera-print-link"><span class="delibera-print-link-label" >'.$texto.'</span></a>
 		';
 	}
 	return $html;
