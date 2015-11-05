@@ -535,6 +535,10 @@ span.delibera_seguir_text:hover {
 .delibera-comment-meta {
     color:#4f4f4f;
     margin:5px 0;
+    display: block;
+    float: left;
+    margin: 0;
+}
 }
 
 .delibera-comment-meta a {
@@ -553,13 +557,15 @@ span.delibera_seguir_text:hover {
 }
 
 .single li.comment .reply a {
-    padding-right: 24px;
-    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    padding-left: 1em;
 }
 
 li.comment .reply a:hover,  .single-pauta .entry-utility {
     opacity:1;
-    margin-right: 30px !important;
     margin-bottom: 20px;
 }
 
@@ -757,7 +763,34 @@ span.delibera-unlike-count, .delibera_unlike span.delibera_unlike_reposta {
 #delibera-comments input#submit:hover, .single-post #respond input#submit:hover { 
     background:#464646;
     cursor:pointer;
-} 
+}
+
+#delibera-comments .children {
+    display: block;
+    float: left;
+    position: relative;
+}
+
+#delibera-comments .delibera-comment-text {
+	width: 67%;
+	display: block;
+    float: left;
+    position: relative;
+}
+
+#delibera-comments .reply,
+#delibera-comments .delibera-comment-botoes {
+	width: 27%;
+	display: block;
+    float: left;
+    position: relative;
+}
+
+#delibera-comments .delibera-comment-author.vcard {
+    display: block;
+    float: left;
+    position: relative;
+}
 
 /* 
   coment�rios - discuss�o-single
