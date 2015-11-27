@@ -14,6 +14,15 @@ function delibera_get_config() {
     $opt = apply_filters('delibera_get_config', $opt);
     
     $opt_conf = get_option('delibera-config', array());
+    
+    if(!is_array($opt_conf))
+    {
+    	$opt_conf = array();
+    }
+    if(!is_array($opt))
+    {
+    	$opt = array();
+    }
 
     $opt = array_merge($opt, $opt_conf);
     
@@ -33,6 +42,7 @@ function delibera_get_main_config($config = array()) {
     $opt['dias_votacao'] = '5';
     $opt['criar_pauta_pelo_front_end'] = 'N';
     $opt['representante_define_prazos'] = 'N';
+    $opt['pauta_suporta_encaminhamento'] = 'S';
     $opt['dias_novo_prazo'] = '2';
     $opt['validacao'] = 'S';
     $opt['dias_relatoria'] = '2';
@@ -44,6 +54,7 @@ function delibera_get_main_config($config = array()) {
     $opt['plan_restriction'] = 'N';
     $opt['cabecalho_arquivo'] = __( 'Bem-vindo a plataforma de debate do ', 'delibera' ).get_bloginfo('name');
     $opt['todos_usuarios_logados_podem_participar'] = 'N';
+	$opt['data_fixa_nova_pauta_externa'] = '';
     
     return array_merge($opt, $config);
 }
@@ -136,6 +147,11 @@ function delibera_conf_page()
 					"label" => __('Representante define prazos?', 'delibera'),
 					"content" => '<input type="checkbox" name="representante_define_prazos" id="representante_define_prazos" value="S" '. ( htmlspecialchars_decode($opt['representante_define_prazos']) == "S" ? "checked='checked'" : "" ).'/>',
 				);
+                $rows[] = array(
+                    "id" => "pauta_suporta_encaminhamento",
+                    "label" => __('Pautas suportam sugestão de encaminhamento?', 'delibera'),
+                    "content" => '<input type="checkbox" name="pauta_suporta_encaminhamento" id="pauta_suporta_encaminhamento" value="S" '. ( htmlspecialchars_decode($opt['pauta_suporta_encaminhamento']) == "S" ? "checked='checked'" : "" ).'/>',
+                );
 				$rows[] = array(
 					"id" => "validacao",
 					"label" => __('É necessário validação das pautas?', 'delibera'),
@@ -204,6 +220,11 @@ function delibera_conf_page()
 					"id" => "cabecalho_arquivo",
 					"label" => __('Título da página de listagem de pautas e da página de uma pauta:', 'delibera'),
 					"content" => '<input type="text" name="cabecalho_arquivo" id="cabecalho_arquivo" value="'.htmlspecialchars_decode($opt['cabecalho_arquivo']).'"/>'
+				);
+				$rows[] = array(
+					"id" => "data_fixa_nova_pauta_externa",
+					"label" => __('Data fixa para pauta externa:', 'delibera'),
+					"content" => '<input type="text" name="data_fixa_nova_pauta_externa" id="data_fixa_nova_pauta_externa" value="'.htmlspecialchars_decode($opt['data_fixa_nova_pauta_externa']).'"/>'
 				);
 				if (is_multisite()) {
 					$rows[] = array(

@@ -66,9 +66,9 @@ class DeliberaThemes
         $this->defaultThemePath = $this->baseDir . 'atenas/';
         $this->defaultThemeUrl = $this->baseUrl . 'atenas/';
         
-        $this->wpThemePath = get_template_directory() . '/delibera';
+        $this->wpThemePath = get_stylesheet_directory() . '/delibera';
         $this->wpThemeUrl = get_stylesheet_directory_uri() . '/delibera';
-        $this->wpThemeName = wp_get_theme()->template;
+        $this->wpThemeName = wp_get_theme()->get_stylesheet();
     }
     
     /**
@@ -104,9 +104,10 @@ class DeliberaThemes
     public function getThemeUrl()
     {
         $conf = delibera_get_config();
+
         if (file_exists($conf['theme'])) {
             // TODO: melhorar a separacao entre tema distribuido junto com o plugin e tema do delibera dentro do tema do wp
-            if (strpos($conf['theme'], 'themes') !== false) {
+            if (strpos($conf['theme'], '/wp-content/themes') === false) {
                 // tema distribuido junto com o plugin
                 return $this->baseUrl . basename($conf['theme']);
             } else {

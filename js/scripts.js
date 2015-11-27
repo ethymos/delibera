@@ -21,7 +21,17 @@ jQuery(document).ready(function()
 	  		jQuery('#showhide-comment-part-text-'+comment).hide();
 	  		jQuery('#showhide_comment'+comment).show();
 		}
+
+    delibera_setpdf_size("#pauta-pdf-content");
+
+    jQuery(window).resize(function(){
+        delibera_setpdf_size("#pauta-pdf-content");
+    });
 });
+
+function delibera_setpdf_size(element) {
+    jQuery(element).height(jQuery(window).height() - 50);
+}
 
 function delibera_showhide(comment)
 { // Hide the "view" div.

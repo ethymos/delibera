@@ -43,12 +43,20 @@ require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_widgets.php';
 
 // End Parse widgets
 
+// Parse rewrite-rules
+
+require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_rewrite_rules.php';
+
+// End Parse rewrite-rules
+
 // pagina de configuracao do plugin
 require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_conf.php';
 
 // Inicialização do plugin
 
 require_once __DIR__.'/print/wp-print.php';
+
+require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_admin_functions.php';
 
 function delibera_init()
 {
@@ -175,7 +183,7 @@ function delibera_Add_custom_Post()
 		//'_edit_link' => '' // Core
 	
 	);
-	
+
 	register_post_type("pauta", $args);
 }
 
@@ -663,9 +671,15 @@ function delibera_get_situation_button($postId)
     }
 }
 
+function delibera_update_edit_form() {
+    echo ' enctype="multipart/form-data"';
+} // end update_edit_form
+add_action('post_edit_form_tag', 'delibera_update_edit_form');
+
 function delibera_pauta_meta()
 {
 	global $post;
+
 	$custom = get_post_custom($post->ID);
 	$options_plugin_delibera = delibera_get_config();
 	
@@ -680,7 +694,17 @@ function delibera_pauta_meta()
 	$dias_discussao = intval(htmlentities($options_plugin_delibera['dias_discussao']));
 	$dias_relatoria = intval(htmlentities($options_plugin_delibera['dias_relatoria']));
 	$dias_votacao_relator = intval(htmlentities($options_plugin_delibera['dias_votacao_relator']));
-	
+
+    $pauta_pdf_file = get_post_meta($post->ID, 'pauta_pdf_contribution', true);
+
+    // Recupera arquivo caso já tenha sido adicionados
+    $pdf_html  = "<p><label>Pauta em PDF</label>";
+    if( $pauta_pdf_file ) {
+        $pdf_html .= "<a href='" . $pauta_pdf_file . "' target='_blank'>Arquivo Atual</a><br/>";
+    }
+    $pdf_html .= "<input type='file' name='pauta_pdf_contribution' id='pauta_pdf_contribution' value='' size='25'/></p>";
+    echo $pdf_html;
+
 	if($options_plugin_delibera['validacao'] == "S") // Adiciona prazo de validação se for necessário
 	{
 		$dias_discussao += $dias_validacao;
@@ -1032,7 +1056,6 @@ function delibera_save_post($post_id, $post)
 	$opt = delibera_get_config();
 	$autosave = ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE );
     
-    
 	if(
 		( // Se tem validação, tem que ter o prazo
 			$opt['validacao'] == 'N' || 
@@ -1078,20 +1101,52 @@ function delibera_save_post($post_id, $post)
 		$events_meta['prazo_eleicao_relator'] = $opt['relatoria'] == 'S' && $opt['eleicao_relator'] == 'S' ? $_POST['prazo_eleicao_relator'] : date('d/m/Y');
 		$events_meta['prazo_votacao'] = $_POST['prazo_votacao'];
 		$events_meta['min_validacoes'] = $opt['validacao'] == 'S' ? $_POST['min_validacoes'] : 10;
-		
-		
+
+        /* ######### START ######### */
+        /* ######### FOR PDF UPLOAD FILE ######### */
+        // Setup the array of supported file types. In this case, it's just PDF.
+        $supported_types = array('application/pdf');
+
+        // Get the file type of the upload
+        $arr_uploaded_file_type = wp_check_filetype(basename($_FILES['pauta_pdf_contribution']['name']));
+        $uploaded_file_type = $arr_uploaded_file_type['type'];
+
+        if (isset ($_FILES['pauta_pdf_contribution']['name']) && $_FILES['pauta_pdf_contribution']['name'] != '') {
+            if (!in_array($uploaded_file_type, $supported_types)) {
+                //TODO: Improve this message and avoid wp_die
+                wp_die("O arquivo para web não é um PDF (formato permitido).");
+            }
+
+
+            // Use the WordPress API to upload the file
+            $upload_pauta_pdf = wp_upload_bits($_FILES['pauta_pdf_contribution']['name'], null, file_get_contents($_FILES['pauta_pdf_contribution']['tmp_name']));
+
+            if (isset($upload_pauta_pdf['error']) && $upload_pauta_pdf['error'] != 0) {
+                $events_meta['pauta_pdf_contribution'] = none;
+                wp_die('Erro ao salvar arquivo para Web. O erro foi: ' . $upload_pauta_pdf['error']);
+            } else {
+                $events_meta['pauta_pdf_contribution'] = $upload_pauta_pdf['url'];
+
+                global $wpdb;
+
+                $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "posts SET post_content=%s WHERE ID=%d", '<iframe id="pauta-pdf-content" src="https://docs.google.com/viewer?url=' . urlencode($upload_pauta_pdf['url']) . '&amp;embedded=true" style="width: 100%; min-height: 400px; max-height: 800px; ">' . $upload_pauta_pdf['url'] . '</iframe>', $post->ID));
+            }
+        }
+        /* ######### FOR PDF UPLOAD FILE ######### */
+        /* ######### END ######### */
+
 		foreach ($events_meta as $key => $value) // Buscar dados
 		{
 	        if(get_post_meta($post->ID, $key, true)) // Se já existe
-	        { 
-	            update_post_meta($post->ID, $key, $value); // Atualiza
+	        {
+                update_post_meta($post->ID, $key, $value); // Atualiza
 	        }
 	        else 
-	        { 
-	            add_post_meta($post->ID, $key, $value, true); // Se não cria
+	        {
+                add_post_meta($post->ID, $key, $value, true); // Senão, cria
 	        }
 	    }
-	    	    
+
 	    if(
 	    	array_key_exists('delibera_fim_prazo', $_POST) &&
 	    	$_POST['delibera_fim_prazo'] == 'S' &&
@@ -1108,8 +1163,7 @@ function delibera_save_post($post_id, $post)
 	    }
 	    
 	}
-	
-	
+
 }
 
 add_action ('save_post', 'delibera_save_post', 1, 2);
@@ -1595,17 +1649,24 @@ function delibera_edit_comment($comment)
 			case 'discussao':
 			case 'encaminhamento':
 			{
-				$tipo = get_comment_meta($comment->comment_ID, "delibera_comment_tipo", true);
-				$checked = $tipo == "discussao" ? "" : ' checked="checked" ';
-				?>
-				<label class="delibera-encaminha-label">
-					<input type="radio" name="delibera_encaminha" value="N" <?php checked($tipo, 'discussao'); ?> /><?php _e('Opinião', 'delibera'); ?>
-				</label> 
-				<label class="delibera-encaminha-label">
-					<input type="radio" name="delibera_encaminha" value="S" <?php checked($tipo, 'encaminhamento'); ?> /><?php _e('Proposta de encaminhamento', 'delibera'); ?>
-				</label>
-				
-				<?php 
+                if (delibera_pautas_suportam_encaminhamento()) {
+                    $tipo = get_comment_meta($comment->comment_ID, "delibera_comment_tipo", true);
+                    $checked = $tipo == "discussao" ? "" : ' checked="checked" ';
+                    ?>
+                    <label class="delibera-encaminha-label">
+                        <input type="radio" name="delibera_encaminha"
+                               value="N" <?php checked($tipo, 'discussao'); ?> /><?php _e('Opinião', 'delibera'); ?>
+                    </label>
+                    <label class="delibera-encaminha-label">
+                        <input type="radio" name="delibera_encaminha"
+                               value="S" <?php checked($tipo, 'encaminhamento'); ?> /><?php _e('Proposta de encaminhamento', 'delibera'); ?>
+                    </label>
+
+                <?php
+
+                } else { ?>
+                    <input type="hidden" name="delibera_encaminha" value="N" />
+                <?php }
 			}break;
 		}
 	}
@@ -2765,26 +2826,7 @@ function delibera_novo_prazo($postID)
 		case 'discussao':
 		case 'relatoria':
 			$inova_data = strtotime("+{$opts['dias_novo_prazo']} days");
-			$nova_data = date("d/m/Y", $inova_data);
-			update_post_meta($postID, 'prazo_discussao', $nova_data);
-			$nova_eleicao_rel = false;
-			$nova_relatoria = false;
-			if($opts['relatoria'] == "S") // Adiciona prazo de relatoria se for necessário
-			{
-				$opts['dias_votacao'] += $opts['dias_relatoria'];
-				if($opts['eleicao_relator'] == "S") // Adiciona prazo de vatacao relator se for necessário
-				{
-					$opts['dias_votacao'] += $opts['dias_votacao_relator'];
-					$opts['dias_relatoria'] += $opts['dias_votacao_relator'];
-					$nova_eleicao_rel = date("d/m/Y", strtotime("+{$opt['dias_votacao_relator']} days", $inova_data));
-				}
-				$nova_relatoria = date("d/m/Y", strtotime("+{$opts['dias_relatoria']} days", $inova_data));
-			}
-			$inova_data_votacao = strtotime("+{$opts['dias_votacao']} days", $inova_data);
-			$nova_data_votacao = date("d/m/Y", $inova_data_votacao);
-			update_post_meta($postID, 'prazo_votacao', $nova_data_votacao);
-			delibera_del_cron($postID);
-			delibera_criar_agenda($postID, false, $nova_data, $nova_data_votacao, $nova_relatoria, $nova_eleicao_rel);
+			delibera_set_novo_prazo_discussao_relatoria($postID, $inova_data, $opts);
 		break;
 		case 'emvotacao':
 			$inova_data = strtotime("+{$opts['dias_novo_prazo']} days");
@@ -2795,7 +2837,35 @@ function delibera_novo_prazo($postID)
 		break;
 	}
 	//delibera_notificar_situacao($postID);
-} 
+}
+
+/**
+ * @param $postID
+ * @param $opts
+ */
+function delibera_set_novo_prazo_discussao_relatoria($postID, $inova_data, $opts)
+{
+	$nova_data = date("d/m/Y", $inova_data);
+	update_post_meta($postID, 'prazo_discussao', $nova_data);
+	$nova_eleicao_rel = false;
+	$nova_relatoria = false;
+	if ($opts['relatoria'] == "S") // Adiciona prazo de relatoria se for necessário
+	{
+		$opts['dias_votacao'] += $opts['dias_relatoria'];
+		if ($opts['eleicao_relator'] == "S") // Adiciona prazo de vatacao relator se for necessário
+		{
+			$opts['dias_votacao'] += $opts['dias_votacao_relator'];
+			$opts['dias_relatoria'] += $opts['dias_votacao_relator'];
+			$nova_eleicao_rel = date("d/m/Y", strtotime("+{$opts['dias_votacao_relator']} days", $inova_data));
+		}
+		$nova_relatoria = date("d/m/Y", strtotime("+{$opts['dias_relatoria']} days", $inova_data));
+	}
+	$inova_data_votacao = strtotime("+{$opts['dias_votacao']} days", $inova_data);
+	$nova_data_votacao = date("d/m/Y", $inova_data_votacao);
+	update_post_meta($postID, 'prazo_votacao', $nova_data_votacao);
+	delibera_del_cron($postID);
+	delibera_criar_agenda($postID, false, $nova_data, $nova_data_votacao, $nova_relatoria, $nova_eleicao_rel);
+}
 
 function delibera_footer() {
 	
@@ -2895,46 +2965,6 @@ function delibera_current_user_can_participate($permissao = 'votar') {
     }
 }
 
-
-// Interface pública para a criação de novas pautas
-
-add_action('generate_rewrite_rules', 'delibera_nova_pauta_generate_rewrite_rules');
-
-function delibera_nova_pauta_generate_rewrite_rules($wp_rewrite) {
-    $new_rules = array(
-        "nova-pauta/?$" => "index.php?&tpl=nova-pauta",
-        
-    );
-    $wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
-}
-
-add_filter('query_vars', 'delibera_nova_pauta_query_vars');
-
-function delibera_nova_pauta_query_vars($public_query_vars) {
-    $public_query_vars[] = "tpl";
-    
-    return $public_query_vars;
-}
-
-add_action('template_redirect', 'delibera_nova_pauta_template_redirect_intercept');
-
-function delibera_nova_pauta_template_redirect_intercept() {
-    global $wp_query, $wpdb;
-
-    $tpl = $wp_query->get('tpl');
-    
-    if ($tpl && $tpl === 'nova-pauta') {
-        $options = delibera_get_config();
-        if(isset($options['criar_pauta_pelo_front_end']) && $options['criar_pauta_pelo_front_end'] == 'S'){
-    
-            global $deliberaThemes;
-
-            include $deliberaThemes->themeFilePath('delibera_nova_pauta.php');
-            die;
-        }
-    }
-}
-
 add_action('init', 'delibera_nova_pauta_create_action');
 function delibera_nova_pauta_create_action(){
     $opt = delibera_get_config();
@@ -2945,10 +2975,33 @@ function delibera_nova_pauta_create_action(){
         
         $pauta = array();
         $pauta['post_title'] = $title;
-        $pauta['post_content'] = $content;
         $pauta['post_excerpt'] = $excerpt;
         $pauta['post_type'] = 'pauta';
-        
+
+        //Check if there is any file uploaded
+        // If there is any, then ignore 'content' and use File.
+        // else do add 'pauta' with the text content
+        if(!empty($_FILES['post_pdf_contribution']['name'])) {
+            // Setup the array of supported file types. In this case, it's just PDF.
+            $supported_types = array('application/pdf');
+            // Get the file type of the upload
+            $pdf_contribution = wp_check_filetype(basename($_FILES['post_pdf_contribution']['name']));
+            $sent_file_type = $pdf_contribution['type'];
+            // Check if the type is supported. If not, throw an error.
+            if (!in_array($sent_file_type, $supported_types)) {
+                //TODO: Improve this message and avoid wp_die
+                wp_die("O arquivo para web não é um PDF (formato permitido).");
+            }
+            $uploaded_file = wp_upload_bits($_FILES['pauta_pdf_contribution']['name'], null, file_get_contents($_FILES['pauta_pdf_contribution']['tmp_name']));
+            if(isset($uploaded_file['error']) && $uploaded_file['error'] != 0) {
+                wp_die('Erro ao salvar arquivo para Web. O erro foi: ' . $upload['error']);
+            } else {
+                $pauta['pauta_pdf_contribution'] = $uploaded_file['url'];
+            }
+        } else {
+            $pauta['post_content'] = $content;
+        }
+
         // para que a situação da pauta seja criada corretamente, 
         // é necessário criar a pauta como rascunho para depois publicar no final desta função
         $pauta['post_status'] = 'draft';
@@ -2991,11 +3044,16 @@ function delibera_nova_pauta_create_action(){
                     $_POST['prazo_eleicao_relator'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao_relator'].' DAYS'));
                 }
             }
-            
-            $_POST['prazo_discussao'] = date('d/m/Y', strtotime ('+'.$opt['dias_discussao'].' DAYS'));
-            $_POST['prazo_votacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao'].' DAYS'));
-            
-            
+
+			if (trim($opt['data_fixa_nova_pauta_externa']) != '') {
+				$prazo_discussao = DateTime::createFromFormat('d/m/Y', $opt['data_fixa_nova_pauta_externa']);
+				$_POST['prazo_discussao'] = $prazo_discussao->format('d/m/Y');
+				$_POST['prazo_votacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao'].' DAYS', $prazo_discussao->getTimestamp()));
+			} else {
+				$_POST['prazo_discussao'] = date('d/m/Y', strtotime ('+'.$opt['dias_discussao'].' DAYS'));
+				$_POST['prazo_votacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao'].' DAYS'));
+			}
+
             // isto é necessário por causa do if da função delibera_publish_pauta()
             $_POST['publish'] = 'Publicar';
             $_POST['prev_status'] = 'draft';
@@ -3051,5 +3109,22 @@ add_filter('login_redirect', function($redirect_to, $request, $user) {
     }
 }, 10, 3);
 TODO mundo redirecionado para a lista de pauta, talvez uma nova opções */
+
+/***
+ * Verifica se as pautas devem suportar sugestão de encaminhamento ou se
+ * as propostas entram apenas como opinião. Muito útil para consultas públicas.
+ *
+ * @return bool
+ */
+function delibera_pautas_suportam_encaminhamento()
+{
+    $options = delibera_get_config();
+
+    if ( $options['pauta_suporta_encaminhamento'] == 'S' ) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 ?>

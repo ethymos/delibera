@@ -32,6 +32,7 @@ add_filter('query_vars', 'print_variables');
 function print_variables($public_query_vars) {
 	$public_query_vars[] = 'delibera_print';
 	$public_query_vars[] = 'delibera_printpage';
+    $public_query_vars[] = 'number-options';
 	return $public_query_vars;
 }
 
@@ -40,6 +41,9 @@ function delibera_print()
 {
 	if(intval(get_query_var('delibera_print')) == 1 || intval(get_query_var('delibera_printpage')) == 1)
 	{
+        global $wp_query;
+        $wp_query->set('posts_per_page', get_query_var('number-options'));
+        query_posts($wp_query->query_vars);
 		include(WP_PLUGIN_DIR.'/delibera/print/print.php');
 		exit();
 	}
@@ -49,6 +53,10 @@ add_action('template_redirect', 'delibera_print', 5);
 ### Function: Print Content
 function print_content($display = true) {
 	global $links_text, $link_number, $max_link_number, $matched_links,  $pages, $multipage, $numpages, $post;
+    if (!isset($link_text) && isset($link_url)) {
+        $link_text = $link_url;
+    }
+
 	if (!isset($matched_links)) {
 		$matched_links = array();
 	}
@@ -131,6 +139,10 @@ function print_categories($before = '', $after = '', $parents = '')
 ### Function: Print Comments Content
 function print_comments_content($display = true) {
 	global $links_text, $link_number, $max_link_number, $matched_links;
+    if (!isset($link_text) && isset($link_url)) {
+        $link_text = $link_url;
+    }
+
 	if (!isset($matched_links)) {
 		$matched_links = array();
 	}
@@ -282,7 +294,7 @@ function delibera_get_print_link($texto = false, $imagem = false)
 	elseif($texto !== false && $imagem === false)
 	{
 		$html = '
-			<a href="'.$url.$e.'delibera_print=1" class="delibera-print-link"><label class="delibera-print-link-label" >'.$texto.'</label></a>
+			<a href="'.$url.$e.'delibera_print=1" class="delibera-print-link"><span class="delibera-print-link-label" >'.$texto.'</span></a>
 		';
 	}
 	return $html;

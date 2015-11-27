@@ -404,7 +404,7 @@ span.author {
     font-weight: bold;
 }
 
-.single-pauta #leader .entry-print {
+.single-pauta #leader .entry-print a {
     background:url('images/icone-print.png') right center no-repeat;
     padding-right:20px;
 }
@@ -422,7 +422,6 @@ span.delibera_seguir_text {
     /*color:#1b61ae;*/
     font-size: 13px;
     margin-top: 5px;
-    padding-top: 20px;
     font-weight:bold;
 }
 
@@ -497,12 +496,13 @@ span.delibera_seguir_text:hover {
 .single li.comment .reply a , .single-pauta .entry-utility a.comment-reply-link, .comentario_coluna2 {
     background: url('images/reply.png') center right no-repeat ;
     display:block;
-    margin-right: 30px !important;
+    margin-right: 34px !important;
     font-family: 'LucidaSansDemiboldRoman', arial, helvetica;
     font-size:10px;
     opacity:0.7;
     text-transform:uppercase;
     text-align:right;
+    padding-right: 22px;
 }
 
 /*.single li.comment{
@@ -535,6 +535,10 @@ span.delibera_seguir_text:hover {
 .delibera-comment-meta {
     color:#4f4f4f;
     margin:5px 0;
+    display: block;
+    float: left;
+    margin: 0;
+}
 }
 
 .delibera-comment-meta a {
@@ -553,13 +557,15 @@ span.delibera_seguir_text:hover {
 }
 
 .single li.comment .reply a {
-    padding-right: 24px;
-    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 85%;
+    padding-left: 1em;
 }
 
 li.comment .reply a:hover,  .single-pauta .entry-utility {
     opacity:1;
-    margin-right: 30px !important;
     margin-bottom: 20px;
 }
 
@@ -757,7 +763,38 @@ span.delibera-unlike-count, .delibera_unlike span.delibera_unlike_reposta {
 #delibera-comments input#submit:hover, .single-post #respond input#submit:hover { 
     background:#464646;
     cursor:pointer;
-} 
+}
+
+#delibera-comments .children {
+    display: block;
+    float: left;
+    position: relative;
+}
+
+#delibera-comments ul.children {
+    width: 97%;
+}
+
+#delibera-comments .delibera-comment-text {
+	width: 67%;
+	display: block;
+    float: left;
+    position: relative;
+}
+
+#delibera-comments .reply,
+#delibera-comments .delibera-comment-botoes {
+	width: 27%;
+	display: block;
+    float: left;
+    position: relative;
+}
+
+#delibera-comments .delibera-comment-author.vcard {
+    display: block;
+    float: left;
+    position: relative;
+}
 
 /* 
   coment�rios - discuss�o-single

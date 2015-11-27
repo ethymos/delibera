@@ -170,11 +170,20 @@ function delibera_comment_form($defaults)
                     ;
                 }
                 if (delibera_current_user_can_participate())
-                {   
-                    $replace = '
-                                '.(($situacao->slug != 'relatoria') ? '<label class="delibera-encaminha-label" ><input type="radio" name="delibera_encaminha" value="N" checked="checked" />'.__('Opinião', 'delibera').'</label>' : '').'
-                                <label class="delibera-encaminha-label" ><input type="radio" name="delibera_encaminha" value="S" '.(($situacao->slug == 'relatoria') ? ' checked="checked" ' : '').' />'.__('Proposta de encaminhamento', 'delibera').'</label>
-                    ';
+                {
+                    $replace = '';
+
+                    if (delibera_pautas_suportam_encaminhamento()) {
+                        if ($situacao->slug != 'relatoria') {
+                            $replace .= '<label class="delibera-encaminha-label" ><input type="radio" name="delibera_encaminha" value="N" checked="checked" />'.__('Opinião', 'delibera').'</label>';
+                        }
+
+                        $replace .= '<label class="delibera-encaminha-label" ><input type="radio" name="delibera_encaminha" value="S" ' . (($situacao->slug == 'relatoria') ? ' checked="checked" ' : '') . ' />'.__('Proposta de encaminhamento', 'delibera').'</label>';
+                    } else {
+                        $replace .= '<input type="hidden" name="delibera_encaminha" value="N" />';
+                    }
+
+
                     $defaults['comment_field'] = preg_replace ("/<label for=\"comment\">(.*?)<\/label>/", $replace, $defaults['comment_field']);
                 }
                 else
@@ -400,6 +409,7 @@ function delibera_gerar_curtir($ID, $type ='pauta')
             $html .= wp_login_url( $type == "pauta" ? get_permalink() : delibera_get_comment_link());
             $html .= '" ><span class="delibera_like_text">'.__('Concordo','delibera').'</span></a>';
         }
+        $html .= '</div>';
     }
     
     return $html;
