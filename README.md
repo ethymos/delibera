@@ -18,6 +18,16 @@ Como usar?
 ==========
 
 Tudo o que você precisa para rodar este plugin é ter uma instalação de WordPress funcionando e saber como instalar um plugin. Para mais informações veja a [documentação](https://github.com/redelivre/delibera/wiki/Home).
+
+Acessando pautas:
+
+Post type = pauta
+
+Exemplo sem links customizados:
+http://www.exemplo.com/?post_type=pauta
+
+Exemplo com links customizados:
+http://www.exemplo.com/pauta/
  
 Como Colaborar?
 ===============
