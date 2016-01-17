@@ -5,6 +5,11 @@ function get_delibera_header() {
 	?>
 	
 	<div id="delibera-header">
+
+        <?php if (isset($opt['criar_pauta_pelo_front_end']) && $opt['criar_pauta_pelo_front_end'] == 'S') : ?>
+            <p class="delibera-participacao"><a href="<?php echo site_url('nova-pauta'); ?>">Criar uma nova pauta</a></p>
+        <?php endif; ?>
+
 		<?php
 		
 		$h = ( is_post_type_archive ( 'pauta' ) ) ? 'h1' : 'h2';
