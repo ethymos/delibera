@@ -203,7 +203,7 @@ p.delibera-participacao a{
     padding: 10px 35px;
     margin:0 10px 0 10px;
     border-radius: 10px;
-    width: 790px;
+    width: 100%;
 }
 
 .archive .form-filtro-ultimos-div {
@@ -292,6 +292,7 @@ body.post-type-archive-pauta .entry-meta {
     line-height: 1.9em;
     padding:0 10px;
     margin-top: 40px;
+	
 }
 
 .post-type-archive-pauta .hentry .entry-content {
@@ -433,7 +434,7 @@ span.delibera_seguir_text:hover {
 .single-pauta .hentry {
     float: left;
     background: #fff;
-    width: 940px;
+    width: 100%;
     border-radius: 15px;
 }
 
@@ -444,7 +445,8 @@ span.delibera_seguir_text:hover {
     float: left;
     line-height: 1.9em;
     padding: 20px 30px;
-    width: 940px;
+    width: 100%;
+	  margin: 0px
 }
 
 .single-pauta .entry-utility {
@@ -456,7 +458,7 @@ span.delibera_seguir_text:hover {
     padding-bottom:5px;
     padding: 0 15px;
     padding-top:1px;
-    width:940px;
+    width:100%;
     float:left;
     border:none;
 }
@@ -920,7 +922,7 @@ ul.tab-navigation li a:hover {
 .post-type-archive-pauta #content, .single-pauta #content {
     -moz-border-radius: 20px;
     -webkit-border-radius: 20px;
-    width: 940px;
+    width: 100%;
     margin: 0 auto;
 }
 
@@ -1651,4 +1653,12 @@ h1.author {
 	color: #CD334E !important;
 	font-weight: bold;
 	
+}
+
+
+/* 
+  Responsivo 
+  ================================================================================*/
+@media screen and (max-width: 910px)  {
+	.site {padding: 20px;}
 }
