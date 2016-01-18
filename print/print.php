@@ -35,9 +35,14 @@ global $withcomments;
 $withcomments = true;
 
 ### Load Print Post/Page Template
+/*
 if(file_exists(TEMPLATEPATH.'/print-posts.php')) {
 	include(TEMPLATEPATH.'/print-posts.php');
 } else {
 	include(WP_PLUGIN_DIR.'/delibera/print/print-posts.php');
 }
+*/
+
+get_template_part( 'print', 'posts' );
+
 ?>
