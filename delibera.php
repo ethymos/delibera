@@ -61,14 +61,14 @@ require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_admin_functions.php';
 function delibera_init()
 {
 	add_action('admin_menu', 'delibera_config_menu');
-	
+
 	delibera_Add_custom_Post();
-	
+
 	delibera_Add_custom_taxonomy();
-	
+
 	global $delibera_comments_padrao;
 	$delibera_comments_padrao = false;
-	
+
 }
 add_action('init','delibera_init');
 
@@ -76,7 +76,7 @@ add_action('init','delibera_init');
 require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_setup.php';
 
 /**
-	 * 
+	 *
 	 * Revemos acentos do texto
 	 * @param string $texto
 	 * @return string
@@ -100,10 +100,10 @@ function delibera_slug_under($label)
 function is_pauta($post = false)
 {
 	return get_post_type($post) == 'pauta' ? true : false;
-} 
+}
 
 /**
- * 
+ *
  * Insere term no banco e atualizar línguas do qtranslate
  * @param string $label
  * @param string $tax Taxonomy
@@ -149,12 +149,12 @@ function delibera_Add_custom_Post()
 	    'view_item' => __('Visualizar Pauta','delibera'),
 	    'search_items' => __('Procurar Pautas','delibera'),
 	    'not_found' =>  __('Nenhuma Pauta localizada','delibera'),
-	    'not_found_in_trash' => __('Nenhuma Pauta localizada na lixeira','delibera'), 
+	    'not_found_in_trash' => __('Nenhuma Pauta localizada na lixeira','delibera'),
 	    'parent_item_colon' => '',
 	    'menu_name' => __('Pautas','delibera')
-	
+
 	);
-		
+
 	$args = array
 	(
 		'label' => __('Pautas','delibera'),
@@ -166,8 +166,8 @@ function delibera_Add_custom_Post()
 		'show_ui' => true, // public
 		'show_in_menu' => true,
 		'menu_position' => 5,
-		// 'menu_icon' => '', 
-		'capability_type' => array('pauta','pautas'),		
+		// 'menu_icon' => '',
+		'capability_type' => array('pauta','pautas'),
 		'map_meta_cap' => true,
 		'hierarchical' => false,
 		'supports' => array('title', 'editor', 'author', 'excerpt', 'trackbacks', 'revisions', 'comments'),
@@ -179,9 +179,9 @@ function delibera_Add_custom_Post()
 		'query_var' => true,
 		'can_export' => true//, // veja abaixo
 		//'show_in_nav_menus' => '', // public
-		//'_builtin' => '', // Core 
+		//'_builtin' => '', // Core
 		//'_edit_link' => '' // Core
-	
+
 	);
 
 	register_post_type("pauta", $args);
@@ -191,7 +191,7 @@ function delibera_pauta_redirect_filter($location, $post_id = null) {
 
 	if (strpos($_SERVER['HTTP_REFERER'], "post_type=pauta"))
 		return admin_url("edit.php")."?post_type=pauta&updated=1";
-	else 
+	else
 		return $location;
 }
 add_filter('redirect_post_location', 'delibera_pauta_redirect_filter', '99');
@@ -213,10 +213,10 @@ function delibera_Add_custom_taxonomy()
 	    'new_item_name' => __('Novo Tema','delibera'),
 	    'view_item' => __('Visualizar Tema','delibera'),
 	    'not_found' =>  __('Nenhum Tema localizado','delibera'),
-	    'not_found_in_trash' => __('Nenhum Tema localizado na lixeira','delibera'), 
+	    'not_found_in_trash' => __('Nenhum Tema localizado na lixeira','delibera'),
 	    'menu_name' => __('Temas','delibera')
 	);
-	
+
 	$args = array
 	(
 		'label' => __('Temas','delibera'),
@@ -228,15 +228,15 @@ function delibera_Add_custom_taxonomy()
 		// 'show_ui' => '', // Public
 		'hierarchical' => true,
 		//'update_count_callback' => '', //Contar objetos associados
-		'rewrite' => true, 
+		'rewrite' => true,
 		//'query_var' => '',
-		//'_builtin' => '' // Core 
+		//'_builtin' => '' // Core
 	);
-	
+
 	register_taxonomy('tema', array('pauta'), $args);
-	
- 
-	
+
+
+
 	$labels = array
 	(
 		'name' => __('Situações','delibera'),
@@ -252,10 +252,10 @@ function delibera_Add_custom_taxonomy()
 	    'new_item_name' => __('Nova Situação','delibera'),
 	    'view_item' => __('Visualizar Situação','delibera'),
 	    'not_found' =>  __('Nenhuma Situação localizado','delibera'),
-	    'not_found_in_trash' => __('Nenhuma Situação localizada na lixeira','delibera'), 
+	    'not_found_in_trash' => __('Nenhuma Situação localizada na lixeira','delibera'),
 	    'menu_name' => __('Situações','delibera')
 	);
-	
+
 	$args = array
 	(
 		'label' => __('Situações','delibera'),
@@ -265,11 +265,11 @@ function delibera_Add_custom_taxonomy()
 		//'show_ui' => true, // Public
 		'hierarchical' => false//,
 		//'update_count_callback' => '', //Contar objetos associados
-		//'rewrite' => '', // 
+		//'rewrite' => '', //
 		//'query_var' => '',
-		//'_builtin' => '' // Core 
+		//'_builtin' => '' // Core
 	);
-	
+
 	register_taxonomy('situacao', array('pauta'), $args);
 
 	// Se precisar trocar os nomes dos terms denovo
@@ -283,9 +283,9 @@ function delibera_Add_custom_taxonomy()
 	wp_update_term($term->term_id, 'situacao', array('name' => 'Proposta de Pauta'));
 	$term = get_term_by('slug', 'naovalidada', 'situacao');
 	wp_update_term($term->term_id, 'situacao', array('name' => 'Pauta Recusada'));*/
-	
+
 	$opt = delibera_get_config();
-	
+
 	if(taxonomy_exists('situacao'))
 	{
 		if(term_exists('comresolucao', 'situacao', null) == false)
@@ -332,7 +332,7 @@ function delibera_Add_custom_taxonomy()
 					);
 				}
 			}
-			
+
 			if(term_exists('relatoria', 'situacao', null) == false)
 			{
 				delibera_insert_term('Relatoria', 'situacao', array(
@@ -390,12 +390,12 @@ function delibera_Add_custom_taxonomy()
 			}
 		}
 	}
-	
+
 	if(file_exists(__DIR__.DIRECTORY_SEPARATOR.'delibera_taxs.php'))
 	{
 		require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_taxs.php';
 	}
-	
+
 }
 
 require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_themes.php';
@@ -414,7 +414,7 @@ function delibera_get_comment_type($comment)
 
 /**
  * Retorna o nome "amigável" do tipo de um comentário.
- * 
+ *
  * @param object $comment
  * @param string $tipo
  * @param bool $echo
@@ -435,7 +435,7 @@ function delibera_get_comment_type_label($comment, $tipo = false, $echo = true)
 			return __('Proposta', 'delibera');
 		break;
 		case 'voto':
-			if($echo) _e('Voto', 'delibera'); 
+			if($echo) _e('Voto', 'delibera');
 			return __('Voto', 'delibera');
 		break;
 		case 'resolucao':
@@ -454,18 +454,18 @@ function delibera_get_comment_type_label($comment, $tipo = false, $echo = true)
  * Retorna uma string com a quantidade de comentários
  * associados a pauta do tipo correspondente a situação
  * atual.
- * 
+ *
  * @param int $postId
  * @return string (exemplo: "5 votos")
  */
 function delibera_get_comments_count_by_type($postId)
 {
     $situacao = delibera_get_situacao($postId);
-    
+
     switch ($situacao->slug) {
         case 'validacao':
             $count = count(delibera_get_comments_validacoes($postId));
-            
+
             if ($count == 0) {
                 $label = __('Nenhuma validação', 'delibera');
             } else if ($count == 1) {
@@ -473,11 +473,11 @@ function delibera_get_comments_count_by_type($postId)
             } else {
                 $label = sprintf(__('%d validações', 'delibera'), $count);
             }
-            
+
             return $label;
         case 'discussao':
             $count = count(delibera_get_comments_discussoes($postId));
-            
+
             if ($count == 0) {
                 $label = __('Nenhum comentário', 'delibera');
             } else if ($count == 1) {
@@ -485,11 +485,11 @@ function delibera_get_comments_count_by_type($postId)
             } else {
                 $label = sprintf(__('%d comentários', 'delibera'), $count);
             }
-            
+
             return $label;
         case 'emvotacao':
             $count = count(delibera_get_comments_votacoes($postId));
-            
+
             if ($count == 0) {
                 $label = __('Nenhum voto', 'delibera');
             } else if ($count == 1) {
@@ -497,7 +497,7 @@ function delibera_get_comments_count_by_type($postId)
             } else {
                 $label = sprintf(__('%d votos', 'delibera'), $count);
             }
-            
+
             return $label;
     }
 }
@@ -515,7 +515,7 @@ function delibera_pauta_custom_meta()
 function delibera_forca_fim_prazo($postID)
 {
 	$situacao = delibera_get_situacao($postID);
-	
+
     switch($situacao->slug)
     {
     	case 'discussao':
@@ -546,11 +546,11 @@ function delibera_admin_list_options($actions, $post)
 			$url = 'admin.php?action=delibera_forca_fim_prazo_action&amp;post='.$post->ID;
 			$url = wp_nonce_url($url, 'delibera_forca_fim_prazo_action'.$post->ID);
 			$actions['forcar_prazo'] = '<a href="'.$url.'" title="'.__('Forçar fim de prazo','delibera').'" >'.__('Forçar fim de prazo','delibera').'</a>';
-			
+
 			$url = 'admin.php?action=delibera_nao_validado_action&amp;post='.$post->ID;
 			$url = wp_nonce_url($url, 'delibera_nao_validado_action'.$post->ID);
 			$actions['nao_validado'] = '<a href="'.$url.'" title="'.__('Invalidar','delibera').'" >'.__('Invalidar','delibera').'</a>';
-			
+
 		}
 		if(delibera_get_situacao($post->ID)->slug == 'naovalidada' && current_user_can('delibera_reabrir_pauta'))
 		{
@@ -558,54 +558,54 @@ function delibera_admin_list_options($actions, $post)
 			$url = wp_nonce_url($url, 'delibera_reabrir_pauta_action'.$post->ID);
 			$actions['reabrir'] = '<a href="'.$url.'" title="'.__('Reabrir','delibera').'" >'.__('Reabrir','delibera').'</a>';
 		}
-		
+
 	}
-	
+
 	//print_r(_get_cron_array());
 	return $actions;
 }
 
 add_filter('post_row_actions','delibera_admin_list_options', 10, 2);
 
-function delibera_forca_fim_prazo_action() 
+function delibera_forca_fim_prazo_action()
 {
-	if(current_user_can('forcar_prazo') && check_admin_referer('delibera_forca_fim_prazo_action'.$_REQUEST['post'], '_wpnonce')) 
+	if(current_user_can('forcar_prazo') && check_admin_referer('delibera_forca_fim_prazo_action'.$_REQUEST['post'], '_wpnonce'))
 	{
 		delibera_forca_fim_prazo($_REQUEST['post']);
-		
+
 		wp_redirect( admin_url( 'edit.php?post_type=pauta') );
 	}
-	else 
+	else
 	{
 		wp_die(__('Você não tem permissão para forçar um prazo','delibera'), __('Sem permissão','delibera'));
 	}
 }
 add_action('admin_action_delibera_forca_fim_prazo_action', 'delibera_forca_fim_prazo_action');
 
-function delibera_nao_validado_action() 
+function delibera_nao_validado_action()
 {
-	if(current_user_can('forcar_prazo') && check_admin_referer('delibera_nao_validado_action'.$_REQUEST['post'], '_wpnonce')) 
+	if(current_user_can('forcar_prazo') && check_admin_referer('delibera_nao_validado_action'.$_REQUEST['post'], '_wpnonce'))
 	{
 		delibera_marcar_naovalidada($_REQUEST['post']);
-		
+
 		wp_redirect( admin_url( 'edit.php?post_type=pauta') );
 	}
-	else 
+	else
 	{
 		wp_die(__('Você não tem permissão para invalidar uma pauta','delibera'), __('Sem permissão','delibera'));
 	}
 }
 add_action('admin_action_delibera_nao_validado_action', 'delibera_nao_validado_action');
 
-function delibera_reabrir_pauta_action() 
+function delibera_reabrir_pauta_action()
 {
-	if(current_user_can('delibera_reabrir_pauta') && check_admin_referer('delibera_reabrir_pauta_action'.$_REQUEST['post'], '_wpnonce')) 
+	if(current_user_can('delibera_reabrir_pauta') && check_admin_referer('delibera_reabrir_pauta_action'.$_REQUEST['post'], '_wpnonce'))
 	{
 		delibera_reabrir_pauta($_REQUEST['post']);
-		
+
 		wp_redirect( admin_url( 'edit.php?post_type=pauta') );
 	}
-	else 
+	else
 	{
 		wp_die(__('Você não tem permissão para re-abrir discussão sobre uma pauta','delibera'), __('Sem permissão','delibera'));
 	}
@@ -615,7 +615,7 @@ add_action('admin_action_delibera_reabrir_pauta_action', 'delibera_reabrir_pauta
 require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_cron.php';
 
 /**
- * 
+ *
  * Retorna a situação do post
  * @param int $postID
  * @return mixed validacao, discussao, elegerelator, relatoria, emvotacao, comresolucao, naovalidada ou false
@@ -628,33 +628,33 @@ function delibera_get_situacao($postID)
 	{
 		$ret = array_pop($situacao);
 	}
-	
+
 	if(!is_object($ret)) // if term situacao does not exists
 	{
 		$ret = new stdClass();
 		$ret->slug = '';
 		$ret->name = '';
 	}
-	
+
 	if(has_filter('delibera_get_situacao'))
 	{
 		return apply_filters('delibera_get_situacao', $ret);
 	}
-	
+
 	return $ret;
 }
 
 /**
  * Retorna o label do botão com a situação da
  * pauta.
- * 
+ *
  * @param int $postId
  * @return string
  */
 function delibera_get_situation_button($postId)
 {
     $situacao = get_the_terms($postId, 'situacao');
-    
+
     if (is_array($situacao) && !empty($situacao)) {
         $situacao = array_pop($situacao);
     }
@@ -682,14 +682,14 @@ function delibera_pauta_meta()
 
 	$custom = get_post_custom($post->ID);
 	$options_plugin_delibera = delibera_get_config();
-	
+
 	if(!is_array($custom)) $custom = array();
 	$validacoes = array_key_exists("numero_validacoes", $custom) ?  $custom["numero_validacoes"][0] : 0;
-	
+
 	$min_validacoes = array_key_exists("min_validacoes", $custom) ?  $custom["min_validacoes"][0] : htmlentities($options_plugin_delibera['minimo_validacao']);
-	
+
 	$situacao = delibera_get_situacao($post->ID);
-	
+
 	$dias_validacao = intval(htmlentities($options_plugin_delibera['dias_validacao']));
 	$dias_discussao = intval(htmlentities($options_plugin_delibera['dias_discussao']));
 	$dias_relatoria = intval(htmlentities($options_plugin_delibera['dias_relatoria']));
@@ -709,13 +709,13 @@ function delibera_pauta_meta()
 	{
 		$dias_discussao += $dias_validacao;
 	}
-	
+
 	$dias_votacao = $dias_discussao + intval(htmlentities($options_plugin_delibera['dias_votacao']));
-	
+
 	if($options_plugin_delibera['relatoria'] == "S") // Adiciona prazo de relatoria se for necessário
 	{
 		$dias_votacao += $dias_relatoria;
-		$dias_relatoria += $dias_discussao;	
+		$dias_relatoria += $dias_discussao;
 		if($options_plugin_delibera['eleicao_relator'] == "S") // Adiciona prazo de vatacao relator se for necessário
 		{
 			$dias_votacao += $dias_votacao_relator;
@@ -723,21 +723,21 @@ function delibera_pauta_meta()
 			$dias_votacao_relator += $dias_discussao;
 		}
 	}
-	
+
 	$now = strtotime(date('Y/m/d')." 11:59:59");
-	
+
 	$prazo_validacao_sugerido = strtotime("+$dias_validacao days", $now);
 	$prazo_discussao_sugerido = strtotime("+$dias_discussao days", $now);
 	$prazo_eleicao_relator_sugerido = strtotime("+$dias_votacao_relator days", $now);
 	$prazo_relatoria_sugerido = strtotime("+$dias_relatoria days", $now);
 	$prazo_votacao_sugerido = strtotime("+$dias_votacao days", $now);
-	
+
 	$prazo_validacao = date('d/m/Y', $prazo_validacao_sugerido);
 	$prazo_discussao = date('d/m/Y', $prazo_discussao_sugerido);
 	$prazo_eleicao_relator = date('d/m/Y', $prazo_eleicao_relator_sugerido);
-	$prazo_relatoria = date('d/m/Y', $prazo_relatoria_sugerido); 
+	$prazo_relatoria = date('d/m/Y', $prazo_relatoria_sugerido);
 	$prazo_votacao = date('d/m/Y', $prazo_votacao_sugerido);
-	
+
 	if (
 		$options_plugin_delibera['representante_define_prazos'] == "N" &&
 		!($post->post_status == 'draft' ||
@@ -749,7 +749,7 @@ function delibera_pauta_meta()
 	} else {
 	    $disable_edicao = '';
 	}
-	
+
 	if(!($post->post_status == 'draft' ||
 		$post->post_status == 'auto-draft' ||
 		$post->post_status == 'pending'))
@@ -757,14 +757,14 @@ function delibera_pauta_meta()
 		$prazo_validacao = array_key_exists("prazo_validacao", $custom) ?  $custom["prazo_validacao"][0] : $prazo_validacao;
 		$prazo_discussao = array_key_exists("prazo_discussao", $custom) ?  $custom["prazo_discussao"][0] : $prazo_discussao;
 		$prazo_eleicao_relator = array_key_exists("prazo_eleicao_relator", $custom) ?  $custom["prazo_eleicao_relator"][0] : $prazo_eleicao_relator;
-		$prazo_relatoria = array_key_exists("prazo_relatoria", $custom) ?  $custom["prazo_relatoria"][0] : $prazo_relatoria; 
+		$prazo_relatoria = array_key_exists("prazo_relatoria", $custom) ?  $custom["prazo_relatoria"][0] : $prazo_relatoria;
 		$prazo_votacao = array_key_exists("prazo_votacao", $custom) ?  $custom["prazo_votacao"][0] : $prazo_votacao;
 	}
 
 	if($options_plugin_delibera['validacao'] == "S")
 	{
 	?>
-		<p>	
+		<p>
 			<label for="min_validacoes" class="label_min_validacoes"><?php _e('Mínimo de Validações','delibera'); ?>:</label>
 			<input <?php echo $disable_edicao ?> id="min_validacoes" name="min_validacoes" class="min_validacoes widefat" value="<?php echo $min_validacoes; ?>"/>
 		</p>
@@ -773,13 +773,13 @@ function delibera_pauta_meta()
 			<input <?php echo $disable_edicao ?> id="prazo_validacao" name="prazo_validacao" class="prazo_validacao widefat hasdatepicker" value="<?php echo $prazo_validacao; ?>"/>
 		</p>
 	<?php
-	} 
+	}
 	?>
 	<p>
 		<label for="prazo_discussao" class="label_prazo_discussao"><?php _e('Prazo para Discussões','delibera') ?>:</label>
 		<input <?php echo $disable_edicao ?> id="prazo_discussao" name="prazo_discussao" class="prazo_discussao widefat hasdatepicker" value="<?php echo $prazo_discussao; ?>"/>
 	</p>
-	<?php 
+	<?php
 	if($options_plugin_delibera['relatoria'] == "S")
 	{
 		if($options_plugin_delibera['eleicao_relator'] == "S")
@@ -811,12 +811,12 @@ function delibera_tratar_data($data, $int = true, $full = true)
 	$data = trim($data);
 	if(strlen($data) < 8) return false;
 	$data = substr($data, 6, 4).substr($data, 2, 4).substr($data, 0, 2);
-	$data .= $full === true ? ' 23:59:59' : ''; 
+	$data .= $full === true ? ' 23:59:59' : '';
 	return strtotime($data);
 }
 
 /**
- * 
+ *
  * Faz agendamento das datas para seguir passos
  * 1) Excluir ao atingir data de validação se não foi validade
  * 2) Iniciar votação se tiver encaminhamento, ou novo prazo, caso contrário
@@ -827,7 +827,7 @@ function delibera_tratar_data($data, $int = true, $full = true)
  */
 function delibera_criar_agenda($postID, $prazo_validacao, $prazo_discussao, $prazo_votacao, $prazo_relatoria = false, $prazo_eleicao_relator = false)
 {
-    
+
 	if($prazo_validacao !== false)
 	{
 		delibera_add_cron(
@@ -847,7 +847,7 @@ function delibera_criar_agenda($postID, $prazo_validacao, $prazo_discussao, $pra
 			)
 		);
 	}
-	
+
 	if($prazo_discussao !== false)
 	{
 		delibera_add_cron(
@@ -867,7 +867,7 @@ function delibera_criar_agenda($postID, $prazo_validacao, $prazo_discussao, $pra
 			)
 		);
 	}
-	
+
 	if($prazo_eleicao_relator != false)
 	{
 		delibera_add_cron(
@@ -887,7 +887,7 @@ function delibera_criar_agenda($postID, $prazo_validacao, $prazo_discussao, $pra
 			)
 		);
 	}
-	
+
 	if($prazo_relatoria != false)
 	{
 		delibera_add_cron(
@@ -907,7 +907,7 @@ function delibera_criar_agenda($postID, $prazo_validacao, $prazo_discussao, $pra
 			)
 		);
 	}
-	
+
 	if($prazo_votacao != false)
 	{
 		delibera_add_cron(
@@ -954,7 +954,7 @@ add_action('delibera_tratar_prazos', 'delibera_tratar_prazos', 1, 1);
 function delibera_tratar_prazo_validacao($args)
 {
 	$situacao = delibera_get_situacao($args['post_ID']);
-	if($situacao->slug == 'validacao') 
+	if($situacao->slug == 'validacao')
 	{
 		delibera_marcar_naovalidada($args['post_ID']);
 	}
@@ -963,7 +963,7 @@ function delibera_tratar_prazo_validacao($args)
 function delibera_tratar_prazo_discussao($args)
 {
 	$situacao = delibera_get_situacao($args['post_ID']);
-	if($situacao->slug == 'discussao') 
+	if($situacao->slug == 'discussao')
 	{
 		$post_id = $args['post_ID'];
 		if(count(delibera_get_comments_encaminhamentos($post_id)) > 0)
@@ -977,7 +977,7 @@ function delibera_tratar_prazo_discussao($args)
 			{
 				wp_set_object_terms($post_id, 'relatoria', 'situacao', false); //Mudar situação para Votação
 			}
-			else 
+			else
 			{
 				wp_set_object_terms($post_id, 'emvotacao', 'situacao', false); //Mudar situação para Votação
 			}
@@ -996,7 +996,7 @@ function delibera_tratar_prazo_discussao($args)
 function delibera_tratar_prazo_relatoria($args)
 {
 	$situacao = delibera_get_situacao($args['post_ID']);
-	if($situacao->slug == 'relatoria') 
+	if($situacao->slug == 'relatoria')
 	{
 		$post_id = $args['post_ID'];
 		if(count(delibera_get_comments_encaminhamentos($post_id)) > 0)
@@ -1018,7 +1018,7 @@ function delibera_tratar_prazo_relatoria($args)
 function delibera_tratar_prazo_votacao($args)
 {
 	$situacao = delibera_get_situacao($args['post_ID']);
-	if($situacao->slug == 'emvotacao') 
+	if($situacao->slug == 'emvotacao')
 	{
 		delibera_computa_votos($args['post_ID']);
 	}
@@ -1037,15 +1037,15 @@ function delibera_reabrir_pauta($postID)
 {
 	wp_set_object_terms($postID, 'validacao', 'situacao', false);
 	//delibera_notificar_situacao($postID);
-	
+
 	delibera_novo_prazo($postID);
 }
 
 /**
- * 
+ *
  * Save o post da pauta
  * @param $post_id int
- * @param $post 
+ * @param $post
  */
 function delibera_save_post($post_id, $post)
 {
@@ -1055,10 +1055,10 @@ function delibera_save_post($post_id, $post)
 	}
 	$opt = delibera_get_config();
 	$autosave = ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE );
-    
+
 	if(
 		( // Se tem validação, tem que ter o prazo
-			$opt['validacao'] == 'N' || 
+			$opt['validacao'] == 'N' ||
 			(array_key_exists('prazo_validacao', $_POST) && array_key_exists('min_validacoes', $_POST) )
 		) &&
 		( // Se tem relatoria, tem que ter o prazo
@@ -1068,7 +1068,7 @@ function delibera_save_post($post_id, $post)
 		( // Se tem relatoria, e é preciso eleger o relator, tem que ter o prazo para eleição
 			$opt['relatoria'] == 'N' ||
 			(
-				$opt['eleicao_relator'] == 'N' || 
+				$opt['eleicao_relator'] == 'N' ||
 				array_key_exists('prazo_eleicao_relator', $_POST)
 			)
 		) &&
@@ -1077,7 +1077,7 @@ function delibera_save_post($post_id, $post)
 	)
 	{
         $events_meta = array();
-	
+
 		$validacoes = get_post_meta($post_id, 'numero_validacoes', true);
 		if($validacoes == "" || $validacoes === false || is_null($validacoes))
 		{
@@ -1094,7 +1094,7 @@ function delibera_save_post($post_id, $post)
 			$events_meta['delibera_numero_seguir'] = 0;
 			$events_meta['delibera_seguiram'] = array();
 		}
-	
+
 		$events_meta['prazo_validacao'] = $opt['validacao'] == 'S' ? $_POST['prazo_validacao'] : date('d/m/Y');
 		$events_meta['prazo_discussao'] = $_POST['prazo_discussao'];
 		$events_meta['prazo_relatoria'] = $opt['relatoria'] == 'S' ? $_POST['prazo_relatoria'] : date('d/m/Y');
@@ -1141,7 +1141,7 @@ function delibera_save_post($post_id, $post)
 	        {
                 update_post_meta($post->ID, $key, $value); // Atualiza
 	        }
-	        else 
+	        else
 	        {
                 add_post_meta($post->ID, $key, $value, true); // Senão, cria
 	        }
@@ -1155,13 +1155,13 @@ function delibera_save_post($post_id, $post)
 	    {
 	    	delibera_forca_fim_prazo($post->ID);
 	    }
-	    
+
 	    if($post->post_status == 'publish' && !$autosave)
 	    {
 	    	delibera_del_cron($post->ID);
             delibera_publish_pauta($post->ID, $post, true);
 	    }
-	    
+
 	}
 
 }
@@ -1184,13 +1184,13 @@ function delibera_publish_pauta($postID, $post, $alterar = false)
 	{
 		return $postID;
 	}
-    
-	if ( 
+
+	if (
 			$alterar ||	(
-				($post->post_status == 'publish' || $_POST['publish'] == 'Publicar') && 
+				($post->post_status == 'publish' || $_POST['publish'] == 'Publicar') &&
 					(
 						(
-							array_key_exists('prev_status', $_POST) && 
+							array_key_exists('prev_status', $_POST) &&
 							(
 								$_POST['prev_status'] == 'draft' ||
 								$_POST['prev_status'] == 'pending'
@@ -1212,15 +1212,15 @@ function delibera_publish_pauta($postID, $post, $alterar = false)
 		$prazo_eleicao_relator =  get_post_meta($postID, 'prazo_eleicao_relator', true);
 		$prazo_votacao =  get_post_meta($postID, 'prazo_votacao', true);
 		$opt = delibera_get_config();
-		
+
 		if(!array_key_exists('validacao', $opt) || $opt['validacao'] == 'S' )
 		{
 			if(!$alterar)
 			{
-                
+
 				wp_set_object_terms($post->ID, 'validacao', 'situacao', false);
 			}
-            
+
 	    	delibera_criar_agenda(
 	    		$post->ID,
 	    		$prazo_validacao,
@@ -1230,7 +1230,7 @@ function delibera_publish_pauta($postID, $post, $alterar = false)
 	    		$opt['relatoria'] == 'S' && $opt['eleicao_relator'] == 'S' ? $prazo_eleicao_relator : false
 	    	);
 		}
-		else 
+		else
 		{
 			if(!$alterar)
 			{
@@ -1245,12 +1245,12 @@ function delibera_publish_pauta($postID, $post, $alterar = false)
 	    		$opt['relatoria'] == 'S' && $opt['eleicao_relator'] == 'S' ? $prazo_eleicao_relator : false
 	    	);
 		}
-		
+
 		if($alterar)
 		{
 			//delibera_notificar_situacao($post);
 		}
-		else 
+		else
 		{
 			delibera_notificar_nova_pauta($post);
 		}
@@ -1272,61 +1272,61 @@ function delibera_check_post_data($data, $postarr)
 			$valida = delibera_tratar_data($value);
 			if(!$autosave && ($valida === false || $valida < 1))
 			{
-				$erros[] = __("É necessário definir corretamente o prazo de validação", "delibera"); 
-			} 
+				$erros[] = __("É necessário definir corretamente o prazo de validação", "delibera");
+			}
 		}
 		$value = $_POST['prazo_discussao'];
 		$valida = delibera_tratar_data($value);
 		if(!$autosave && ($valida === false || $valida < 1))
 		{
-			$erros[] = __("É necessário definir corretamente o prazo de discussão", "delibera"); 
+			$erros[] = __("É necessário definir corretamente o prazo de discussão", "delibera");
 		}
-		
+
 		if($opt['relatoria'] == 'S')
 		{
 			$value = $_POST['prazo_relatoria'];
 			$valida = delibera_tratar_data($value);
 			if(!$autosave && ($valida === false || $valida < 1))
 			{
-				$erros[] = __("É necessário definir corretamente o prazo para relatoria", "delibera"); 
+				$erros[] = __("É necessário definir corretamente o prazo para relatoria", "delibera");
 			}
-			
+
 			if($opt['eleicao_relator'] == 'S')
 			{
 				$value = $_POST['prazo__leicao_relator'];
 				$valida = delibera_tratar_data($value);
 				if(!$autosave && ($valida === false || $valida < 1))
 				{
-					$erros[] = __("É necessário definir corretamente o prazo para eleição de um relator", "delibera"); 
+					$erros[] = __("É necessário definir corretamente o prazo para eleição de um relator", "delibera");
 				}
 			}
-			
+
 		}
-		
+
 		$value = $_POST['prazo_votacao'];
 		$valida = delibera_tratar_data($value);
 		if(!$autosave && ($valida === false || $valida < 1))
 		{
-			$erros[] = __("É necessário definir corretamente o prazo para votação", "delibera"); 
+			$erros[] = __("É necessário definir corretamente o prazo para votação", "delibera");
 		}
-		
+
 		if($opt['validacao'] == 'S')
 		{
 			$value = (int)$_POST['min_validacoes'];
 			$valida = is_int($value) && $value > 0;
 			if(!$autosave && ($valida === false))
 			{
-				$erros[] = __("É necessário definir corretamente o número mínimo de validações", "delibera"); 
-			} 
+				$erros[] = __("É necessário definir corretamente o número mínimo de validações", "delibera");
+			}
 		}
-		
+
 		if(
 			count($erros) == 0
 		)
 		{
 			return $data;
 		}
-		else 
+		else
 		{
 			//wp_die(__('Erro ao salvar dados da pauta, faltando informações de prazos e validações mínimas!','delibera'));
 			wp_die(implode("<BR/>", $erros));
@@ -1339,7 +1339,7 @@ add_filter('wp_insert_post_data', 'delibera_check_post_data', 10, 2);
 
 function delibera_get_comments_link() {
 	global $post;
-	
+
 	return get_permalink($post->ID) . '#delibera-comments';
 }
 
@@ -1355,23 +1355,23 @@ function delibera_get_comment_link($comment_pass = false)
 	{
 		return str_replace('#comment', '#delibera-comment', get_comments_link());
 	}
-	
+
 	return str_replace('#comment', '#delibera-comment', get_comment_link($comment));
 }
 
 function delibera_comment_post_redirect( $location ) {
 	global $post, $comment_id;
-	
-	return ( $post->post_type == 'pauta' ) ? preg_replace("/#comment-([\d]+)/", "#delibera-comment-" . $comment_id, $location) : $location; 
+
+	return ( $post->post_type == 'pauta' ) ? preg_replace("/#comment-([\d]+)/", "#delibera-comment-" . $comment_id, $location) : $location;
 }
 add_filter( 'comment_post_redirect', 'delibera_comment_post_redirect' );
 
 /**
- * 
+ *
  * Comentário em listagem (Visualização)
  * @param string $commentText
  */
-function delibera_comment_text($commentText) 
+function delibera_comment_text($commentText)
 {
 	global $comment, $post, $delibera_comments_padrao;
 	if(get_post_type($post) == "pauta" && $delibera_comments_padrao !== true)
@@ -1382,7 +1382,7 @@ function delibera_comment_text($commentText)
 		$total = 0;
 		$nvotos = 0;
 		switch ($tipo)
-		{ 
+		{
 			case 'validacao':
 			{
 				$validacao = get_comment_meta($comment->comment_ID, "delibera_validacao", true);
@@ -1448,7 +1448,7 @@ function delibera_comment_text($commentText)
 			}break;
 			case 'voto':
 			{
-				$commentText = ' 
+				$commentText = '
 				<div class="comentario_coluna1 delibera-comment-text">
 					'.$commentText.'
 				</div>
@@ -1461,7 +1461,7 @@ function delibera_comment_text($commentText)
 		}
 		return $commentText;
 	}
-	else 
+	else
 	{
 		return '<div class="delibera-comment-text">'.$commentText.'</div>';
 	}
@@ -1481,7 +1481,7 @@ function delibera_comment_text_filtro($text, $comment_id = false, $show = true)
 		}
 		$string_temp = wordwrap($text, $tamanho, '##!##');
 		$cut = strpos($string_temp, '##!##');
-		
+
 		$text = delibera_show_hide_button($comment_id, $text, $cut, $show);
 	}
 	return $text;
@@ -1502,7 +1502,7 @@ function delibera_show_hide_button($comment_id, $text, $cut, $show)
 		$part = '<div id="showhide-comment-part-text-'.$comment_id.'" class="delibera-slide-part-text" >';
 		$part .= truncate($text, $cut, '&hellip;');
 		$part .= '</div>';
-		
+
 		$comment_text = $part.$showhide.$text."</div>".$showhide_button;
 	}
 	else
@@ -1511,13 +1511,13 @@ function delibera_show_hide_button($comment_id, $text, $cut, $show)
 		$comment_text = truncate($text, $cut,'&hellip;').'<br/>
 		'.$link;
 	}
-	
+
 	return $comment_text;
 }
 
 /**
- * 
- *  
+ *
+ *
  * @param string $text String to truncate.
  * @param integer $length Length of returned string, including ellipsis.
  * @param string $ending Ending to be appended to the trimmed string.
@@ -1617,7 +1617,7 @@ function truncate($text, $length = 100, $ending = '...', $exact = false, $consid
 }
 
 /**
- * 
+ *
  * Comentário na tela de Edição na administração
  * @param WP_comment $comment
  */
@@ -1627,7 +1627,7 @@ function delibera_edit_comment($comment)
 	{
 		$tipo = get_comment_meta($comment->comment_ID, "delibera_comment_tipo", true);
 		switch ($tipo)
-		{ 
+		{
 			case 'validacao':
 			{
 				$validacao = get_comment_meta($comment->comment_ID, "delibera_validacao", true);
@@ -1681,10 +1681,10 @@ function delibera_can_comment($postID = '')
 		$post = get_post($postID);
 		$postID = $post->ID;
 	}
-	
+
 	$situacoes_validas = array('validacao' => true, 'discussao' => true, 'emvotacao' => true, 'elegerelator' => true);
 	$situacao = delibera_get_situacao($postID);
-	
+
 	if(array_key_exists($situacao->slug, $situacoes_validas))
 	{
 		return delibera_current_user_can_participate();
@@ -1716,10 +1716,10 @@ function delibera_comments_is_open($postID = null)
 		$post = get_post($postID);
 		$postID = $post->ID;
 	}
-	
+
 	$situacoes_validas = array('validacao' => true, 'discussao' => true, 'emvotacao' => true, 'elegerelator' => true,'relatoria'=>true);
 	$situacao = delibera_get_situacao($postID);
-	
+
 	if(array_key_exists($situacao->slug, $situacoes_validas))
 	{
 		return $situacoes_validas[$situacao->slug];
@@ -1749,14 +1749,14 @@ function delibera_comment_form_action($postID)
 add_action('comment_form', 'delibera_comment_form_action');
 
 /**
- * 
+ *
  * Salvar custom fields do comentário
  * @param int $comment_id
  */
-function delibera_save_comment_metas($comment_id) 
+function delibera_save_comment_metas($comment_id)
 {
 	$tipo = get_comment_meta($comment_id, "delibera_comment_tipo", true);
-	
+
 	if($tipo == false || $tipo == "")
 	{
 		if(array_key_exists("delibera_comment_tipo", $_POST))
@@ -1764,20 +1764,20 @@ function delibera_save_comment_metas($comment_id)
 			$tipo = $_POST['delibera_comment_tipo'];
 		}
 	}
-	
+
 	delibera_curtir_comment_meta($comment_id);
-	
+
 	delibera_discordar_comment_meta($comment_id);
-	
+
 	$comment = get_comment($comment_id);
-	
+
 	switch($tipo)
 	{
 		case "validacao":
 		{
 			add_comment_meta($comment_id, 'delibera_validacao', $_POST['delibera_validacao'], true);
 			add_comment_meta($comment_id, 'delibera_comment_tipo', 'validacao', true);
-			
+
 			if($_POST['delibera_validacao'] == "S")
 			{
 				$validacoes = get_post_meta($comment->comment_post_ID, 'numero_validacoes', true);
@@ -1789,7 +1789,7 @@ function delibera_save_comment_metas($comment_id)
 			$nvalidacoes++;
 			update_post_meta($comment->comment_post_ID, 'delibera_numero_comments_validacoes', $nvalidacoes);
 		}break;
-		
+
 		case 'discussao':
 		case 'encaminhamento':
 		{
@@ -1805,7 +1805,7 @@ function delibera_save_comment_metas($comment_id)
 					add_comment_meta($comment_id, 'delibera-baseouseem', $_POST['delibera-baseouseem'], true);
 				}
 			}
-			else 
+			else
 			{
 				add_comment_meta($comment_id, 'delibera_comment_tipo', 'discussao', true);
 				$ndiscussoes = get_post_meta($comment->comment_post_ID, 'delibera_numero_comments_discussoes', true);
@@ -1819,11 +1819,11 @@ function delibera_save_comment_metas($comment_id)
 		}break;
 		case 'voto':
 		{
-			
+
 			add_comment_meta($comment_id, 'delibera_comment_tipo', 'voto', true);
-			
+
 			$votos = array();
-			
+
 			foreach ($_POST as $postkey => $postvar)
 			{
 				if( substr($postkey, 0, strlen('delibera_voto')) == 'delibera_voto' )
@@ -1831,23 +1831,23 @@ function delibera_save_comment_metas($comment_id)
 					$votos[] = $postvar;
 				}
 			}
-			
+
 			add_comment_meta($comment_id, 'delibera_votos', $votos, true);
-			
+
 			$comment = get_comment($comment_id);
 			delibera_valida_votos($comment->comment_post_ID);
-			
+
 			$nvotos = get_post_meta($comment->comment_post_ID, 'delibera_numero_comments_votos', true);
 			$nvotos++;
 			update_post_meta($comment->comment_post_ID, 'delibera_numero_comments_votos', $nvotos);
-			
+
 			if(has_action('delibera_novo_voto'))
 			{
 				do_action('delibera_novo_voto', $comment_id, $comment, $votos);
 			}
-			
+
 		} break;
-			
+
 		default:
 		{
 			$npadroes = get_post_meta($comment->comment_post_ID, 'delibera_numero_comments_padroes', true);
@@ -1878,12 +1878,12 @@ function delibera_pre_edit_comment($dados)
 		{
 			$comment_id = $comment->comment_ID;
 		}
-		else 
+		else
 		{
 			wp_die(__('Você não pode Editar esse tipo de comentário','delibera'));
 		}
 	}
-	
+
 	$tipo = get_comment_meta($comment_id, "delibera_comment_tipo", true);
 	if(array_search($tipo, delibera_get_comments_types()) !== false)
 	{
@@ -1903,9 +1903,9 @@ function delibera_config_menu()
 {
 	/*if (function_exists('add_menu_page'))
 		add_menu_page( __('Delibera','delibera'), __('Delibera plugin','delibera'), 'manage_options', 'delibera-config', 'delibera_conf_page');*/
-	
+
 	$base_page = 'delibera-config';
-	
+
 	if (function_exists('add_menu_page'))
 	{
 		add_object_page( __('Delibera','delibera'), __('Delibera','delibera'), 'manage_options', $base_page, array(), WP_PLUGIN_URL."/delibera/images/delibera_icon.png");
@@ -1924,20 +1924,20 @@ function delibera_form_table($rows) {
 	$content = '<table class="form-table">';
 	foreach ($rows as $row) {
 		$content .= '<tr '.(array_key_exists('row-id', $row) ? 'id="'.$row['row-id'].'"' : '' ).' '.(array_key_exists('row-style', $row) ? 'style="'.$row['row-style'].'"' : '' ).' '.(array_key_exists('row-class', $row) ? 'class="'.$row['row-class'].'"' : '' ).' ><th valign="top" scrope="row">';
-        
+
 		if (isset($row['id']) && $row['id'] != '') {
 			$content .= '<label for="'.$row['id'].'">'.$row['label'].'</label>';
 		} else {
 			$content .= $row['label'];
 		}
-        
+
 		if (isset($row['desc']) && $row['desc'] != '') {
 			$content .= '<br/><small>'.$row['desc'].'</small>';
 		}
 
 		$content .= '</th><td valign="top">';
 		$content .= $row['content'];
-		$content .= '</td></tr>'; 
+		$content .= '</td></tr>';
 	}
 	$content .= '</table>';
 	return $content;
@@ -1948,7 +1948,7 @@ function delibera_form_table($rows) {
 function delibera_scripts()
 {
 	global $post;
-	
+
 	if (is_pauta()) {
 		wp_enqueue_script('jquery-expander', WP_CONTENT_URL.'/plugins/delibera/js/jquery.expander.js', array('jquery'));
 		wp_enqueue_script('delibera', WP_CONTENT_URL.'/plugins/delibera/js/scripts.js', array('jquery-expander'));
@@ -1956,29 +1956,29 @@ function delibera_scripts()
 		wp_enqueue_script('delibera-concordar', WP_CONTENT_URL . '/plugins/delibera/js/delibera_concordar.js', array('delibera'));
 
 		$situation = delibera_get_situacao($post->ID);
-		
+
 		$data = array(
 			'post_id' => $post->ID,
 			'ajax_url' => admin_url('admin-ajax.php'),
 		);
-		
+
 		if (is_object($situation)) {
 			$data['situation'] = $situation->slug;
 		}
-		
+
 		wp_localize_script('delibera', 'delibera', $data);
 	}
 }
 add_action( 'wp_print_scripts', 'delibera_scripts' );
 
 /**
- * 
+ *
  * Se tiver estilos customizados, ta aí a dica...
  *
 function delibera_print_styles()
 {
-	
-} 
+
+}
 add_action('wp_print_styles', 'delibera_print_styles');*/
 
 function delibera_print_styles()
@@ -1986,9 +1986,9 @@ function delibera_print_styles()
 	if (is_pauta()) {
 		wp_enqueue_style('jquery-ui-custom', plugins_url() . '/delibera/css/jquery-ui-1.9.2.custom.min.css');
 	}
-	
+
 	wp_enqueue_style('delibera_style', WP_CONTENT_URL.'/plugins/delibera/css/delibera.css');
-} 
+}
 add_action('admin_print_styles', 'delibera_print_styles');
 
 function delibera_admin_scripts()
@@ -1998,7 +1998,7 @@ function delibera_admin_scripts()
 		wp_enqueue_script('jquery-ui-datepicker-ptbr', WP_CONTENT_URL.'/plugins/delibera/js/jquery.ui.datepicker-pt-BR.js', array('jquery-ui-datepicker'));
 		wp_enqueue_script('delibera-admin',WP_CONTENT_URL.'/plugins/delibera/js/admin_scripts.js', array( 'jquery-ui-datepicker-ptbr'));
 	}
-	
+
 	if(isset($_REQUEST['page']) && $_REQUEST['page'] == 'delibera-notifications')
 	{
 		wp_enqueue_script('delibera-admin-notifica',WP_CONTENT_URL.'/plugins/delibera/js/admin_notifica_scripts.js', array('jquery'));
@@ -2011,7 +2011,7 @@ add_action( 'admin_print_scripts', 'delibera_admin_scripts' );
 // Funções de conteudo
 
 /**
- * 
+ *
  * Retorna post do tipo pauta em uma determinada situacao (validacao, discussao, emvotacao ou comresolucao), usando um filtro
  * @param array $filtro
  * @param string $situacao
@@ -2021,7 +2021,7 @@ function delibera_get_pautas_em($filtro = array(), $situacao = false)
 	$filtro['post_type'] = "pauta";
 	$filtro['post_status'] = "publish";
 	$tax_query = array();
-	
+
 	if(array_key_exists("tax_query", $filtro) && $situacao !== false)
 	{
 		$tax_query = $filtro['tax_query'];
@@ -2040,7 +2040,7 @@ function delibera_get_pautas_em($filtro = array(), $situacao = false)
 }
 
 /**
- * 
+ *
  * Retorna pautas em Validação
  * @param array $filtro
  */
@@ -2050,7 +2050,7 @@ function delibera_get_propostas($filtro = array())
 }
 
 /**
- * 
+ *
  * Retorna pautas em Discussão
  * @param array $filtro
  */
@@ -2074,7 +2074,7 @@ function delibera_des_filtro_qtranslate($where)
 add_filter('posts_where_request', 'delibera_des_filtro_qtranslate', 11);
 
 /**
- * 
+ *
  * Retorna pautas em Votação
  * @param array $filtro
  */
@@ -2084,7 +2084,7 @@ function delibera_get_emvotacao($filtro = array())
 }
 
 /**
- * 
+ *
  * Retorna pautas já resolvidas
  * @param array $filtro
  */
@@ -2105,17 +2105,17 @@ function delibera_get_comments_padrao($args = array(), $file = '/comments.php' )
 
 /**
  * Retorna comentários do Delibera de acordo com o tipo.
- * 
+ *
  * @param int $post_id
  * @param string|array $tipo um tipo ou um array de tipos
- * @return array 
+ * @return array
  */
 function delibera_get_comments($post_id, $tipo, $args = array())
 {
 	if (is_string($tipo)) {
 		$tipo = array($tipo);
 	}
-	
+
 	$args = array_merge(array('post_id' => $post_id), $args);
 	$comments = get_comments($args);
 	$ret = array();
@@ -2136,7 +2136,7 @@ function delibera_wp_list_comments($args = array(), $comments = null)
 {
 	global $post;
 	global $delibera_comments_padrao;
-	
+
 	if(get_post_type($post) == "pauta")
 	{
 		$situacao = delibera_get_situacao($post->ID);
@@ -2164,30 +2164,30 @@ function delibera_wp_list_comments($args = array(), $comments = null)
 			//$args['callback'] = 'delibera_comments_list';
 			?>
 			<div class="delibera_lista_validacoes">
-			<?php 
+			<?php
 			wp_list_comments($args, $comments);
 			?>
 			</div>
-			<?php 
+			<?php
 		}
 		elseif($situacao->slug == 'comresolucao')
 		{
 			$args['walker'] = new Delibera_Walker_Comment();
 			wp_list_comments($args, $comments);
-            
+
 			$encaminhamentos = delibera_get_comments_encaminhamentos($post->ID);
 			$discussoes = delibera_get_comments_discussoes($post->ID);
 			?>
 			<div class="delibera_encaminhamentos_inferior">
     			<?php wp_list_comments($args, $encaminhamentos); ?>
 			</div>
-			
+
 			<div id="comments" class="delibera_opinioes_inferior">
 			    <hr>
 			    <h2 class="comments-title bottom"><?php _e('Histórico da pauta', 'delibera'); ?></h2>
 			    <?php wp_list_comments($args, $discussoes); ?>
 			</div>
-			
+
 			<?php
 		}
 		else
@@ -2242,7 +2242,7 @@ function delibera_get_comments_encaminhamentos($post_id)
  * Retorna os encaminhamentos dos tipos 'encaminhamento' e
  * 'encaminhamento_selecionado' (aqueles que foram selecionados
  * pelo relator para ir para votação).
- * 
+ *
  * @param int $post_id
  * @return array
  */
@@ -2254,7 +2254,7 @@ function delibera_get_comments_all_encaminhamentos($post_id)
 /**
  * Retorna os encaminhamentos do tipo 'encaminhamento_selecionado'
  * (aqueles que foram selecionados pelo relator para ir para votação).
- * 
+ *
  * @param int $post_id
  * @return array
  */
@@ -2279,7 +2279,7 @@ function delibera_get_comments_resolucoes($post_id)
 }
 
 /**
- * 
+ *
  * Busca comentários com o tipo em tipos
  * @param array $comments lista de comentários a ser filtrada
  * @param array $tipos tipos aceitos
@@ -2287,7 +2287,7 @@ function delibera_get_comments_resolucoes($post_id)
 function delibera_comments_filter_portipo($comments, $tipos)
 {
 	$ret = array();
-	
+
 	foreach ($comments as $comment)
 	{
 		$tipo = get_comment_meta($comment->comment_ID, 'delibera_comment_tipo', true);
@@ -2300,7 +2300,7 @@ function delibera_comments_filter_portipo($comments, $tipos)
 }
 
 /**
- * 
+ *
  * Filtro que retorna Comentário filtrados pela a situação da pauta
  * @param array $comments
  * @param int $postID
@@ -2309,11 +2309,11 @@ function delibera_comments_filter_portipo($comments, $tipos)
 function delibera_get_comments_filter($comments)
 {
 	global $delibera_comments_padrao;
-	
+
 	if($delibera_comments_padrao === true) return $comments;
-	
+
 	$ret = array();
-	
+
 	if(count($comments) > 0)
 	{
 		if(get_post_type($comments[0]->comment_post_ID) == "pauta")
@@ -2339,7 +2339,7 @@ function delibera_get_comments_filter($comments)
 				}break;
 				case 'comresolucao':
 				{
-					$ret = delibera_comments_filter_portipo($comments, array('resolucao')); 
+					$ret = delibera_comments_filter_portipo($comments, array('resolucao'));
 				}break;
 			}
 			return $ret;
@@ -2353,10 +2353,10 @@ add_filter('comments_array', 'delibera_get_comments_filter');
 /**
  * Retorna um inteiro indicando quantos dias faltam para o fim do prazo
  * de uma pauta.
- * 
+ *
  * Se o parâmetro $data for passado por referência o prazo para o fim da
  * pauta é associado a ele.
- * 
+ *
  * @param int $postID
  * @param string $data
  * @return int
@@ -2367,11 +2367,11 @@ function delibera_get_prazo($postID, &$data = null)
 	$prazo = "";
 	$idata = strtotime(date('Y/m/d').' 23:59:59');
 	$diff = -1;
-	
+
 	if(is_object($situacao))
 	{
 		switch ($situacao->slug)
-		{ 
+		{
 			case 'validacao':
 			{
 				$prazo = get_post_meta($postID, 'prazo_validacao', true);
@@ -2393,17 +2393,17 @@ function delibera_get_prazo($postID, &$data = null)
 				$prazo = get_post_meta($postID, 'prazo_votacao', true);
 			} break;
 		}
-	
+
 		$iprazo = strtotime(substr($prazo, 6).substr($prazo, 2, 4).substr($prazo, 0, 2).' 23:59:59');
-	
+
 		$diff = $iprazo - $idata;
 	}
 	$dias = -1;
-	
+
 	if($diff >= 0) $dias = ceil($diff/(60*60*24));
-	
+
 	if(!is_null($data)) $data = $prazo;
-		
+
 	return $dias;
 }
 
@@ -2420,7 +2420,7 @@ add_filter('manage_edit-pauta_columns', 'delibera_edit_columns');
 function delibera_post_custom_column($column)
 {
 	global $post;
-	
+
 	switch ( $column )
 	{
 		case 'tema':
@@ -2442,7 +2442,7 @@ function delibera_post_custom_column($column)
 			}
 			break;
 	}
-	
+
 }
 
 add_action('manage_posts_custom_column',  'delibera_post_custom_column');
@@ -2481,11 +2481,11 @@ function delibera_comment_number_filtro($count, $postID)
 		return $count;
 	}
 	$situacao = delibera_get_situacao($postID);
-	
+
 	if (!$situacao) {
 		return;
 	}
-	
+
 	switch($situacao->slug)
 	{
 		case 'validacao':
@@ -2537,7 +2537,7 @@ add_action('restrict_manage_posts','delibera_restrict_listings');
 
 function delibera_convert_situacao_id_to_taxonomy_term_in_query(&$query)
 {
-	global $pagenow; 
+	global $pagenow;
 	$qv = &$query->query_vars;
 	if (isset($qv['post_type']) &&
 		$qv['post_type'] == 'pauta' &&
@@ -2565,10 +2565,10 @@ require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_user_painel.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_relatorio.php';
 
 /**
- * 
+ *
  * Pega os ultimos conteúdos
- * @param string $tipo (option) 'pauta' ou 'comments', padrão 'pauta' 
- * @param array $args (option) query padrão do post ou do comments 
+ * @param string $tipo (option) 'pauta' ou 'comments', padrão 'pauta'
+ * @param array $args (option) query padrão do post ou do comments
  * @param int $count (option) padrão 5
  */
 function delibera_ultimas($tipo = 'pauta', $args = array(), $count = 5)
@@ -2598,7 +2598,7 @@ function delibera_timeline($post_id = false, $tipo_data = false)
 function delibera_the_posts($posts)
 {
 	if (empty($posts)) return $posts;
- 
+
 	$timeline_found = false; // use this flag to see if styles and scripts need to be enqueued
 	$relatoria = false;
 	foreach ($posts as $post)
@@ -2616,7 +2616,7 @@ function delibera_the_posts($posts)
 			}
 		}
 	}
- 
+
 	if ($timeline_found)
 	{
 		// enqueue here
@@ -2624,7 +2624,7 @@ function delibera_the_posts($posts)
 		wp_enqueue_script( 'delibera_timeline_js', WP_CONTENT_URL.'/plugins/delibera/timeline/js/delibera_timeline.js', array( 'jquery' ));
 		wp_enqueue_script( 'jquery-ui-draggable');
 	}
-	
+
 	return $posts;
 }
 
@@ -2639,7 +2639,7 @@ add_filter('the_posts', 'delibera_the_posts'); // the_posts gets triggered befor
  * verifica se o número mínimo de validações foi
  * atingido e se sim muda a situação da pauta de
  * "emvotacao" para "discussao".
- * 
+ *
  * @param unknown $post
  * @return null
  */
@@ -2647,7 +2647,7 @@ function delibera_valida_validacoes($post)
 {
 	$validacoes = get_post_meta($post, 'numero_validacoes', true);
 	$min_validacoes = get_post_meta($post, 'min_validacoes', true);
-	
+
 	if($validacoes >= $min_validacoes)
 	{
 		wp_set_object_terms($post, 'discussao', 'situacao', false); //Mudar situação para Discussão
@@ -2665,7 +2665,7 @@ function delibera_valida_validacoes($post)
 	}
 }
 
-/* Faz os testes de permissões para garantir que nenhum engraçadinho 
+/* Faz os testes de permissões para garantir que nenhum engraçadinho
  * está injetando variáveis maliciosas.
  * TODO: Incluir todas as variaveis a serem verificadas aqui
  */
@@ -2674,13 +2674,13 @@ function delibera_valida_permissoes($comment_ID)
 	if (get_post_type() == 'pauta' && !delibera_current_user_can_participate())
 	{
 		if (array_key_exists('delibera_validacao', $_REQUEST) || array_key_exists('delibera_encaminha', $_REQUEST) )
-			wp_die("Nananina não! Você não tem que ter permissão pra votar.","Tocooo!!");	
+			wp_die("Nananina não! Você não tem que ter permissão pra votar.","Tocooo!!");
 	}
 }
 add_action( 'wp_blacklist_check', 'delibera_valida_permissoes' );
 
 /**
- * 
+ *
  * Verifica se o número de votos é igual ao número de representantes para deflagar fim da votação
  * @param integer $postID
  */
@@ -2696,11 +2696,11 @@ function delibera_valida_votos($postID)
     		$users_count += $result[0]->n;
     	}
     }
-	
+
 	$votos = delibera_get_comments_votacoes($postID);
-	
+
 	$votos_count = count($votos);
-	
+
 	if($votos_count >= $users_count)
 	{
 		delibera_computa_votos($postID, $votos);
@@ -2708,7 +2708,7 @@ function delibera_valida_votos($postID)
 }
 
 /**
- * 
+ *
  * Faz a apuração dos votos e toma as devidas ações:
  *    Empate: Mais prazo;
  *    Vencedor: Marco com resolucao e marca o encaminhamento.
@@ -2727,7 +2727,7 @@ function delibera_computa_votos($postID, $votos = null)
 	{
 		$encaminhamentos_votos[$encaminhamento->comment_ID] = 0;
 	}
-	
+
 	foreach ($votos as $voto_comment)
 	{
 		$voto = get_comment_meta($voto_comment->comment_ID, 'delibera_votos', true);
@@ -2738,7 +2738,7 @@ function delibera_computa_votos($postID, $votos = null)
 	}
 	$maisvotado = array(-1, -1);
 	$iguais = array();
-	
+
 	foreach ($encaminhamentos_votos as $encaminhamentos_voto_key => $encaminhamentos_voto_valor)
 	{
 		if($encaminhamentos_voto_valor > $maisvotado[1])
@@ -2754,13 +2754,13 @@ function delibera_computa_votos($postID, $votos = null)
 		delete_comment_meta($encaminhamentos_voto_key, 'delibera_comment_numero_votos');
 		add_comment_meta($encaminhamentos_voto_key, 'delibera_comment_numero_votos', $encaminhamentos_voto_valor, true);
 	}
-	
+
 	// nao finaliza a votacao caso haja um empate, exceto quando o administrador clicar no botão "Forçar fim do prazo"
 	if(count($iguais) > 0 && !(isset($_REQUEST['action']) && $_REQUEST['action'] == 'delibera_forca_fim_prazo_action')) // Empato
 	{
 		delibera_novo_prazo($postID);
 	}
-	else 
+	else
 	{
 		wp_set_object_terms($postID, 'comresolucao', 'situacao', false);
 		update_comment_meta($maisvotado[0], 'delibera_comment_tipo', 'resolucao');
@@ -2780,7 +2780,7 @@ function delibera_emvotacao($post)
 	{
 		if($opt['eleicao_relator'] == 'S')
 		{
-			
+
 		}
 	}
 }
@@ -2802,13 +2802,13 @@ function delibera_novo_prazo($postID)
 			$nova_datarel = date("d/m/Y", $inova_datarel);
 			$inova_datar = strtotime("+{$opts['dias_relatoria']} days",$inova_datarel);
 			$nova_datar = date("d/m/Y", $inova_datar);
-			
+
 			$events_meta['prazo_validacao'] = $opts['validacao'] == 'S' ? $nova_data : date('d/m/Y');
 			$events_meta['prazo_discussao'] = $nova_datad;
 			$events_meta['prazo_relatoria'] = $opts['relatoria'] == 'S' ? $nova_datar : date('d/m/Y');
 			$events_meta['prazo_eleicao_relator'] = $opts['relatoria'] == 'S' && $opts['eleicao_relator'] == 'S' ? $nova_datarel : date('d/m/Y');
 			$events_meta['prazo_votacao'] = $nova_datavt;
-			
+
 			foreach ($events_meta as $key => $value) // Buscar dados
 			{
 				if(get_post_meta($postID, $key, true)) // Se já existe
@@ -2868,9 +2868,9 @@ function delibera_set_novo_prazo_discussao_relatoria($postID, $inova_data, $opts
 }
 
 function delibera_footer() {
-	
+
     echo '<div id="mensagem-confirma-voto" style="display:none;"><p>'.__('Sua contribuição foi registrada no sistema','delibera').'</p></div>';
-    
+
 }
 add_action('wp_footer', 'delibera_footer');
 
@@ -2879,12 +2879,12 @@ function delibera_loaded() {
 	// load plugin translations
 	load_plugin_textdomain('delibera', false, dirname(plugin_basename( __FILE__ )).'/lang');
 }
-add_action('plugins_loaded','delibera_loaded'); 
+add_action('plugins_loaded','delibera_loaded');
 
 function delibera_get_plan_config()
 {
 	$plan = 'N';
-	
+
 	if( is_multisite() && get_current_blog_id() != 1 )
 	{
 		switch_to_blog(1);
@@ -2897,7 +2897,7 @@ function delibera_get_plan_config()
 		$opt = delibera_get_config();
 		$plan = $opt['plan_restriction'];
 	}
-	
+
 	return $plan;
 }
 
@@ -2923,12 +2923,12 @@ function get_page_by_slug($page_slug, $output = OBJECT, $post_type = 'page' ) {
  * Retorna a lista de idiomas disponível. Se o plugin
  * qtrans estiver habilitado retorna os idiomas dele, se
  * não usa o idioma definido no wp-config.php
- * 
+ *
  * @return array
  */
 function delibera_get_available_languages() {
     $langs = array(get_locale());
-    
+
     if(function_exists('qtrans_enableLanguage'))
     {
         global $q_config;
@@ -2941,21 +2941,21 @@ function delibera_get_available_languages() {
 /**
  * Verifica se o usuário atual pode participar das discussão
  * de uma pauta votando ou discutindo.
- * 
+ *
  * Por padrão retorna true apenas de o usuário tiver a capability 'votar',
  * mas se a opção "Todos os usuários da rede podem participar" estiver habilitada
  * retorna true para todos os usuários logados.
- * 
+ *
  * Quando estiver na single da pauta, retorna false sempre que ela
  * estiver com o prazo encerrado.
- * 
+ *
  * @return bool
  */
 function delibera_current_user_can_participate($permissao = 'votar') {
     global $post;
-    
+
     $options = delibera_get_config();
-    
+
     if (is_singular('pauta') && delibera_get_prazo($post->ID) == -1) {
         return false;
     } else if (is_multisite() && $options['todos_usuarios_logados_podem_participar'] == 'S') {
@@ -2972,7 +2972,7 @@ function delibera_nova_pauta_create_action(){
         $title = $_POST['nova-pauta-titulo'];
         $content = $_POST['nova-pauta-conteudo'];
         $excerpt = $_POST['nova-pauta-resumo'];
-        
+
         $pauta = array();
         $pauta['post_title'] = $title;
         $pauta['post_excerpt'] = $excerpt;
@@ -3002,19 +3002,19 @@ function delibera_nova_pauta_create_action(){
             $pauta['post_content'] = $content;
         }
 
-        // para que a situação da pauta seja criada corretamente, 
+        // para que a situação da pauta seja criada corretamente,
         // é necessário criar a pauta como rascunho para depois publicar no final desta função
         $pauta['post_status'] = 'draft';
-        
+
         $pauta_id = wp_insert_post($pauta);
-        
+
         if(is_int($pauta_id) && $pauta_id > 0){
-            
-            /* Os valores adicionados ao array $_POST são baseados no if da função delibera_save_post(), 
+
+            /* Os valores adicionados ao array $_POST são baseados no if da função delibera_save_post(),
              * comentado abaixo
-            if(  
+            if(
                 ( // Se tem validação, tem que ter o prazo
-                    $opt['validacao'] == 'N' || 
+                    $opt['validacao'] == 'N' ||
                     (array_key_exists('prazo_validacao', $_POST) && array_key_exists('min_validacoes', $_POST) )
                 ) &&
                 ( // Se tem relatoria, tem que ter o prazo
@@ -3024,7 +3024,7 @@ function delibera_nova_pauta_create_action(){
                 ( // Se tem relatoria, e é preciso eleger o relator, tem que ter o prazo para eleição
                     $opt['relatoria'] == 'N' ||
                     (
-                        $opt['eleicao_relator'] == 'N' || 
+                        $opt['eleicao_relator'] == 'N' ||
                         array_key_exists('prazo_eleicao_relator', $_POST)
                     )
                 ) &&
@@ -3032,12 +3032,12 @@ function delibera_nova_pauta_create_action(){
                 array_key_exists('prazo_votacao', $_POST)
              )
             */
-            
+
             if($opt['validacao'] == 'S'){
                 $_POST['prazo_validacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_validacao'].' DAYS'));
                 $_POST['min_validacoes'] = $opt['minimo_validacao'];
             }
-            
+
             if($opt['relatoria'] == 'S'){
                 $_POST['prazo_relatoria'] = date('d/m/Y', strtotime ('+'.$opt['dias_relatoria'].' DAYS'));
                 if($opt['eleicao_relator'] == 'S'){
@@ -3057,29 +3057,29 @@ function delibera_nova_pauta_create_action(){
             // isto é necessário por causa do if da função delibera_publish_pauta()
             $_POST['publish'] = 'Publicar';
             $_POST['prev_status'] = 'draft';
-            
+
             // verifica se todos os temas enviados por post são válidos
             $temas = get_terms('tema', array('hide_empty'    => true));
             $temas_ids = array();
-            
+
             if(isset($_POST['tema']) && is_array($_POST['tema']))
                 foreach($temas as $tema)
                     if(in_array ($tema->term_id, $_POST['tema']))
                         $temas_ids[] = $tema->term_id;
-            
+
             // coloca os termos de temas no post
             wp_set_post_terms($pauta_id, $temas_ids, 'tema');
-            
-            // publica o post 
+
+            // publica o post
             wp_publish_post($pauta_id);
-            
-            // isto serve para criar o slug corretamente, 
+
+            // isto serve para criar o slug corretamente,
             // já que no wp_insert_post não cria o slug quando o status é draft e o wp_publish_post tb não cria o slug
             unset($pauta['post_status']);
             $pauta['ID'] = $pauta_id;
             $pauta['post_name'] = sanitize_post_field('post_name', $title, $pauta_id, 'save');
             wp_update_post($pauta);
-            
+
             // redireciona para a pauta criada
             $permalink = get_post_permalink($pauta_id);
             wp_safe_redirect($permalink);
@@ -3095,13 +3095,13 @@ function delibera_nova_pauta_create_action(){
  * onde o Delibera foi instalado para a página de pautas após o
  * login se a opção "Todos os usuários logados na rede podem participar?"
  * estiver habilitada.
- * 
+ *
  * Se não fizermos esse redicionamento estes usuários serão redirecionados
  * para suas páginas de perfil fora do site onde o Delibera está instalado.
  *
 add_filter('login_redirect', function($redirect_to, $request, $user) {
     $options = delibera_get_config();
-    
+
     if ($options['todos_usuarios_logados_podem_participar'] == 'S' && !is_user_member_of_blog()) {
         return site_url('pauta');
     } else {
