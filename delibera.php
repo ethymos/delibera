@@ -1217,7 +1217,7 @@ function delibera_the_posts($posts)
 		}
 	}
 
-	if ($timeline_found)
+    if ( ($timeline_found) && (!is_admin()) )
 	{
 		// enqueue here
 		wp_enqueue_style('delibera_timeline_css',  WP_CONTENT_URL.'/plugins/delibera/timeline/delibera_timeline.css');
