@@ -1,10 +1,15 @@
 <?php
 /**
- * Funções usadas no painel administrativo do delibera
+ * Realiza modificações no painel administrativo do wordpress
  */
 
 /**
  * Função para incluir a ação de edição em massa para prazo de discussão
+ *
+ * @property admin_footer
+ * @return null
+ * @package Action
+ * @subpackage Admin
  */
 function delibera_custom_bulk_admin_footer() {
 
@@ -36,6 +41,9 @@ add_action('admin_footer', 'delibera_custom_bulk_admin_footer');
 
 /**
  * Função que trata a ação de edição em massa do prazo de discussão
+ *
+ * @package Action
+ * @subpackage Admin
  */
 function delibera_custom_bulk_action() {
 
@@ -72,6 +80,9 @@ add_action('load-edit.php', 'delibera_custom_bulk_action');
 
 /**
  * Função que exibe a mensagem de confirmação da alteração em massa
+ *
+ * @package Action
+ * @subpackage Admin
  */
 function delibera_custom_bulk_admin_notices() {
 
@@ -90,6 +101,10 @@ add_action('admin_notices', 'delibera_custom_bulk_admin_notices');
  *
  * Comentário na tela de Edição na administração
  * @param WP_comment $comment
+ *
+ * @property add_meta_boxes_comment
+ * @package Action
+ * @subpackage Admin
  */
 function delibera_edit_comment($comment)
 {
@@ -143,7 +158,15 @@ function delibera_edit_comment($comment)
 }
 
 add_filter('add_meta_boxes_comment', 'delibera_edit_comment');
-function delibera_edit_columns($columns)
+
+/**
+ * Internacionaliza label das propriedades
+ *
+ * @package Action
+ * @subpackage Admin
+ *
+ */
+ function delibera_edit_columns($columns)
 {
 	$columns[ 'tema' ] = __( 'Tema' );
 	$columns[ 'situacao' ] = __( 'Situação' );
@@ -153,6 +176,13 @@ function delibera_edit_columns($columns)
 
 add_filter('manage_edit-pauta_columns', 'delibera_edit_columns');
 
+/**
+ *
+ *
+ * @package Action
+ * @subpackage Admin
+ *
+ */
 function delibera_post_custom_column($column)
 {
 	global $post;
@@ -183,6 +213,13 @@ function delibera_post_custom_column($column)
 
 add_action('manage_posts_custom_column',  'delibera_post_custom_column');
 
+/**
+ *
+ *
+ * @package Action
+ * @subpackage Admin
+ *
+ */
 function delibera_admin_list_options($actions, $post)
 {
 	if(get_post_type($post) == 'pauta' && $post->post_status == 'publish' )
@@ -213,6 +250,13 @@ function delibera_admin_list_options($actions, $post)
 
 add_filter('post_row_actions','delibera_admin_list_options', 10, 2);
 
+/**
+ *
+ *
+ * @package Action
+ * @subpackage Admin
+ *
+ */
 function delibera_restrict_listings()
 {
 	global $typenow;

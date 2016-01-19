@@ -1,10 +1,14 @@
 <?php
 /**
+ * Utilização do arquivo diretamente no tema.
+ */
+
+/**
  * Template utilizado ao tentar editar um comentário na pauta
  *
  * É adicionado formulário e botões para editar ou remover comentários
  *
- * @namespace Template
+ * @package Template
  */
 function delibera_template_edit_comment() {}
 ?>

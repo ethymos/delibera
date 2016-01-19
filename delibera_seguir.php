@@ -1,9 +1,22 @@
 <?php
+/**
+ * Ações para gerenciar usuários que querem seguir determinada pauta
+ */
+
+/**
+ * Contabiliza novo seguidor nos metadados da pauta utilizando `update_post_meta`
+ *
+ * @param $ID
+ * @param $type 
+ *
+ * @package Pauta
+ * @subpackage Seguir
+ */
 function delibera_seguir($ID, $type = 'seguir')
 {
 	$user_id = get_current_user_id();
 	$ip = $_SERVER['REMOTE_ADDR'];
-	
+
 	if($type == 'seguir')
 	{
 		$postID = $ID;
@@ -43,6 +56,14 @@ function delibera_seguir($ID, $type = 'seguir')
 	}
 }
 
+/**
+ * Busca número de seguidores da pauta utilizando `get_post_meta`
+ *
+ * @param $ID
+ *
+ * @package Pauta
+ * @subpackage Seguir
+ */
 function delibera_numero_seguir($ID)
 {
 	$postID = $ID;
@@ -50,6 +71,15 @@ function delibera_numero_seguir($ID)
 	return $nseguir;
 }
 
+/**
+ * Verifica se usuário logado já segue pauta
+ *
+ * @param $postID
+ * @param $user_id
+ *
+ * @package Pauta
+ * @subpackage Seguir
+ */
 function delibera_ja_seguiu($postID, $user_id)
 {
 	$seguiram = get_post_meta($postID, 'delibera_seguiram', true);
@@ -67,6 +97,12 @@ function delibera_ja_seguiu($postID, $user_id)
 	return false;
 }
 
+
+/**
+ * Hook executado quando algum usuário segue uma pauta 
+ *
+ * @package Action
+ */
 function delibera_seguir_callback()
 {
 	if(array_key_exists('seguir_id', $_POST) && array_key_exists('type', $_POST))
@@ -75,13 +111,25 @@ function delibera_seguir_callback()
 	}
 	die();
 }
+
 add_action('wp_ajax_delibera_seguir', 'delibera_seguir_callback');
+
 add_action('wp_ajax_nopriv_delibera_seguir', 'delibera_seguir_callback');
 
+/**
+ * Busca quais ID dos usuários que seguem a pauta
+ *
+ * @param $ID - ID da pauta
+ * @param $return - tipo do retorno desejado (array ou string)
+ * @return Array - retorna IDS que seguem a pauta 
+ *
+ * @package Pauta
+ * @subpackage Seguir
+ */
 function delibera_get_quem_seguiu($ID, $return = 'array')
 {
 	$seguiram_hora = get_post_meta($ID, 'delibera_seguiram', true);
-	
+
 	if(!is_array($seguiram_hora)) $seguiram_hora = array();
 	switch($return)
 	{
@@ -116,6 +164,6 @@ function delibera_get_quem_seguiu($ID, $return = 'array')
 			return $seguiram_hora;
 		break;
 	}
-	
+
 }
 ?>
