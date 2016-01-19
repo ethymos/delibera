@@ -162,3 +162,27 @@ function delibera_form_table($rows) {
 	$content .= '</table>';
 	return $content;
 }
+
+/**
+ *
+ * Pega os ultimos conteúdos
+ * @param string $tipo (option) 'pauta' ou 'comments', padrão 'pauta'
+ * @param array $args (option) query padrão do post ou do comments
+ * @param int $count (option) padrão 5
+ */
+function delibera_ultimas($tipo = 'pauta', $args = array(), $count = 5)
+{
+	switch($tipo)
+	{
+    case 'pauta':
+        $filtro = array('orderby' => 'modified', 'order' => 'DESC', 'posts_per_page' => $count);
+        $filtro = array_merge($filtro, $args);
+        return delibera_get_pautas_em($filtro, false);
+		break;
+    case 'comments':
+        $filtro = array('orderby' => 'comment_date_gmt', 'order' => 'DESC', 'number' => $count, 'post_type' => 'pauta');
+        $filtro = array_merge($filtro, $args);
+        return delibera_wp_get_comments($filtro);
+		break;
+	}
+}

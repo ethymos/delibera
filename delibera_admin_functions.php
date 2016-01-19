@@ -143,3 +143,42 @@ function delibera_edit_comment($comment)
 }
 
 add_filter('add_meta_boxes_comment', 'delibera_edit_comment');
+function delibera_edit_columns($columns)
+{
+	$columns[ 'tema' ] = __( 'Tema' );
+	$columns[ 'situacao' ] = __( 'Situação' );
+	$columns[ 'prazo' ] = __( 'Prazo' );
+	return $columns;
+}
+
+add_filter('manage_edit-pauta_columns', 'delibera_edit_columns');
+
+function delibera_post_custom_column($column)
+{
+	global $post;
+
+	switch ( $column )
+	{
+    case 'tema':
+        echo the_terms($post->ID, "tema");
+        break;
+    case 'situacao':
+        echo delibera_get_situacao($post->ID)->name;
+        break;
+    case 'prazo':
+        $data = "";
+        $prazo = delibera_get_prazo($post->ID, $data);
+        if($prazo == -1)
+        {
+            echo __('Encerrado', 'delibera');
+        }
+        elseif($data != "")
+        {
+            echo $data." (".$prazo.($prazo == 1 ? __(" dia", 'delibera') : __(" dias", 'delibera')).")";
+        }
+        break;
+	}
+
+}
+
+add_action('manage_posts_custom_column',  'delibera_post_custom_column');
