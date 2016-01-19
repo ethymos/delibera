@@ -340,7 +340,12 @@ function delibera_computa_votos($postID, $votos = null)
 		$voto = get_comment_meta($voto_comment->comment_ID, 'delibera_votos', true);
 		foreach ($voto as $voto_para)
 		{
-			$encaminhamentos_votos[$voto_para]++;
+            if (isset($encaminhamentos_votos[$voto_para]))
+            {
+                $encaminhamentos_votos[$voto_para]++;
+            } else {
+                $encaminhamentos_votos[$voto_para] = 1;
+            }
 		}
 	}
 	$maisvotado = array(-1, -1);
