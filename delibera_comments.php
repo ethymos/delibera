@@ -482,3 +482,323 @@ function delibera_pre_edit_comment($dados)
 //add_filter('comment_save_pre', 'delibera_pre_edit_comment'); //TODO Verificar edição
 
 // require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_template.php';
+
+function delibera_get_comments_padrao($args = array(), $file = '/comments.php' )
+{
+	global $delibera_comments_padrao;
+	$delibera_comments_padrao = true;
+	comments_template($file);
+	$delibera_comments_padrao = false;
+}
+
+/**
+ * Retorna comentários do Delibera de acordo com o tipo.
+ *
+ * @param int $post_id
+ * @param string|array $tipo um tipo ou um array de tipos
+ * @return array
+ */
+function delibera_get_comments($post_id, $tipo, $args = array())
+{
+	if (is_string($tipo)) {
+		$tipo = array($tipo);
+	}
+
+	$args = array_merge(array('post_id' => $post_id), $args);
+	$comments = get_comments($args);
+	$ret = array();
+	foreach ($comments as $comment)
+	{
+		$comment_tipo = get_comment_meta($comment->comment_ID, 'delibera_comment_tipo', true);
+		if (in_array($comment_tipo, $tipo)) {
+			$ret[] = $comment;
+		}
+	}
+	return $ret;
+}
+
+require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_comments.php';
+
+
+function delibera_wp_list_comments($args = array(), $comments = null)
+{
+	global $post;
+	global $delibera_comments_padrao;
+
+	if(get_post_type($post) == "pauta")
+	{
+		$situacao = delibera_get_situacao($post->ID);
+
+		if($delibera_comments_padrao === true)
+		{
+			$args['post_id'] = $post->ID;
+			$args['walker'] = new Delibera_Walker_Comment_padrao();
+			$comments = get_comments($args);
+			$ret = array();
+			foreach ($comments as $comment)
+			{
+				$tipo_tmp = get_comment_meta($comment->comment_ID, 'delibera_comment_tipo', true);
+				if(strlen($tipo_tmp) <= 0 || $tipo_tmp === false)
+				{
+					$ret[] = $comment;
+				}
+			}
+			wp_list_comments($args, $ret);
+		}
+		elseif($situacao->slug == 'validacao')
+		{
+			//comment_form();
+			$args['walker'] = new Delibera_Walker_Comment();
+			//$args['callback'] = 'delibera_comments_list';
+			?>
+			<div class="delibera_lista_validacoes">
+			<?php
+			wp_list_comments($args, $comments);
+			?>
+			</div>
+			<?php
+		}
+		elseif($situacao->slug == 'comresolucao')
+		{
+			$args['walker'] = new Delibera_Walker_Comment();
+			wp_list_comments($args, $comments);
+
+			$encaminhamentos = delibera_get_comments_encaminhamentos($post->ID);
+			$discussoes = delibera_get_comments_discussoes($post->ID);
+			?>
+			<div class="delibera_encaminhamentos_inferior">
+    			<?php wp_list_comments($args, $encaminhamentos); ?>
+			</div>
+
+			<div id="comments" class="delibera_opinioes_inferior">
+			    <hr>
+			    <h2 class="comments-title bottom"><?php _e('Histórico da pauta', 'delibera'); ?></h2>
+			    <?php wp_list_comments($args, $discussoes); ?>
+			</div>
+
+			<?php
+		}
+		else
+		{
+			$args['walker'] = new Delibera_Walker_Comment();
+			//$args['callback'] = 'delibera_comments_list';
+			wp_list_comments($args, $comments);
+		}
+	}
+	else
+	{
+		wp_list_comments($args, $comments);
+	}
+}
+
+
+/**
+ * Retrieve a list of comments.
+ *
+ * The comment list can be for the blog as a whole or for an individual post.
+ *
+ * The list of comment arguments are 'status', 'orderby', 'comment_date_gmt',
+ * 'order', 'number', 'offset', and 'post_id'.
+ *
+ * @since 2.7.0
+ * @uses $wpdb
+ *
+ * @param mixed $args Optional. Array or string of options to override defaults.
+ * @return array List of comments.
+ */
+function delibera_wp_get_comments( $args = '' ) {
+	$query = new delibera_WP_Comment_Query();
+	return $query->query( $args );
+}
+
+function delibera_get_comments_validacoes($post_id)
+{
+	return delibera_get_comments($post_id, 'validacao');
+}
+
+function delibera_get_comments_discussoes($post_id)
+{
+	return delibera_get_comments($post_id, 'discussao');
+}
+
+function delibera_get_comments_encaminhamentos($post_id)
+{
+	return delibera_get_comments($post_id, 'encaminhamento');
+}
+
+/**
+ * Retorna os encaminhamentos dos tipos 'encaminhamento' e
+ * 'encaminhamento_selecionado' (aqueles que foram selecionados
+ * pelo relator para ir para votação).
+ *
+ * @param int $post_id
+ * @return array
+ */
+function delibera_get_comments_all_encaminhamentos($post_id)
+{
+    return delibera_get_comments($post_id, array('encaminhamento', 'encaminhamento_selecionado'));
+}
+
+/**
+ * Retorna os encaminhamentos do tipo 'encaminhamento_selecionado'
+ * (aqueles que foram selecionados pelo relator para ir para votação).
+ *
+ * @param int $post_id
+ * @return array
+ */
+function delibera_get_comments_encaminhamentos_selecionados($post_id)
+{
+    return delibera_get_comments($post_id, 'encaminhamento_selecionado');
+}
+
+
+function delibera_get_comments_votacoes($post_id)
+{
+	return delibera_get_comments($post_id, 'voto');
+}
+
+function delibera_get_comments_resolucoes($post_id)
+{
+	if(has_filter('delibera_get_resolucoes'))
+	{
+		return apply_filters('delibera_get_resolucoes', delibera_get_comments($post_id, 'resolucao'));
+	}
+	return delibera_get_comments($post_id, 'resolucao');
+}
+
+/**
+ *
+ * Busca comentários com o tipo em tipos
+ * @param array $comments lista de comentários a ser filtrada
+ * @param array $tipos tipos aceitos
+ */
+function delibera_comments_filter_portipo($comments, $tipos)
+{
+	$ret = array();
+
+	foreach ($comments as $comment)
+	{
+		$tipo = get_comment_meta($comment->comment_ID, 'delibera_comment_tipo', true);
+		if(array_search($tipo, $tipos) !== false)
+		{
+			$ret[] = $comment;
+		}
+	}
+	return $ret;
+}
+
+/**
+ *
+ * Filtro que retorna Comentário filtrados pela a situação da pauta
+ * @param array $comments
+ * @param int $postID
+ * @return array Comentários filtrados
+ */
+function delibera_get_comments_filter($comments)
+{
+	global $delibera_comments_padrao;
+
+	if($delibera_comments_padrao === true) return $comments;
+
+	$ret = array();
+
+	if(count($comments) > 0)
+	{
+		if(get_post_type($comments[0]->comment_post_ID) == "pauta")
+		{
+			$situacao = delibera_get_situacao($comments[0]->comment_post_ID);
+			switch ($situacao->slug)
+			{
+				case 'validacao':
+				{
+					$ret = delibera_comments_filter_portipo($comments, array('validacao'));
+				}break;
+				case 'discussao':
+				{
+					$ret = delibera_comments_filter_portipo($comments, array('discussao', 'encaminhamento'));
+				}break;
+				case 'relatoria':
+				{
+					$ret = delibera_comments_filter_portipo($comments, array('discussao', 'encaminhamento'));
+				}break;
+				case 'emvotacao':
+				{
+					$ret = delibera_comments_filter_portipo($comments, array('voto'));
+				}break;
+				case 'comresolucao':
+				{
+					$ret = delibera_comments_filter_portipo($comments, array('resolucao'));
+				}break;
+			}
+			return $ret;
+		}
+	}
+	return $comments;
+}
+
+add_filter('comments_array', 'delibera_get_comments_filter');
+
+function delibera_comment_number($postID, $tipo)
+{
+	switch($tipo)
+	{
+		case 'validacao':
+			return doubleval(get_post_meta($postID, 'delibera_numero_comments_validacoes', true));
+		break;
+		case 'discussao':
+			return doubleval(get_post_meta($postID, 'delibera_numero_comments_discussoes', true));
+		break;
+		case 'encaminhamento':
+			return doubleval(get_post_meta($postID, 'delibera_numero_comments_encaminhamentos', true));
+		break;
+		case 'voto':
+			return doubleval(get_post_meta($postID, 'delibera_numero_comments_votos', true));
+		break;
+		/*case 'resolucao':
+			return doubleval(get_post_meta($postID, 'delibera_numero_comments_resolucoes', true)); TODO Número de resoluções, baseado no mínimo de votos, ou marcação especial
+		break;*/
+		case 'todos':
+			return get_post($postID)->comment_count;
+		break;
+		default:
+			return doubleval(get_post_meta($postID, 'delibera_numero_comments_padroes', true));
+		break;
+	}
+}
+
+function delibera_comment_number_filtro($count, $postID)
+{
+	if (!is_pauta()) {
+		return $count;
+	}
+	$situacao = delibera_get_situacao($postID);
+
+	if (!$situacao) {
+		return;
+	}
+
+	switch($situacao->slug)
+	{
+		case 'validacao':
+			return doubleval(get_post_meta($postID, 'delibera_numero_comments_validacoes', true));
+		break;
+		case 'discussao':
+		case 'comresolucao':
+			return doubleval(
+				get_post_meta($postID, 'delibera_numero_comments_encaminhamentos', true) +
+				get_post_meta($postID, 'delibera_numero_comments_discussoes', true)
+			);
+		break;
+		case 'relatoria':
+			return doubleval(get_post_meta($postID, 'delibera_numero_comments_encaminhamentos', true));
+		break;
+		case 'emvotacao':
+			return doubleval(get_post_meta($postID, 'delibera_numero_comments_votos', true));
+		break;
+		default:
+			return doubleval(get_post_meta($postID, 'delibera_numero_comments_padroes', true));
+		break;
+	}
+}
+
+add_filter('get_comments_number', 'delibera_comment_number_filtro', 10, 2);
