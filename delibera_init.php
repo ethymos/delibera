@@ -304,7 +304,8 @@ function delibera_print_styles()
 {
 
 }
-add_action('wp_print_styles', 'delibera_print_styles');*/
+add_action('wp_print_styles', 'delibera_print_styles');
+*/
 
 function delibera_print_styles()
 {
