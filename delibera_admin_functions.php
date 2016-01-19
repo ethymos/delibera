@@ -85,3 +85,61 @@ function delibera_custom_bulk_admin_notices() {
 }
 
 add_action('admin_notices', 'delibera_custom_bulk_admin_notices');
+
+/**
+ *
+ * Comentário na tela de Edição na administração
+ * @param WP_comment $comment
+ */
+function delibera_edit_comment($comment)
+{
+	if(get_post_type($comment->comment_post_ID) == "pauta")
+	{
+		$tipo = get_comment_meta($comment->comment_ID, "delibera_comment_tipo", true);
+		switch ($tipo)
+		{
+			case 'validacao':
+			{
+				$validacao = get_comment_meta($comment->comment_ID, "delibera_validacao", true);
+				$sim = ($validacao == "S" ? true : false);
+				?>
+				<div id="painel_validacao delibera-comment-text" >
+					<?php if($sim){ ?>
+					<label class="delibera-aceitou-view"><?php _e('Aceitou','delibera'); ?></label>
+					<?php }else { ?>
+					<label class="delibera-rejeitou-view"><?php _e('Rejeitou','delibera'); ?></label>
+					<?php } ?>
+				</div>
+				<script type="text/javascript">
+					var quickdiv = document.getElementById('postdiv');
+					quickdiv.style.display = 'none';
+				</script>
+				<?php
+			}break;
+			case 'discussao':
+			case 'encaminhamento':
+			{
+                if (delibera_pautas_suportam_encaminhamento()) {
+                    $tipo = get_comment_meta($comment->comment_ID, "delibera_comment_tipo", true);
+                    $checked = $tipo == "discussao" ? "" : ' checked="checked" ';
+                    ?>
+                    <label class="delibera-encaminha-label">
+                        <input type="radio" name="delibera_encaminha"
+                               value="N" <?php checked($tipo, 'discussao'); ?> /><?php _e('Opinião', 'delibera'); ?>
+                    </label>
+                    <label class="delibera-encaminha-label">
+                        <input type="radio" name="delibera_encaminha"
+                               value="S" <?php checked($tipo, 'encaminhamento'); ?> /><?php _e('Proposta de encaminhamento', 'delibera'); ?>
+                    </label>
+
+                <?php
+
+                } else { ?>
+                    <input type="hidden" name="delibera_encaminha" value="N" />
+                <?php }
+			}break;
+		}
+	}
+}
+
+add_filter('add_meta_boxes_comment', 'delibera_edit_comment');
