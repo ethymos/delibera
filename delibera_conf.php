@@ -1,4 +1,6 @@
 <?php
+require_once('delibera_themes.php');
+require_once('delibera_roles.php');
 
 /**
  * Retorna todas as configurações do delibera
