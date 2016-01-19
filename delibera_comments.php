@@ -1,6 +1,7 @@
 <?php
 require_once('delibera_comments_query.php');
 require_once('delibera_comments_template.php');
+require_once('delibera_comments_edit.php');
 
 
 function delibera_get_comment_type($comment)

@@ -804,7 +804,6 @@ add_action ('save_post', 'delibera_save_post', 1, 2);
 require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_curtir.php';
 require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_discordar.php';
 require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_seguir.php';
-require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_edit_comment.php';
 
 if(file_exists(__DIR__.DIRECTORY_SEPARATOR.'mailer') && file_exists(__DIR__.DIRECTORY_SEPARATOR.'mailer'.DIRECTORY_SEPARATOR.'delibera_mailer.php'))
 {
