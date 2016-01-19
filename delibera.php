@@ -1195,13 +1195,6 @@ function delibera_ultimas($tipo = 'pauta', $args = array(), $count = 5)
 	}
 }
 
-function delibera_timeline($post_id = false, $tipo_data = false)
-{
-	require_once __DIR__.DIRECTORY_SEPARATOR.'timeline/delibera_timeline.php';
-	$timeline = new delibera_timeline();
-	$timeline->generate($post_id, $tipo_data);
-}
-
 function delibera_the_posts($posts)
 {
 	if (empty($posts)) return $posts;
