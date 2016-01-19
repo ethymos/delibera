@@ -225,3 +225,38 @@ function delibera_timeline_template_redirect()
 }
 
 add_action('template_redirect', 'delibera_timeline_template_redirect', 5);
+
+function delibera_the_posts($posts)
+{
+	if (empty($posts)) return $posts;
+
+	$timeline_found = false; // use this flag to see if styles and scripts need to be enqueued
+	$relatoria = false;
+	foreach ($posts as $post)
+	{
+		if (stripos($post->post_content, '[delibera_timeline') !== false)
+		{
+			$timeline_found = true; // bingo!
+		}
+		if(get_post_type($post) == 'pauta')
+		{
+			$situacao = delibera_get_situacao($post->ID);
+			if($situacao->slug == 'relatoria')
+			{
+				$relatoria = true;
+			}
+		}
+	}
+
+    if ( ($timeline_found) && (!is_admin()) )
+	{
+		// enqueue here
+		wp_enqueue_style('delibera_timeline_css',  WP_CONTENT_URL.'/plugins/delibera/timeline/delibera_timeline.css');
+		wp_enqueue_script( 'delibera_timeline_js', WP_CONTENT_URL.'/plugins/delibera/timeline/js/delibera_timeline.js', array( 'jquery' ));
+		wp_enqueue_script( 'jquery-ui-draggable');
+	}
+
+	return $posts;
+}
+
+add_filter('the_posts', 'delibera_the_posts'); // the_posts gets triggered before wp_head

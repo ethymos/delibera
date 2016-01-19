@@ -1,5 +1,4 @@
 <?php
-require_once(__DIR__.DIRECTORY_SEPARATOR.'delibera_topic_deadline.php');
 
 function delibera_pauta_redirect_filter($location, $post_id = null) {
 
@@ -9,13 +8,6 @@ function delibera_pauta_redirect_filter($location, $post_id = null) {
 		return $location;
 }
 add_filter('redirect_post_location', 'delibera_pauta_redirect_filter', '99');
-
-require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_conf_themes.php';
-
-if(file_exists(__DIR__.DIRECTORY_SEPARATOR.'delibera_filtros.php'))
-{
-	require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_filtros.php';
-}
 
 function delibera_pauta_custom_meta()
 {
@@ -583,3 +575,143 @@ function delibera_save_post($post_id, $post)
 }
 
 add_action ('save_post', 'delibera_save_post', 1, 2);
+
+/***
+ * Verifica se as pautas devem suportar sugestão de encaminhamento ou se
+ * as propostas entram apenas como opinião. Muito útil para consultas públicas.
+ *
+ * @return bool
+ */
+function delibera_pautas_suportam_encaminhamento()
+{
+    $options = delibera_get_config();
+
+    if ( $options['pauta_suporta_encaminhamento'] == 'S' ) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+add_action('init', 'delibera_nova_pauta_create_action');
+function delibera_nova_pauta_create_action(){
+    $opt = delibera_get_config();
+    if ($opt['criar_pauta_pelo_front_end'] == 'S' && is_user_logged_in() && isset($_POST['_wpnonce']) && wp_verify_nonce($_POST['_wpnonce'], 'delibera_nova_pauta')) {
+        $title = $_POST['nova-pauta-titulo'];
+        $content = $_POST['nova-pauta-conteudo'];
+        $excerpt = $_POST['nova-pauta-resumo'];
+
+        $pauta = array();
+        $pauta['post_title'] = $title;
+        $pauta['post_excerpt'] = $excerpt;
+        $pauta['post_type'] = 'pauta';
+
+        //Check if there is any file uploaded
+        // If there is any, then ignore 'content' and use File.
+        // else do add 'pauta' with the text content
+        if(!empty($_FILES['post_pdf_contribution']['name'])) {
+            // Setup the array of supported file types. In this case, it's just PDF.
+            $supported_types = array('application/pdf');
+            // Get the file type of the upload
+            $pdf_contribution = wp_check_filetype(basename($_FILES['post_pdf_contribution']['name']));
+            $sent_file_type = $pdf_contribution['type'];
+            // Check if the type is supported. If not, throw an error.
+            if (!in_array($sent_file_type, $supported_types)) {
+                //TODO: Improve this message and avoid wp_die
+                wp_die("O arquivo para web não é um PDF (formato permitido).");
+            }
+            $uploaded_file = wp_upload_bits($_FILES['pauta_pdf_contribution']['name'], null, file_get_contents($_FILES['pauta_pdf_contribution']['tmp_name']));
+            if(isset($uploaded_file['error']) && $uploaded_file['error'] != 0) {
+                wp_die('Erro ao salvar arquivo para Web. O erro foi: ' . $upload['error']);
+            } else {
+                $pauta['pauta_pdf_contribution'] = $uploaded_file['url'];
+            }
+        } else {
+            $pauta['post_content'] = $content;
+        }
+
+        // para que a situação da pauta seja criada corretamente,
+        // é necessário criar a pauta como rascunho para depois publicar no final desta função
+        $pauta['post_status'] = 'draft';
+
+        $pauta_id = wp_insert_post($pauta);
+
+        if(is_int($pauta_id) && $pauta_id > 0){
+
+            /* Os valores adicionados ao array $_POST são baseados no if da função delibera_save_post(),
+             * comentado abaixo
+            if(
+                ( // Se tem validação, tem que ter o prazo
+                    $opt['validacao'] == 'N' ||
+                    (array_key_exists('prazo_validacao', $_POST) && array_key_exists('min_validacoes', $_POST) )
+                ) &&
+                ( // Se tem relatoria, tem que ter o prazo
+                    $opt['relatoria'] == 'N' ||
+                    array_key_exists('prazo_relatoria', $_POST)
+                ) &&
+                ( // Se tem relatoria, e é preciso eleger o relator, tem que ter o prazo para eleição
+                    $opt['relatoria'] == 'N' ||
+                    (
+                        $opt['eleicao_relator'] == 'N' ||
+                        array_key_exists('prazo_eleicao_relator', $_POST)
+                    )
+                ) &&
+                array_key_exists('prazo_discussao', $_POST) &&
+                array_key_exists('prazo_votacao', $_POST)
+             )
+            */
+
+            if($opt['validacao'] == 'S'){
+                $_POST['prazo_validacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_validacao'].' DAYS'));
+                $_POST['min_validacoes'] = $opt['minimo_validacao'];
+            }
+
+            if($opt['relatoria'] == 'S'){
+                $_POST['prazo_relatoria'] = date('d/m/Y', strtotime ('+'.$opt['dias_relatoria'].' DAYS'));
+                if($opt['eleicao_relator'] == 'S'){
+                    $_POST['prazo_eleicao_relator'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao_relator'].' DAYS'));
+                }
+            }
+
+			if (trim($opt['data_fixa_nova_pauta_externa']) != '') {
+				$prazo_discussao = DateTime::createFromFormat('d/m/Y', $opt['data_fixa_nova_pauta_externa']);
+				$_POST['prazo_discussao'] = $prazo_discussao->format('d/m/Y');
+				$_POST['prazo_votacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao'].' DAYS', $prazo_discussao->getTimestamp()));
+			} else {
+				$_POST['prazo_discussao'] = date('d/m/Y', strtotime ('+'.$opt['dias_discussao'].' DAYS'));
+				$_POST['prazo_votacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao'].' DAYS'));
+			}
+
+            // isto é necessário por causa do if da função delibera_publish_pauta()
+            $_POST['publish'] = 'Publicar';
+            $_POST['prev_status'] = 'draft';
+
+            // verifica se todos os temas enviados por post são válidos
+            $temas = get_terms('tema', array('hide_empty'    => true));
+            $temas_ids = array();
+
+            if(isset($_POST['tema']) && is_array($_POST['tema']))
+                foreach($temas as $tema)
+                    if(in_array ($tema->term_id, $_POST['tema']))
+                        $temas_ids[] = $tema->term_id;
+
+               // coloca  o s termos de temas no post
+              wp_set_post_terms($pauta_id, $temas_ids, 'tema');
+
+               // publica o post
+              wp_publish_post($pauta_id);
+
+               // isto serve para criar o slug corretamente,
+                // já que no wp _ insert_post não cria o slug quando o status é draft e o wp_publish_post tb não cria o slug
+              unset($pauta['post_status']);
+              $pauta['ID'] = $pauta_id;
+              $pauta['post_name'] = sanitize_post_field('post_name', $title, $pauta_id, 'save');
+              wp_update_post($pauta);
+
+               // redireciona para a pauta criada
+              $permalink = get_post_permalink($pauta_id);
+              wp_safe_redirect($permalink);
+              die;
+          }
+      }
+ }

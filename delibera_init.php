@@ -401,3 +401,53 @@ function delibera_config_menu()
 		do_action('delibera_menu_itens', $base_page);
 	}
 }
+
+/**
+ *
+ * Insere term no banco e atualizar línguas do qtranslate
+ * @param string $label
+ * @param string $tax Taxonomy
+ * @param array $term EX: array('description'=> __('Español'),'slug' => 'espanol', 'slug' => 'espanol')
+ * @param array $idiomas EX: array('qtrans_term_en' => 'United States of America', 'qtrans_term_pt' => 'Estados Unidos da América', 'qtrans_term_es' => 'Estados Unidos de América'
+ */
+function delibera_insert_term($label, $tax, $term, $idiomas = array())
+{
+	if(term_exists($term['slug'], $tax, null) == false)
+	{
+		wp_insert_term($label, $tax, $term);
+		global $q_config;
+		if(count($idiomas) > 0 && function_exists('qtrans_stripSlashesIfNecessary'))
+		{
+			if(isset($idiomas['qtrans_term_'.$q_config['default_language']]) && $idiomas['qtrans_term_'.$q_config['default_language']]!='')
+			{
+				$default = htmlspecialchars(qtrans_stripSlashesIfNecessary($idiomas['qtrans_term_'.$q_config['default_language']]), ENT_NOQUOTES);
+				if(!isset($q_config['term_name'][$default]) || !is_array($q_config['term_name'][$default])) $q_config['term_name'][$default] = array();
+				foreach($q_config['enabled_languages'] as $lang) {
+					$idiomas['qtrans_term_'.$lang] = qtrans_stripSlashesIfNecessary($idiomas['qtrans_term_'.$lang]);
+					if($idiomas['qtrans_term_'.$lang]!='') {
+						$q_config['term_name'][$default][$lang] = htmlspecialchars($idiomas['qtrans_term_'.$lang], ENT_NOQUOTES);
+					} else {
+						$q_config['term_name'][$default][$lang] = $default;
+					}
+				}
+				update_option('qtranslate_term_name',$q_config['term_name']);
+			}
+		}
+	}
+}
+
+function delibera_convert_situacao_id_to_taxonomy_term_in_query(&$query)
+{
+	global $pagenow;
+	$qv = &$query->query_vars;
+	if (isset($qv['post_type']) &&
+		$qv['post_type'] == 'pauta' &&
+		$pagenow=='edit.php' &&
+		isset($qv['situacao'])
+	)
+	{
+		$situacao = get_term_by('id', $_REQUEST['situacao'], 'situacao');
+		$qv['situacao'] = $situacao->slug;
+	}
+}
+add_filter('parse_query','delibera_convert_situacao_id_to_taxonomy_term_in_query');

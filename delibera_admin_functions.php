@@ -182,3 +182,56 @@ function delibera_post_custom_column($column)
 }
 
 add_action('manage_posts_custom_column',  'delibera_post_custom_column');
+
+function delibera_admin_list_options($actions, $post)
+{
+	if(get_post_type($post) == 'pauta' && $post->post_status == 'publish' )
+	{
+		if(current_user_can('forcar_prazo'))
+		{
+			$url = 'admin.php?action=delibera_forca_fim_prazo_action&amp;post='.$post->ID;
+			$url = wp_nonce_url($url, 'delibera_forca_fim_prazo_action'.$post->ID);
+			$actions['forcar_prazo'] = '<a href="'.$url.'" title="'.__('Forçar fim de prazo','delibera').'" >'.__('Forçar fim de prazo','delibera').'</a>';
+
+			$url = 'admin.php?action=delibera_nao_validado_action&amp;post='.$post->ID;
+			$url = wp_nonce_url($url, 'delibera_nao_validado_action'.$post->ID);
+			$actions['nao_validado'] = '<a href="'.$url.'" title="'.__('Invalidar','delibera').'" >'.__('Invalidar','delibera').'</a>';
+
+		}
+		if(delibera_get_situacao($post->ID)->slug == 'naovalidada' && current_user_can('delibera_reabrir_pauta'))
+		{
+			$url = 'admin.php?action=delibera_reabrir_pauta_action&amp;post='.$post->ID;
+			$url = wp_nonce_url($url, 'delibera_reabrir_pauta_action'.$post->ID);
+			$actions['reabrir'] = '<a href="'.$url.'" title="'.__('Reabrir','delibera').'" >'.__('Reabrir','delibera').'</a>';
+		}
+
+	}
+
+	//print_r(_get_cron_array());
+	return $actions;
+}
+
+add_filter('post_row_actions','delibera_admin_list_options', 10, 2);
+
+function delibera_restrict_listings()
+{
+	global $typenow;
+	global $wp_query;
+	if ($typenow=='pauta')
+	{
+		$taxonomy = 'situacao';
+		$situacao_taxonomy = get_taxonomy($taxonomy);
+		wp_dropdown_categories(array(
+			'show_option_all' => sprintf(__('Mostrar todas as %s','delibera'),$situacao_taxonomy->label),
+			'taxonomy' => $taxonomy,
+			'name' => 'situacao',
+			'orderby' => 'id',
+			'selected' => isset($_REQUEST['situacao']) ? $_REQUEST['situacao'] : '',
+			'hierarchical' => false,
+			'depth' => 1,
+			'show_count' => true, // This will give a view
+			'hide_empty' => true, // This will give false positives, i.e. one's not empty related to the other terms.
+		));
+	}
+}
+add_action('restrict_manage_posts','delibera_restrict_listings');
