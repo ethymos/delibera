@@ -126,8 +126,11 @@ function delibera_get_comment_link($comment_pass = false)
 
 function delibera_comment_post_redirect( $location ) {
 	global $post, $comment_id;
-
-	return ( $post->post_type == 'pauta' ) ? preg_replace("/#comment-([\d]+)/", "#delibera-comment-" . $comment_id, $location) : $location;
+    if (empty($global)) {
+        return $location;
+    } else {
+        return ( $post->post_type == 'pauta' ) ? preg_replace("/#comment-([\d]+)/", "#delibera-comment-" . $comment_id, $location) : $location;
+    }
 }
 add_filter( 'comment_post_redirect', 'delibera_comment_post_redirect' );
 
