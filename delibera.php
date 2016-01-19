@@ -133,7 +133,7 @@ function delibera_pauta_redirect_filter($location, $post_id = null) {
 }
 add_filter('redirect_post_location', 'delibera_pauta_redirect_filter', '99');
 
-require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_themes.php';
+require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_conf_themes.php';
 
 if(file_exists(__DIR__.DIRECTORY_SEPARATOR.'delibera_filtros.php'))
 {
