@@ -28,7 +28,7 @@ class delibera_WP_Comment_Query extends WP_Comment_Query
 			'post_parent' => '',
 			'post_status' => '',
 			'post_type' => '',
-			'tax_query' => '', 
+			'tax_query' => '',
 			'status' => '',
 			'type' => '',
 			'user_id' => '',
@@ -151,9 +151,9 @@ class delibera_WP_Comment_Query extends WP_Comment_Query
 			}
 			$join .= $compact['join'];
 			$where .= $compact['where'];
-		} 
-		
-		
+		}
+
+
 		$pieces = array( 'fields', 'join', 'where', 'orderby', 'order', 'limits' );
 		$clauses = apply_filters_ref_array( 'comments_clauses', array( compact( $pieces ), &$this ) );
 		foreach ( $pieces as $piece )
@@ -170,6 +170,6 @@ class delibera_WP_Comment_Query extends WP_Comment_Query
 
 		return $comments;
 	}
-	
-} 
+
+}
 ?>
