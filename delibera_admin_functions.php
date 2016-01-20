@@ -1,6 +1,7 @@
 <?php
 /**
  * Realiza modificações no painel administrativo do wordpress
+ * @package Pauta\Admin
  */
 
 /**
@@ -8,8 +9,6 @@
  *
  * @property admin_footer
  * @return null
- * @package Action
- * @subpackage Admin
  */
 function delibera_custom_bulk_admin_footer() {
 
@@ -42,8 +41,6 @@ add_action('admin_footer', 'delibera_custom_bulk_admin_footer');
 /**
  * Função que trata a ação de edição em massa do prazo de discussão
  *
- * @package Action
- * @subpackage Admin
  */
 function delibera_custom_bulk_action() {
 
@@ -81,8 +78,6 @@ add_action('load-edit.php', 'delibera_custom_bulk_action');
 /**
  * Função que exibe a mensagem de confirmação da alteração em massa
  *
- * @package Action
- * @subpackage Admin
  */
 function delibera_custom_bulk_admin_notices() {
 
@@ -103,8 +98,6 @@ add_action('admin_notices', 'delibera_custom_bulk_admin_notices');
  * @param WP_comment $comment
  *
  * @property add_meta_boxes_comment
- * @package Action
- * @subpackage Admin
  */
 function delibera_edit_comment($comment)
 {
@@ -162,8 +155,7 @@ add_filter('add_meta_boxes_comment', 'delibera_edit_comment');
 /**
  * Internacionaliza label das propriedades
  *
- * @package Action
- * @subpackage Admin
+ * @param $columns
  *
  */
  function delibera_edit_columns($columns)
@@ -177,10 +169,9 @@ add_filter('add_meta_boxes_comment', 'delibera_edit_comment');
 add_filter('manage_edit-pauta_columns', 'delibera_edit_columns');
 
 /**
+ * Retorna valor de determinada coluna da pauta
  *
- *
- * @package Action
- * @subpackage Admin
+ * @param $columns
  *
  */
 function delibera_post_custom_column($column)
@@ -214,10 +205,9 @@ function delibera_post_custom_column($column)
 add_action('manage_posts_custom_column',  'delibera_post_custom_column');
 
 /**
- *
- *
- * @package Action
- * @subpackage Admin
+ * Inclui novas ações na lista do wp admin
+ * @param $columns
+ * @param $post
  *
  */
 function delibera_admin_list_options($actions, $post)
@@ -251,10 +241,7 @@ function delibera_admin_list_options($actions, $post)
 add_filter('post_row_actions','delibera_admin_list_options', 10, 2);
 
 /**
- *
- *
- * @package Action
- * @subpackage Admin
+ * Preenche lista de valores disponíveis para filtro da listagem do WP admin
  *
  */
 function delibera_restrict_listings()

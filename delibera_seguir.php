@@ -9,8 +9,7 @@
  * @param $ID
  * @param $type 
  *
- * @package Pauta
- * @subpackage Seguir
+ * @package Pauta\Seguir
  */
 function delibera_seguir($ID, $type = 'seguir')
 {
@@ -61,8 +60,7 @@ function delibera_seguir($ID, $type = 'seguir')
  *
  * @param $ID
  *
- * @package Pauta
- * @subpackage Seguir
+ * @package Pauta\Seguir
  */
 function delibera_numero_seguir($ID)
 {
@@ -77,8 +75,7 @@ function delibera_numero_seguir($ID)
  * @param $postID
  * @param $user_id
  *
- * @package Pauta
- * @subpackage Seguir
+ * @package Pauta\Seguir
  */
 function delibera_ja_seguiu($postID, $user_id)
 {
@@ -101,7 +98,7 @@ function delibera_ja_seguiu($postID, $user_id)
 /**
  * Hook executado quando algum usuário segue uma pauta 
  *
- * @package Action
+ * @package Pauta\Seguir
  */
 function delibera_seguir_callback()
 {
@@ -123,8 +120,7 @@ add_action('wp_ajax_nopriv_delibera_seguir', 'delibera_seguir_callback');
  * @param $return - tipo do retorno desejado (array ou string)
  * @return Array - retorna IDS que seguem a pauta 
  *
- * @package Pauta
- * @subpackage Seguir
+ * @package Pauta\Seguir
  */
 function delibera_get_quem_seguiu($ID, $return = 'array')
 {

@@ -1,9 +1,20 @@
 <?php
+/**
+ * Implementa classe utilizada para buscar comentários ao utilizar `wp_get_list_comments`
+ * @package Comentarios\Template
+ */
 
+/**
+ * Classe utilizada para hackear a forma de buscar os comentários
+ * 
+ * @see http://shinraholdings.com/621/custom-walker-to-extend-the-walker_comment-class/
+ */
 class Delibera_Walker_Comment_padrao extends Walker_Comment
 {
 
     /**
+     * Altera resultado da função `wp_get_list_comments` ao ser utilizado como walker
+     * 
      * @see Walker::start_el()
      * @since 2.7.0
      *
@@ -11,6 +22,7 @@ class Delibera_Walker_Comment_padrao extends Walker_Comment
      * @param object $comment Comment data object.
      * @param int $depth Depth of comment in reference to parents.
      * @param array $args
+     * @param int @current_object_id
      */
     function start_el(&$output, $comment, $depth = 0, $args = array(), $current_object_id = 0) {
         $depth++;

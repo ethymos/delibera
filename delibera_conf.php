@@ -1,6 +1,9 @@
 <?php
-require_once('delibera_conf_themes.php');
-require_once('delibera_conf_roles.php');
+/**
+ * Página de configuração do plugin.
+ * @package Configuracoes
+ */
+
 
 /**
  * Retorna todas as configurações do delibera
@@ -8,6 +11,7 @@ require_once('delibera_conf_roles.php');
  * salvo no banco para determinada opções retorna o
  * valor padrão.
  *
+ * @package Configuracoes\Template
  * @return array
  */
 function delibera_get_config() {
@@ -31,6 +35,17 @@ function delibera_get_config() {
     return $opt;
 }
 
+require_once('delibera_conf_themes.php');
+require_once('delibera_conf_roles.php');
+
+/**
+ * Retorna do banco de dados configuração principal
+ *
+ * @param array $config -
+ * @return array
+ * @package Configuracoes\Template
+ *
+ */
 function delibera_get_main_config($config = array()) {
     global $deliberaThemes;
 
@@ -67,6 +82,7 @@ add_filter('delibera_get_config', 'delibera_get_main_config');
  * do Delibera
  *
  * @return null
+ * @package Configuracoes\Admin
  */
 function delibera_conf_page()
 {

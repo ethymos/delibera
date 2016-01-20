@@ -19,6 +19,10 @@ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+/**
+ * Reponsável por importar todos os arquivos utilizados pelo plugin
+ * @package Global
+ */
 
 if(!defined('__DIR__')) {
     $iPos = strrpos(__FILE__, DIRECTORY_SEPARATOR);

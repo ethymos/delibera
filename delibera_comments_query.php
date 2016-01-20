@@ -1,4 +1,13 @@
 <?php
+/**
+ * Customização da busca por comentários
+ * @package Comentarios
+ */
+
+/**
+ * Implementação básica de modificação na busca por comentários nos posts do tipo 'pauta'
+ *
+ */
 class delibera_WP_Comment_Query extends WP_Comment_Query
 {
 /**

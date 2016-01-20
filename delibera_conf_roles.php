@@ -1,6 +1,8 @@
 <?php
+/**
+ * Configuração de permissões.
+ */
 
-// Configuração de permissões
 $delibera_permissoes = array(
 	'administrator' => array('Novo' => false, 'Caps' => array
 	(
@@ -86,7 +88,9 @@ $delibera_permissoes = array(
  * Quando estiver na single da pauta, retorna false sempre que ela
  * estiver com o prazo encerrado.
  *
+ * @param string $permissao
  * @return bool
+ * @package Pauta
  */
 function delibera_current_user_can_participate($permissao = 'votar') {
     global $post;
@@ -102,6 +106,13 @@ function delibera_current_user_can_participate($permissao = 'votar') {
     }
 }
 
+/**
+ * Verifica se pauta está aberta para comentários
+ *
+ * @param string $postID
+ *
+ * @package Pauta
+ */
 function delibera_can_comment($postID = '')
 {
 	if(is_null($postID))

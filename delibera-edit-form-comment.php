@@ -1,6 +1,7 @@
 <?php
 /**
  * Utilização do arquivo diretamente no tema.
+ * @namespace Comentarios
  */
 
 /**
@@ -8,7 +9,6 @@
  *
  * É adicionado formulário e botões para editar ou remover comentários
  *
- * @package Template
  */
 function delibera_template_edit_comment() {}
 ?>
