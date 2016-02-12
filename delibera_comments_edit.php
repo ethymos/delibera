@@ -54,9 +54,9 @@ function delibera_update_comment($comment_id, $user_id, $text, $proposta)
 		'comment_date' => date("Y-m-d H:i:s")
 	);
 	wp_update_comment($arrcomment);
-	
+
 	$comment = get_comment($comment_id);
-	
+
 	$proposta_antes = get_comment_meta($comment_id, 'delibera_comment_tipo', true);
 	if($proposta != $proposta_antes)
 	{
@@ -70,7 +70,7 @@ function delibera_update_comment($comment_id, $user_id, $text, $proposta)
 			$ndiscussoes--;
 			update_post_meta($comment->comment_post_ID, 'delibera_numero_comments_discussoes', $ndiscussoes);
 		}
-		else 
+		else
 		{
 			update_comment_meta($comment_id, 'delibera_comment_tipo', 'discussao');
 			$ndiscussoes = get_post_meta($comment->comment_post_ID, 'delibera_numero_comments_discussoes', true);
@@ -81,9 +81,9 @@ function delibera_update_comment($comment_id, $user_id, $text, $proposta)
 			update_post_meta($comment->comment_post_ID, 'delibera_numero_comments_encaminhamentos', $nencaminhamentos);
 		}
 	}
-	
+
 	return $text;
-} 
+}
 
 function delibera_update_comment_callback()
 {
@@ -109,7 +109,7 @@ function delibera_comment_edit_form()
 	global $comment;
 	$comment = delibera_get_comment_to_edit($comment->comment_ID);
 	require_once(WP_CONTENT_DIR.'/../wp-admin/includes/template.php');
-	include(__DIR__.'/delibera-edit-form-comment.php');
+	require_once(__DIR__.'/delibera-edit-form-comment.php');
 }
 
 function delibera_delete_comment_link( $link = null, $before = '', $after = '' )
@@ -136,7 +136,7 @@ function delibera_delete_comment($comment_id, $user_id, $proposta)
 		$nencaminhamentos--;
 		update_post_meta($comment->comment_post_ID, 'delibera_numero_comments_encaminhamentos', $nencaminhamentos);
 	}
-	else 
+	else
 	{
 		$ndiscussoes = get_post_meta($comment->comment_post_ID, 'delibera_numero_comments_discussoes', true);
 		$ndiscussoes--;
@@ -162,5 +162,3 @@ function delibera_delete_comment_callback()
 }
 add_action('wp_ajax_delibera_delete_comment', 'delibera_delete_comment_callback');
 add_action('wp_ajax_nopriv_delibera_delete_comment', 'delibera_delete_comment_callback');
-
-?>
