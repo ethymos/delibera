@@ -126,11 +126,10 @@ function delibera_get_comment_link($comment_pass = false)
 
 function delibera_comment_post_redirect( $location ) {
 	global $post, $comment_id;
-    if (empty($global)) {
-        return $location;
-    } else {
-        return ( $post->post_type == 'pauta' ) ? preg_replace("/#comment-([\d]+)/", "#delibera-comment-" . $comment_id, $location) : $location;
-    }
+    return ( is_object($post) &&
+             property_exists($post, 'post_type') &&
+             $post->post_type == 'pauta' )
+        ? preg_replace("/#comment-([\d]+)/", "#delibera-comment-" . $comment_id, $location) : $location;
 }
 add_filter( 'comment_post_redirect', 'delibera_comment_post_redirect' );
 
@@ -901,7 +900,7 @@ function delibera_computa_votos($postID, $votos = null)
 		$voto = get_comment_meta($voto_comment->comment_ID, 'delibera_votos', true);
 		foreach ($voto as $voto_para)
 		{
-            if (isset($encaminhamentos_votos[$voto_para]))
+            if (array_key_exists($voto_para, $encaminhamentos_votos))
             {
                 $encaminhamentos_votos[$voto_para]++;
             } else {

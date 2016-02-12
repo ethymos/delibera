@@ -296,17 +296,6 @@ function delibera_scripts()
 }
 add_action( 'wp_print_scripts', 'delibera_scripts' );
 
-/**
- *
- * Se tiver estilos customizados, ta aí a dica...
- *
-function delibera_print_styles()
-{
-
-}
-add_action('wp_print_styles', 'delibera_print_styles');
-*/
-
 function delibera_print_styles()
 {
 	if (is_pauta()) {
