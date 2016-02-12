@@ -260,3 +260,19 @@ function delibera_the_posts($posts)
 }
 
 add_filter('the_posts', 'delibera_the_posts'); // the_posts gets triggered before wp_head
+
+function delibera_timeline($post_id = false, $tipo_data = false)
+{
+	require_once __DIR__.DIRECTORY_SEPARATOR.'timeline/delibera_timeline.php';
+	$timeline = new delibera_timeline();
+	$timeline->generate($post_id, $tipo_data);
+}
+
+function delibera_replace_timeline($args)
+{
+	$atts = array('post_id' => false, 'tipo_data' => false);
+	$atts = array_merge($atts, $args);
+
+    return delibera_timeline($atts['post_id'], $atts['tipo_data']);
+}
+add_shortcode( 'delibera_timeline', 'delibera_replace_timeline' );
