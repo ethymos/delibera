@@ -169,39 +169,6 @@ function delibera_Add_custom_taxonomy()
 				)
 			);
 		}
-		if(isset($opt['relatoria']) && $opt['relatoria'] == 'S')
-		{
-			if($opt['eleicao_relator'] == 'S')
-			{
-				if(term_exists('eleicaoredator', 'situacao', null) == false)
-				{
-					delibera_insert_term('Regime de Votação de Relator', 'situacao', array(
-							'description'=> 'Pauta em Eleição de Relator',
-							'slug' => 'eleicaoredator',
-						),
-						array(
-							'qtrans_term_pt' => 'Regime de Votação de Relator',
-							'qtrans_term_en' => 'Election of Rapporteur',
-							'qtrans_term_es' => 'Elección del Relator',
-						)
-					);
-				}
-			}
-
-			if(term_exists('relatoria', 'situacao', null) == false)
-			{
-				delibera_insert_term('Relatoria', 'situacao', array(
-						'description'=> 'Pauta com encaminhamentos em Relatoria',
-						'slug' => 'relatoria',
-					),
-					array(
-						'qtrans_term_pt' => 'Relatoria',
-						'qtrans_term_en' => 'Rapporteur',
-						'qtrans_term_es' => 'Relator',
-					)
-				);
-				}
-		}
 		do_action('delibera_situacao_register');
 		
 	}

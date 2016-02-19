@@ -82,9 +82,6 @@ function delibera_pauta_meta()
 	if(!is_array($custom)) $custom = array();
 	$situacao = delibera_get_situacao($post->ID);
 
-	$dias_relatoria = intval(htmlentities($options_plugin_delibera['dias_relatoria']));
-	$dias_votacao_relator = intval(htmlentities($options_plugin_delibera['dias_votacao_relator']));
-
     $pauta_pdf_file = get_post_meta($post->ID, 'pauta_pdf_contribution', true);
 
     // Recupera arquivo caso já tenha sido adicionados
@@ -102,26 +99,10 @@ function delibera_pauta_meta()
 
 	$dias_votacao = /*$dias_discussao +*/ intval(htmlentities($options_plugin_delibera['dias_votacao']));
 
-	if($options_plugin_delibera['relatoria'] == "S") // Adiciona prazo de relatoria se for necessário
-	{
-		$dias_votacao += $dias_relatoria;
-		$dias_relatoria += $dias_discussao;
-		if($options_plugin_delibera['eleicao_relator'] == "S") // Adiciona prazo de vatacao relator se for necessário
-		{
-			$dias_votacao += $dias_votacao_relator;
-			$dias_relatoria += $dias_votacao_relator;
-			$dias_votacao_relator += $dias_discussao;
-		}
-	}
-
 	$now = strtotime(date('Y/m/d')." 11:59:59");
 
-	$prazo_eleicao_relator_sugerido = strtotime("+$dias_votacao_relator days", $now);
-	$prazo_relatoria_sugerido = strtotime("+$dias_relatoria days", $now);
 	$prazo_votacao_sugerido = strtotime("+$dias_votacao days", $now);
 
-	$prazo_eleicao_relator = date('d/m/Y', $prazo_eleicao_relator_sugerido);
-	$prazo_relatoria = date('d/m/Y', $prazo_relatoria_sugerido);
 	$prazo_votacao = date('d/m/Y', $prazo_votacao_sugerido);
 
 	if (
@@ -140,31 +121,12 @@ function delibera_pauta_meta()
 		$post->post_status == 'auto-draft' ||
 		$post->post_status == 'pending'))
 	{
-		$prazo_eleicao_relator = array_key_exists("prazo_eleicao_relator", $custom) ?  $custom["prazo_eleicao_relator"][0] : $prazo_eleicao_relator;
-		$prazo_relatoria = array_key_exists("prazo_relatoria", $custom) ?  $custom["prazo_relatoria"][0] : $prazo_relatoria;
+		
 		$prazo_votacao = array_key_exists("prazo_votacao", $custom) ?  $custom["prazo_votacao"][0] : $prazo_votacao;
 	}
 
 	do_action('delibera_topic_meta', $post, $custom, $options_plugin_delibera, $situacao, $disable_edicao);
 	
-	if($options_plugin_delibera['relatoria'] == "S")
-	{
-		if($options_plugin_delibera['eleicao_relator'] == "S")
-		{
-		?>
-			<p>
-				<label for="prazo_eleicao_relator" class="label_prazo_eleicao_relator"><?php _e('Prazo para Eleição de Relator','delibera') ?>:</label>
-				<input <?php echo $disable_edicao ?> id="prazo_eleicao_relator" name="prazo_eleicao_relator" class="prazo_eleicao_relator widefat hasdatepicker" value="<?php echo $prazo_eleicao_relator; ?>"/>
-			</p>
-		<?php
-		}
-	?>
-		<p>
-			<label for="prazo_relatoria" class="label_prazo_relatoria"><?php _e('Prazo para Relatoria','delibera') ?>:</label>
-			<input <?php echo $disable_edicao ?> id="prazo_relatoria" name="prazo_relatoria" class="prazo_relatoria widefat hasdatepicker" value="<?php echo $prazo_relatoria; ?>"/>
-		</p>
-	<?php
-	}
 	?>
 	<p>
 		<label for="prazo_votacao" class="label_prazo_votacao"><?php _e('Prazo para Votações','delibera') ?>:</label>
@@ -234,27 +196,6 @@ function delibera_check_post_data($data, $postarr)
 		
 		$erros == apply_filters('delibera_check_post_data', $erros, $opt, $autosave);
 		
-		if($opt['relatoria'] == 'S')
-		{
-			$value = $_POST['prazo_relatoria'];
-			$valida = delibera_tratar_data($value);
-            if(!$autosave && ($valida === false || $valida < 1))
-            {
-                $erros[] = __("É necessário definir corretamente o prazo para relatoria", "Delibera");
-			}
-
-			if($opt['eleicao_relator'] == 'S')
-			{
-				$value = $_POST['prazo__leicao_relator'];
-				$valida = delibera_tratar_data($value);
-				if(!$autosave && ($valida === false || $valida < 1))
-				{
-					$erros[] = __("É necessário definir corretamente o prazo para eleição de um relator", "delibera");
-				}
-			}
-
-		}
-
 		$value = $_POST['prazo_votacao'];
 		$valida = delibera_tratar_data($value);
 		if(!$autosave && ($valida === false || $valida < 1))
@@ -360,17 +301,6 @@ function delibera_save_post($post_id, $post)
 	$opt = delibera_get_config();
 	$autosave = ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE );
 	if(
-			( // Se tem relatoria, tem que ter o prazo
-					$opt['relatoria'] == 'N' ||
-					array_key_exists('prazo_relatoria', $_POST)
-					) &&
-			( // Se tem relatoria, e é preciso eleger o relator, tem que ter o prazo para eleição
-					$opt['relatoria'] == 'N' ||
-					(
-							$opt['eleicao_relator'] == 'N' ||
-							array_key_exists('prazo_eleicao_relator', $_POST)
-							)
-					) &&
 			array_key_exists('prazo_votacao', $_POST)
 			)
 	{
@@ -389,8 +319,6 @@ function delibera_save_post($post_id, $post)
 			$events_meta['delibera_seguiram'] = array();
 		}
 	
-		$events_meta['prazo_relatoria'] = $opt['relatoria'] == 'S' ? $_POST['prazo_relatoria'] : date('d/m/Y');
-		$events_meta['prazo_eleicao_relator'] = $opt['relatoria'] == 'S' && $opt['eleicao_relator'] == 'S' ? $_POST['prazo_eleicao_relator'] : date('d/m/Y');
 		$events_meta['prazo_votacao'] = $_POST['prazo_votacao'];
 		
 	
@@ -549,13 +477,6 @@ function delibera_nova_pauta_create_action(){
 
         	do_action('delibera_create_pauta_frontend', $opt);
         
-            if($opt['relatoria'] == 'S'){
-                $_POST['prazo_relatoria'] = date('d/m/Y', strtotime ('+'.$opt['dias_relatoria'].' DAYS'));
-                if($opt['eleicao_relator'] == 'S'){
-                    $_POST['prazo_eleicao_relator'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao_relator'].' DAYS'));
-                }
-            }
-
 			if (trim($opt['data_fixa_nova_pauta_externa']) != '') {
 				$prazo_discussao = DateTime::createFromFormat('d/m/Y', $opt['data_fixa_nova_pauta_externa']);
 				$_POST['prazo_votacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao'].' DAYS', $prazo_discussao->getTimestamp()));

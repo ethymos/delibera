@@ -50,7 +50,7 @@ class DeliberaFlow
 	{
 		if(array_key_exists('flow', $opts) && !is_array($opts['flow']))
 		{
-			$opts['flow'] = explode(',', trim($opts['flow']));
+			$opts['flow'] = array('validacao', 'discussao', 'elegerelator', 'relatoria', 'emvotacao', 'comresolucao');//explode(',', trim($opts['flow']));
 		}
 		return $opts;
 	}
