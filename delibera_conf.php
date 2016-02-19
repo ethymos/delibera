@@ -119,7 +119,7 @@ function delibera_conf_page()
         // atualiza os permalinks por conta da opção "criar_pauta_pelo_front_end"
         flush_rewrite_rules();
 
-        if (update_option('delibera-config', $opt) || (isset($_POST["delibera_reinstall"]) && $_POST['delibera_reinstall'] == 'S'))
+        if (update_option('delibera-config', apply_filters('delibera-pre-main-config-save', $opt)) || (isset($_POST["delibera_reinstall"]) && $_POST['delibera_reinstall'] == 'S'))
             $mensagem = __('Configurações salvas!','delibera');
         else
             $mensagem = __('Erro ao salvar as configurações. Verifique os valores inseridos e tente novamente!','delibera');
