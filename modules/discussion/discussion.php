@@ -15,7 +15,6 @@ class DeliberaDiscussion
 		add_action('delibera_topic_meta', array($this, 'topicMeta'), 10, 5);
 		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 3);
 		add_filter('delibera_check_post_data', array($this, 'checkPostData'), 10, 3);
-		//add_action('delibera_save_post', array($this, 'savePost'), 10, 3);
 		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 10, 2);
 		add_action('delibera_create_pauta_frontend', array($this, 'createPautaAtFront'));
 		
@@ -95,6 +94,8 @@ class DeliberaDiscussion
 	{
 		$dias_discussao = intval(htmlentities($options_plugin_delibera['dias_discussao']));
 
+		$now = strtotime(date('Y/m/d')." 11:59:59");
+		
 		$prazo_discussao_sugerido = strtotime("+$dias_discussao days", $now);
 		$prazo_discussao = date('d/m/Y', $prazo_discussao_sugerido);
 
@@ -188,7 +189,10 @@ class DeliberaDiscussion
 	
 	public function savePostMetas($events_meta, $opt)
 	{
-		$events_meta['prazo_discussao'] = $_POST['prazo_discussao'];
+		if(array_key_exists('prazo_discussao', $_POST))
+		{
+			$events_meta['prazo_discussao'] = $_POST['prazo_discussao'];
+		}
 		
 		return $events_meta;
 	}

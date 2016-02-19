@@ -100,7 +100,7 @@ function delibera_pauta_meta()
 		//TODO adicionar modulo anterior ao prazo $dias_discussao += $dias_validacao;
 	}
 
-	$dias_votacao = $dias_discussao + intval(htmlentities($options_plugin_delibera['dias_votacao']));
+	$dias_votacao = /*$dias_discussao +*/ intval(htmlentities($options_plugin_delibera['dias_votacao']));
 
 	if($options_plugin_delibera['relatoria'] == "S") // Adiciona prazo de relatoria se for necessário
 	{
@@ -359,89 +359,104 @@ function delibera_save_post($post_id, $post)
 	}
 	$opt = delibera_get_config();
 	$autosave = ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE );
-
-	$events_meta = array();
-
-	$validacoes = get_post_meta($post_id, 'numero_validacoes', true);
-	if($validacoes == "" || $validacoes === false || is_null($validacoes))
+	if(
+			( // Se tem relatoria, tem que ter o prazo
+					$opt['relatoria'] == 'N' ||
+					array_key_exists('prazo_relatoria', $_POST)
+					) &&
+			( // Se tem relatoria, e é preciso eleger o relator, tem que ter o prazo para eleição
+					$opt['relatoria'] == 'N' ||
+					(
+							$opt['eleicao_relator'] == 'N' ||
+							array_key_exists('prazo_eleicao_relator', $_POST)
+							)
+					) &&
+			array_key_exists('prazo_votacao', $_POST)
+			)
 	{
-		$events_meta['delibera_numero_comments_votos'] = 0;
-		$events_meta['delibera_numero_comments_padroes'] = 0;
-		$events_meta['delibera_numero_curtir'] = 0;
-		$events_meta['delibera_curtiram'] = array();
-		$events_meta['delibera_numero_discordar'] = 0;
-		$events_meta['delibera_discordaram'] = array();
-		$events_meta['delibera_numero_seguir'] = 0;
-		$events_meta['delibera_seguiram'] = array();
-	}
-
-	$events_meta['prazo_relatoria'] = $opt['relatoria'] == 'S' ? $_POST['prazo_relatoria'] : date('d/m/Y');
-	$events_meta['prazo_eleicao_relator'] = $opt['relatoria'] == 'S' && $opt['eleicao_relator'] == 'S' ? $_POST['prazo_eleicao_relator'] : date('d/m/Y');
-	$events_meta['prazo_votacao'] = $_POST['prazo_votacao'];
+		$events_meta = array();
 	
-
-	/* ######### START ######### */
-	/* ######### FOR PDF UPLOAD FILE ######### */
-	// Setup the array of supported file types. In this case, it's just PDF.
-	$supported_types = array('application/pdf');
-
-	// Get the file type of the upload
-	$arr_uploaded_file_type = wp_check_filetype(basename($_FILES['pauta_pdf_contribution']['name']));
-	$uploaded_file_type = $arr_uploaded_file_type['type'];
-
-        if (isset ($_FILES['pauta_pdf_contribution']['name']) && $_FILES['pauta_pdf_contribution']['name'] != '') {
-            if (!in_array($uploaded_file_type, $supported_types)) {
-                //TODO: Improve this message and avoid wp_die
-                wp_die("O arquivo para web não é um PDF (formato permitido).");
-            }
-
-
-            // Use the WordPress API to upload the file
-            $upload_pauta_pdf = wp_upload_bits($_FILES['pauta_pdf_contribution']['name'], null, file_get_contents($_FILES['pauta_pdf_contribution']['tmp_name']));
-
-            if (isset($upload_pauta_pdf['error']) && $upload_pauta_pdf['error'] != 0) {
-                $events_meta['pauta_pdf_contribution'] = none;
-                wp_die('Erro ao salvar arquivo para Web. O erro foi: ' . $upload_pauta_pdf['error']);
-            } else {
-                $events_meta['pauta_pdf_contribution'] = $upload_pauta_pdf['url'];
-
-                global $wpdb;
-
-                $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "posts SET post_content=%s WHERE ID=%d", '<iframe id="pauta-pdf-content" src="https://docs.google.com/viewer?url=' . urlencode($upload_pauta_pdf['url']) . '&amp;embedded=true" style="width: 100%; min-height: 400px; max-height: 800px; ">' . $upload_pauta_pdf['url'] . '</iframe>', $post->ID));
-            }
-        }
-        /* ######### FOR PDF UPLOAD FILE ######### */
-        /* ######### END ######### */
-        
-	$events_meta = apply_filters('delibera_save_post_metas', $events_meta);
-
-	foreach ($events_meta as $key => $value) // Buscar dados
-	{
-		if(get_post_meta($post->ID, $key, true)) // Se já existe
+		$validacoes = get_post_meta($post_id, 'numero_validacoes', true);
+		if($validacoes == "" || $validacoes === false || is_null($validacoes))
 		{
-			update_post_meta($post->ID, $key, $value); // Atualiza
+			$events_meta['delibera_numero_comments_votos'] = 0;
+			$events_meta['delibera_numero_comments_padroes'] = 0;
+			$events_meta['delibera_numero_curtir'] = 0;
+			$events_meta['delibera_curtiram'] = array();
+			$events_meta['delibera_numero_discordar'] = 0;
+			$events_meta['delibera_discordaram'] = array();
+			$events_meta['delibera_numero_seguir'] = 0;
+			$events_meta['delibera_seguiram'] = array();
 		}
-		else
-		{
-			add_post_meta($post->ID, $key, $value, true); // Senão, cria
-		}
-	}
-
-	do_action('delibera_save_post', $post_id, $post, $opt);
 	
-    if(
-    	array_key_exists('delibera_fim_prazo', $_POST) &&
-    	$_POST['delibera_fim_prazo'] == 'S' &&
-    	current_user_can('forcar_prazo')
-    )
-    {
-    	delibera_forca_fim_prazo($post->ID);
-    }
-
-	if($post->post_status == 'publish' && !$autosave)
-	{
-		delibera_del_cron($post->ID);
-		delibera_publish_pauta($post->ID, $post, true);
+		$events_meta['prazo_relatoria'] = $opt['relatoria'] == 'S' ? $_POST['prazo_relatoria'] : date('d/m/Y');
+		$events_meta['prazo_eleicao_relator'] = $opt['relatoria'] == 'S' && $opt['eleicao_relator'] == 'S' ? $_POST['prazo_eleicao_relator'] : date('d/m/Y');
+		$events_meta['prazo_votacao'] = $_POST['prazo_votacao'];
+		
+	
+		/* ######### START ######### */
+		/* ######### FOR PDF UPLOAD FILE ######### */
+		// Setup the array of supported file types. In this case, it's just PDF.
+		$supported_types = array('application/pdf');
+	
+		// Get the file type of the upload
+		$arr_uploaded_file_type = wp_check_filetype(basename($_FILES['pauta_pdf_contribution']['name']));
+		$uploaded_file_type = $arr_uploaded_file_type['type'];
+	
+	        if (isset ($_FILES['pauta_pdf_contribution']['name']) && $_FILES['pauta_pdf_contribution']['name'] != '') {
+	            if (!in_array($uploaded_file_type, $supported_types)) {
+	                //TODO: Improve this message and avoid wp_die
+	                wp_die("O arquivo para web não é um PDF (formato permitido).");
+	            }
+	
+	
+	            // Use the WordPress API to upload the file
+	            $upload_pauta_pdf = wp_upload_bits($_FILES['pauta_pdf_contribution']['name'], null, file_get_contents($_FILES['pauta_pdf_contribution']['tmp_name']));
+	
+	            if (isset($upload_pauta_pdf['error']) && $upload_pauta_pdf['error'] != 0) {
+	                $events_meta['pauta_pdf_contribution'] = none;
+	                wp_die('Erro ao salvar arquivo para Web. O erro foi: ' . $upload_pauta_pdf['error']);
+	            } else {
+	                $events_meta['pauta_pdf_contribution'] = $upload_pauta_pdf['url'];
+	
+	                global $wpdb;
+	
+	                $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "posts SET post_content=%s WHERE ID=%d", '<iframe id="pauta-pdf-content" src="https://docs.google.com/viewer?url=' . urlencode($upload_pauta_pdf['url']) . '&amp;embedded=true" style="width: 100%; min-height: 400px; max-height: 800px; ">' . $upload_pauta_pdf['url'] . '</iframe>', $post->ID));
+	            }
+	        }
+	        /* ######### FOR PDF UPLOAD FILE ######### */
+	        /* ######### END ######### */
+	        
+		$events_meta = apply_filters('delibera_save_post_metas', $events_meta, $opt);
+	
+		foreach ($events_meta as $key => $value) // Buscar dados
+		{
+			if(get_post_meta($post->ID, $key, true)) // Se já existe
+			{
+				update_post_meta($post->ID, $key, $value); // Atualiza
+			}
+			else
+			{
+				add_post_meta($post->ID, $key, $value, true); // Senão, cria
+			}
+		}
+	
+		do_action('delibera_save_post', $post_id, $post, $opt);
+		
+	    if(
+	    	array_key_exists('delibera_fim_prazo', $_POST) &&
+	    	$_POST['delibera_fim_prazo'] == 'S' &&
+	    	current_user_can('forcar_prazo')
+	    )
+	    {
+	    	delibera_forca_fim_prazo($post->ID);
+	    }
+	
+		if($post->post_status == 'publish' && !$autosave)
+		{
+			delibera_del_cron($post->ID);
+			delibera_publish_pauta($post->ID, $post, true);
+		}
 	}
 }
 

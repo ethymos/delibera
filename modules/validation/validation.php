@@ -15,7 +15,6 @@ class DeliberaValidation
 		add_action('delibera_topic_meta', array($this, 'topicMeta'), 10, 5);
 		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 3);
 		add_filter('delibera_check_post_data', array($this, 'checkPostData'), 10, 3);
-		//add_action('delibera_save_post', array($this, 'savePost'), 10, 3);
 		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 10, 2);
 		add_action('delibera_create_pauta_frontend', array($this, 'createPautaAtFront'));
 		
@@ -251,8 +250,14 @@ class DeliberaValidation
 	
 	public function savePostMetas($events_meta, $opt)
 	{
-		$events_meta['prazo_validacao'] = $opt['validacao'] == 'S' ? $_POST['prazo_validacao'] : date('d/m/Y');
-		$events_meta['min_validacoes'] = $opt['validacao'] == 'S' ? $_POST['min_validacoes'] : 10;
+		if( // Se tem validação, tem que ter o prazo
+			$opt['validacao'] == 'N' ||
+			(array_key_exists('prazo_validacao', $_POST) && array_key_exists('min_validacoes', $_POST) )
+		)
+		{
+			$events_meta['prazo_validacao'] = $opt['validacao'] == 'S' ? $_POST['prazo_validacao'] : date('d/m/Y');
+			$events_meta['min_validacoes'] = $opt['validacao'] == 'S' ? $_POST['min_validacoes'] : 10;
+		}
 		
 		return $events_meta;
 	}
