@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/redelivre/delibera.png?label=ready&title=Ready)](https://waffle.io/redelivre/delibera)
 Delibera
 ========
 
