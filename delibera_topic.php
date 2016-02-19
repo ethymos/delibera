@@ -275,69 +275,68 @@ function delibera_save_post($post_id, $post)
 	
 		
 	
-		/* ######### START ######### */
-		/* ######### FOR PDF UPLOAD FILE ######### */
-		// Setup the array of supported file types. In this case, it's just PDF.
-		$supported_types = array('application/pdf');
-	
-		// Get the file type of the upload
-		$arr_uploaded_file_type = wp_check_filetype(basename($_FILES['pauta_pdf_contribution']['name']));
-		$uploaded_file_type = $arr_uploaded_file_type['type'];
-	
-	        if (isset ($_FILES['pauta_pdf_contribution']['name']) && $_FILES['pauta_pdf_contribution']['name'] != '') {
-	            if (!in_array($uploaded_file_type, $supported_types)) {
-	                //TODO: Improve this message and avoid wp_die
-	                wp_die("O arquivo para web não é um PDF (formato permitido).");
-	            }
-	
-	
-	            // Use the WordPress API to upload the file
-	            $upload_pauta_pdf = wp_upload_bits($_FILES['pauta_pdf_contribution']['name'], null, file_get_contents($_FILES['pauta_pdf_contribution']['tmp_name']));
-	
-	            if (isset($upload_pauta_pdf['error']) && $upload_pauta_pdf['error'] != 0) {
-	                $events_meta['pauta_pdf_contribution'] = none;
-	                wp_die('Erro ao salvar arquivo para Web. O erro foi: ' . $upload_pauta_pdf['error']);
-	            } else {
-	                $events_meta['pauta_pdf_contribution'] = $upload_pauta_pdf['url'];
-	
-	                global $wpdb;
-	
-	                $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "posts SET post_content=%s WHERE ID=%d", '<iframe id="pauta-pdf-content" src="https://docs.google.com/viewer?url=' . urlencode($upload_pauta_pdf['url']) . '&amp;embedded=true" style="width: 100%; min-height: 400px; max-height: 800px; ">' . $upload_pauta_pdf['url'] . '</iframe>', $post->ID));
-	            }
-	        }
-	        /* ######### FOR PDF UPLOAD FILE ######### */
-	        /* ######### END ######### */
+	/* ######### START ######### */
+	/* ######### FOR PDF UPLOAD FILE ######### */
+	// Setup the array of supported file types. In this case, it's just PDF.
+	$supported_types = array('application/pdf');
+
+	// Get the file type of the upload
+	$arr_uploaded_file_type = wp_check_filetype(basename($_FILES['pauta_pdf_contribution']['name']));
+	$uploaded_file_type = $arr_uploaded_file_type['type'];
+
+        if (isset ($_FILES['pauta_pdf_contribution']['name']) && $_FILES['pauta_pdf_contribution']['name'] != '') {
+            if (!in_array($uploaded_file_type, $supported_types)) {
+                //TODO: Improve this message and avoid wp_die
+                wp_die("O arquivo para web não é um PDF (formato permitido).");
+            }
+
+
+            // Use the WordPress API to upload the file
+            $upload_pauta_pdf = wp_upload_bits($_FILES['pauta_pdf_contribution']['name'], null, file_get_contents($_FILES['pauta_pdf_contribution']['tmp_name']));
+
+            if (isset($upload_pauta_pdf['error']) && $upload_pauta_pdf['error'] != 0) {
+                $events_meta['pauta_pdf_contribution'] = none;
+                wp_die('Erro ao salvar arquivo para Web. O erro foi: ' . $upload_pauta_pdf['error']);
+            } else {
+                $events_meta['pauta_pdf_contribution'] = $upload_pauta_pdf['url'];
+
+                global $wpdb;
+
+                $wpdb->query($wpdb->prepare("UPDATE " . $wpdb->prefix . "posts SET post_content=%s WHERE ID=%d", '<iframe id="pauta-pdf-content" src="https://docs.google.com/viewer?url=' . urlencode($upload_pauta_pdf['url']) . '&amp;embedded=true" style="width: 100%; min-height: 400px; max-height: 800px; ">' . $upload_pauta_pdf['url'] . '</iframe>', $post->ID));
+            }
+        }
+        /* ######### FOR PDF UPLOAD FILE ######### */
+        /* ######### END ######### */
 	        
-		$events_meta = apply_filters('delibera_save_post_metas', $events_meta, $opt);
-	
-		foreach ($events_meta as $key => $value) // Buscar dados
+	$events_meta = apply_filters('delibera_save_post_metas', $events_meta, $opt);
+
+	foreach ($events_meta as $key => $value) // Buscar dados
+	{
+		if(get_post_meta($post->ID, $key, true)) // Se já existe
 		{
-			if(get_post_meta($post->ID, $key, true)) // Se já existe
-			{
-				update_post_meta($post->ID, $key, $value); // Atualiza
-			}
-			else
-			{
-				add_post_meta($post->ID, $key, $value, true); // Senão, cria
-			}
+			update_post_meta($post->ID, $key, $value); // Atualiza
 		}
-	
-		do_action('delibera_save_post', $post_id, $post, $opt);
-		
-	    if(
-	    	array_key_exists('delibera_fim_prazo', $_POST) &&
-	    	$_POST['delibera_fim_prazo'] == 'S' &&
-	    	current_user_can('forcar_prazo')
-	    )
-	    {
-	    	delibera_forca_fim_prazo($post->ID);
-	    }
-	
-		if($post->post_status == 'publish' && !$autosave)
+		else
 		{
-			delibera_del_cron($post->ID);
-			delibera_publish_pauta($post->ID, $post, true);
+			add_post_meta($post->ID, $key, $value, true); // Senão, cria
 		}
+	}
+
+	do_action('delibera_save_post', $post_id, $post, $opt);
+	
+    if(
+    	array_key_exists('delibera_fim_prazo', $_POST) &&
+    	$_POST['delibera_fim_prazo'] == 'S' &&
+    	current_user_can('forcar_prazo')
+    )
+    {
+    	delibera_forca_fim_prazo($post->ID);
+    }
+
+	if($post->post_status == 'publish' && !$autosave)
+	{
+		delibera_del_cron($post->ID);
+		delibera_publish_pauta($post->ID, $post, true);
 	}
 }
 
