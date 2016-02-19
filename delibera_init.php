@@ -202,20 +202,6 @@ function delibera_Add_custom_taxonomy()
 				);
 				}
 		}
-		if(term_exists('discussao', 'situacao', null) == false)
-		{
-			delibera_insert_term('Pauta em discussão', 'situacao', array(
-					'description'=> 'Pauta em Discussão',
-					'slug' => 'discussao',
-				),
-				array(
-					'qtrans_term_pt' => 'Pauta em discussão',
-					'qtrans_term_en' => 'Agenda en discusión',
-					'qtrans_term_es' => 'Topic under discussion',
-				)
-			);
-		}
-		
 		do_action('delibera_situacao_register');
 		
 	}

@@ -14,7 +14,7 @@ class DeliberaValidation
 		add_filter('delibera_situation_button_text', array($this, 'situationButtonText'));
 		add_action('delibera_topic_meta', array($this, 'topicMeta'), 10, 5);
 		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 3);
-		add_filter('delibera_check_post_data', array($this, 'checkPostData'), 10, 2);
+		add_filter('delibera_check_post_data', array($this, 'checkPostData'), 10, 3);
 		//add_action('delibera_save_post', array($this, 'savePost'), 10, 3);
 		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 10, 2);
 		add_action('delibera_create_pauta_frontend', array($this, 'createPautaAtFront'));
@@ -183,7 +183,7 @@ class DeliberaValidation
 		}
 	}
 	
-	function checkPostData($erros, $opt)
+	function checkPostData($erros, $opt, $autosave)
 	{
 		if($opt['validacao'] == 'S')
 		{

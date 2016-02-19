@@ -55,7 +55,6 @@ function delibera_get_main_config($config = array()) {
     $opt = array();
     $opt['theme'] = $deliberaThemes->getThemeDir('creta');
     
-    $opt['dias_discussao'] = '5';
     $opt['dias_votacao'] = '5';
     $opt['criar_pauta_pelo_front_end'] = 'N';
     $opt['representante_define_prazos'] = 'N';
@@ -173,12 +172,6 @@ function delibera_conf_page()
                 );
 				
                 $rows = apply_filters('delivera_config_page_rows', $rows, $opt);
-
-				$rows[] = array(
-					"id" => "dias_discussao",
-					"label" => __('Dias para discussão da pauta:', 'delibera'),
-					"content" => '<input type="text" name="dias_discussao" id="dias_discussao" value="'.htmlspecialchars_decode($opt['dias_discussao']).'"/>'
-				);
 
 				$rows[] = array(
 					"id" => "dias_votacao",
