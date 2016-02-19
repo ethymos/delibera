@@ -55,16 +55,11 @@ function delibera_get_situation_button($postId)
 {
     $situacao = get_the_terms($postId, 'situacao');
 
-    if (is_array($situacao) && !empty($situacao)) {
+    if (is_array($situacao) && !empty($situacao))
+    {
         $situacao = array_pop($situacao);
     }
-
-    switch($situacao->slug) {
-        case 'emvotacao':
-            return 'Votar';
-        default:
-            return apply_filters('delibera_situation_button_text', $situacao);
-    }
+    return apply_filters('delibera_situation_button_text', $situacao->slug);
 }
 
 function delibera_update_edit_form() {
@@ -97,13 +92,7 @@ function delibera_pauta_meta()
 		//TODO adicionar modulo anterior ao prazo $dias_discussao += $dias_validacao;
 	}
 
-	$dias_votacao = /*$dias_discussao +*/ intval(htmlentities($options_plugin_delibera['dias_votacao']));
-
 	$now = strtotime(date('Y/m/d')." 11:59:59");
-
-	$prazo_votacao_sugerido = strtotime("+$dias_votacao days", $now);
-
-	$prazo_votacao = date('d/m/Y', $prazo_votacao_sugerido);
 
 	if (
 		$options_plugin_delibera['representante_define_prazos'] == "N" &&
@@ -117,22 +106,8 @@ function delibera_pauta_meta()
 	    $disable_edicao = '';
 	}
 
-	if(!($post->post_status == 'draft' ||
-		$post->post_status == 'auto-draft' ||
-		$post->post_status == 'pending'))
-	{
-		
-		$prazo_votacao = array_key_exists("prazo_votacao", $custom) ?  $custom["prazo_votacao"][0] : $prazo_votacao;
-	}
-
 	do_action('delibera_topic_meta', $post, $custom, $options_plugin_delibera, $situacao, $disable_edicao);
 	
-	?>
-	<p>
-		<label for="prazo_votacao" class="label_prazo_votacao"><?php _e('Prazo para Votações','delibera') ?>:</label>
-		<input <?php echo $disable_edicao ?> id="prazo_votacao" name="prazo_votacao" class="prazo_votacao widefat hasdatepicker" value="<?php echo $prazo_votacao; ?>"/>
-	</p>
-	<?php
 }
 
 
@@ -167,6 +142,18 @@ function delibera_publish_pauta($postID, $post, $alterar = false)
 		$opt = delibera_get_config();
 		
 		do_action('delibera_publish_pauta', $postID, $opt, $alterar);
+		
+		$curtir = get_post_meta($post_id, 'delibera_numero_curtir', true);
+		if($curtir == "" || $curtir === false || is_null($curtir))
+		{
+			$events_meta['delibera_numero_comments_padroes'] = 0;
+			$events_meta['delibera_numero_curtir'] = 0;
+			$events_meta['delibera_curtiram'] = array();
+			$events_meta['delibera_numero_discordar'] = 0;
+			$events_meta['delibera_discordaram'] = array();
+			$events_meta['delibera_numero_seguir'] = 0;
+			$events_meta['delibera_seguiram'] = array();
+		}
 
 		if($alterar)
 		{
@@ -196,13 +183,6 @@ function delibera_check_post_data($data, $postarr)
 		
 		$erros == apply_filters('delibera_check_post_data', $erros, $opt, $autosave);
 		
-		$value = $_POST['prazo_votacao'];
-		$valida = delibera_tratar_data($value);
-		if(!$autosave && ($valida === false || $valida < 1))
-		{
-			$erros[] = __("É necessário definir corretamente o prazo para votação", "delibera");
-		}
-
 		if(
 			count($erros) == 0
 		)
@@ -268,16 +248,6 @@ add_filter('posts_where_request', 'delibera_des_filtro_qtranslate', 11);
 
 /**
  *
- * Retorna pautas em Votação
- * @param array $filtro
- */
-function delibera_get_emvotacao($filtro = array())
-{
-	return delibera_get_pautas_em($filtro, 'emvotacao');
-}
-
-/**
- *
  * Retorna pautas já resolvidas
  * @param array $filtro
  */
@@ -300,26 +270,9 @@ function delibera_save_post($post_id, $post)
 	}
 	$opt = delibera_get_config();
 	$autosave = ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE );
-	if(
-			array_key_exists('prazo_votacao', $_POST)
-			)
-	{
-		$events_meta = array();
 	
-		$validacoes = get_post_meta($post_id, 'numero_validacoes', true);
-		if($validacoes == "" || $validacoes === false || is_null($validacoes))
-		{
-			$events_meta['delibera_numero_comments_votos'] = 0;
-			$events_meta['delibera_numero_comments_padroes'] = 0;
-			$events_meta['delibera_numero_curtir'] = 0;
-			$events_meta['delibera_curtiram'] = array();
-			$events_meta['delibera_numero_discordar'] = 0;
-			$events_meta['delibera_discordaram'] = array();
-			$events_meta['delibera_numero_seguir'] = 0;
-			$events_meta['delibera_seguiram'] = array();
-		}
+	$events_meta = array();
 	
-		$events_meta['prazo_votacao'] = $_POST['prazo_votacao'];
 		
 	
 		/* ######### START ######### */
@@ -452,38 +405,8 @@ function delibera_nova_pauta_create_action(){
 
         if(is_int($pauta_id) && $pauta_id > 0){
 
-            /* Os valores adicionados ao array $_POST são baseados no if da função delibera_save_post(),
-             * comentado abaixo
-            if(
-                ( // Se tem validação, tem que ter o prazo
-                    $opt['validacao'] == 'N' ||
-                    (array_key_exists('prazo_validacao', $_POST) && array_key_exists('min_validacoes', $_POST) )
-                ) &&
-                ( // Se tem relatoria, tem que ter o prazo
-                    $opt['relatoria'] == 'N' ||
-                    array_key_exists('prazo_relatoria', $_POST)
-                ) &&
-                ( // Se tem relatoria, e é preciso eleger o relator, tem que ter o prazo para eleição
-                    $opt['relatoria'] == 'N' ||
-                    (
-                        $opt['eleicao_relator'] == 'N' ||
-                        array_key_exists('prazo_eleicao_relator', $_POST)
-                    )
-                ) &&
-                array_key_exists('prazo_discussao', $_POST) &&
-                array_key_exists('prazo_votacao', $_POST)
-             )
-            */
-
         	do_action('delibera_create_pauta_frontend', $opt);
         
-			if (trim($opt['data_fixa_nova_pauta_externa']) != '') {
-				$prazo_discussao = DateTime::createFromFormat('d/m/Y', $opt['data_fixa_nova_pauta_externa']);
-				$_POST['prazo_votacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao'].' DAYS', $prazo_discussao->getTimestamp()));
-			} else {
-				$_POST['prazo_votacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao'].' DAYS'));
-			}
-
             // isto é necessário por causa do if da função delibera_publish_pauta()
             $_POST['publish'] = 'Publicar';
             $_POST['prev_status'] = 'draft';

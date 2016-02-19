@@ -144,8 +144,6 @@ class DeliberaRapporteur
 			}
 		}
 	
-		$now = strtotime(date('Y/m/d')." 11:59:59");
-	
 		$prazo_eleicao_relator_sugerido = strtotime("+$dias_votacao_relator days", $now);
 		$prazo_relatoria_sugerido = strtotime("+$dias_relatoria days", $now);
 	
@@ -227,7 +225,8 @@ class DeliberaRapporteur
 	
 	/**
 	 *
-	 * Retorna pautas em Validação
+	 * Retorna pautas em Relatoria ou Eleição para relator
+	 * 
 	 * @param array $filtro
 	 */
 	public static function getPautas($filtro = array())

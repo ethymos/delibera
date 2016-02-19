@@ -156,19 +156,6 @@ function delibera_Add_custom_taxonomy()
 				)
 			);
 		}
-		if(term_exists('emvotacao', 'situacao', null) == false)
-		{
-			delibera_insert_term('Regime de Votação', 'situacao', array(
-					'description'=> 'Pauta com encaminhamentos em Votacao',
-					'slug' => 'emvotacao',
-				),
-				array(
-					'qtrans_term_pt' => 'Regime de Votação',
-					'qtrans_term_en' => 'Voting',
-					'qtrans_term_es' => 'Sistema de Votación',
-				)
-			);
-		}
 		do_action('delibera_situacao_register');
 		
 	}

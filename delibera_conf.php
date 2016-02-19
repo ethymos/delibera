@@ -55,7 +55,6 @@ function delibera_get_main_config($config = array()) {
     $opt = array();
     $opt['theme'] = $deliberaThemes->getThemeDir('creta');
     
-    $opt['dias_votacao'] = '5';
     $opt['criar_pauta_pelo_front_end'] = 'N';
     $opt['representante_define_prazos'] = 'N';
     $opt['dias_novo_prazo'] = '2';
@@ -162,12 +161,6 @@ function delibera_conf_page()
 				);
 				
                 $rows = apply_filters('delivera_config_page_rows', $rows, $opt);
-
-				$rows[] = array(
-					"id" => "dias_votacao",
-					"label" => __('Dias para votação de encaminhamentos:', 'delibera'),
-					"content" => '<input type="text" name="dias_votacao" id="dias_votacao" value="'.htmlspecialchars_decode($opt['dias_votacao']).'"/>'
-				);
 
 				$rows[] = array(
 					"id" => "dias_novo_prazo",
