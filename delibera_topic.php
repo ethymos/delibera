@@ -18,7 +18,7 @@ function delibera_pauta_custom_meta()
  *
  * Retorna a situação do post
  * @param int $postID
- * @return mixed validacao, discussao, elegerelator, relatoria, emvotacao, comresolucao, naovalidada ou false
+ * @return mixed term name in taxonomy situacao or false
  */
 function delibera_get_situacao($postID)
 {
@@ -215,45 +215,9 @@ function delibera_publish_pauta($postID, $post, $alterar = false)
 			)
 		)
 	{
-		$prazo_validacao = get_post_meta($postID, 'prazo_validacao', true);
-		$prazo_discussao =  get_post_meta($postID, 'prazo_discussao', true);
-		$prazo_relatoria =  get_post_meta($postID, 'prazo_relatoria', true);
-		$prazo_eleicao_relator =  get_post_meta($postID, 'prazo_eleicao_relator', true);
-		$prazo_votacao =  get_post_meta($postID, 'prazo_votacao', true);
 		$opt = delibera_get_config();
-
-		if(!array_key_exists('validacao', $opt) || $opt['validacao'] == 'S' )
-		{
-			if(!$alterar)
-			{
-
-				wp_set_object_terms($post->ID, 'validacao', 'situacao', false);
-			}
-
-	    	delibera_criar_agenda(
-	    		$post->ID,
-	    		$prazo_validacao,
-	    		$prazo_discussao,
-	    		$prazo_votacao,
-	    		$opt['relatoria'] == 'S' ? $prazo_relatoria : false,
-	    		$opt['relatoria'] == 'S' && $opt['eleicao_relator'] == 'S' ? $prazo_eleicao_relator : false
-	    	);
-		}
-		else
-		{
-			if(!$alterar)
-			{
-				wp_set_object_terms($post->ID, 'discussao', 'situacao', false);
-			}
-	    	delibera_criar_agenda(
-	    		$post->ID,
-	    		false,
-	    		$prazo_discussao,
-	    		$prazo_votacao,
-	    		$opt['relatoria'] == 'S' ? $prazo_relatoria : false,
-	    		$opt['relatoria'] == 'S' && $opt['eleicao_relator'] == 'S' ? $prazo_eleicao_relator : false
-	    	);
-		}
+		
+		do_action('delibera_publish_pauta', $postID, $opt, $alterar);
 
 		if($alterar)
 		{
@@ -268,6 +232,11 @@ function delibera_publish_pauta($postID, $post, $alterar = false)
 
 add_action ('publish_pauta', 'delibera_publish_pauta', 1, 2);
 
+/**
+ * 
+ * @param unknown $data
+ * @param unknown $postarr
+ */
 function delibera_check_post_data($data, $postarr)
 {
 	$opt = delibera_get_config();
@@ -275,15 +244,9 @@ function delibera_check_post_data($data, $postarr)
 	$autosave = ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE );
 	if(get_post_type() == 'pauta' && (!isset($_REQUEST['action']) || $_REQUEST['action'] != 'trash'))
 	{
-		if($opt['validacao'] == 'S')
-		{
-			$value = $_POST['prazo_validacao'];
-			$valida = delibera_tratar_data($value);
-			if(!$autosave && ($valida === false || $valida < 1))
-			{
-				$erros[] = __("É necessário definir corretamente o prazo de validação", "delibera");
-			}
-		}
+		
+		$erros == apply_filters('delibera_check_post_data', $erros, $opt);
+		
 		$value = $_POST['prazo_discussao'];
 		$valida = delibera_tratar_data($value);
 		if(!$autosave && ($valida === false || $valida < 1))
@@ -319,16 +282,6 @@ function delibera_check_post_data($data, $postarr)
 			$erros[] = __("É necessário definir corretamente o prazo para votação", "delibera");
 		}
 
-		if($opt['validacao'] == 'S')
-		{
-			$value = (int)$_POST['min_validacoes'];
-			$valida = is_int($value) && $value > 0;
-			if(!$autosave && ($valida === false))
-			{
-				$erros[] = __("É necessário definir corretamente o número mínimo de validações", "delibera");
-			}
-		}
-
 		if(
 			count($erros) == 0
 		)
@@ -348,9 +301,12 @@ add_filter('wp_insert_post_data', 'delibera_check_post_data', 10, 2);
 
 /**
  *
- * Retorna post do tipo pauta em uma determinada situacao (validacao, discussao, emvotacao ou comresolucao), usando um filtro
+ * Retorna post do tipo pauta em uma determinada situacao, usando um filtro
  * @param array $filtro
  * @param string $situacao
+ * 
+ * @return array of posts of type pauta
+ * 
  */
 function delibera_get_pautas_em($filtro = array(), $situacao = false)
 {
@@ -373,16 +329,6 @@ function delibera_get_pautas_em($filtro = array(), $situacao = false)
 		$filtro['tax_query'] = $tax_query;
 	}
 	return get_posts($filtro);
-}
-
-/**
- *
- * Retorna pautas em Validação
- * @param array $filtro
- */
-function delibera_get_propostas($filtro = array())
-{
-	return delibera_get_pautas_em($filtro, 'validacao');
 }
 
 /**
@@ -444,60 +390,38 @@ function delibera_save_post($post_id, $post)
 	$opt = delibera_get_config();
 	$autosave = ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE );
 
-	if(
-		( // Se tem validação, tem que ter o prazo
-			$opt['validacao'] == 'N' ||
-			(array_key_exists('prazo_validacao', $_POST) && array_key_exists('min_validacoes', $_POST) )
-		) &&
-		( // Se tem relatoria, tem que ter o prazo
-			$opt['relatoria'] == 'N' ||
-			array_key_exists('prazo_relatoria', $_POST)
-		) &&
-		( // Se tem relatoria, e é preciso eleger o relator, tem que ter o prazo para eleição
-			$opt['relatoria'] == 'N' ||
-			(
-				$opt['eleicao_relator'] == 'N' ||
-				array_key_exists('prazo_eleicao_relator', $_POST)
-			)
-		) &&
-		array_key_exists('prazo_discussao', $_POST) &&
-		array_key_exists('prazo_votacao', $_POST)
-	)
+	$events_meta = array();
+
+	$validacoes = get_post_meta($post_id, 'numero_validacoes', true);
+	if($validacoes == "" || $validacoes === false || is_null($validacoes))
 	{
-        $events_meta = array();
+			
+		$events_meta['delibera_numero_comments_encaminhamentos'] = 0;
+		$events_meta['delibera_numero_comments_discussoes'] = 0;
+		$events_meta['delibera_numero_comments_votos'] = 0;
+		$events_meta['delibera_numero_comments_padroes'] = 0;
+		$events_meta['delibera_numero_curtir'] = 0;
+		$events_meta['delibera_curtiram'] = array();
+		$events_meta['delibera_numero_discordar'] = 0;
+		$events_meta['delibera_discordaram'] = array();
+		$events_meta['delibera_numero_seguir'] = 0;
+		$events_meta['delibera_seguiram'] = array();
+	}
 
-		$validacoes = get_post_meta($post_id, 'numero_validacoes', true);
-		if($validacoes == "" || $validacoes === false || is_null($validacoes))
-		{
-			$events_meta['numero_validacoes'] = 0;
-			$events_meta['delibera_numero_comments_validacoes'] = 0;
-			$events_meta['delibera_numero_comments_encaminhamentos'] = 0;
-			$events_meta['delibera_numero_comments_discussoes'] = 0;
-			$events_meta['delibera_numero_comments_votos'] = 0;
-			$events_meta['delibera_numero_comments_padroes'] = 0;
-			$events_meta['delibera_numero_curtir'] = 0;
-			$events_meta['delibera_curtiram'] = array();
-			$events_meta['delibera_numero_discordar'] = 0;
-			$events_meta['delibera_discordaram'] = array();
-			$events_meta['delibera_numero_seguir'] = 0;
-			$events_meta['delibera_seguiram'] = array();
-		}
+	$events_meta['prazo_discussao'] = $_POST['prazo_discussao'];
+	$events_meta['prazo_relatoria'] = $opt['relatoria'] == 'S' ? $_POST['prazo_relatoria'] : date('d/m/Y');
+	$events_meta['prazo_eleicao_relator'] = $opt['relatoria'] == 'S' && $opt['eleicao_relator'] == 'S' ? $_POST['prazo_eleicao_relator'] : date('d/m/Y');
+	$events_meta['prazo_votacao'] = $_POST['prazo_votacao'];
+	
 
-		$events_meta['prazo_validacao'] = $opt['validacao'] == 'S' ? $_POST['prazo_validacao'] : date('d/m/Y');
-		$events_meta['prazo_discussao'] = $_POST['prazo_discussao'];
-		$events_meta['prazo_relatoria'] = $opt['relatoria'] == 'S' ? $_POST['prazo_relatoria'] : date('d/m/Y');
-		$events_meta['prazo_eleicao_relator'] = $opt['relatoria'] == 'S' && $opt['eleicao_relator'] == 'S' ? $_POST['prazo_eleicao_relator'] : date('d/m/Y');
-		$events_meta['prazo_votacao'] = $_POST['prazo_votacao'];
-		$events_meta['min_validacoes'] = $opt['validacao'] == 'S' ? $_POST['min_validacoes'] : 10;
+	/* ######### START ######### */
+	/* ######### FOR PDF UPLOAD FILE ######### */
+	// Setup the array of supported file types. In this case, it's just PDF.
+	$supported_types = array('application/pdf');
 
-        /* ######### START ######### */
-        /* ######### FOR PDF UPLOAD FILE ######### */
-        // Setup the array of supported file types. In this case, it's just PDF.
-        $supported_types = array('application/pdf');
-
-        // Get the file type of the upload
-        $arr_uploaded_file_type = wp_check_filetype(basename($_FILES['pauta_pdf_contribution']['name']));
-        $uploaded_file_type = $arr_uploaded_file_type['type'];
+	// Get the file type of the upload
+	$arr_uploaded_file_type = wp_check_filetype(basename($_FILES['pauta_pdf_contribution']['name']));
+	$uploaded_file_type = $arr_uploaded_file_type['type'];
 
         if (isset ($_FILES['pauta_pdf_contribution']['name']) && $_FILES['pauta_pdf_contribution']['name'] != '') {
             if (!in_array($uploaded_file_type, $supported_types)) {
@@ -522,36 +446,37 @@ function delibera_save_post($post_id, $post)
         }
         /* ######### FOR PDF UPLOAD FILE ######### */
         /* ######### END ######### */
+        
+	$events_meta = apply_filters('delibera_save_post_metas', $events_meta);
 
-		foreach ($events_meta as $key => $value) // Buscar dados
+	foreach ($events_meta as $key => $value) // Buscar dados
+	{
+		if(get_post_meta($post->ID, $key, true)) // Se já existe
 		{
-	        if(get_post_meta($post->ID, $key, true)) // Se já existe
-	        {
-                update_post_meta($post->ID, $key, $value); // Atualiza
-	        }
-	        else
-	        {
-                add_post_meta($post->ID, $key, $value, true); // Senão, cria
-	        }
-	    }
-
-	    if(
-	    	array_key_exists('delibera_fim_prazo', $_POST) &&
-	    	$_POST['delibera_fim_prazo'] == 'S' &&
-	    	current_user_can('forcar_prazo')
-	    )
-	    {
-	    	delibera_forca_fim_prazo($post->ID);
-	    }
-
-	    if($post->post_status == 'publish' && !$autosave)
-	    {
-	    	delibera_del_cron($post->ID);
-            delibera_publish_pauta($post->ID, $post, true);
-	    }
-
+			update_post_meta($post->ID, $key, $value); // Atualiza
+		}
+		else
+		{
+			add_post_meta($post->ID, $key, $value, true); // Senão, cria
+		}
 	}
 
+	do_action('delibera_save_post', $post_id, $post, $opt);
+	
+    if(
+    	array_key_exists('delibera_fim_prazo', $_POST) &&
+    	$_POST['delibera_fim_prazo'] == 'S' &&
+    	current_user_can('forcar_prazo')
+    )
+    {
+    	delibera_forca_fim_prazo($post->ID);
+    }
+
+	if($post->post_status == 'publish' && !$autosave)
+	{
+		delibera_del_cron($post->ID);
+		delibera_publish_pauta($post->ID, $post, true);
+	}
 }
 
 add_action ('save_post', 'delibera_save_post', 1, 2);
@@ -641,11 +566,8 @@ function delibera_nova_pauta_create_action(){
              )
             */
 
-            if($opt['validacao'] == 'S'){
-                $_POST['prazo_validacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_validacao'].' DAYS'));
-                $_POST['min_validacoes'] = $opt['minimo_validacao'];
-            }
-
+        	do_action('delibera_create_pauta_frontend', $opt);
+        
             if($opt['relatoria'] == 'S'){
                 $_POST['prazo_relatoria'] = date('d/m/Y', strtotime ('+'.$opt['dias_relatoria'].' DAYS'));
                 if($opt['eleicao_relator'] == 'S'){

@@ -13,6 +13,13 @@ class DeliberaValidation
 		add_filter('delivera_config_page_rows', array($this, 'configPageRows'), 10, 2);
 		add_filter('delibera_situation_button_text', array($this, 'situationButtonText'));
 		add_action('delibera_topic_meta', array($this, 'topicMeta'), 10, 5);
+		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 3);
+		add_filter('delibera_check_post_data', array($this, 'checkPostData'), 10, 2);
+		//add_action('delibera_save_post', array($this, 'savePost'), 10, 3);
+		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 10, 2);
+		add_action('delibera_create_pauta_frontend', array($this, 'createPautaAtFront'));
+		
+		add_shortcode( 'delibera_lista_de_propostas', array($this, 'replacePropostas' ));
 	}
 	
 	/**
@@ -101,6 +108,17 @@ class DeliberaValidation
 		return $situation;
 	}
 	
+	/**
+	 * 
+	 * Post Meta Fields display
+	 * 
+	 * @param \WP_Post $post
+	 * @param array $custom post custom fields
+	 * @param array $options_plugin_delibera Delibera options array
+	 * @param WP_Term $situacao
+	 * @param bool $disable_edicao
+	 * 
+	 */
 	public function topicMeta($post, $custom, $options_plugin_delibera, $situacao, $disable_edicao)
 	{
 		$validacoes = array_key_exists("numero_validacoes", $custom) ?  $custom["numero_validacoes"][0] : 0;
@@ -138,11 +156,116 @@ class DeliberaValidation
 		
 	}
 	
-	public function delibera_publish_pauta()
+	public function publishPauta($postID, $opt, $alterar)
 	{
+		if(!array_key_exists('validacao', $opt) || $opt['validacao'] == 'S' && $opt['flow'][0] == 'validacao' )
+		{
+			if(!$alterar)
+			{
+				wp_set_object_terms($postID, 'validacao', 'situacao', false);
+			}
 		
+		}
+		$events_meta = array();
+		$events_meta['delibera_numero_comments_validacoes'] = 0;
+		$events_meta['numero_validacoes'] = 0;
+		
+		foreach ($events_meta as $key => $value) // Buscar dados
+		{
+			if(get_post_meta($postID, $key, true)) // Se já existe
+			{
+				update_post_meta($postID, $key, $value); // Atualiza
+			}
+			else
+			{
+				add_post_meta($postID, $key, $value, true); // Senão, cria
+			}
+		}
+	}
+	
+	function checkPostData($erros, $opt)
+	{
+		if($opt['validacao'] == 'S')
+		{
+			$value = $_POST['prazo_validacao'];
+			$valida = delibera_tratar_data($value);
+			if(!$autosave && ($valida === false || $valida < 1))
+			{
+				$erros[] = __("É necessário definir corretamente o prazo de validação", "delibera");
+			}
+			
+			$value = (int)$_POST['min_validacoes'];
+			$valida = is_int($value) && $value > 0;
+			if(!$autosave && ($valida === false))
+			{
+				$erros[] = __("É necessário definir corretamente o número mínimo de validações", "delibera");
+			}
+		}
+		return $erros;
+	}
+	
+	/**
+	 *
+	 * Retorna pautas em Validação
+	 * @param array $filtro
+	 */
+	public static function getPropostas($filtro = array())
+	{
+		return self::getPautas($filtro);
+	}
+	
+	/**
+	 *
+	 * Retorna pautas em Validação
+	 * @param array $filtro
+	 */
+	public static function getPautas($filtro = array())
+	{
+		return delibera_get_pautas_em($filtro, 'validacao');
+	}
+	
+	public function replacePropostas($matches)
+	{
+		global $wp_posts;
+		$temp = explode(',', $matches[1]); // configurações da shorttag
+		$count = count($temp);
+	
+		$param = array(); // TODO Tratar Parametros
+	
+		$html = DeliberaValidation::getPropostas($param);
+	
+		$wp_posts = $html;
+		global $post;
+		$old = $post;
+		echo '<div id="lista-de-pautas">';
+		foreach ( $wp_posts as $wp_post )
+		{
+			$post = $wp_post;
+			include 'delibera_loop_pauta.php';
+		}
+		echo '</div>';
+		$post = $old;
+	
+		return ''; // Retornar código da representação
+	}
+	
+	public function savePostMetas($events_meta, $opt)
+	{
+		$events_meta['prazo_validacao'] = $opt['validacao'] == 'S' ? $_POST['prazo_validacao'] : date('d/m/Y');
+		$events_meta['min_validacoes'] = $opt['validacao'] == 'S' ? $_POST['min_validacoes'] : 10;
+		
+		return $events_meta;
+	}
+	
+	public function createPautaAtFront($opt)
+	{
+		if($opt['validacao'] == 'S'){
+			$_POST['prazo_validacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_validacao'].' DAYS'));
+			$_POST['min_validacoes'] = $opt['minimo_validacao'];
+		}
 	}
 	
 }
 $DeliberaValidation = new DeliberaValidation();
+
 
