@@ -64,10 +64,8 @@ function delibera_get_situation_button($postId)
             return 'Votar';
         case 'discussao':
             return 'Discutir';
-        case 'validacao':
-            return 'Votar';
         default:
-            return;
+            return apply_filters('delibera_situation_button_text', $situacao);
     }
 }
 
@@ -84,13 +82,8 @@ function delibera_pauta_meta()
 	$options_plugin_delibera = delibera_get_config();
 
 	if(!is_array($custom)) $custom = array();
-	$validacoes = array_key_exists("numero_validacoes", $custom) ?  $custom["numero_validacoes"][0] : 0;
-
-	$min_validacoes = array_key_exists("min_validacoes", $custom) ?  $custom["min_validacoes"][0] : htmlentities($options_plugin_delibera['minimo_validacao']);
-
 	$situacao = delibera_get_situacao($post->ID);
 
-	$dias_validacao = intval(htmlentities($options_plugin_delibera['dias_validacao']));
 	$dias_discussao = intval(htmlentities($options_plugin_delibera['dias_discussao']));
 	$dias_relatoria = intval(htmlentities($options_plugin_delibera['dias_relatoria']));
 	$dias_votacao_relator = intval(htmlentities($options_plugin_delibera['dias_votacao_relator']));
@@ -107,7 +100,7 @@ function delibera_pauta_meta()
 
 	if($options_plugin_delibera['validacao'] == "S") // Adiciona prazo de validação se for necessário
 	{
-		$dias_discussao += $dias_validacao;
+		//TODO adicionar modulo anterior ao prazo $dias_discussao += $dias_validacao;
 	}
 
 	$dias_votacao = $dias_discussao + intval(htmlentities($options_plugin_delibera['dias_votacao']));
@@ -126,13 +119,12 @@ function delibera_pauta_meta()
 
 	$now = strtotime(date('Y/m/d')." 11:59:59");
 
-	$prazo_validacao_sugerido = strtotime("+$dias_validacao days", $now);
 	$prazo_discussao_sugerido = strtotime("+$dias_discussao days", $now);
 	$prazo_eleicao_relator_sugerido = strtotime("+$dias_votacao_relator days", $now);
 	$prazo_relatoria_sugerido = strtotime("+$dias_relatoria days", $now);
 	$prazo_votacao_sugerido = strtotime("+$dias_votacao days", $now);
 
-	$prazo_validacao = date('d/m/Y', $prazo_validacao_sugerido);
+	
 	$prazo_discussao = date('d/m/Y', $prazo_discussao_sugerido);
 	$prazo_eleicao_relator = date('d/m/Y', $prazo_eleicao_relator_sugerido);
 	$prazo_relatoria = date('d/m/Y', $prazo_relatoria_sugerido);
@@ -154,26 +146,14 @@ function delibera_pauta_meta()
 		$post->post_status == 'auto-draft' ||
 		$post->post_status == 'pending'))
 	{
-		$prazo_validacao = array_key_exists("prazo_validacao", $custom) ?  $custom["prazo_validacao"][0] : $prazo_validacao;
 		$prazo_discussao = array_key_exists("prazo_discussao", $custom) ?  $custom["prazo_discussao"][0] : $prazo_discussao;
 		$prazo_eleicao_relator = array_key_exists("prazo_eleicao_relator", $custom) ?  $custom["prazo_eleicao_relator"][0] : $prazo_eleicao_relator;
 		$prazo_relatoria = array_key_exists("prazo_relatoria", $custom) ?  $custom["prazo_relatoria"][0] : $prazo_relatoria;
 		$prazo_votacao = array_key_exists("prazo_votacao", $custom) ?  $custom["prazo_votacao"][0] : $prazo_votacao;
 	}
 
-	if($options_plugin_delibera['validacao'] == "S")
-	{
-	?>
-		<p>
-			<label for="min_validacoes" class="label_min_validacoes"><?php _e('Mínimo de Validações','delibera'); ?>:</label>
-			<input <?php echo $disable_edicao ?> id="min_validacoes" name="min_validacoes" class="min_validacoes widefat" value="<?php echo $min_validacoes; ?>"/>
-		</p>
-		<p>
-			<label for="prazo_validacao" class="label_prazo_validacao"><?php _e('Prazo para Validação','delibera') ?>:</label>
-			<input <?php echo $disable_edicao ?> id="prazo_validacao" name="prazo_validacao" class="prazo_validacao widefat hasdatepicker" value="<?php echo $prazo_validacao; ?>"/>
-		</p>
-	<?php
-	}
+	do_action('delibera_topic_meta', $post, $custom, $options_plugin_delibera, $situacao, $disable_edicao);
+	
 	?>
 	<p>
 		<label for="prazo_discussao" class="label_prazo_discussao"><?php _e('Prazo para Discussões','delibera') ?>:</label>

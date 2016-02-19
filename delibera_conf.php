@@ -39,7 +39,8 @@ require_once('delibera_conf_themes.php');
 require_once('delibera_conf_roles.php');
 
 /**
- * Retorna do banco de dados configuração principal
+ * Return Main Configuration from database
+ * there are two level of config, main (required) and others configs
  *
  * @param array $config -
  * @return array
@@ -53,15 +54,13 @@ function delibera_get_main_config($config = array()) {
 
     $opt = array();
     $opt['theme'] = $deliberaThemes->getThemeDir('creta');
-    $opt['minimo_validacao'] = '10';
-    $opt['dias_validacao'] = '5';
+    
     $opt['dias_discussao'] = '5';
     $opt['dias_votacao'] = '5';
     $opt['criar_pauta_pelo_front_end'] = 'N';
     $opt['representante_define_prazos'] = 'N';
     $opt['pauta_suporta_encaminhamento'] = 'S';
     $opt['dias_novo_prazo'] = '2';
-    $opt['validacao'] = 'S';
     $opt['dias_relatoria'] = '2';
     $opt['relatoria'] = 'N';
     $opt['eleicao_relator'] = 'N';
@@ -72,6 +71,8 @@ function delibera_get_main_config($config = array()) {
     $opt['cabecalho_arquivo'] = __( 'Bem-vindo a plataforma de debate do ', 'delibera' ).get_bloginfo('name');
     $opt['todos_usuarios_logados_podem_participar'] = 'N';
 	$opt['data_fixa_nova_pauta_externa'] = '';
+	
+	$opt = apply_filters('delibera_get_main_config', $opt);
 
     return array_merge($opt, $config);
 }
@@ -170,22 +171,8 @@ function delibera_conf_page()
                     "label" => __('Pautas suportam sugestão de encaminhamento?', 'delibera'),
                     "content" => '<input type="checkbox" name="pauta_suporta_encaminhamento" id="pauta_suporta_encaminhamento" value="S" '. ( htmlspecialchars_decode($opt['pauta_suporta_encaminhamento']) == "S" ? "checked='checked'" : "" ).'/>',
                 );
-				$rows[] = array(
-					"id" => "validacao",
-					"label" => __('É necessário validação das pautas?', 'delibera'),
-					"content" => '<input type="checkbox" name="validacao" id="validacao" value="S" '.(htmlspecialchars_decode($opt['validacao']) == 'S' ? 'checked="checked"' : '').' />'
-				);
-				$rows[] = array(
-					"id" => "minimo_validacao",
-					"label" => __('Mínimo de validações para uma pauta:', 'delibera'),
-					"content" => '<input type="text" name="minimo_validacao" id="minimo_validacao" value="'.htmlspecialchars_decode($opt['minimo_validacao']).'"/>'
-				);
-
-				$rows[] = array(
-					"id" => "dias_validacao",
-					"label" => __('Dias para validação da pauta:', 'delibera'),
-					"content" => '<input type="text" name="dias_validacao" id="dias_validacao" value="'.htmlspecialchars_decode($opt['dias_validacao']).'"/>'
-				);
+				
+                $rows = apply_filters('delivera_config_page_rows', $rows, $opt);
 
 				$rows[] = array(
 					"id" => "dias_discussao",

@@ -215,35 +215,9 @@ function delibera_Add_custom_taxonomy()
 				)
 			);
 		}
-		if(isset($opt['validacao']) && $opt['validacao'] == 'S')
-		{
-			if(term_exists('validacao', 'situacao', null) == false)
-			{
-				delibera_insert_term('Proposta de Pauta', 'situacao', array(
-						'description'=> 'Pauta em Validação',
-						'slug' => 'validacao',
-					),
-					array(
-						'qtrans_term_pt' => 'Proposta de Pauta',
-						'qtrans_term_en' => 'Proposed Topic',
-						'qtrans_term_es' => 'Agenda Propuesta',
-					)
-				);
-			}
-			if(term_exists('naovalidada', 'situacao', null) == false)
-			{
-				delibera_insert_term('Pauta Recusada', 'situacao', array(
-						'description'=> 'Pauta não Validação',
-						'slug' => 'naovalidada',
-					),
-					array(
-						'qtrans_term_pt' => 'Pauta Recusada',
-						'qtrans_term_en' => 'Rejected Topic',
-						'qtrans_term_es' => 'Agenda Rechazada',
-					)
-				);
-			}
-		}
+		
+		do_action('delibera_situacao_register');
+		
 	}
 
 	if(file_exists(__DIR__.DIRECTORY_SEPARATOR.'delibera_taxs.php'))
@@ -253,9 +227,24 @@ function delibera_Add_custom_taxonomy()
 
 }
 
+function deliberaLoadModules()
+{
+	$modules = array_filter(glob(dirname(__FILE__).'/modules/*'), 'is_dir');
+	foreach ($modules as $module)
+	{
+		$filename = $module.DIRECTORY_SEPARATOR.basename($module).'.php';
+		if(file_exists($filename))
+		{
+			include $filename;
+		}
+	}
+}
 
 function delibera_init()
 {
+	
+	deliberaLoadModules();
+	
 	add_action('admin_menu', 'delibera_config_menu');
 
 	delibera_Add_custom_Post();
