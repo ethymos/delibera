@@ -46,7 +46,7 @@ class DeliberaVote
 	 */
 	public function getMainConfig($opts)
 	{
-		$opt['dias_votacao'] = '5';
+		$opts['dias_votacao'] = '5';
 		return $opts;
 	}
 	
