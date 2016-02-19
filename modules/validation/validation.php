@@ -10,7 +10,7 @@ class DeliberaValidation
 	{
 		add_action('delibera_situacao_register', array($this, 'registerTax'));
 		add_filter('delibera_get_main_config', array($this, 'getMainConfig'));
-		add_filter('delivera_config_page_rows', array($this, 'ConfigPageRows'), 10, 2);
+		add_filter('delivera_config_page_rows', array($this, 'configPageRows'), 10, 2);
 		add_filter('delibera_situation_button_text', array($this, 'situationButtonText'));
 		add_action('delibera_topic_meta', array($this, 'topicMeta'), 10, 5);
 	}
@@ -66,7 +66,7 @@ class DeliberaValidation
 	 * Array to show on config page
 	 * @param array $rows
 	 */
-	public function ConfigPageRows($rows, $opt)
+	public function configPageRows($rows, $opt)
 	{
 		$rows[] = array(
 				"id" => "validacao",
@@ -135,6 +135,11 @@ class DeliberaValidation
 			</p>
 		<?php
 		}
+		
+	}
+	
+	public function delibera_publish_pauta()
+	{
 		
 	}
 	
