@@ -3,7 +3,7 @@
 // PHP 5.3 and later:
 namespace Delibera\Modules;
 
-class DeliberaValidation
+class Validation
 {
 	
 	public function __construct()
@@ -271,6 +271,6 @@ class DeliberaValidation
 	}
 	
 }
-$DeliberaValidation = new DeliberaValidation();
+$DeliberaValidation = new \Delibera\Modules\Validation();
 
 

@@ -6,7 +6,7 @@
 // PHP 5.3 and later:
 namespace Delibera;
 
-class DeliberaFlow
+class Flow
 {
 	public function __construct()
 	{
@@ -107,4 +107,4 @@ class DeliberaFlow
 }
 
 
-$DeliberaFlow = new DeliberaFlow();
+$DeliberaFlow = new \Delibera\Flow();

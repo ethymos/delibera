@@ -3,7 +3,7 @@
 // PHP 5.3 and later:
 namespace Delibera\Modules;
 
-class DeliberaVote
+class Vote
 {
 	
 	public function __construct()
@@ -203,6 +203,6 @@ class DeliberaVote
 	}
 	
 }
-$DeliberaVote = new DeliberaVote();
+$DeliberaVote = new \Delibera\Modules\Vote();
 
 

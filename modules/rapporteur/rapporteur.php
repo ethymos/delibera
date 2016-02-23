@@ -3,7 +3,7 @@
 // PHP 5.3 and later:
 namespace Delibera\Modules;
 
-class DeliberaRapporteur
+class Rapporteur
 {
 	
 	public function __construct()
@@ -270,6 +270,6 @@ class DeliberaRapporteur
 	}
 	
 }
-$DeliberaRapporteur = new DeliberaRapporteur();
+$DeliberaRapporteur = new \Delibera\Modules\Rapporteur();
 
 
