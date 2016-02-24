@@ -159,6 +159,34 @@ class Vote
 				add_post_meta($postID, $key, $value, true); // Senão, cria
 			}
 		}
+		/*
+		 * Faz agendamento das datas para seguir passos
+		 * 1) Excluir ao atingir data de validação se não foi validade
+		 * 2) Iniciar votação se tiver encaminhamento, ou novo prazo, caso contrário
+		 * 3) Fim da votação
+		 * 
+		 */ 
+		$prazo_votacao = get_post_meta($postID, 'prazo_votacao', true);
+		
+		if( ! empty($prazo_votacao) )
+		{
+			delibera_add_cron(
+				delibera_tratar_data($prazo_votacao),
+				'delibera_tratar_prazo_votacao',
+				array(
+						'post_ID' => $postID,
+						'prazo_votacao' => $prazo_votacao
+				)
+			);
+			delibera_add_cron(
+				strtotime("-1 day", delibera_tratar_data($prazo_votacao)),
+				'delibera_notificar_fim_prazo',
+				array(
+						'post_ID' => $postID,
+						'prazo_votacao' => $prazo_votacao
+				)
+			);
+		}
 		
 	}
 	

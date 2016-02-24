@@ -157,6 +157,28 @@ class Discussion
 				add_post_meta($postID, $key, $value, true); // Senão, cria
 			}
 		}
+		
+		$prazo_discussao = get_post_meta($postID, 'prazo_discussao', true);
+		
+		if($prazo_discussao !== false)
+		{
+			delibera_add_cron(
+				delibera_tratar_data($prazo_discussao),
+				'delibera_tratar_prazo_discussao',
+				array(
+						'post_ID' => $postID,
+						'prazo_discussao' => $prazo_discussao
+				)
+			);
+			delibera_add_cron(
+				strtotime("-1 day", delibera_tratar_data($prazo_discussao)),
+				'delibera_notificar_fim_prazo',
+				array(
+						'post_ID' => $postID,
+						'prazo_discussao' => $prazo_discussao
+				)
+			);
+		}
 	}
 	
 	function checkPostData($erros, $opt, $autosave)

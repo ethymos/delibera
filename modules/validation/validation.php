@@ -192,6 +192,28 @@ class Validation
 				add_post_meta($postID, $key, $value, true); // Senão, cria
 			}
 		}
+		
+		$prazo_validacao = get_post_meta($postID, 'prazo_validacao', true);
+		
+		if( ! empty($prazo_validacao) )
+		{
+			delibera_add_cron(
+				delibera_tratar_data($prazo_validacao),
+				'delibera_tratar_prazo_validacao',
+				array(
+						'post_ID' => $postID,
+						'prazo_validacao' => $prazo_validacao
+				)
+			);
+			delibera_add_cron(
+				strtotime("-1 day", delibera_tratar_data($prazo_validacao)),
+				'delibera_notificar_fim_prazo',
+				array(
+						'post_ID' => $postID,
+						'prazo_validacao' => $prazo_validacao
+				)
+			);
+		}
 	}
 	
 	function checkPostData($erros, $opt, $autosave)
