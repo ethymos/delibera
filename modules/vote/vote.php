@@ -17,6 +17,7 @@ class Vote
 		add_filter('delibera_check_post_data', array($this, 'checkPostData'), 10, 3);
 		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 10, 2);
 		add_action('delibera_create_pauta_frontend', array($this, 'createPautaAtFront'));
+		add_filter('delibera_register_flow_module', array($this, 'registerFlowModule'));
 		
 	}
 	
@@ -38,6 +39,16 @@ class Vote
 				)
 			);
 		}
+	}
+	
+	/**
+	 * Register situacao objects for flow treat
+	 * @param array $modules
+	 */
+	public function registerFlowModule($modules)
+	{
+		$modules['emvotacao'] = $this;
+		return $modules;
 	}
 	
 	/**
@@ -118,7 +129,7 @@ class Vote
 	
 	public function publishPauta($postID, $opt, $alterar)
 	{
-		if(!array_key_exists('relatoria', $opt) || $opt['relatoria'] == 'S' && $opt['flow'][0] == 'relatoria' )
+		if(!array_key_exists('relatoria', $opt) || $opt['relatoria'] == 'S' && $opt['delibera_flow'][0] == 'relatoria' )
 		{
 			if(!$alterar)
 			{

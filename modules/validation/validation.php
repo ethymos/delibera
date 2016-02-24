@@ -17,6 +17,7 @@ class Validation
 		add_filter('delibera_check_post_data', array($this, 'checkPostData'), 10, 3);
 		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 10, 2);
 		add_action('delibera_create_pauta_frontend', array($this, 'createPautaAtFront'));
+		add_filter('delibera_register_flow_module', array($this, 'registerFlowModule'));
 		
 		add_shortcode( 'delibera_lista_de_propostas', array($this, 'replacePropostas' ));
 	}
@@ -54,6 +55,17 @@ class Validation
 				)
 			);
 		}
+	}
+
+	/**
+	 * Register situacao objects for flow treat
+	 * @param array $modules
+	 */
+	public function registerFlowModule($modules)
+	{
+		$modules['validacao'] = $this;
+		$modules['naovalidada'] = $this;
+		return $modules;
 	}
 	
 	/**
@@ -157,7 +169,7 @@ class Validation
 	
 	public function publishPauta($postID, $opt, $alterar)
 	{
-		if(!array_key_exists('validacao', $opt) || $opt['validacao'] == 'S' && $opt['flow'][0] == 'validacao' )
+		if(!array_key_exists('validacao', $opt) || $opt['validacao'] == 'S' && $opt['delibera_flow'][0] == 'validacao' )
 		{
 			if(!$alterar)
 			{
@@ -270,6 +282,14 @@ class Validation
 		}
 	}
 	
+	public function getDeadline($post_id = false)
+	{
+		if($post_id == false)
+		{
+			$post_id = get_the_ID();
+		}
+		return get_post_meta($post_id, 'prazo_validacao', true);
+	}
 }
 $DeliberaValidation = new \Delibera\Modules\Validation();
 

@@ -17,6 +17,7 @@ class Discussion
 		add_filter('delibera_check_post_data', array($this, 'checkPostData'), 10, 3);
 		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 10, 2);
 		add_action('delibera_create_pauta_frontend', array($this, 'createPautaAtFront'));
+		add_filter('delibera_register_flow_module', array($this, 'registerFlowModule'));
 		
 		add_shortcode( 'delibera_lista_de_pautas',  array($this, 'replacePautas' ));
 	}
@@ -39,6 +40,16 @@ class Discussion
 				)
 			);
 		}
+	}
+	
+	/**
+	 * Register situacao objects for flow treat
+	 * @param array $modules
+	 */
+	public function registerFlowModule($modules)
+	{
+		$modules['discussao'] = $this;
+		return $modules;
 	}
 	
 	/**
@@ -123,7 +134,7 @@ class Discussion
 	
 	public function publishPauta($postID, $opt, $alterar)
 	{
-		if(/*!array_key_exists('discussao', $opt) || $opt['discussao'] == 'S' && TODO check activation */ $opt['flow'][0] == 'discussao' )
+		if(/*!array_key_exists('discussao', $opt) || $opt['discussao'] == 'S' && TODO check activation */ $opt['delibera_flow'][0] == 'discussao' )
 		{
 			if(!$alterar)
 			{
@@ -211,6 +222,15 @@ class Discussion
 		} else {
 			$_POST['prazo_discussao'] = date('d/m/Y', strtotime ('+'.$opt['dias_discussao'].' DAYS'));
 		}
+	}
+	
+	public function getDeadline($post_id = false)
+	{
+		if($post_id == false)
+		{
+			$post_id = get_the_ID();
+		}
+		return get_post_meta($post_id, 'prazo_discussao', true);
 	}
 	
 }
