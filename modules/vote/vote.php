@@ -213,6 +213,15 @@ class Vote
 		}
 	}
 	
+	public function getDeadline($post_id = false)
+	{
+		if($post_id == false)
+		{
+			$post_id = get_the_ID();
+		}
+		return get_post_meta($post_id, 'prazo_votacao', true);
+	}
+	
 }
 $DeliberaVote = new \Delibera\Modules\Vote();
 

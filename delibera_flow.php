@@ -126,9 +126,13 @@ class Flow
 		$modules = $this->getFlowModules();
 		
 		$now = array_search($situacao, $flow);
-		if(($now - 1) > 0)
+		if(($now - 1) > 0 && array_key_exists($flow[$now - 1], $modules) && property_exists($modules[$flow[$now - 1]], 'getDeadline'))
 		{
-			$modules[$flow[$now - 1]]->getDeadline();
+			return $modules[$flow[$now - 1]]->getDeadline();
+		}
+		else 
+		{
+			return date('d/m/Y');
 		}
 	}
 	

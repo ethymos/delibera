@@ -281,6 +281,24 @@ class Rapporteur
 		}
 	}
 	
+	public function getDeadline($post_id = false)
+	{
+		if($post_id == false)
+		{
+			$post_id = get_the_ID();
+		}
+		$opt = delibera_get_config();
+		/**
+		 * Add time to Relator election when activated
+		 */
+		if($opt['eleicao_relator'] == 'S')
+		{
+			return date('d/m/Y', strtotime ('+'.$opt['dias_votacao_relator'].' DAYS', delibera_tratar_data(get_post_meta($post_id, 'prazo_relatoria', true))));
+		}
+		
+		return get_post_meta($post_id, 'prazo_relatoria', true);
+	}
+	
 }
 $DeliberaRapporteur = new \Delibera\Modules\Rapporteur();
 
