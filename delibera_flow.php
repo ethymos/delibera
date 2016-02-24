@@ -16,7 +16,7 @@ class Flow
 		add_action('delibera_topic_meta', array($this, 'topicMeta'), 10, 5);
 		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 10, 2);
 		
-		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 3);
+		//add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 3);
 		
 	}
 	
@@ -144,34 +144,6 @@ class Flow
 		}
 	
 		return $events_meta;
-	}
-	
-	public function publishPauta($postID, $opt, $alterar)
-	{
-		$prazo_validacao = get_post_meta($postID, 'prazo_validacao', true);
-		$prazo_discussao =  get_post_meta($postID, 'prazo_discussao', true);
-		$prazo_relatoria =  get_post_meta($postID, 'prazo_relatoria', true);
-		$prazo_eleicao_relator =  get_post_meta($postID, 'prazo_eleicao_relator', true);
-		$prazo_votacao =  get_post_meta($postID, 'prazo_votacao', true);
-		
-		
-		delibera_criar_agenda(
-			$post->ID,
-			$prazo_validacao,
-			$prazo_discussao,
-			$prazo_votacao,
-			$opt['relatoria'] == 'S' ? $prazo_relatoria : false,
-			$opt['relatoria'] == 'S' && $opt['eleicao_relator'] == 'S' ? $prazo_eleicao_relator : false
-		);
-		// discussao
-		/*else
-		{
-			if (! $alterar)
-			{
-				wp_set_object_terms ( $post->ID, 'discussao', 'situacao', false );
-			}
-			delibera_criar_agenda ( $post->ID, false, $prazo_discussao, $prazo_votacao, $opt ['relatoria'] == 'S' ? $prazo_relatoria : false, $opt ['relatoria'] == 'S' && $opt ['eleicao_relator'] == 'S' ? $prazo_eleicao_relator : false );
-		}*/
 	}
 	
 }
