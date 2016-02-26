@@ -365,6 +365,10 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 				delibera_novo_prazo($post_id);
 			}
 		}
+		elseif($situacao->slug == 'eleicao_relator')
+		{
+			//TODO eleicao relator deadline
+		}
 	}
 	
 }
