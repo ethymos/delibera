@@ -162,14 +162,6 @@ class Validation extends \Delibera\Modules\ModuleBase
 	 */
 	public function publishPauta($postID, $opt, $alterar)
 	{
-		if(!array_key_exists('validacao', $opt) || $opt['validacao'] == 'S' && $opt['delibera_flow'][0] == 'validacao' )
-		{
-			if(!$alterar)
-			{
-				wp_set_object_terms($postID, 'validacao', 'situacao', false);
-			}
-		
-		}
 		$events_meta = array();
 		$events_meta['delibera_numero_comments_validacoes'] = 0;
 		$events_meta['numero_validacoes'] = 0;
