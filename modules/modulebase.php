@@ -11,13 +11,13 @@ abstract class ModuleBase
 	 * List of of topic status
 	 * @var array
 	 */
-	abstract protected $situacao = array();
+	protected $situacao = array();
 	
 	/**
 	 * Name of module deadline metadata
 	 * @var String
 	 */
-	abstract protected $prazo_meta = 'prazo';
+	protected $prazo_meta = 'prazo';
 	
 	/**
 	 * List of pair shotcode name => method
