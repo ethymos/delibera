@@ -59,6 +59,24 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 	}
 	
 	/**
+	 *
+	 * {@inheritDoc}
+	 * @see \Delibera\Modules\ModuleBase::initModule()
+	 */
+	public function initModule($post_id)
+	{
+		$opts = delibera_get_config();
+		if($opts['eleicao_relator'] == 'S')
+		{
+			wp_set_object_terms($post_id, 'eleicaoredator', 'situacao', false); //Mudar situação para Votação
+		}
+		elseif($opts['relatoria'] == 'S')
+		{
+			wp_set_object_terms($post_id, 'relatoria', 'situacao', false); //Mudar situação para Votação
+		}
+	}
+	
+	/**
 	 * Append configurations 
 	 * @param array $opts
 	 */
@@ -201,10 +219,10 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 		{
 			delibera_add_cron(
 				delibera_tratar_data($prazo_eleicao_relator),
-				'delibera_tratar_prazo_eleicao_relator',
+				array($this, 'deadline'),
 				array(
-						'post_ID' => $postID,
-						'prazo_votacao' => $prazo_eleicao_relator
+						'post_id' => $postID,
+						'prazo' => $prazo_eleicao_relator
 				)
 			);
 			delibera_add_cron(
@@ -223,10 +241,10 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 		{
 			delibera_add_cron(
 				delibera_tratar_data($prazo_relatoria),
-				'delibera_tratar_prazo_relatoria',
+				array($this, 'deadline'),
 				array(
-						'post_ID' => $postID,
-						'prazo_votacao' => $prazo_relatoria
+						'post_id' => $postID,
+						'prazo' => $prazo_relatoria
 				)
 			);
 			delibera_add_cron(
@@ -317,6 +335,36 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 		}
 		
 		return get_post_meta($post_id, 'prazo_relatoria', true);
+	}
+	
+	/**
+	 *
+	 * {@inheritDoc}
+	 * @see \Delibera\Modules\ModuleBase::deadline()
+	 */
+	public function deadline($args)
+	{
+		$situacao = delibera_get_situacao($args['post_ID']);
+		if($situacao->slug == 'relatoria')
+		{
+			$post_id = $args['post_ID'];
+			if(count(delibera_get_comments_encaminhamentos($post_id)) > 0)
+			{
+				//wp_set_object_terms($post_id, 'emvotacao', 'situacao', false); //Mudar situação para Votação
+				\Delibera\Flow::next($post_id);
+				
+				//delibera_notificar_situacao($post_id);
+				
+				if(has_action('delibera_relatoria_concluida'))
+				{
+					do_action('delibera_relatoria_concluida', $post_id);
+				}
+			}
+			else
+			{
+				delibera_novo_prazo($post_id);
+			}
+		}
 	}
 	
 }

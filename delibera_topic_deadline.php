@@ -19,7 +19,7 @@ function delibera_forca_fim_prazo($postID)
         ));
     	break;
     case 'emvotacao':
-        delibera_computa_votos($postID);
+        //delibera_computa_votos($postID); TODO use module
     	break;
     }
     //delibera_notificar_situacao($postID);
@@ -73,71 +73,6 @@ add_action('admin_action_delibera_reabrir_pauta_action', 'delibera_reabrir_pauta
 
 require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_cron.php';
 
-
-function delibera_tratar_prazos($args)
-{
-	$situacao = delibera_get_situacao($args['post_ID']);
-	switch ($situacao->slug)
-	{
-		case 'validacao':
-			delibera_tratar_prazo_validacao($args);
-		break;
-		case 'discussao':
-			delibera_tratar_prazo_discussao($args);
-		break;
-		case 'relatoria':
-			delibera_tratar_prazo_relatoria($args);
-		break;
-		case 'emvotacao':
-			delibera_tratar_prazo_votacao($args);
-		break;
-	}
-}
-
-add_action('delibera_tratar_prazos', 'delibera_tratar_prazos', 1, 1);
-
-function delibera_tratar_prazo_validacao($args)
-{
-	$situacao = delibera_get_situacao($args['post_ID']);
-	if($situacao->slug == 'validacao')
-	{
-		delibera_marcar_naovalidada($args['post_ID']);
-	}
-}
-
-function delibera_tratar_prazo_discussao($args)
-{
-	$situacao = delibera_get_situacao($args['post_ID']);
-	if($situacao->slug == 'discussao')
-	{
-		$post_id = $args['post_ID'];
-		if(count(delibera_get_comments_encaminhamentos($post_id)) > 0)
-		{
-			$opts = delibera_get_config();
-			if($opts['eleicao_relator'] == 'S')
-			{
-				wp_set_object_terms($post_id, 'eleicaoredator', 'situacao', false); //Mudar situação para Votação
-			}
-			elseif($opts['relatoria'] == 'S')
-			{
-				wp_set_object_terms($post_id, 'relatoria', 'situacao', false); //Mudar situação para Votação
-			}
-			else
-			{
-				wp_set_object_terms($post_id, 'emvotacao', 'situacao', false); //Mudar situação para Votação
-			}
-			if(has_action('delibera_discussao_concluida'))
-			{
-				do_action('delibera_discussao_concluida', $post_id);
-			}
-		}
-		else
-		{
-			delibera_novo_prazo($post_id);
-		}
-	}
-}
-
 function delibera_tratar_prazo_relatoria($args)
 {
 	$situacao = delibera_get_situacao($args['post_ID']);
@@ -157,15 +92,6 @@ function delibera_tratar_prazo_relatoria($args)
 		{
 			delibera_novo_prazo($post_id);
 		}
-	}
-}
-
-function delibera_tratar_prazo_votacao($args)
-{
-	$situacao = delibera_get_situacao($args['post_ID']);
-	if($situacao->slug == 'emvotacao')
-	{
-		delibera_computa_votos($args['post_ID']);
 	}
 }
 

@@ -8,6 +8,9 @@ namespace Delibera;
 
 class Flow
 {
+	
+	protected $flow = array();
+	
 	public function __construct()
 	{
 		add_filter('delibera_get_main_config', array($this, 'getMainConfig'));
@@ -78,11 +81,12 @@ class Flow
 		<?php
 	}
 	
+	/**
+	 * get topic flow sequence
+	 * @param string $post_id
+	 */
 	public function get($post_id = false)
 	{
-		$options_plugin_delibera = delibera_get_config();
-		$default_flow = isset($options_plugin_delibera['delibera_flow']) ? $options_plugin_delibera['delibera_flow'] : array();
-		
 		if($post_id == false)
 		{
 			$post_id = get_the_ID();
@@ -92,13 +96,20 @@ class Flow
 			}
 		}
 		
+		if(array_key_exists($post_id, $this->flow)) return $this->flow[$post_id];
+		
+		$options_plugin_delibera = delibera_get_config();
+		$default_flow = isset($options_plugin_delibera['delibera_flow']) ? $options_plugin_delibera['delibera_flow'] : array();
+		
 		$flow = get_post_meta($post_id, 'delibera_flow', true);
 		if(is_array($flow) && count($flow) > 0)
 		{
+			$this->flow[$post_id] = $flow;
 			return $flow;
 		}
 		else 
 		{
+			$this->flow[$post_id] = $default_flow;
 			return $default_flow;
 		}
 	}
@@ -146,6 +157,28 @@ class Flow
 		return $events_meta;
 	}
 	
+	/**
+	 * Go to the next module on flow
+	 * @param string $post_id
+	 */
+	public static function next($post_id = false)
+	{
+		global $DeliberaFlow;
+		
+		$flow = $DeliberaFlow->get($post_id);
+		$situacao = delibera_get_situacao($post_id);
+		$current = array_search($situacao, $flow);
+		$modules = $DeliberaFlow->getFlowModules(); //TODO cache?
+		
+		if(array_key_exists($current+1, $flow))
+		{
+			$modules[$flow[$current+1]]->initModule($post_id);
+		}
+		else 
+		{
+			//TODO the end?
+		}
+	}
 }
 
 global $DeliberaFlow;

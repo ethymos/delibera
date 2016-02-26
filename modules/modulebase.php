@@ -63,6 +63,12 @@ abstract class ModuleBase
 	abstract public function registerTax();
 	
 	/**
+	 * Initial situation on module begins
+	 * @param int $post_id
+	 */
+	abstract public function initModule($post_id);
+	
+	/**
 	 * Append configurations
 	 * @param array $opts
 	 */
@@ -153,5 +159,11 @@ abstract class ModuleBase
 	{
 		return delibera_get_pautas_em($filtro, $this->situacao);
 	}
+	
+	/**
+	 * Trigger module deadline event
+	 * @param array $args in form: array('post_id' => $post_id, 'prazo' => $prazo)
+	 */
+	abstract public function deadline($args);
 	
 }

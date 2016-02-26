@@ -45,6 +45,16 @@ class Discussion extends \Delibera\Modules\ModuleBase
 	}
 	
 	/**
+	 *
+	 * {@inheritDoc}
+	 * @see \Delibera\Modules\ModuleBase::initModule()
+	 */
+	public function initModule($post_id)
+	{
+		wp_set_object_terms($post_id, 'discussao', 'situacao', false);
+	}
+	
+	/**
 	 * Append configurations 
 	 * @param array $opts
 	 */
@@ -158,10 +168,10 @@ class Discussion extends \Delibera\Modules\ModuleBase
 		{
 			delibera_add_cron(
 				delibera_tratar_data($prazo_discussao),
-				'delibera_tratar_prazo_discussao',
+				array($this, 'deadline'),
 				array(
-						'post_ID' => $postID,
-						'prazo_discussao' => $prazo_discussao
+						'post_id' => $postID,
+						'prazo' => $prazo_discussao
 				)
 			);
 			delibera_add_cron(
@@ -227,6 +237,33 @@ class Discussion extends \Delibera\Modules\ModuleBase
 			$_POST['prazo_discussao'] = $prazo_discussao->format('d/m/Y');
 		} else {
 			$_POST['prazo_discussao'] = date('d/m/Y', strtotime ('+'.$opt['dias_discussao'].' DAYS'));
+		}
+	}
+	
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * @see \Delibera\Modules\ModuleBase::deadline()
+	 */
+	public function deadline($args)
+	{
+		$post_id = $args['post_id'];
+		$situacao = delibera_get_situacao($post_id);
+		if($situacao->slug == 'discussao')
+		{
+			if(count(delibera_get_comments_encaminhamentos($post_id)) > 0)
+			{
+				\Delibera\Flow::next($post_id);
+				
+				if(has_action('delibera_discussao_concluida'))
+				{
+					do_action('delibera_discussao_concluida', $post_id);
+				}
+			}
+			else
+			{
+				delibera_novo_prazo($post_id);
+			}
 		}
 	}
 	

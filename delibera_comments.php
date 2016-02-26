@@ -421,7 +421,7 @@ function delibera_save_comment_metas($comment_id)
 			add_comment_meta($comment_id, 'delibera_votos', $votos, true);
 
 			$comment = get_comment($comment_id);
-			delibera_valida_votos($comment->comment_post_ID);
+			//delibera_valida_votos($comment->comment_post_ID); TODO use module version
 
 			$nvotos = get_post_meta($comment->comment_post_ID, 'delibera_numero_comments_votos', true);
 			$nvotos++;
@@ -846,101 +846,3 @@ function delibera_valida_permissoes($comment_ID)
 }
 add_action( 'wp_blacklist_check', 'delibera_valida_permissoes' );
 
-/**
- *
- * Verifica se o número de votos é igual ao número de representantes para deflagar fim da votação
- * @param integer $postID
- */
-function delibera_valida_votos($postID)
-{
-	global $wp_roles,$wpdb;
-	$users_count = 0;
-    foreach ($wp_roles->roles as $nome => $role)
-    {
-    	if(is_array($role['capabilities']) && array_key_exists('votar', $role['capabilities']) && $role['capabilities']['votar'] == 1 ? "SSSSSim" : "NNNnnnnnnnao")
-    	{
-    		$result = $wpdb->get_results("SELECT count(*) as n FROM $wpdb->usermeta WHERE meta_key = 'wp_capabilities' AND meta_value LIKE '%$nome%' ");
-    		$users_count += $result[0]->n;
-    	}
-    }
-
-	$votos = delibera_get_comments_votacoes($postID);
-
-	$votos_count = count($votos);
-
-	if($votos_count >= $users_count)
-	{
-		delibera_computa_votos($postID, $votos);
-	}
-}
-
-/**
- *
- * Faz a apuração dos votos e toma as devidas ações:
- *    Empate: Mais prazo;
- *    Vencedor: Marco com resolucao e marca o encaminhamento.
- * @param interger $postID
- * @param array $votos
- */
-function delibera_computa_votos($postID, $votos = null)
-{
-	if(is_null($votos)) // Ocorre no fim do prazo de votação
-	{
-		$votos = delibera_get_comments_votacoes($postID);
-	}
-	$encaminhamentos = delibera_get_comments_encaminhamentos($postID);
-	$encaminhamentos_votos = array();
-	foreach ($encaminhamentos as $encaminhamento)
-	{
-		$encaminhamentos_votos[$encaminhamento->comment_ID] = 0;
-	}
-
-	foreach ($votos as $voto_comment)
-	{
-		$voto = get_comment_meta($voto_comment->comment_ID, 'delibera_votos', true);
-		foreach ($voto as $voto_para)
-		{
-            if (array_key_exists($voto_para, $encaminhamentos_votos))
-            {
-                $encaminhamentos_votos[$voto_para]++;
-            } else {
-                $encaminhamentos_votos[$voto_para] = 1;
-            }
-		}
-	}
-	$maisvotado = array(-1, -1);
-	$iguais = array();
-
-	foreach ($encaminhamentos_votos as $encaminhamentos_voto_key => $encaminhamentos_voto_valor)
-	{
-		if($encaminhamentos_voto_valor > $maisvotado[1])
-		{
-			$maisvotado[0] = $encaminhamentos_voto_key;
-			$maisvotado[1] = $encaminhamentos_voto_valor;
-			$iguais = array();
-		}
-		elseif($encaminhamentos_voto_valor == $maisvotado[1])
-		{
-			$iguais[] = $encaminhamentos_voto_key;
-		}
-		delete_comment_meta($encaminhamentos_voto_key, 'delibera_comment_numero_votos');
-		add_comment_meta($encaminhamentos_voto_key, 'delibera_comment_numero_votos', $encaminhamentos_voto_valor, true);
-	}
-
-	// nao finaliza a votacao caso haja um empate, exceto quando o administrador clicar no botão "Forçar fim do prazo"
-	if(count($iguais) > 0 && !(isset($_REQUEST['action']) && $_REQUEST['action'] == 'delibera_forca_fim_prazo_action')) // Empato
-	{
-		delibera_novo_prazo($postID);
-	}
-	else
-	{
-		wp_set_object_terms($postID, 'comresolucao', 'situacao', false);
-		update_comment_meta($maisvotado[0], 'delibera_comment_tipo', 'resolucao');
-		add_post_meta($postID, 'data_resolucao', date('d/m/Y H:i:s'), true);
-		////delibera_notificar_situacao($postID);
-		if(has_action('votacao_concluida'))
-		{
-			do_action('votacao_concluida', $post);
-		}
-	}
-}

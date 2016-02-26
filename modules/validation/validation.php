@@ -44,6 +44,16 @@ class Validation extends \Delibera\Modules\ModuleBase
 			);
 		}
 	}
+	
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * @see \Delibera\Modules\ModuleBase::initModule()
+	 */
+	public function initModule($post_id)
+	{
+		wp_set_object_terms($post_id, 'validacao', 'situacao', false);
+	}
 
 	/**
 	 * Append configurations 
@@ -182,17 +192,17 @@ class Validation extends \Delibera\Modules\ModuleBase
 		{
 			delibera_add_cron(
 				delibera_tratar_data($prazo_validacao),
-				'delibera_tratar_prazo_validacao',
+				array($this, 'deadline'),
 				array(
-						'post_ID' => $postID,
-						'prazo_validacao' => $prazo_validacao
+						'post_id' => $postID,
+						'prazo' => $prazo_validacao
 				)
 			);
 			delibera_add_cron(
 				strtotime("-1 day", delibera_tratar_data($prazo_validacao)),
 				'delibera_notificar_fim_prazo',
 				array(
-						'post_ID' => $postID,
+						'post_id' => $postID,
 						'prazo_validacao' => $prazo_validacao
 				)
 			);
@@ -294,6 +304,21 @@ class Validation extends \Delibera\Modules\ModuleBase
 			$_POST['min_validacoes'] = $opt['minimo_validacao'];
 		}
 	}
+	
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * @see \Delibera\Modules\ModuleBase::deadline()
+	 */
+	public function deadline($args)
+	{
+		$situacao = delibera_get_situacao($args['post_id']);
+		if($situacao->slug == 'validacao')
+		{
+			delibera_marcar_naovalidada($post_id);
+		}
+	}
+	
 }
 $DeliberaValidation = new \Delibera\Modules\Validation();
 
