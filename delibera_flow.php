@@ -19,7 +19,7 @@ class Flow
 		add_action('delibera_topic_meta', array($this, 'topicMeta'), 10, 5);
 		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 10, 2);
 		
-		//add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 3);
+		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 3);
 		
 	}
 	
@@ -158,6 +158,17 @@ class Flow
 	}
 	
 	/**
+	 * When the topic is published
+	 * @param int $postID
+	 * @param array $opt delibera configs
+	 * @param bool $alterar has been altered
+	 */
+	public function publishPauta($postID, $opt, $alterar)
+	{
+		self::reabrirPauta($postID, false);
+	}
+	
+	/**
 	 * Go to the next module on flow
 	 * @param string $post_id
 	 */
@@ -197,6 +208,14 @@ class Flow
 		}
 		$DeliberaFlow->next($post_id);
 		//delibera_notificar_situacao($postID); // Originaly comment, why?
+	}
+	
+	public static function reabrirPauta($postID, $new_deadline = false)
+	{
+		global $DeliberaFlow;
+		$flow = $DeliberaFlow->get($postID);
+		$flow[0]->initModule($postID);
+		if($new_deadline) delibera_novo_prazo($postID);
 	}
 	
 }
