@@ -332,7 +332,7 @@ function delibera_save_post($post_id, $post)
     	current_user_can('forcar_prazo')
     )
     {
-    	delibera_forca_fim_prazo($post->ID);
+    	\Delibera\Flow::forcarFimPrazo($post->ID);
     }
 
 	if($post->post_status == 'publish' && !$autosave)

@@ -1,36 +1,10 @@
 <?php
 
-function delibera_forca_fim_prazo($postID)
-{
-	$situacao = delibera_get_situacao($postID);
-
-    switch($situacao->slug)
-    {
-    case 'discussao':
-        delibera_tratar_prazo_discussao(array(
-            'post_ID' => $postID,
-            'prazo_discussao' => date('d/m/Y')
-        ));
-    	break;
-    case 'relatoria':
-        delibera_tratar_prazo_relatoria(array(
-            'post_ID' => $postID,
-            'prazo_relatoria' => date('d/m/Y')
-        ));
-    	break;
-    case 'emvotacao':
-        //delibera_computa_votos($postID); TODO use module
-    	break;
-    }
-    //delibera_notificar_situacao($postID);
-}
-
-
 function delibera_forca_fim_prazo_action()
 {
 	if(current_user_can('forcar_prazo') && check_admin_referer('delibera_forca_fim_prazo_action'.$_REQUEST['post'], '_wpnonce'))
 	{
-		delibera_forca_fim_prazo($_REQUEST['post']);
+		\Delibera\Flow::forcarFimPrazo($_REQUEST['post']);
 
 		wp_redirect( admin_url( 'edit.php?post_type=pauta') );
 	}
@@ -72,28 +46,6 @@ function delibera_reabrir_pauta_action()
 add_action('admin_action_delibera_reabrir_pauta_action', 'delibera_reabrir_pauta_action');
 
 require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_cron.php';
-
-function delibera_tratar_prazo_relatoria($args)
-{
-	$situacao = delibera_get_situacao($args['post_ID']);
-	if($situacao->slug == 'relatoria')
-	{
-		$post_id = $args['post_ID'];
-		if(count(delibera_get_comments_encaminhamentos($post_id)) > 0)
-		{
-			wp_set_object_terms($post_id, 'emvotacao', 'situacao', false); //Mudar situação para Votação
-			//delibera_notificar_situacao($post_id);
-			if(has_action('delibera_relatoria_concluida'))
-			{
-				do_action('delibera_relatoria_concluida', $post_id);
-			}
-		}
-		else
-		{
-			delibera_novo_prazo($post_id);
-		}
-	}
-}
 
 function delibera_marcar_naovalidada($postID)
 {
