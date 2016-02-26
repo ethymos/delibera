@@ -169,6 +169,7 @@ function delibera_Add_custom_taxonomy()
 
 function deliberaLoadModules()
 {
+	include dirname(__FILE__).'/modules/modulebase.php';
 	$modules = array_filter(glob(dirname(__FILE__).'/modules/*'), 'is_dir');
 	foreach ($modules as $module)
 	{

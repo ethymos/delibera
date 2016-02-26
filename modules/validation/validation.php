@@ -3,24 +3,12 @@
 // PHP 5.3 and later:
 namespace Delibera\Modules;
 
-class Validation
+class Validation extends \Delibera\Modules\ModuleBase
 {
 	
-	public function __construct()
-	{
-		add_action('delibera_situacao_register', array($this, 'registerTax'));
-		add_filter('delibera_get_main_config', array($this, 'getMainConfig'));
-		add_filter('delivera_config_page_rows', array($this, 'configPageRows'), 10, 2);
-		add_filter('delibera_situation_button_text', array($this, 'situationButtonText'));
-		add_action('delibera_topic_meta', array($this, 'topicMeta'), 10, 5);
-		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 3);
-		add_filter('delibera_check_post_data', array($this, 'checkPostData'), 10, 3);
-		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 10, 2);
-		add_action('delibera_create_pauta_frontend', array($this, 'createPautaAtFront'));
-		add_filter('delibera_register_flow_module', array($this, 'registerFlowModule'));
-		
-		add_shortcode( 'delibera_lista_de_propostas', array($this, 'replacePropostas' ));
-	}
+	protected $situacao = array('validacao', 'naovalidada');
+	protected $prazo_meta = 'prazo_validacao';
+	protected $shortcodes = array('delibera_lista_de_propostas' => 'replacePropostas' );
 	
 	/**
 	 * Register Tax for the module
@@ -57,17 +45,6 @@ class Validation
 		}
 	}
 
-	/**
-	 * Register situacao objects for flow treat
-	 * @param array $modules
-	 */
-	public function registerFlowModule($modules)
-	{
-		$modules['validacao'] = $this;
-		$modules['naovalidada'] = $this;
-		return $modules;
-	}
-	
 	/**
 	 * Append configurations 
 	 * @param array $opts
@@ -167,6 +144,12 @@ class Validation
 		
 	}
 	
+	/**
+	 * When the topic is published
+	 * @param int $postID
+	 * @param array $opt delibera configs
+	 * @param bool $alterar has been altered
+	 */
 	public function publishPauta($postID, $opt, $alterar)
 	{
 		if(!array_key_exists('validacao', $opt) || $opt['validacao'] == 'S' && $opt['delibera_flow'][0] == 'validacao' )
@@ -216,7 +199,14 @@ class Validation
 		}
 	}
 	
-	function checkPostData($erros, $opt, $autosave)
+	/**
+	 * Validate topic required data 
+	 * @param array $erros erros report array
+	 * @param array $opt Delibera configs
+	 * @param bool $autosave is autosave?
+	 * @return array erros report array append if needed
+	 */
+	public function checkPostData($erros, $opt, $autosave)
 	{
 		if($opt['validacao'] == 'S')
 		{
@@ -247,16 +237,6 @@ class Validation
 		return self::getPautas($filtro);
 	}
 	
-	/**
-	 *
-	 * Retorna pautas em Validação
-	 * @param array $filtro
-	 */
-	public static function getPautas($filtro = array())
-	{
-		return delibera_get_pautas_em($filtro, 'validacao');
-	}
-	
 	public function replacePropostas($matches)
 	{
 		global $wp_posts;
@@ -282,6 +262,13 @@ class Validation
 		return ''; // Retornar código da representação
 	}
 	
+	/**
+	 * Save topic metadata
+	 * @param array $events_meta
+	 * @param array $opt Delibera configs
+	 * 
+	 * @return array events_meta to be save on the topic
+	 */
 	public function savePostMetas($events_meta, $opt)
 	{
 		if( // Se tem validação, tem que ter o prazo
@@ -296,21 +283,16 @@ class Validation
 		return $events_meta;
 	}
 	
+	/**
+	 * Treat postback of frotend topic
+	 * @param array $opt Delibera configs
+	 */
 	public function createPautaAtFront($opt)
 	{
 		if($opt['validacao'] == 'S'){
 			$_POST['prazo_validacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_validacao'].' DAYS'));
 			$_POST['min_validacoes'] = $opt['minimo_validacao'];
 		}
-	}
-	
-	public function getDeadline($post_id = false)
-	{
-		if($post_id == false)
-		{
-			$post_id = get_the_ID();
-		}
-		return get_post_meta($post_id, 'prazo_validacao', true);
 	}
 }
 $DeliberaValidation = new \Delibera\Modules\Validation();

@@ -3,23 +3,20 @@
 // PHP 5.3 and later:
 namespace Delibera\Modules;
 
-class Rapporteur
+class Rapporteur extends \Delibera\Modules\ModuleBase
 {
+	/**
+	 * List of of topic status
+	 * @var array
+	 */
+	protected $situacao = array('relatoria', 'eleicao_relator');
 	
-	public function __construct()
-	{
-		add_action('delibera_situacao_register', array($this, 'registerTax'));
-		add_filter('delibera_get_main_config', array($this, 'getMainConfig'));
-		add_filter('delivera_config_page_rows', array($this, 'configPageRows'), 10, 2);
-		add_filter('delibera_situation_button_text', array($this, 'situationButtonText'));
-		add_action('delibera_topic_meta', array($this, 'topicMeta'), 10, 5);
-		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 3);
-		add_filter('delibera_check_post_data', array($this, 'checkPostData'), 10, 3);
-		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 10, 2);
-		add_action('delibera_create_pauta_frontend', array($this, 'createPautaAtFront'));
-		add_filter('delibera_register_flow_module', array($this, 'registerFlowModule'));
-		
-	}
+	/**
+	 * Name of module deadline metadata
+	 * @var array situacao a => deadline_a
+	 */
+	protected $prazo_meta = array('relatoria' => 'prazo_relatoria', 'eleicao_relator' => 'prazo_eleicao_relator');
+	
 	
 	/**
 	 * Register Tax for the module
@@ -62,17 +59,6 @@ class Rapporteur
 	}
 	
 	/**
-	 * Register situacao objects for flow treat
-	 * @param array $modules
-	 */
-	public function registerFlowModule($modules)
-	{
-		$modules['relatoria'] = $this;
-		$modules['eleicaoredator'] = $this;
-		return $modules;
-	}
-	
-	/**
 	 * Append configurations 
 	 * @param array $opts
 	 */
@@ -101,7 +87,7 @@ class Rapporteur
 			"label" => __('Prazo para relatoria:', 'delibera'),
 			"content" => '<input type="text" name="dias_relatoria" id="dias_relatoria" value="'.htmlspecialchars_decode($opt['dias_relatoria']).'"/>'
 		);
-		/*$rows[] = array(
+		$rows[] = array(
 			"id" => "eleicao_relator",
 			"label" => __('Necessário eleição de relator?', 'delibera'),
 			"content" => '<input type="checkbox" name="eleicao_relator" value="S" '.(htmlspecialchars_decode($opt['eleicao_relator']) == 'S' ? 'checked="checked"' : '').' />'
@@ -110,7 +96,7 @@ class Rapporteur
 			"id" => "dias_votacao_relator",
 			"label" => __('Prazo para eleição de relator:', 'delibera'),
 			"content" => '<input type="text" name="dias_votacao_relator" id="dias_votacao_relator" value="'.htmlspecialchars_decode($opt['dias_votacao_relator']).'"/>'
-		);*/
+		);
 		return $rows;
 	}
 	
@@ -278,17 +264,6 @@ class Rapporteur
 
 		}
 		return $erros;
-	}
-	
-	/**
-	 *
-	 * Retorna pautas em Relatoria ou Eleição para relator
-	 * 
-	 * @param array $filtro
-	 */
-	public static function getPautas($filtro = array())
-	{
-		return delibera_get_pautas_em($filtro, array('eleicaoredator', 'relatoria'));
 	}
 	
 	public function savePostMetas($events_meta, $opt)

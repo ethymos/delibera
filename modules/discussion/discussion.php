@@ -3,24 +3,26 @@
 // PHP 5.3 and later:
 namespace Delibera\Modules;
 
-class Discussion
+class Discussion extends \Delibera\Modules\ModuleBase
 {
 	
-	public function __construct()
-	{
-		add_action('delibera_situacao_register', array($this, 'registerTax'));
-		add_filter('delibera_get_main_config', array($this, 'getMainConfig'));
-		add_filter('delivera_config_page_rows', array($this, 'configPageRows'), 10, 2);
-		add_filter('delibera_situation_button_text', array($this, 'situationButtonText'));
-		add_action('delibera_topic_meta', array($this, 'topicMeta'), 10, 5);
-		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 3);
-		add_filter('delibera_check_post_data', array($this, 'checkPostData'), 10, 3);
-		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 10, 2);
-		add_action('delibera_create_pauta_frontend', array($this, 'createPautaAtFront'));
-		add_filter('delibera_register_flow_module', array($this, 'registerFlowModule'));
-		
-		add_shortcode( 'delibera_lista_de_pautas',  array($this, 'replacePautas' ));
-	}
+	/**
+	 * List of of topic status
+	 * @var array
+	 */
+	protected $situacao = array('discussao');
+	
+	/**
+	 * Name of module deadline metadata
+	 * @var String
+	 */
+	protected $prazo_meta = 'prazo_discussao';
+	
+	/**
+	 * List of pair shotcode name => method
+	 * @var array
+	 */
+	protected $shorcodes = array('delibera_lista_de_pautas' => 'replacePautas' );
 	
 	/**
 	 * Register Tax for the module
@@ -40,16 +42,6 @@ class Discussion
 				)
 			);
 		}
-	}
-	
-	/**
-	 * Register situacao objects for flow treat
-	 * @param array $modules
-	 */
-	public function registerFlowModule($modules)
-	{
-		$modules['discussao'] = $this;
-		return $modules;
 	}
 	
 	/**
@@ -113,7 +105,9 @@ class Discussion
 
 		$now = strtotime(date('Y/m/d')." 11:59:59");
 		
-		$prazo_discussao_sugerido = strtotime("+$dias_discussao days", $now);
+		global $DeliberaFlow;
+		
+		$prazo_discussao_sugerido = strtotime("+$dias_discussao days", delibera_tratar_data($DeliberaFlow->getLastDeadline($post->ID)));
 		$prazo_discussao = date('d/m/Y', $prazo_discussao_sugerido);
 
 		if(!($post->post_status == 'draft' ||
@@ -192,16 +186,6 @@ class Discussion
 		return $erros;
 	}
 	
-	/**
-	 *
-	 * Retorna pautas em Validação
-	 * @param array $filtro
-	 */
-	public static function getPautas($filtro = array())
-	{
-		return delibera_get_pautas_em($filtro, 'discussao');
-	}
-	
 	public function replacePautas($matches)
 	{
 		$temp = explode(',', $matches[1]); // configurações da shorttag
@@ -244,15 +228,6 @@ class Discussion
 		} else {
 			$_POST['prazo_discussao'] = date('d/m/Y', strtotime ('+'.$opt['dias_discussao'].' DAYS'));
 		}
-	}
-	
-	public function getDeadline($post_id = false)
-	{
-		if($post_id == false)
-		{
-			$post_id = get_the_ID();
-		}
-		return get_post_meta($post_id, 'prazo_discussao', true);
 	}
 	
 }

@@ -148,5 +148,5 @@ class Flow
 	
 }
 
-
+global $DeliberaFlow;
 $DeliberaFlow = new \Delibera\Flow();

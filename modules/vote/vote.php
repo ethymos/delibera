@@ -3,23 +3,20 @@
 // PHP 5.3 and later:
 namespace Delibera\Modules;
 
-class Vote
+class Vote extends \Delibera\Modules\ModuleBase
 {
 	
-	public function __construct()
-	{
-		add_action('delibera_situacao_register', array($this, 'registerTax'));
-		add_filter('delibera_get_main_config', array($this, 'getMainConfig'));
-		add_filter('delivera_config_page_rows', array($this, 'configPageRows'), 10, 2);
-		add_filter('delibera_situation_button_text', array($this, 'situationButtonText'));
-		add_action('delibera_topic_meta', array($this, 'topicMeta'), 10, 5);
-		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 3);
-		add_filter('delibera_check_post_data', array($this, 'checkPostData'), 10, 3);
-		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 10, 2);
-		add_action('delibera_create_pauta_frontend', array($this, 'createPautaAtFront'));
-		add_filter('delibera_register_flow_module', array($this, 'registerFlowModule'));
-		
-	}
+	/**
+	 * List of of topic status
+	 * @var array
+	 */
+	protected $situacao = array('emvotacao');
+	
+	/**
+	 * Name of module deadline metadata
+	 * @var String
+	 */
+	protected $prazo_meta = 'prazo_votacao';
 	
 	/**
 	 * Register Tax for the module
@@ -39,16 +36,6 @@ class Vote
 				)
 			);
 		}
-	}
-	
-	/**
-	 * Register situacao objects for flow treat
-	 * @param array $modules
-	 */
-	public function registerFlowModule($modules)
-	{
-		$modules['emvotacao'] = $this;
-		return $modules;
 	}
 	
 	/**
@@ -211,16 +198,6 @@ class Vote
 		return self::getPautas($filtro);
 	}
 	
-	/**
-	 *
-	 * Retorna pautas em Votação
-	 * @param array $filtro
-	 */
-	public static function getPautas($filtro = array())
-	{
-		return delibera_get_pautas_em($filtro, 'emvotacao');
-	}
-	
 	public function savePostMetas($events_meta, $opt)
 	{
 		if(array_key_exists('prazo_votacao', $_POST))
@@ -239,15 +216,6 @@ class Vote
 		} else {
 			$_POST['prazo_votacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao'].' DAYS'));
 		}
-	}
-	
-	public function getDeadline($post_id = false)
-	{
-		if($post_id == false)
-		{
-			$post_id = get_the_ID();
-		}
-		return get_post_meta($post_id, 'prazo_votacao', true);
 	}
 	
 }
