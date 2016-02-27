@@ -13,6 +13,12 @@ class Vote extends \Delibera\Modules\ModuleBase
 	protected $situacao = array('emvotacao');
 	
 	/**
+	 *
+	 * @var array list of module flows
+	 */
+	protected $flows = array('emvotacao');
+	
+	/**
 	 * Name of module deadline metadata
 	 * @var String
 	 */
@@ -87,6 +93,20 @@ class Vote extends \Delibera\Modules\ModuleBase
 	}
 	
 	/**
+	 *
+	 * {@inheritDoc}
+	 * @see \Delibera\Modules\ModuleBase::generateDeadline()
+	 */
+	public function generateDeadline($options_plugin_delibera)
+	{
+		$dias_votacao = intval(htmlentities($options_plugin_delibera['dias_votacao']));
+		
+		$prazo_votacao_sugerido = strtotime("+$dias_votacao days", delibera_tratar_data(\Delibera\Flow::getLastDeadline('emvotacao')));
+		
+		return date('d/m/Y', $prazo_votacao_sugerido);
+	}
+	
+	/**
 	 * 
 	 * Post Meta Fields display
 	 * 
@@ -99,13 +119,7 @@ class Vote extends \Delibera\Modules\ModuleBase
 	 */
 	public function topicMeta($post, $custom, $options_plugin_delibera, $situacao, $disable_edicao)
 	{
-		$now = strtotime(date('Y/m/d')." 11:59:59");
-		
-		$dias_votacao = /*$dias_discussao +*/ intval(htmlentities($options_plugin_delibera['dias_votacao']));
-		
-		$prazo_votacao_sugerido = strtotime("+$dias_votacao days", $now);
-		
-		$prazo_votacao = date('d/m/Y', $prazo_votacao_sugerido);
+		$prazo_votacao = $this->generateDeadline($options_plugin_delibera);
 		
 		if(!($post->post_status == 'draft' ||
 			$post->post_status == 'auto-draft' ||
@@ -179,7 +193,7 @@ class Vote extends \Delibera\Modules\ModuleBase
 				strtotime("-1 day", delibera_tratar_data($prazo_votacao)),
 				'delibera_notificar_fim_prazo',
 				array(
-						'post_ID' => $postID,
+						'post_id' => $postID,
 						'prazo_votacao' => $prazo_votacao
 				)
 			);

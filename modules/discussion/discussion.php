@@ -13,6 +13,12 @@ class Discussion extends \Delibera\Modules\ModuleBase
 	protected $situacao = array('discussao');
 	
 	/**
+	 *
+	 * @var array list of module flows
+	 */
+	protected $flows = array('discussao');
+	
+	/**
 	 * Name of module deadline metadata
 	 * @var String
 	 */
@@ -99,6 +105,19 @@ class Discussion extends \Delibera\Modules\ModuleBase
 	}
 	
 	/**
+	 *
+	 * {@inheritDoc}
+	 * @see \Delibera\Modules\ModuleBase::generateDeadline()
+	 */
+	public function generateDeadline($options_plugin_delibera)
+	{
+		$dias_discussao = intval(htmlentities($options_plugin_delibera['dias_discussao']));
+		
+		$prazo_discussao_sugerido = strtotime("+$dias_discussao days", delibera_tratar_data(\Delibera\Flow::getLastDeadline('discussao')));
+		return date('d/m/Y', $prazo_discussao_sugerido);
+	}
+	
+	/**
 	 * 
 	 * Post Meta Fields display
 	 * 
@@ -111,15 +130,8 @@ class Discussion extends \Delibera\Modules\ModuleBase
 	 */
 	public function topicMeta($post, $custom, $options_plugin_delibera, $situacao, $disable_edicao)
 	{
-		$dias_discussao = intval(htmlentities($options_plugin_delibera['dias_discussao']));
-
-		$now = strtotime(date('Y/m/d')." 11:59:59");
+		$prazo_discussao = $this->generateDeadline($options_plugin_delibera);
 		
-		global $DeliberaFlow;
-		
-		$prazo_discussao_sugerido = strtotime("+$dias_discussao days", delibera_tratar_data($DeliberaFlow->getLastDeadline($post->ID)));
-		$prazo_discussao = date('d/m/Y', $prazo_discussao_sugerido);
-
 		if(!($post->post_status == 'draft' ||
 				$post->post_status == 'auto-draft' ||
 				$post->post_status == 'pending'))
@@ -178,7 +190,7 @@ class Discussion extends \Delibera\Modules\ModuleBase
 				strtotime("-1 day", delibera_tratar_data($prazo_discussao)),
 				'delibera_notificar_fim_prazo',
 				array(
-						'post_ID' => $postID,
+						'post_id' => $postID,
 						'prazo_discussao' => $prazo_discussao
 				)
 			);

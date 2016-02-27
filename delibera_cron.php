@@ -104,13 +104,14 @@ function delibera_del_cron($postID)
 	$crons =  get_option('delibera-cron', array());
 	if(!is_array($crons)) $crons = array();
 	$crons_new = array();
-	
 	foreach($crons as $cron_data => $cron_value)
 	{
 		$new_cron = array();
 		foreach ($cron_value as $call)
 		{
-			if($call['args']['post_ID'] != $postID)
+			if(isset($call['args']['post_ID'])) $call['args']['post_id'] = $call['args']['post_ID']; // precisa ser compatível com cron anteriores
+			
+			if($call['args']['post_id'] != $postID)
 			{
 				$new_cron[] = $call;
 			}

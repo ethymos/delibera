@@ -87,11 +87,6 @@ function delibera_pauta_meta()
     $pdf_html .= "<input type='file' name='pauta_pdf_contribution' id='pauta_pdf_contribution' value='' size='25'/></p>";
     echo $pdf_html;
 
-	if($options_plugin_delibera['validacao'] == "S") // Adiciona prazo de validação se for necessário
-	{
-		//TODO adicionar modulo anterior ao prazo $dias_discussao += $dias_validacao;
-	}
-
 	$now = strtotime(date('Y/m/d')." 11:59:59");
 
 	if (
@@ -143,7 +138,7 @@ function delibera_publish_pauta($postID, $post, $alterar = false)
 		
 		do_action('delibera_publish_pauta', $postID, $opt, $alterar);
 		
-		$curtir = get_post_meta($post_id, 'delibera_numero_curtir', true);
+		$curtir = get_post_meta($postID, 'delibera_numero_curtir', true);
 		if($curtir == "" || $curtir === false || is_null($curtir))
 		{
 			$events_meta['delibera_numero_comments_padroes'] = 0;

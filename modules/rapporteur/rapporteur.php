@@ -12,6 +12,12 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 	protected $situacao = array('relatoria', 'eleicao_relator');
 	
 	/**
+	 * 
+	 * @var array list of module flows
+	 */
+	protected $flows = array('relatoria');
+	
+	/**
 	 * Name of module deadline metadata
 	 * @var array situacao a => deadline_a
 	 */
@@ -133,6 +139,31 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 	}
 	
 	/**
+	 *
+	 * {@inheritDoc}
+	 * @see \Delibera\Modules\ModuleBase::generateDeadline()
+	 */
+	public function generateDeadline($options_plugin_delibera)
+	{
+		$dias_relatoria = intval(htmlentities($options_plugin_delibera['dias_relatoria']));
+		$dias_votacao_relator = intval(htmlentities($options_plugin_delibera['dias_votacao_relator']));
+		
+		//$dias_relatoria += $dias_discussao; // TODO issue #50
+		if($options_plugin_delibera['eleicao_relator'] == "S") // Adiciona prazo de vatacao relator se for necessário
+		{
+			$dias_relatoria += $dias_votacao_relator;
+		}
+		
+		$prazo_eleicao_relator_sugerido = strtotime("+$dias_votacao_relator days", delibera_tratar_data(\Delibera\Flow::getLastDeadline('relatoria')));
+		$prazo_relatoria_sugerido = strtotime("+$dias_relatoria days", delibera_tratar_data(\Delibera\Flow::getLastDeadline('relatoria')));
+		
+		$prazo_eleicao_relator = date('d/m/Y', $prazo_eleicao_relator_sugerido);
+		
+		return date('d/m/Y', $prazo_relatoria_sugerido);
+		
+	}
+	
+	/**
 	 * 
 	 * Post Meta Fields display
 	 * 
@@ -145,26 +176,13 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 	 */
 	public function topicMeta($post, $custom, $options_plugin_delibera, $situacao, $disable_edicao)
 	{
-		$now = strtotime(date('Y/m/d')." 11:59:59");
-		
-		$dias_relatoria = intval(htmlentities($options_plugin_delibera['dias_relatoria']));
 		$dias_votacao_relator = intval(htmlentities($options_plugin_delibera['dias_votacao_relator']));
-
-		if($options_plugin_delibera['relatoria'] == "S") // Adiciona prazo de relatoria se for necessário
-		{
-			//$dias_relatoria += $dias_discussao; // TODO issue #50
-			if($options_plugin_delibera['eleicao_relator'] == "S") // Adiciona prazo de vatacao relator se for necessário
-			{
-				$dias_relatoria += $dias_votacao_relator;
-				$dias_votacao_relator += $dias_discussao;
-			}
-		}
-	
-		$prazo_eleicao_relator_sugerido = strtotime("+$dias_votacao_relator days", $now);
-		$prazo_relatoria_sugerido = strtotime("+$dias_relatoria days", $now);
-	
+		
+		$prazo_eleicao_relator_sugerido = strtotime("+$dias_votacao_relator days", delibera_tratar_data(\Delibera\Flow::getLastDeadline('relatoria', $post->ID)));
+		
 		$prazo_eleicao_relator = date('d/m/Y', $prazo_eleicao_relator_sugerido);
-		$prazo_relatoria = date('d/m/Y', $prazo_relatoria_sugerido);
+		
+		$prazo_relatoria = $this->generateDeadline($options_plugin_delibera);
 		
 		if(!($post->post_status == 'draft' ||
 				$post->post_status == 'auto-draft' ||
@@ -229,7 +247,7 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 				strtotime("-1 day", delibera_tratar_data($prazo_eleicao_relator)),
 				'delibera_notificar_fim_prazo',
 				array(
-						'post_ID' => $postID,
+						'post_id' => $postID,
 						'prazo_votacao' => $prazo_eleicao_relator
 				)
 			);
@@ -251,7 +269,7 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 				strtotime("-1 day", delibera_tratar_data($prazo_relatoria)),
 				'delibera_notificar_fim_prazo',
 				array(
-						'post_ID' => $postID,
+						'post_id' => $postID,
 						'prazo_votacao' => $prazo_relatoria
 				)
 			);
@@ -317,24 +335,6 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 				$_POST['prazo_eleicao_relator'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao_relator'].' DAYS'));
 			}
 		}
-	}
-	
-	public function getDeadline($post_id = false)
-	{
-		if($post_id == false)
-		{
-			$post_id = get_the_ID();
-		}
-		$opt = delibera_get_config();
-		/**
-		 * Add time to Relator election when activated
-		 */
-		if($opt['eleicao_relator'] == 'S')
-		{
-			return date('d/m/Y', strtotime ('+'.$opt['dias_votacao_relator'].' DAYS', delibera_tratar_data(get_post_meta($post_id, 'prazo_relatoria', true))));
-		}
-		
-		return get_post_meta($post_id, 'prazo_relatoria', true);
 	}
 	
 	/**

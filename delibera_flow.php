@@ -10,6 +10,7 @@ class Flow
 {
 	
 	protected $flow = array();
+	protected $deadlines = array();
 	
 	public function __construct()
 	{
@@ -18,9 +19,8 @@ class Flow
 		add_filter('delibera-pre-main-config-save', array($this, 'preMainConfigSave'));
 		add_action('delibera_topic_meta', array($this, 'topicMeta'), 10, 5);
 		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 10, 2);
-		
 		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 3);
-		
+		add_filter('delibera_flow_list', array($this, 'filterFlowList'));
 	}
 	
 	/**
@@ -29,7 +29,7 @@ class Flow
 	 */
 	public function getMainConfig($opts)
 	{
-		$opts['delibera_flow'] = array('validacao', 'discussao', 'elegerelator', 'relatoria', 'emvotacao', 'comresolucao');
+		$opts['delibera_flow'] = array('validacao', 'discussao', 'relatoria', 'emvotacao', 'comresolucao');
 		return $opts;
 	}
 	
@@ -87,6 +87,11 @@ class Flow
 	 */
 	public function get($post_id = false)
 	{
+		$options_plugin_delibera = delibera_get_config();
+		
+		$default_flow = isset($options_plugin_delibera['delibera_flow']) ? $options_plugin_delibera['delibera_flow'] : array();
+		$default_flow = apply_filters('delibera_flow_list', $default_flow);
+		
 		if($post_id == false)
 		{
 			$post_id = get_the_ID();
@@ -98,12 +103,10 @@ class Flow
 		
 		if(array_key_exists($post_id, $this->flow)) return $this->flow[$post_id];
 		
-		$options_plugin_delibera = delibera_get_config();
-		$default_flow = isset($options_plugin_delibera['delibera_flow']) ? $options_plugin_delibera['delibera_flow'] : array();
-		
 		$flow = get_post_meta($post_id, 'delibera_flow', true);
 		if(is_array($flow) && count($flow) > 0)
 		{
+			$flow = apply_filters('delibera_flow_list', $flow);
 			$this->flow[$post_id] = $flow;
 			return $flow;
 		}
@@ -127,17 +130,19 @@ class Flow
 		return $modules;
 	}
 	
-	public function getLastDeadline($situacao, $post_id = false)
+	public static function getLastDeadline($situacao, $post_id = false)
 	{
+		global $DeliberaFlow;
+		
 		if($post_id == false)
 		{
 			$post_id = get_the_ID();
 		}
-		$flow = $this->get($post_id);
-		$modules = $this->getFlowModules();
+		$flow = $DeliberaFlow->get($post_id);
+		$modules = $DeliberaFlow->getFlowModules();
 		
 		$now = array_search($situacao, $flow);
-		if(($now - 1) > 0 && array_key_exists($flow[$now - 1], $modules) && property_exists($modules[$flow[$now - 1]], 'getDeadline'))
+		if(($now - 1) >= 0 && array_key_exists($now - 1, $flow) && array_key_exists($flow[$now - 1], $modules) && method_exists($modules[$flow[$now - 1]], 'getDeadline'))
 		{
 			return $modules[$flow[$now - 1]]->getDeadline();
 		}
@@ -214,8 +219,28 @@ class Flow
 	{
 		global $DeliberaFlow;
 		$flow = $DeliberaFlow->get($postID);
-		$flow[0]->initModule($postID);
+		$modules = $DeliberaFlow->getFlowModules();
+		$modules[$flow[0]]->initModule($postID);
 		if($new_deadline) delibera_novo_prazo($postID);
+	}
+	
+	/**
+	 * Check if module has bean remove or altered
+	 * @param array $flows
+	 * @return array
+	 */
+	public function filterFlowList($flow)
+	{
+		if(is_array($flow))
+		{
+			$modules = $this->getFlowModules();
+			$flow = array_values(array_intersect($flow, array_keys($modules)));
+			return $flow;
+		}
+		else 
+		{
+			return array();
+		}
 	}
 	
 }

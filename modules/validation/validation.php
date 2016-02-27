@@ -5,9 +5,28 @@ namespace Delibera\Modules;
 
 class Validation extends \Delibera\Modules\ModuleBase
 {
-	
+	/**
+	 *
+	 * @var array List of of topic status
+	 */
 	protected $situacao = array('validacao', 'naovalidada');
+	
+	/**
+	 *
+	 * @var array list of module flows
+	 */
+	protected $flows = array('validacao');
+	
+	/**
+	 *
+	 * @var String Name of module deadline metadata
+	 */
 	protected $prazo_meta = 'prazo_validacao';
+	
+	/**
+	 *
+	 * @var array List of pair shotcode name => method
+	 */
 	protected $shortcodes = array('delibera_lista_de_propostas' => 'replacePropostas' );
 	
 	/**
@@ -108,6 +127,20 @@ class Validation extends \Delibera\Modules\ModuleBase
 	
 	/**
 	 * 
+	 * {@inheritDoc}
+	 * @see \Delibera\Modules\ModuleBase::generateDeadline()
+	 */
+	public function generateDeadline($options_plugin_delibera)
+	{
+		$dias_validacao = intval(htmlentities($options_plugin_delibera['dias_validacao']));
+		
+		$prazo_validacao_sugerido = strtotime("+$dias_validacao days", delibera_tratar_data(\Delibera\Flow::getLastDeadline('valicacao')));
+		
+		return date('d/m/Y', $prazo_validacao_sugerido);
+	}
+	
+	/**
+	 * 
 	 * Post Meta Fields display
 	 * 
 	 * @param \WP_Post $post
@@ -123,13 +156,7 @@ class Validation extends \Delibera\Modules\ModuleBase
 		
 		$min_validacoes = array_key_exists("min_validacoes", $custom) ?  $custom["min_validacoes"][0] : htmlentities($options_plugin_delibera['minimo_validacao']);
 		
-		$dias_validacao = intval(htmlentities($options_plugin_delibera['dias_validacao']));
-		
-		$now = strtotime(date('Y/m/d')." 11:59:59");
-		
-		$prazo_validacao_sugerido = strtotime("+$dias_validacao days", $now);
-		
-		$prazo_validacao = date('d/m/Y', $prazo_validacao_sugerido);
+		$prazo_validacao = $this->generateDeadline($options_plugin_delibera);
 		
 		if(!($post->post_status == 'draft' ||
 				$post->post_status == 'auto-draft' ||

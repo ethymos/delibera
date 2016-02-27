@@ -8,20 +8,26 @@ abstract class ModuleBase
 {
 
 	/**
-	 * List of of topic status
-	 * @var array
+	 * 
+	 * @var array List of of topic status
 	 */
 	protected $situacao = array();
 	
 	/**
-	 * Name of module deadline metadata
-	 * @var String
+	 *
+	 * @var array list of module flows
+	 */
+	protected $flows = array();
+	
+	/**
+	 * 
+	 * @var String Name of module deadline metadata
 	 */
 	protected $prazo_meta = 'prazo';
 	
 	/**
-	 * List of pair shotcode name => method
-	 * @var array
+	 * 
+	 * @var array List of pair shotcode name => method
 	 */
 	protected $shortcodes = array();
 	
@@ -50,7 +56,7 @@ abstract class ModuleBase
 	 */
 	public function registerFlowModule($modules)
 	{
-		foreach ($this->situacao as $situacao)
+		foreach ($this->flows as $situacao)
 		{
 			$modules[$situacao] = $this;
 		}
@@ -132,6 +138,12 @@ abstract class ModuleBase
 	abstract public function createPautaAtFront($opt);
 	
 	/**
+	 * Generate deadline date
+	 * @param array $options_plugin_delibera Delibera configs
+	 */
+	abstract public function generateDeadline($options_plugin_delibera);
+	
+	/**
 	 * Return this module deadline for the current post
 	 * @param int $post_id
 	 * @return mixed|string deadline date
@@ -145,9 +157,18 @@ abstract class ModuleBase
 		if(is_array($this->prazo_meta))
 		{
 			$situacao = delibera_get_situacao($post_id);
-			return array_key_exists($situacao, $this->prazo_meta) ? get_post_meta($post_id, $this->prazo_meta[$situacao], true) : date('d/m/Y');
+			$situacao = $situacao->slug;
+			
+			return !empty($situacao) && array_key_exists($situacao, $this->prazo_meta) ? get_post_meta($post_id, $this->prazo_meta[$situacao], true) : $this->generateDeadline(delibera_get_config());
 		}
-		return get_post_meta($post_id, $this->prazo_meta, true);
+		$deadline = get_post_meta($post_id, $this->prazo_meta, true);
+		
+		if(empty($deadline))
+		{
+			return $this->generateDeadline(delibera_get_config());
+		}
+		
+		return $deadline;
 	}
 	
 	/**
