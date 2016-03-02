@@ -28,6 +28,7 @@ div, h1, h2, h3, h4, h5, p { margin-bottom:9px; }
 
 #delibera .filters li {
     padding:3px 0;
+	  list-style-type: none;
 }
 
 #delibera .filters ul.dates li {
@@ -604,3 +605,13 @@ div.error p {
     margin: 0.5em 0;
     padding: 2px;
 }
+
+/* 
+  Responsivo 
+  ================================================================================*/
+@media screen and (max-width: 910px)  {
+	.site-content {padding: 20px;}
+	.filters.widget-area {width: 100%;}
+	#delibera .site-content {width: 100%;}
+}
+
