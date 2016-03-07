@@ -12,12 +12,13 @@
                    );
   echo '<div id="user_pager" class="user_pager">';
   echo paginate_links( array(
-    'base' => add_query_arg( 'paged', '%#%' ),
-    'format' => '',
-    'prev_text' => __('&laquo;'),
-    'next_text' => __('&raquo;'),
-    'total' =>  $blogusers->get_total()/$number_users_per_page,
-    'current' => get_query_var( 'paged' )
+    'base'       =>  add_query_arg( 'paged', '%#%' ),
+    'format'     => '',
+    'prev_text'  => __('&laquo;'),
+    'next_text'  => __('&raquo;'),
+    'show_all'   =>  true ,
+    'total'      =>  $blogusers->get_total()/$number_users_per_page,
+    'current'    =>  get_query_var( 'paged' )
   ));
   //wp_reset_post_data();
   echo '</div>';
@@ -55,8 +56,8 @@
      $last_content = $current_user_posts[0];
 ?>
 <div id="user_post" class="user_post" >
-     <div id="user_post_title" class="user_post_title" ><h2><a href="<?php echo $last_content->guid ?>" > <?php echo  $last_content->post_title; ?></a></h2></div>
-     <div id="user_post_content" class="user_post_content"><p><?php echo $last_content->post_content ;?></div>
+     <div id="user_post_title" class="user_post_title" ><h2><a href="<?php echo $last_content->guid; ?>" > <?php echo  $last_content->post_title; ?></a></h2></div>
+     <div id="user_post_content" class="user_post_content"><p><?php echo $last_content->post_content;?></div>
 </div>
 <?php
     }
