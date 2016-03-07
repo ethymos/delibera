@@ -26,10 +26,8 @@
             <h1><a href=""><?php the_title(); ?></a></h1>
             <p class="meta clearfix">Discussão criada por <span class="author"><?php the_author(); ?></span> em <span class="date"><?php the_date('d/m/y'); ?></span></p>
 
-            <div class="meta meta-social clearfix">
-                <a href="" class="btn btn-facebook">Facebook</a>
-                <a href="" class="btn btn-twitter">Twitter</a>
-                <a href="" class="btn btn-google-plus">Google+</a>
+           <div class="meta meta-social clearfix">
+                <share-button></share-button>
                 <div class="alignright bottom">
                     <a href="?delibera_print=1" class="btn"><i class="icon-print"></i> Imprimir</a>
                     <button id="delibera_seguir" href="" class="btn">
