@@ -143,21 +143,7 @@ function delibera_Add_custom_taxonomy()
 
 	if(taxonomy_exists('situacao'))
 	{
-		if(term_exists('comresolucao', 'situacao', null) == false)
-		{
-			delibera_insert_term('Resolução', 'situacao', array(
-					'description'=> 'Pauta com resoluções aprovadas',
-					'slug' => 'comresolucao',
-				),
-				array(
-					'qtrans_term_pt' => 'Resolução',
-					'qtrans_term_en' => 'Resolution',
-					'qtrans_term_es' => 'Resolución',
-				)
-			);
-		}
 		do_action('delibera_situacao_register');
-		
 	}
 
 	if(file_exists(__DIR__.DIRECTORY_SEPARATOR.'delibera_taxs.php'))

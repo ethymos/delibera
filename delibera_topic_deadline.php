@@ -47,15 +47,6 @@ add_action('admin_action_delibera_reabrir_pauta_action', 'delibera_reabrir_pauta
 
 require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_cron.php';
 
-function delibera_marcar_naovalidada($postID)
-{
-	wp_set_object_terms($postID, 'naovalidada', 'situacao', false);
-	if(has_action('delibera_pauta_recusada'))
-	{
-		do_action('delibera_pauta_recusada', $postID);
-	}
-}
-
 function delibera_reabrir_pauta($postID)
 {
 	wp_set_object_terms($postID, 'validacao', 'situacao', false);

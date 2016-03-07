@@ -334,7 +334,20 @@ class Validation extends \Delibera\Modules\ModuleBase
 		$situacao = delibera_get_situacao($args['post_id']);
 		if($situacao->slug == 'validacao')
 		{
-			delibera_marcar_naovalidada($post_id);
+			$this->marcarNaovalidada($post_id);
+		}
+	}
+	
+	/**
+	 * No min validation recived
+	 * @param int $postID
+	 */
+	public function marcarNaovalidada($postID)
+	{
+		wp_set_object_terms($postID, 'naovalidada', 'situacao', false);
+		if(has_action('delibera_pauta_recusada'))
+		{
+			do_action('delibera_pauta_recusada', $postID);
 		}
 	}
 	

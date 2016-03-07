@@ -243,16 +243,6 @@ add_filter('posts_where_request', 'delibera_des_filtro_qtranslate', 11);
 
 /**
  *
- * Retorna pautas já resolvidas
- * @param array $filtro
- */
-function delibera_get_resolucoes($filtro = array())
-{
-	return delibera_get_pautas_em($filtro, 'comresolucao');
-}
-
-/**
- *
  * Save o post da pauta
  * @param $post_id int
  * @param $post
