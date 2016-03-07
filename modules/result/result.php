@@ -208,11 +208,7 @@ class Result extends \Delibera\Modules\ModuleBase
 	 */
 	public function deadline($args)
 	{
-		$situacao = delibera_get_situacao($args['post_id']);
-		if($situacao->slug == 'validacao')
-		{
-			delibera_marcar_naovalidada($post_id);
-		}
+		
 	}
 	
 }
