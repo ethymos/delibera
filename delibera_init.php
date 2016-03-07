@@ -279,8 +279,7 @@ function delibera_scripts()
 		wp_enqueue_script('delibera', WP_CONTENT_URL.'/plugins/delibera/js/scripts.js', array('jquery-expander'));
 		wp_enqueue_script('delibera-seguir', WP_CONTENT_URL . '/plugins/delibera/js/delibera_seguir.js', array('delibera'));
 		wp_enqueue_script('delibera-concordar', WP_CONTENT_URL . '/plugins/delibera/js/delibera_concordar.js', array('delibera'));
-        wp_enqueue_script('share-js', WP_CONTENT_URL . '/plugins/delibera/js/share-button.min.js');
-        wp_enqueue_style('share-css', WP_CONTENT_URL . '/plugins/delibera/css/share-button.min.css');
+        wp_enqueue_script('share-js', WP_CONTENT_URL . '/plugins/delibera/js/socialite.min.js');
 
 		$situation = delibera_get_situacao($post->ID);
 
