@@ -203,10 +203,10 @@ abstract class ModuleBase
 			$prazo_date = get_post_meta($post_id, $prazo, true);
 			if( ! empty($prazo_date) )
 			{
-				delibera_del_cron($post_id, array($this, 'deadline'));
-				delibera_del_cron($post_id, 'delibera_notificar_fim_prazo');
+				\Delibera\Cron\del($post_id, array($this, 'deadline'));
+				\Delibera\Cron\del($post_id, 'delibera_notificar_fim_prazo');
 					
-				delibera_add_cron(
+				\Delibera\Cron\add(
 					delibera_tratar_data($prazo_date),
 					array($this, 'deadline'),
 					array(
@@ -214,7 +214,7 @@ abstract class ModuleBase
 						'prazo' => $prazo_date
 					)
 				);
-				delibera_add_cron(
+				\Delibera\Cron\add(
 					strtotime("-1 day", delibera_tratar_data($prazo_date)),
 					'delibera_notificar_fim_prazo',
 					array(

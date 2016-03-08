@@ -322,7 +322,6 @@ function delibera_save_post($post_id, $post)
 
 	if($post->post_status == 'publish' && !$autosave)
 	{
-		delibera_del_cron($post->ID);
 		delibera_publish_pauta($post->ID, $post, true);
 	}
 }

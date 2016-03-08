@@ -1,143 +1,179 @@
 <?php 
-/*if(array_key_exists("delibera_cron_action", $_REQUEST) && !defined('DOING_DELIBERA_CRON'))
-{
-	ignore_user_abort(true);
-	define('DOING_DELIBERA_CRON', true);
-	delibera_cron_action();
-}*/
 
-function delibera_cron_action()
+// PHP 5.3 and later:
+namespace Delibera;
+
+/**
+ * Manage cron activities of Delibera 
+ *
+ */
+class Cron
 {
-	ignore_user_abort(true);
-	define('DOING_DELIBERA_CRON', true);
-	try
+	
+	public function __construct()
+	{
+		add_action('admin_action_delibera_cron_action', array($this, 'action'));
+		add_action('wp',  array($this, 'registry') );
+		add_action('admin_action_delibera_cron_list', array($this, 'list'));
+	}
+	
+	/**
+	 * Wordpress hook when cron is trigged
+	 */
+	function action()
+	{
+		ignore_user_abort(true);
+		define('DOING_DELIBERA_CRON', true);
+		try
+		{
+			$crons =  get_option('delibera-cron', array());
+			$new_crons = array();
+			$now = time();
+			$exec = 0;
+			foreach ($crons as $key => $values)
+			{
+				if($key <= $now)
+				{
+					foreach ($values as $value)
+					{
+						$exec++;
+						if(function_exists($value['call_back']))
+						{
+							call_user_func($value['call_back'], $value['args']);
+						}
+					}
+				}
+				else
+				{
+					$new_crons[$key] = $values;
+				}
+			}
+			update_option('delibera-cron', $new_crons);
+		}
+		catch (Exception $e)
+		{
+			$error = __('Erro no cron Delibera: ','delibera').$e->getMessage()."\n".$e->getCode()."\n".$e->getTraceAsString()."\n".$e->getLine()."\n".$e->getFile();
+			wp_mail("jacson@ethymos.com.br", get_bloginfo('name'), $error);
+		}
+		//wp_mail("jacson@ethymos.com.br", get_bloginfo('name'),"Foram executadas $exec tarefa(s)");
+	}
+	
+	/**
+	 * Registry a cron event check hourly
+	 */
+	function registry()
+	{
+		if ( !wp_next_scheduled( 'admin_action_delibera_cron_action' ) ) // if already been scheduled, will return a time 
+		{
+			wp_schedule_event(time(), 'hourly', 'admin_action_delibera_cron_action');
+		}
+	}
+	
+	/**
+	 * Simple text list of cron jobs
+	 */
+	function cronList()
 	{
 		$crons =  get_option('delibera-cron', array());
-		$new_crons = array();
-		$now = time();
-		$exec = 0;
 		foreach ($crons as $key => $values)
 		{
-			if($key <= $now)
+			echo "\n<br/>[$key]: ".date("d/m/Y H:i:s", $key);
+			foreach ($values as $key2 => $value)
 			{
-				foreach ($values as $value)
+				echo "\n<br/>\t&nbsp;&nbsp;&nbsp;[$key2]";
+				foreach ($value as $ki => $item)
 				{
-					$exec++;
-					if(function_exists($value['call_back']))
+					echo "\n<br/>\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[$ki]";
+					if(is_array($item))
 					{
-						call_user_func($value['call_back'], $value['args']);
+						echo "\n<br/>\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".print_r($item, true);
+					}
+					else
+					{
+						echo "\n<br/>\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$item";
 					}
 				}
 			}
-			else
-			{
-				$new_crons[$key] = $values;
-			}
 		}
-		update_option('delibera-cron', $new_crons);
 	}
-	catch (Exception $e)
+	
+	/**
+	 * Add cron trigger
+	 * @param int $data date that will occur
+	 * @param function $call_back
+	 * @param array $args
+	 */
+	public static function add($data, $call_back, $args)
 	{
-		$error = __('Erro no cron Delibera: ','delibera').$e->getMessage()."\n".$e->getCode()."\n".$e->getTraceAsString()."\n".$e->getLine()."\n".$e->getFile();
-		wp_mail("jacson@ethymos.com.br", get_bloginfo('name'), $error);
-	}
-	//wp_mail("jacson@ethymos.com.br", get_bloginfo('name'),"Foram executadas $exec tarefa(s)");
-}
-
-add_action('admin_action_delibera_cron_action', 'delibera_cron_action');
-
-function delibera_cron_registry()
-{
-	if ( !wp_next_scheduled( 'admin_action_delibera_cron_action' ) )
-	{
-		wp_schedule_event(time(), 'hourly', 'admin_action_delibera_cron_action');
-	}
-}
-add_action('wp', 'delibera_cron_registry');
-
-function delibera_cron_list()
-{
-	$crons =  get_option('delibera-cron', array());
-	foreach ($crons as $key => $values)
-	{
-		echo "\n<br/>[$key]: ".date("d/m/Y H:i:s", $key);
-		foreach ($values as $key2 => $value)
+		if(is_int($data) && $data > 0)
 		{
-			echo "\n<br/>\t&nbsp;&nbsp;&nbsp;[$key2]";
-			foreach ($value as $ki => $item)
+			$crons =  get_option('delibera-cron', array());
+			if(!is_array($crons)) $crons = array();
+	
+			if(!array_key_exists($data, $crons))
 			{
-				echo "\n<br/>\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[$ki]";
-				if(is_array($item))
-				{
-					echo "\n<br/>\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".print_r($item, true);
-				}
-				else 
-				{
-					echo "\n<br/>\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$item";
-				}
+				$crons[$data] = array();
 			}
+			$crons[$data][] = array('call_back' => $call_back, "args" => $args);
+			ksort($crons);
+			update_option('delibera-cron', $crons);
 		}
 	}
-}
-
-add_action('admin_action_delibera_cron_list', 'delibera_cron_list');
-
-function delibera_add_cron($data, $call_back, $args)
-{
-	if(is_int($data) && $data > 0)
+	
+	/**
+	 * Remove a cron trigger
+	 * @param int $postID
+	 * @param function $callback function name or array($object, 'functio-name')
+	 */
+	static function del($postID, $callback = false)
 	{
 		$crons =  get_option('delibera-cron', array());
 		if(!is_array($crons)) $crons = array();
-		
-		if(!array_key_exists($data, $crons))
+	
+		if( is_array($callback) )
 		{
-			$crons[$data] = array();
+			$callback = get_class($callback[0]).'_'.$callback[1];
 		}
-		$crons[$data][] = array('call_back' => $call_back, "args" => $args);
-		ksort($crons);
-		update_option('delibera-cron', $crons);
-	}
-}
-
-function delibera_del_cron($postID, $callback = false)
-{
-	$crons =  get_option('delibera-cron', array());
-	if(!is_array($crons)) $crons = array();
 	
-	if( is_array($callback) )
-	{
-		$callback = get_class($callback[0]).'_'.$callback[1];
-	}
-	
-	$crons_new = array();
-	foreach($crons as $cron_data => $cron_value)
-	{
-		$new_cron = array();
-		foreach ($cron_value as $call)
+		$crons_new = array();
+		foreach($crons as $cron_data => $cron_value)
 		{
-			if(isset($call['args']['post_ID'])) $call['args']['post_id'] = $call['args']['post_ID']; // precisa ser compatível com cron anteriores
-			
-			$cron_callback = $call['call_back'];
-			if( is_array($call['call_back']) )
+			$new_cron = array();
+			foreach ($cron_value as $call)
 			{
-				$cron_callback = get_class($call[0]).'_'.$call['call_back'][1];
+				if(isset($call['args']['post_ID'])) $call['args']['post_id'] = $call['args']['post_ID']; // precisa ser compatível com cron anteriores
+					
+				$cron_callback = $call['call_back'];
+				if( is_array($call['call_back']) )
+				{
+					$cron_callback = get_class($call[0]).'_'.$call['call_back'][1];
+				}
+					
+				if($call['args']['post_id'] != $postID || ($callback !== false && $callback != $cron_callback ))
+				{
+					$new_cron[] = $call;
+				}
 			}
-			
-			if($call['args']['post_id'] != $postID || ($callback !== false && $callback != $cron_callback ))
+			if(count($new_cron) > 0)
 			{
-				$new_cron[] = $call;
+				$crons_new[$cron_data] = $new_cron;
 			}
 		}
-		if(count($new_cron) > 0)
-		{
-			$crons_new[$cron_data] = $new_cron;
-		}
+	
+		ksort($crons_new);
+		update_option('delibera-cron', $crons_new);
 	}
 	
-	ksort($crons_new);
-	update_option('delibera-cron', $crons_new);
 }
 
-add_action('delibera_pauta_recusada', 'delibera_del_cron');
+$DeliberaCron = new \Delibera\Cron();
+
+// Force cron exec
+/*if(array_key_exists("delibera_cron_action", $_REQUEST) && !defined('DOING_DELIBERA_CRON'))
+ {
+ ignore_user_abort(true);
+ define('DOING_DELIBERA_CRON', true);
+ delibera_cron_action();
+ }*/
 
 ?>
