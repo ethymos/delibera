@@ -159,6 +159,10 @@ class Flow
 			$events_meta['delibera_flow'] = explode(',', trim($_POST['delibera_flow']));
 		}
 	
+		$post_id = get_the_ID();
+		$module = $this->getCurrentModule($post_id);
+		$module->newDeadline($post_id);
+		
 		return $events_meta;
 	}
 	
@@ -171,6 +175,23 @@ class Flow
 	public function publishPauta($postID, $opt, $alterar)
 	{
 		self::reabrirPauta($postID, false);
+	}
+	
+	/**
+	 * Return Current Flow Module
+	 * @param int $post_id
+	 * @return \Delibera\Modules\ModuleBase
+	 */
+	public static function getCurrentModule($post_id)
+	{
+		global $DeliberaFlow;
+		
+		$flow = $DeliberaFlow->get($post_id);
+		$situacao = delibera_get_situacao($post_id);
+		$current = array_search($situacao, $flow);
+		$modules = $DeliberaFlow->getFlowModules(); //TODO cache?
+		
+		return $modules[$flow[$current]];
 	}
 	
 	/**

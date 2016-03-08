@@ -80,6 +80,7 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 		{
 			wp_set_object_terms($post_id, 'relatoria', 'situacao', false); //Mudar situação para Votação
 		}
+		$this->newDeadline($post_id);
 	}
 	
 	/**
@@ -230,51 +231,6 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 			}
 		
 		}
-		
-		$prazo_eleicao_relator = get_post_meta($postID, 'prazo_eleicao_relator', true);
-		
-		if( ! empty($prazo_eleicao_relator) )
-		{
-			delibera_add_cron(
-				delibera_tratar_data($prazo_eleicao_relator),
-				array($this, 'deadline'),
-				array(
-						'post_id' => $postID,
-						'prazo' => $prazo_eleicao_relator
-				)
-			);
-			delibera_add_cron(
-				strtotime("-1 day", delibera_tratar_data($prazo_eleicao_relator)),
-				'delibera_notificar_fim_prazo',
-				array(
-						'post_id' => $postID,
-						'prazo_votacao' => $prazo_eleicao_relator
-				)
-			);
-		}
-		
-		$prazo_relatoria = get_post_meta($postID, 'prazo_relatoria', true);
-		
-		if( ! empty($prazo_relatoria) )
-		{
-			delibera_add_cron(
-				delibera_tratar_data($prazo_relatoria),
-				array($this, 'deadline'),
-				array(
-						'post_id' => $postID,
-						'prazo' => $prazo_relatoria
-				)
-			);
-			delibera_add_cron(
-				strtotime("-1 day", delibera_tratar_data($prazo_relatoria)),
-				'delibera_notificar_fim_prazo',
-				array(
-						'post_id' => $postID,
-						'prazo_votacao' => $prazo_relatoria
-				)
-			);
-		}
-		
 	}
 	
 	function checkPostData($erros, $opt, $autosave)

@@ -58,6 +58,7 @@ class Discussion extends \Delibera\Modules\ModuleBase
 	public function initModule($post_id)
 	{
 		wp_set_object_terms($post_id, 'discussao', 'situacao', false);
+		$this->newDeadline($post_id);
 	}
 	
 	/**
@@ -174,27 +175,6 @@ class Discussion extends \Delibera\Modules\ModuleBase
 			}
 		}
 		
-		$prazo_discussao = get_post_meta($postID, 'prazo_discussao', true);
-		
-		if($prazo_discussao !== false)
-		{
-			delibera_add_cron(
-				delibera_tratar_data($prazo_discussao),
-				array($this, 'deadline'),
-				array(
-						'post_id' => $postID,
-						'prazo' => $prazo_discussao
-				)
-			);
-			delibera_add_cron(
-				strtotime("-1 day", delibera_tratar_data($prazo_discussao)),
-				'delibera_notificar_fim_prazo',
-				array(
-						'post_id' => $postID,
-						'prazo_discussao' => $prazo_discussao
-				)
-			);
-		}
 	}
 	
 	function checkPostData($erros, $opt, $autosave)

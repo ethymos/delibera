@@ -187,4 +187,43 @@ abstract class ModuleBase
 	 */
 	abstract public function deadline($args);
 	
+	/**
+	 * Create new deadline events calendar
+	 * @param int $post_id
+	 */
+	public function newDeadline($post_id)
+	{
+		$prazos = $this->prazo_meta;
+		if(is_string($this->prazo_meta))
+		{
+			$prazos = array($this->prazo_meta);
+		}
+		foreach ($prazos as $prazo)
+		{
+			$prazo_date = get_post_meta($post_id, $prazo, true);
+			if( ! empty($prazo_date) )
+			{
+				delibera_del_cron($post_id, array($this, 'deadline'));
+				delibera_del_cron($post_id, 'delibera_notificar_fim_prazo');
+					
+				delibera_add_cron(
+					delibera_tratar_data($prazo_date),
+					array($this, 'deadline'),
+					array(
+						'post_id' => $post_id,
+						'prazo' => $prazo_date
+					)
+				);
+				delibera_add_cron(
+					strtotime("-1 day", delibera_tratar_data($prazo_date)),
+					'delibera_notificar_fim_prazo',
+					array(
+						'post_id' => $post_id,
+						'prazo_validacao' => $prazo_date
+					)
+				);
+			}
+		}
+	}
+	
 }

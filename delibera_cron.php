@@ -99,10 +99,16 @@ function delibera_add_cron($data, $call_back, $args)
 	}
 }
 
-function delibera_del_cron($postID)
+function delibera_del_cron($postID, $callback = false)
 {
 	$crons =  get_option('delibera-cron', array());
 	if(!is_array($crons)) $crons = array();
+	
+	if( is_array($callback) )
+	{
+		$callback = get_class($callback[0]).'_'.$callback[1];
+	}
+	
 	$crons_new = array();
 	foreach($crons as $cron_data => $cron_value)
 	{
@@ -111,7 +117,13 @@ function delibera_del_cron($postID)
 		{
 			if(isset($call['args']['post_ID'])) $call['args']['post_id'] = $call['args']['post_ID']; // precisa ser compatível com cron anteriores
 			
-			if($call['args']['post_id'] != $postID)
+			$cron_callback = $call['call_back'];
+			if( is_array($call['call_back']) )
+			{
+				$cron_callback = get_class($call[0]).'_'.$call['call_back'][1];
+			}
+			
+			if($call['args']['post_id'] != $postID || ($callback !== false && $callback != $cron_callback ))
 			{
 				$new_cron[] = $call;
 			}
