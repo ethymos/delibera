@@ -3,11 +3,11 @@
   get_header();
   get_the_content();
   
-  $user = $_GET['member'];
+  $user =  $wp_query->query_vars['member'];
   $user = get_user_by( 'login' , $user ); ?>
   <p>
     <div>
-      <?php echo get_avatar( $user->email ); ?>
+      <?php echo get_avatar( $user->ID ); ?>
     </div>
     <div>
       <?php echo 'Nesta página você pode encontrar tudo o que o usuário ' . $user->first_name  . ' produziu de pautas e comentários no Delibera'; ?>
@@ -31,11 +31,9 @@
 
   foreach( $author_posts->posts as $post )
   {
-    echo '<article class="post hentry">';
-    echo '<header class="entry-header"><br><h2 class="entry-title"><a href="' . get_permalink($post) . '">' . $post->post_title . '</a></h2></header>';
+    echo '<h2 class="entry-title"><a href="' . get_permalink($post) . '">' . $post->post_title . '</a></h2>';
     echo '<div class="entry-content">' . $post->post_content . '</div>';
     echo '<br>';
-    echo '</article>';
   }
   echo '<div>';
   echo paginate_links( array(

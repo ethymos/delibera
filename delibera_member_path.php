@@ -11,13 +11,13 @@ add_filter( 'query_vars', 'userpage_rewrite_add_var' );
 function userpage_rewrite_rule() {
     add_rewrite_tag( '%member%', '([^&]+)' );
     add_rewrite_rule(
-        '^member/([^/]*)/?',
+        '^delibera/membro/([^/]*)/?',
         'index.php?member=$matches[1]',
         'top'
     );
-    add_rewrite_tag( '%members%', '([^&]+)' );
+    add_rewrite_tag( '%members%', '' );
     add_rewrite_rule(
-        '^members',
+        '^delibera/membros',
         'index.php?members',
         'top'
     );
@@ -32,8 +32,8 @@ function userpage_rewrite_catch() {
         exit;
     }
     if ( array_key_exists( 'members', $wp_query->query_vars ) ) {
-        echo "hello word!";
         include ( ABSPATH . 'wp-content/plugins/delibera/delibera_list_users.php');
+        $delibera_user_list->page();
         exit;
     }
 }
