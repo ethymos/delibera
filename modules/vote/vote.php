@@ -52,6 +52,7 @@ class Vote extends \Delibera\Modules\ModuleBase
 	public function initModule($post_id)
 	{
 		wp_set_object_terms($post_id, 'emvotacao', 'situacao', false);
+		$this->newDeadline($post_id);
 	}
 	
 	/**
@@ -140,22 +141,6 @@ class Vote extends \Delibera\Modules\ModuleBase
 	
 	public function publishPauta($postID, $opt, $alterar)
 	{
-		if(!array_key_exists('relatoria', $opt) || $opt['relatoria'] == 'S' && $opt['delibera_flow'][0] == 'relatoria' )
-		{
-			if(!$alterar)
-			{
-				if($opt['eleicao_relator'] == 'S')
-				{
-					wp_set_object_terms($postID, 'eleicaoredator', 'situacao', false);
-				}
-				else 
-				{
-					wp_set_object_terms($postID, 'relatoria', 'situacao', false);
-				}
-			}
-		
-		}
-		
 		$events_meta = array();
 		$events_meta['delibera_numero_comments_votos'] = 0;
 		
@@ -170,8 +155,6 @@ class Vote extends \Delibera\Modules\ModuleBase
 				add_post_meta($postID, $key, $value, true); // Senão, cria
 			}
 		}
-		
-		$this->newDeadline($post_id);
 		
 	}
 	
