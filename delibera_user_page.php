@@ -31,7 +31,7 @@ class Delibera_User_page
 
   function user_pautas($user, $per_page)
   {
-    global $delibera_user_display;
+    global $user_display;
     ?>
     <p>
       <div>
@@ -51,15 +51,15 @@ class Delibera_User_page
         'paged' => get_query_var( 'paged' ) 
     );
     $author_posts = new WP_Query( $args );
-    $delibera_user_display->formPaginator( $per_page );
-    $delibera_user_display->displayPaginator($author_posts->max_num_pages , get_query_var( 'paged' ) );
+    $user_display->formPaginator( $per_page );
+    $user_display->displayPaginator($author_posts->max_num_pages , get_query_var( 'paged' ) );
     foreach( $author_posts->posts as $post )
     {
       echo '<h2 id="post_title" class="post_title" ><a href="' . get_permalink($post) . '">' . $post->post_title . '</a></h2>';
       echo '<div id="post_content" class="post_content">' . $post->post_content . '</div>';
       echo '<br>';
     }
-    $delibera_user_display->displayPaginator($author_posts->max_num_pages , get_query_var( 'paged' ) );
+    $user_display->displayPaginator($author_posts->max_num_pages , get_query_var( 'paged' ) );
   }
   
   function user_comments($user)

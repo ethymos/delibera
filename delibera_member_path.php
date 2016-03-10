@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_user_page.php';
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_list_users.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_user_display.php';
 
 class DeliberaMemberPath
 {
@@ -47,8 +47,7 @@ class DeliberaMemberPath
           exit;
       }
       if ( array_key_exists( 'members', $wp_query->query_vars ) ) {
-          global $delibera_list_users;
-          $delibera_list_users->page();
+          load_template(__DIR__ . DIRECTORY_SEPARATOR . 'themes/creta/page-authors.php' , true);
           exit;
       }
   }
