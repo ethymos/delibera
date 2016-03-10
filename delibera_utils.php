@@ -1,12 +1,25 @@
 <?php
 
-function delibera_tratar_data($data, $int = true, $full = true)
+/**
+ * Return timestamp of parsered date or now if fail
+ * @param string $data like: 22/01/1982
+ * @param string $int return int or database format
+ * @param string $onlastsecond append last day second to date (23:59:59)
+ */
+function delibera_tratar_data($data, $int = true, $onlastsecond = true)
 {
 	$data = trim($data);
-	if(strlen($data) < 8) return false;
-	$data = substr($data, 6, 4).substr($data, 2, 4).substr($data, 0, 2);
-	$data .= $full === true ? ' 23:59:59' : '';
-	return strtotime($data);
+	$dateTime = new DateTime();
+	if($onlastsecond)
+	{
+		$dateTime = \DateTime::createFromFormat('d/m/Y H:i:s', $data." 23:59:59"); //TODO get wordpress format
+	}
+	else
+	{
+		$dateTime = \DateTime::createFromFormat('d/m/Y', $data);
+	}
+	
+	return $dateTime->format( ($int ? 'U' : 'Y-m-d H:i:s'));
 }
 
 /**
