@@ -106,62 +106,33 @@ function delibera_pauta_meta()
 }
 
 
-function delibera_publish_pauta($postID, $post, $alterar = false)
+function delibera_publish_pauta($post)
 {
+	$postID = $post->ID;
 	if(get_post_type( $postID ) != "pauta")
 	{
 		return $postID;
 	}
-
-	if (
-			$alterar ||	(
-				($post->post_status == 'publish' || $_POST['publish'] == 'Publicar') &&
-					(
-						(
-							array_key_exists('prev_status', $_POST) &&
-							(
-								$_POST['prev_status'] == 'draft' ||
-								$_POST['prev_status'] == 'pending'
-							)
-						) ||
-						(
-							array_key_exists('original_post_status', $_POST) && (
-									$_POST['original_post_status'] == 'draft' ||
-									$_POST['original_post_status'] == 'auto-draft' ||
-									$_POST['original_post_status'] == 'pending')
-						)
-					)
-			)
-		)
+	
+	$opt = delibera_get_config();
+	
+	do_action('delibera_publish_pauta', $postID, $opt);
+	
+	$curtir = get_post_meta($postID, 'delibera_numero_curtir', true);
+	if($curtir == "" || $curtir === false || is_null($curtir))
 	{
-		$opt = delibera_get_config();
-		
-		do_action('delibera_publish_pauta', $postID, $opt, $alterar);
-		
-		$curtir = get_post_meta($postID, 'delibera_numero_curtir', true);
-		if($curtir == "" || $curtir === false || is_null($curtir))
-		{
-			$events_meta['delibera_numero_comments_padroes'] = 0;
-			$events_meta['delibera_numero_curtir'] = 0;
-			$events_meta['delibera_curtiram'] = array();
-			$events_meta['delibera_numero_discordar'] = 0;
-			$events_meta['delibera_discordaram'] = array();
-			$events_meta['delibera_numero_seguir'] = 0;
-			$events_meta['delibera_seguiram'] = array();
-		}
-
-		if($alterar)
-		{
-			//delibera_notificar_situacao($post);
-		}
-		else
-		{
-			delibera_notificar_nova_pauta($post);
-		}
+		$events_meta['delibera_numero_comments_padroes'] = 0;
+		$events_meta['delibera_numero_curtir'] = 0;
+		$events_meta['delibera_curtiram'] = array();
+		$events_meta['delibera_numero_discordar'] = 0;
+		$events_meta['delibera_discordaram'] = array();
+		$events_meta['delibera_numero_seguir'] = 0;
+		$events_meta['delibera_seguiram'] = array();
 	}
-}
 
-add_action ('publish_pauta', 'delibera_publish_pauta', 1, 2);
+	delibera_notificar_nova_pauta($postID);
+}
+add_action ('draft_to_publish', 'delibera_publish_pauta', 1, 1);
 
 /**
  * 
@@ -320,10 +291,6 @@ function delibera_save_post($post_id, $post)
     	\Delibera\Flow::forcarFimPrazo($post->ID);
     }
 
-	if($post->post_status == 'publish' && !$autosave)
-	{
-		delibera_publish_pauta($post->ID, $post, true);
-	}
 }
 
 add_action ('save_post', 'delibera_save_post', 1, 2);
