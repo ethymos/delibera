@@ -18,9 +18,10 @@ class Flow
 		add_filter('delivera_config_page_rows', array($this, 'configPageRows'), 10, 2);
 		add_filter('delibera-pre-main-config-save', array($this, 'preMainConfigSave'));
 		add_action('delibera_topic_meta', array($this, 'topicMeta'), 10, 5);
-		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 10, 2);
-		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 3);
+		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 1000, 2);
+		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 2);
 		add_filter('delibera_flow_list', array($this, 'filterFlowList'));
+		add_action('delibera_save_post', array($this, 'savePost'), 1000, 3);
 	}
 	
 	/**
@@ -159,11 +160,13 @@ class Flow
 			$events_meta['delibera_flow'] = explode(',', trim($_POST['delibera_flow']));
 		}
 	
-		$post_id = get_the_ID();
+		return $events_meta;
+	}
+	
+	public function savePost($post_id, $post, $opt)
+	{
 		$module = $this->getCurrentModule($post_id);
 		$module->newDeadline($post_id);
-		
-		return $events_meta;
 	}
 	
 	/**
@@ -172,7 +175,7 @@ class Flow
 	 * @param array $opt delibera configs
 	 * @param bool $alterar has been altered
 	 */
-	public function publishPauta($postID, $opt, $alterar)
+	public function publishPauta($postID, $opt)
 	{
 		self::reabrirPauta($postID, false);
 	}
@@ -188,7 +191,7 @@ class Flow
 		
 		$flow = $DeliberaFlow->get($post_id);
 		$situacao = delibera_get_situacao($post_id);
-		$current = array_search($situacao, $flow);
+		$current = array_search($situacao->slug, $flow);
 		$modules = $DeliberaFlow->getFlowModules(); //TODO cache?
 		
 		return $modules[$flow[$current]];
@@ -276,13 +279,13 @@ class Flow
 		$deadline = $module->getDeadline($post_id);
 	
 		$dateTimeNow = new \DateTime();
-		$deadlineDate = \DateTime::createFromFormat('d/m/Y', $deadline);
+		$deadlineDate = \DateTime::createFromFormat('d/m/Y H:i:s', $deadline." 23:59:59");
 		
 		$diff = $dateTimeNow->diff($deadlineDate);
 		
 		if($diff->d > 0)
 		{
-			return $diff->d;
+			return $diff->format('%a');
 		}
 		if($diff->d < 1 && ($diff->i || $diff->h || $diff->s)) 
 		{
