@@ -124,7 +124,7 @@ class Result extends \Delibera\Modules\ModuleBase
 	 * @param array $opt delibera configs
 	 * @param bool $alterar has been altered
 	 */
-	public function publishPauta($postID, $opt, $alterar)
+	public function publishPauta($postID, $opt)
 	{
 		
 	}

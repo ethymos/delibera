@@ -39,7 +39,7 @@ abstract class ModuleBase
 		add_filter('delivera_config_page_rows', array($this, 'configPageRows'), 10, 2);
 		add_filter('delibera_situation_button_text', array($this, 'situationButtonText'));
 		add_action('delibera_topic_meta', array($this, 'topicMeta'), 10, 5);
-		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 3);
+		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 2);
 		add_filter('delibera_check_post_data', array($this, 'checkPostData'), 10, 3);
 		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 10, 2);
 		add_action('delibera_create_pauta_frontend', array($this, 'createPautaAtFront'));
@@ -109,9 +109,8 @@ abstract class ModuleBase
 	 * When the topic is published
 	 * @param int $postID
 	 * @param array $opt delibera configs
-	 * @param bool $alterar has been altered
 	 */
-	abstract public function publishPauta($postID, $opt, $alterar);
+	abstract public function publishPauta($postID, $opt);
 	
 	/**
 	 * Validate topic required data
@@ -193,35 +192,43 @@ abstract class ModuleBase
 	 */
 	public function newDeadline($post_id)
 	{
-		$prazos = $this->prazo_meta;
-		if(is_string($this->prazo_meta))
+		if(get_post_status($post_id) == 'publish')
 		{
-			$prazos = array($this->prazo_meta);
-		}
-		foreach ($prazos as $prazo)
-		{
-			$prazo_date = get_post_meta($post_id, $prazo, true);
-			if( ! empty($prazo_date) )
+			$prazos = $this->prazo_meta;
+			if(is_string($this->prazo_meta))
 			{
-				\Delibera\Cron::del($post_id, array($this, 'deadline'));
-				\Delibera\Cron::del($post_id, 'delibera_notificar_fim_prazo');
-					
-				\Delibera\Cron::add(
-					delibera_tratar_data($prazo_date),
-					array($this, 'deadline'),
-					array(
-						'post_id' => $post_id,
-						'prazo' => $prazo_date
-					)
-				);
-				\Delibera\Cron::add(
-					strtotime("-1 day", delibera_tratar_data($prazo_date)),
-					'delibera_notificar_fim_prazo',
-					array(
-						'post_id' => $post_id,
-						'prazo_validacao' => $prazo_date
-					)
-				);
+				$prazos = array($this->prazo_meta);
+			}
+			foreach ($prazos as $prazo)
+			{
+				$prazo_date = get_post_meta($post_id, $prazo, true);
+				if( ! empty($prazo_date) )
+				{
+					\Delibera\Cron::del($post_id, array($this, 'deadline'));
+					\Delibera\Cron::del($post_id, 'delibera_notificar_fim_prazo');
+						
+					\Delibera\Cron::add(
+						delibera_tratar_data($prazo_date),
+						array($this, 'deadline'),
+						array(
+							'post_ID' => $post_id,
+							'prazo' => $prazo_date
+						)
+					);
+					\Delibera\Cron::add(
+						strtotime("-1 day", delibera_tratar_data($prazo_date)),
+						'delibera_notificar_fim_prazo',
+						array(
+							'post_ID' => $post_id,
+							'prazo_validacao' => $prazo_date
+						)
+					);
+				}
+				else 
+				{
+					$msn = "empty date on $post_id: ".print_r($this, true)."Dates: ".print_r($prazos, true);
+					throw new \Exception($msn);
+				}
 			}
 		}
 	}

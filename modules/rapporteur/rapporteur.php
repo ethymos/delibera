@@ -214,23 +214,9 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 		
 	}
 	
-	public function publishPauta($postID, $opt, $alterar)
+	public function publishPauta($postID, $opt)
 	{
-		if(!array_key_exists('relatoria', $opt) || $opt['relatoria'] == 'S' && $opt['delibera_flow'][0] == 'relatoria' )
-		{
-			if(!$alterar)
-			{
-				if($opt['eleicao_relator'] == 'S')
-				{
-					wp_set_object_terms($postID, 'eleicaoredator', 'situacao', false);
-				}
-				else 
-				{
-					wp_set_object_terms($postID, 'relatoria', 'situacao', false);
-				}
-			}
 		
-		}
 	}
 	
 	function checkPostData($erros, $opt, $autosave)

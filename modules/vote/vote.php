@@ -139,7 +139,7 @@ class Vote extends \Delibera\Modules\ModuleBase
 		
 	}
 	
-	public function publishPauta($postID, $opt, $alterar)
+	public function publishPauta($postID, $opt)
 	{
 		$events_meta = array();
 		$events_meta['delibera_numero_comments_votos'] = 0;

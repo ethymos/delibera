@@ -149,16 +149,8 @@ class Discussion extends \Delibera\Modules\ModuleBase
 		
 	}
 	
-	public function publishPauta($postID, $opt, $alterar)
+	public function publishPauta($postID, $opt)
 	{
-		if(/*!array_key_exists('discussao', $opt) || $opt['discussao'] == 'S' && TODO check activation */ $opt['delibera_flow'][0] == 'discussao' )
-		{
-			if(!$alterar)
-			{
-				wp_set_object_terms($postID, 'discussao', 'situacao', false);
-			}
-		
-		}
 		$events_meta = array();
 		$events_meta['delibera_numero_comments_encaminhamentos'] = 0;
 		$events_meta['delibera_numero_comments_discussoes'] = 0;
