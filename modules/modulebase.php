@@ -229,8 +229,9 @@ abstract class ModuleBase
 				}
 				else 
 				{
-					$msn = "empty date on $post_id: ".print_r($this, true)."Dates: ".print_r($prazos, true);
-					throw new \Exception($msn);
+					/*$msn = "empty date on $post_id: ".print_r($this, true)."Dates: ".print_r($prazos, true);
+					throw new \Exception($msn);*/
+					// empty date! Meaning: no activated deadline, then do nothing
 				}
 			}
 		}
