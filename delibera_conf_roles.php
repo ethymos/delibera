@@ -97,7 +97,7 @@ function delibera_current_user_can_participate($permissao = 'votar') {
 
     $options = delibera_get_config();
 
-    if (is_singular('pauta') && delibera_get_prazo($post->ID) == -1) {
+    if (is_singular('pauta') && \Delibera\Flow::getDeadlineDays($post->ID) == -1) {
         return false;
     } else if (is_multisite() && $options['todos_usuarios_logados_podem_participar'] == 'S') {
         return is_user_logged_in();

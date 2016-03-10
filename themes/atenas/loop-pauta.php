@@ -45,10 +45,10 @@
 							<div class="entry-prazo">
 							
 								<?php
-								if ( delibera_get_prazo( $post->ID ) == -1 )
+								if ( \Delibera\Flow::getDeadlineDays( $post->ID ) == -1 )
 									_e( 'Prazo encerrado', 'delibera' );
 								else
-									printf( _n( 'Encerra em um dia', 'Encerra em %1$s dias', delibera_get_prazo( $post->ID ), 'delibera' ), number_format_i18n( delibera_get_prazo( $post->ID ) ) );
+									printf( _n( 'Encerra em um dia', 'Encerra em %1$s dias', \Delibera\Flow::getDeadlineDays( $post->ID ), 'delibera' ), number_format_i18n( \Delibera\Flow::getDeadlineDays( $post->ID ) ) );
 								?>
 							</div><!-- .entry-prazo -->
 							<div class="entry-print">

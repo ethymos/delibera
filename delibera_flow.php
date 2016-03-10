@@ -264,6 +264,37 @@ class Flow
 		}
 	}
 	
+	/**
+	 * Return module deadline days for the current post (until 1 minute, we return 1)
+	 * @param int $post_id
+	 * @return mixed|string deadline date
+	 */
+	public static function getDeadlineDays($post_id = false)
+	{
+		$module = \Delibera\Flow::getCurrentModule($post_id);
+	
+		$deadline = $module->getDeadline($post_id);
+	
+		$dateTimeNow = new \DateTime();
+		$deadlineDate = \DateTime::createFromFormat('d/m/Y', $deadline);
+		
+		$diff = $dateTimeNow->diff($deadlineDate);
+		
+		if($diff->d > 0)
+		{
+			return $diff->d;
+		}
+		if($diff->d < 1 && ($diff->i || $diff->h || $diff->s)) 
+		{
+			return  1;
+		}
+		else 
+		{
+			return -1;
+		}
+		
+	}
+	
 }
 
 global $DeliberaFlow;

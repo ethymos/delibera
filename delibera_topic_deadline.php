@@ -148,8 +148,8 @@ function delibera_set_novo_prazo_discussao_relatoria($postID, $inova_data, $opts
  * @param int $postID
  * @param string $data
  * @return int
- */
-function delibera_get_prazo($postID, &$data = null)
+ *
+function \Delibera\Flow::getDeadlineDays($postID, &$data = null)
 {
 	$situacao = delibera_get_situacao($postID);
 	$prazo = "";
@@ -193,4 +193,4 @@ function delibera_get_prazo($postID, &$data = null)
 	if(!is_null($data)) $data = $prazo;
 
 	return $dias;
-}
+}*/

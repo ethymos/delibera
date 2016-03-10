@@ -188,7 +188,7 @@ function delibera_post_custom_column($column)
         break;
     case 'prazo':
         $data = "";
-        $prazo = delibera_get_prazo($post->ID, $data);
+        $prazo = \Delibera\Flow::getDeadlineDays($post->ID, $data);
         if($prazo == -1)
         {
             echo __('Encerrado', 'delibera');
