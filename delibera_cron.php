@@ -15,12 +15,15 @@ class Cron
 		add_action('admin_action_delibera_cron_action', array($this, 'action'));
 		add_action('wp',  array($this, 'registry') );
 		add_action('admin_action_delibera_cron_list', array($this, 'list'));
+		add_action('delibera_menu_itens', array($this, 'addMenu'));
+		add_action('wp_trash_post', array($this, 'del') );
+		add_action('before_delete_post', array($this, 'del') );
 	}
 	
 	/**
 	 * Wordpress hook when cron is trigged
 	 */
-	function action()
+	public function action()
 	{
 		ignore_user_abort(true);
 		define('DOING_DELIBERA_CRON', true);
@@ -37,9 +40,19 @@ class Cron
 					foreach ($values as $value)
 					{
 						$exec++;
-						if(function_exists($value['call_back']))
+						if(is_array($value['call_back']))
 						{
-							call_user_func($value['call_back'], $value['args']);
+							if(method_exists($value['call_back'][0], $value['call_back'][1]))
+							{
+								call_user_func($value['call_back'], $value['args']);
+							}
+						}
+						else 
+						{
+							if(function_exists($value['call_back']))
+							{
+								call_user_func($value['call_back'], $value['args']);
+							}
 						}
 					}
 				}
@@ -54,6 +67,7 @@ class Cron
 		{
 			$error = __('Erro no cron Delibera: ','delibera').$e->getMessage()."\n".$e->getCode()."\n".$e->getTraceAsString()."\n".$e->getLine()."\n".$e->getFile();
 			wp_mail("jacson@ethymos.com.br", get_bloginfo('name'), $error);
+			file_put_contents('/tmp/delibera_cron.log', $error, FILE_APPEND);
 		}
 		//wp_mail("jacson@ethymos.com.br", get_bloginfo('name'),"Foram executadas $exec tarefa(s)");
 	}
@@ -74,27 +88,33 @@ class Cron
 	 */
 	function cronList()
 	{
-		$crons =  get_option('delibera-cron', array());
-		foreach ($crons as $key => $values)
-		{
-			echo "\n<br/>[$key]: ".date("d/m/Y H:i:s", $key);
-			foreach ($values as $key2 => $value)
+		?>
+		<div class="delibera-cron-table">
+			<span><?php _e('Lista de tarefas agendadas', 'delibera'); ?></span>
+			<pre><?php
+			$crons =  get_option('delibera-cron', array());
+			foreach ($crons as $key => $values)
 			{
-				echo "\n<br/>\t&nbsp;&nbsp;&nbsp;[$key2]";
-				foreach ($value as $ki => $item)
+				echo "\n<br/>[$key]: ".date("d/m/Y H:i:s", $key);
+				foreach ($values as $key2 => $value)
 				{
-					echo "\n<br/>\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[$ki]";
-					if(is_array($item))
+					echo "\n<br/>\t&nbsp;&nbsp;&nbsp;[$key2]";
+					foreach ($value as $ki => $item)
 					{
-						echo "\n<br/>\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".print_r($item, true);
-					}
-					else
-					{
-						echo "\n<br/>\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$item";
+						echo "\n<br/>\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[$ki]";
+						if(is_array($item))
+						{
+							echo "\n<br/>\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".print_r($item, true);
+						}
+						else
+						{
+							echo "\n<br/>\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$item";
+						}
 					}
 				}
-			}
-		}
+			}?>
+			</pre>
+		</div><?php
 	}
 	
 	/**
@@ -141,15 +161,15 @@ class Cron
 			$new_cron = array();
 			foreach ($cron_value as $call)
 			{
-				if(isset($call['args']['post_ID'])) $call['args']['post_id'] = $call['args']['post_ID']; // precisa ser compatível com cron anteriores
-					
 				$cron_callback = $call['call_back'];
 				if( is_array($call['call_back']) )
 				{
-					$cron_callback = get_class($call[0]).'_'.$call['call_back'][1];
+					$cron_callback = get_class($call['call_back'][0]).'_'.$call['call_back'][1];
 				}
-					
-				if($call['args']['post_id'] != $postID || ($callback !== false && $callback != $cron_callback ))
+				
+				if(array_key_exists('post_id', $call['args'])) $call['args']['post_ID'] = $call['args']['post_id'];
+				
+				if($call['args']['post_ID'] != $postID || ($callback !== false && $callback != $cron_callback ))
 				{
 					$new_cron[] = $call;
 				}
@@ -164,6 +184,16 @@ class Cron
 		update_option('delibera-cron', $crons_new);
 	}
 	
+	public function addMenu($base_page)
+	{
+		add_submenu_page($base_page, __('Delibera Cron','delibera'),__('Delibera Cron','delibera'), 'manage_options', 'delibera-cron', array($this, 'confPage'));
+	}
+	
+	public function confPage()
+	{
+		$this->cronList();
+	}
+	
 }
 
 $DeliberaCron = new \Delibera\Cron();
@@ -175,5 +205,5 @@ $DeliberaCron = new \Delibera\Cron();
  define('DOING_DELIBERA_CRON', true);
  delibera_cron_action();
  }*/
-
+//update_option('delibera-cron', array()); //delete cron
 ?>
