@@ -229,7 +229,7 @@ class Discussion extends \Delibera\Modules\ModuleBase
 	 * {@inheritDoc}
 	 * @see \Delibera\Modules\ModuleBase::deadline()
 	 */
-	public function deadline($args)
+	public static function deadline($args)
 	{
 		$post_id = $args['post_id'];
 		$situacao = delibera_get_situacao($post_id);

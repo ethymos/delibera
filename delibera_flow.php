@@ -134,6 +134,10 @@ class Flow
 	public static function getLastDeadline($situacao, $post_id = false)
 	{
 		global $DeliberaFlow;
+		if(is_object($situacao))
+		{
+			$situacao = $situacao->slug;
+		}
 		
 		if($post_id == false)
 		{
@@ -165,6 +169,7 @@ class Flow
 	
 	public function savePost($post_id, $post, $opt)
 	{
+		
 		$module = $this->getCurrentModule($post_id);
 		$module->newDeadline($post_id);
 	}
@@ -207,7 +212,7 @@ class Flow
 		
 		$flow = $DeliberaFlow->get($post_id);
 		$situacao = delibera_get_situacao($post_id);
-		$current = array_search($situacao, $flow);
+		$current = array_search($situacao->slug, $flow);
 		$modules = $DeliberaFlow->getFlowModules(); //TODO cache?
 		
 		if(array_key_exists($current+1, $flow))
@@ -228,12 +233,12 @@ class Flow
 		
 		$flow = $DeliberaFlow->get($post_id);
 		$situacao = delibera_get_situacao($post_id);
-		$current = array_search($situacao, $flow);
+		$current = array_search($situacao->slug, $flow);
 		$modules = $DeliberaFlow->getFlowModules(); //TODO cache?
 		
 		if(array_key_exists($current, $flow))
 		{
-			$modules[$flow[$current]]->deadline(array('post_id' => $post_id, 'prazo' => date('d/m/Y'), 'force' => true));
+			call_user_func(array(get_class($modules[$flow[$current]]), 'deadline'), array('post_id' => $post_id, 'prazo' => date('d/m/Y'), 'force' => true) );
 		}
 		$DeliberaFlow->next($post_id);
 		//delibera_notificar_situacao($postID); // Originaly comment, why?

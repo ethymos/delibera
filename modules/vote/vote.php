@@ -305,12 +305,14 @@ class Vote extends \Delibera\Modules\ModuleBase
 	 * {@inheritDoc}
 	 * @see \Delibera\Modules\ModuleBase::deadline()
 	 */
-	public function deadline($args)
+	public static function deadline($args)
 	{
-		$situacao = delibera_get_situacao($args['post_id']);
+		$post_id = $args['post_id'];
+		$situacao = delibera_get_situacao($post_id);
 		if($situacao->slug == 'emvotacao')
 		{
-			$this->computaVotos($args['post_id']);
+			$current = \Delibera\Flow::getCurrentModule($post_id);
+			$current->computaVotos($post_id);
 		}
 	}
 	

@@ -18,8 +18,14 @@ function delibera_tratar_data($data, $int = true, $onlastsecond = true)
 	{
 		$dateTime = \DateTime::createFromFormat('d/m/Y', $data);
 	}
-	
-	return $dateTime->format( ($int ? 'U' : 'Y-m-d H:i:s'));
+	if(is_object($dateTime))
+	{
+		return $dateTime->format( ($int ? 'U' : 'Y-m-d H:i:s'));
+	}
+	else
+	{
+		return false;
+	}
 }
 
 /**

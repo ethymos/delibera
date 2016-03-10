@@ -125,6 +125,7 @@ class Cron
 	 */
 	public static function add($data, $call_back, $args)
 	{
+		$data = intval($data);
 		if(is_int($data) && $data > 0)
 		{
 			$crons =  get_option('delibera-cron', array());
@@ -136,7 +137,10 @@ class Cron
 			}
 			$crons[$data][] = array('call_back' => $call_back, "args" => $args);
 			ksort($crons);
-			update_option('delibera-cron', $crons);
+			if(!update_option('delibera-cron', $crons))
+			{
+				throw new \Exception("Cron not updated on $data, values:".print_r($crons[$data],true));
+			}
 		}
 	}
 	
@@ -152,7 +156,7 @@ class Cron
 	
 		if( is_array($callback) )
 		{
-			$callback = get_class($callback[0]).'_'.$callback[1];
+			$callback = $callback[0].'_'.$callback[1];
 		}
 	
 		$crons_new = array();
@@ -164,7 +168,7 @@ class Cron
 				$cron_callback = $call['call_back'];
 				if( is_array($call['call_back']) )
 				{
-					$cron_callback = get_class($call['call_back'][0]).'_'.$call['call_back'][1];
+					$cron_callback = $call['call_back'][0].'_'.$call['call_back'][1];
 				}
 				
 				if(array_key_exists('post_id', $call['args'])) $call['args']['post_ID'] = $call['args']['post_id'];

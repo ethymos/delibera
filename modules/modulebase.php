@@ -184,7 +184,7 @@ abstract class ModuleBase
 	 * Trigger module deadline event
 	 * @param array $args in form: array('post_id' => $post_id, 'prazo' => $prazo)
 	 */
-	abstract public function deadline($args);
+	abstract public static function deadline($args);
 	
 	/**
 	 * Create new deadline events calendar
@@ -204,12 +204,15 @@ abstract class ModuleBase
 				$prazo_date = get_post_meta($post_id, $prazo, true);
 				if( ! empty($prazo_date) )
 				{
-					\Delibera\Cron::del($post_id, array($this, 'deadline'));
+					\Delibera\Cron::del($post_id, array(get_class($this), 'deadline'));
 					\Delibera\Cron::del($post_id, 'delibera_notificar_fim_prazo');
-						
+					
+					$cron = get_option('delibera-cron');
+					var_dump($cron);
+					
 					\Delibera\Cron::add(
 						delibera_tratar_data($prazo_date),
-						array($this, 'deadline'),
+						array(get_class($this), 'deadline'),
 						array(
 							'post_ID' => $post_id,
 							'prazo' => $prazo_date
@@ -220,7 +223,7 @@ abstract class ModuleBase
 						'delibera_notificar_fim_prazo',
 						array(
 							'post_ID' => $post_id,
-							'prazo_validacao' => $prazo_date
+							$prazo => $prazo_date
 						)
 					);
 				}

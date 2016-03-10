@@ -315,7 +315,7 @@ class Validation extends \Delibera\Modules\ModuleBase
 	 * {@inheritDoc}
 	 * @see \Delibera\Modules\ModuleBase::deadline()
 	 */
-	public function deadline($args)
+	public static function deadline($args)
 	{
 		$situacao = delibera_get_situacao($args['post_id']);
 		if($situacao->slug == 'validacao')
