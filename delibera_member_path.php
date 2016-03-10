@@ -1,48 +1,58 @@
 <?php
-// Create the query var so that WP catches the custom /member/username url
-function userpage_rewrite_add_var( $vars ) {
-    $vars[] = 'member';
-    $vars[] = 'merbers';
-    return $vars;
+
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_user_page.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_list_users.php';
+
+class DeliberaMemberPath
+{
+
+  public function __construct()
+  {
+    add_filter( 'query_vars', array( $this , 'userpage_rewrite_add_var' ) ) ;
+    add_action( 'init', array( $this , 'userpage_rewrite_rule') ) ;
+    add_action( 'template_redirect', array( $this , 'userpage_rewrite_catch') ) ;
+  }
+
+  // Create the query var so that WP catches the custom /member/username url
+  public function userpage_rewrite_add_var( $vars ) {
+      $vars[] = 'login';
+      $vars[] = 'merbers';
+      return $vars;
+  }
+  
+  // Create the rewrites
+  public function userpage_rewrite_rule() {
+      add_rewrite_tag( '%login%', '([^&]+)' );
+      add_rewrite_rule(
+          '^delibera/membro/([^/]*)/?',
+          'index.php?login=$matches[1]',
+          'top'
+      );
+      add_rewrite_tag( '%members%', '' );
+      add_rewrite_rule(
+          '^delibera/membros',
+          'index.php?members',
+          'top'
+      );
+  }
+  
+  // Catch the URL and redirect it to a template file
+  public function userpage_rewrite_catch() {
+      global $wp_query;
+      if ( array_key_exists( 'login', $wp_query->query_vars ) ) {
+          $login = $wp_query->query_vars['login'];
+          $user = get_user_by( 'login' , $login ); 
+          global $delibera_user_page;
+          $delibera_user_page->page($user);
+          exit;
+      }
+      if ( array_key_exists( 'members', $wp_query->query_vars ) ) {
+          global $delibera_list_users;
+          $delibera_list_users->page();
+          exit;
+      }
+  }
+  
 }
-add_filter( 'query_vars', 'userpage_rewrite_add_var' );
-
-// Create the rewrites
-function userpage_rewrite_rule() {
-    add_rewrite_tag( '%member%', '([^&]+)' );
-    add_rewrite_rule(
-        '^delibera/membro/([^/]*)/?',
-        'index.php?member=$matches[1]',
-        'top'
-    );
-    add_rewrite_tag( '%members%', '' );
-    add_rewrite_rule(
-        '^delibera/membros',
-        'index.php?members',
-        'top'
-    );
-}
-add_action('init','userpage_rewrite_rule');
-
-// Catch the URL and redirect it to a template file
-function userpage_rewrite_catch() {
-    global $wp_query;
-    if ( array_key_exists( 'member', $wp_query->query_vars ) ) {
-        include ( ABSPATH . 'wp-content/plugins/delibera/delibera_user_page.php');
-        exit;
-    }
-    if ( array_key_exists( 'members', $wp_query->query_vars ) ) {
-        include ( ABSPATH . 'wp-content/plugins/delibera/delibera_list_users.php');
-        $delibera_user_list->page();
-        exit;
-    }
-}
-add_action( 'template_redirect', 'userpage_rewrite_catch' );
-
-function user_last_login( $user_login, $user ){
-    update_user_meta( $user->ID, '_last_login', time() );
-}
-add_action( 'wp_login', 'user_last_login', 10, 2 );
-
-
-
+global $delibera_member_path;
+$delibera_member_path= new DeliberaMemberPath();

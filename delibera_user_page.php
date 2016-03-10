@@ -1,89 +1,132 @@
 <?php
 
-  get_header();
-  get_the_content();
-  
-  $user =  $wp_query->query_vars['member'];
-  $user = get_user_by( 'login' , $user ); ?>
-  <p>
-    <div>
-      <?php echo get_avatar( $user->ID ); ?>
-    </div>
-    <div>
-      <?php echo 'Nesta página você pode encontrar tudo o que o usuário ' . $user->first_name  . ' produziu de pautas e comentários no Delibera'; ?>
-    </div>
-    <br>
-    <?php //var_dump($user); ?>
-    <div>
-      <?php echo 'Conteudos do tipo Pauta:'; ?>
-    </div>
-  </p>
-  <main id="main" class="site-main" role="main">
-  <?php
-  $args = array(
-      'author' => $user->ID,
-      'status' => 'approve',
-      'posts_per_page' => 5,
-      'post_type' => 'pauta',
-      'paged' => get_query_var( 'paged' ) 
-  );
-  $author_posts = new WP_Query( $args );
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_user_display.php';
 
-  foreach( $author_posts->posts as $post )
+class Delibera_User_page
+{
+  public function __construct()
   {
-    echo '<h2 class="entry-title"><a href="' . get_permalink($post) . '">' . $post->post_title . '</a></h2>';
-    echo '<div class="entry-content">' . $post->post_content . '</div>';
-    echo '<br>';
   }
-  echo '<div>';
-  echo paginate_links( array(
-    'base' => add_query_arg( 'paged', '%#%' ),
-    'format' => '',
-    'prev_text' => __('&laquo;'),
-    'next_text' => __('&raquo;'),
-    'total' =>  $author_posts->max_num_pages,
-    'current' => get_query_var( 'paged' )
-  ));
-  //wp_reset_post_data();
-  echo '</div>';
-  ?>
 
-  <?php
+  function page($user)
+  {
+    get_header();
+    $per_page = isset( $_GET['per-page'] ) ?  esc_html( $_GET['per-page'] ) : '20' ;
+    $search = isset( $_GET['search'] ) ?  esc_html( $_GET['search'] ) : '' ;
+    $order  = isset( $_GET['order-by'] ) ?  esc_html( $_GET['order-by'] ) : '' ;
+    $this->html( $user , $per_page );
+    wp_footer();
+    ?>
+    </body>
+    </html> 
+    <?php
+  }
+  
+  function html( $user , $per_page )
+  { 
+    $this->user_pautas( $user , $per_page );
+    $this->user_comments($user);
+    wp_reset_post_data();
+  }
+
+  function user_pautas($user, $per_page)
+  {
+    global $delibera_user_display;
+    ?>
+    <p>
+      <div>
+        <?php echo get_avatar( $user->ID ); ?>
+        <h1><?php echo $user->first_name ?></h1>
+      </div>
+      <div>
+        <h2><?php echo 'Pautas:'; ?></h2>
+      </div>
+    </p>
+    <?php
     $args = array(
-        'user_id' => $user->ID,
-        'number' => 1, // how many comments to retrieve
+        'author' => $user->ID,
+        'status' => 'approve',
+        'posts_per_page' => $per_page,
         'post_type' => 'pauta',
-        'status' => 'approve'
-        );
-
-    $comments = get_comments( $args );
-
-    if ( $comments )
+        'paged' => get_query_var( 'paged' ) 
+    );
+    $author_posts = new WP_Query( $args );
+    $delibera_user_display->formPaginator( $per_page );
+    $delibera_user_display->displayPaginator($author_posts->max_num_pages , get_query_var( 'paged' ) );
+    foreach( $author_posts->posts as $post )
     {
-        $output.= '<article class="post hentry">';
-        $output.= '<header class="entry-header"><br><h2 class="entry-title"> Comentários de ' . $user->first_name . '</h2></header>';
-        $output.= '<div class="entry-content">';
-        $output.= "<ul>\n";
-        foreach ( $comments as $comment )
-        {
-        $output.= '<li>';
-        $output.= $comment->comment_content . '&nbsp';
-        $output.= '<a href="'.get_comment_link( $comment->comment_ID ).'">';
-        $output.= get_the_title($comment->comment_post_ID);
-        $output.= '</a>, '. mysql2date('m/d/Y', $comment->comment_date, $translate);
-        $output.= "</li>\n";
-        }
-        $output.= '</ul>';
-        $output.= '</div>';
+      echo '<h2 id="post_title" class="post_title" ><a href="' . get_permalink($post) . '">' . $post->post_title . '</a></h2>';
+      echo '<div id="post_content" class="post_content">' . $post->post_content . '</div>';
+      echo '<br>';
+    }
+    $delibera_user_display->displayPaginator($author_posts->max_num_pages , get_query_var( 'paged' ) );
+  }
+  
+  function user_comments($user)
+  {
+      $args = array(
+          'user_id' => $user->ID,
+          'number' => 2,
+          'post_type' => 'pauta',
+          'status' => 'approve',
+          'offset' => get_query_var( 'pagec' ) 
+          );
 
-        $output.= '</article>';
-        echo $output;
-    } else { echo "No comments made";}
+      $comments = get_comments( $args );
+      echo '<div id="user_pagination" class="user_pagination">';
+        echo $this->get_paginator( $comments[0]->comment_count/2 , get_query_var( 'pagec' ) );
+      echo '</div>';
+      if ( $comments )
+      {
+          $output.= '<h2>Comentários: </h2>';
+          $output.= '<div class="user_comment">';
+          foreach ( $comments as $comment )
+          {
+            $output.= '<strong>' . $this->parse_comment_type( $comment->comment_ID , 'tipo') . ': </strong><br>';
+            $output.= $comment->comment_content . '<br>';
+            $output.= '' . wp_get_attachment_image(get_comment_meta( $comment->comment_ID , 'attachmentId', true)) . '<br>';
+            $output.= '<p>Na  pauta <a href="'.get_comment_link( $comment->comment_ID ).'">';
+            $output.= get_the_title($comment->comment_post_ID);
+            $output.= ', em </a> '. mysql2date('m/d/Y', $comment->comment_date, $translate);
+            if( $this->get_comment_meta( $comment->comment_ID , 'tipo') != discussao ) 
+            {
+              $output.= ' <br><br>';
+              $output.= 'Numero de votos: ';
+              $votaram = $this->get_comment_meta( $comment->comment_ID , 'numero_votos');
+              $output.=  $votaram ? $votaram : '0';
+              $output.= ' <br>';
+            }
+            $output.= '<p>Concordaram: ';
+            $curtiram = $this->get_comment_meta( $comment->comment_ID , 'numero_curtir' );
+            $output.=  $curtiram ? $curtiram : '0';
+            $output.= '<br>Discordaram: ';
+            $discordaram =  $this->get_comment_meta( $comment->comment_ID , 'numero_discordar' );
+            $output.= $discordaram ? $discordaram : '0';
+            $output.= ' </p>';
+          }
+          $output.= '</div>';
+          echo $output;
+      } else { echo __('Usuário não possui nenhum comentário' , 'delibera'); }
+  }
+  
+  function get_comment_meta($id, $control)
+  {
+    $string = 'delibera_comment_' . $control;
+    return  get_comment_meta( $id , $string  , true);
+    }
 
-  ?>
+  function parse_comment_type($id, $control)
+  {
+    $type = $this->get_comment_meta( $id , $control );
+    switch($type)
+    {
+      case 'encaminhamento':
+        return 'Proposta de Encaminhamento';
+      case 'discussao':
+        return 'Discussão';
+    }
+  }
+}
 
-  </main>
-  <?php wp_footer();?>
-</body>
-</html> 
-
+global $delibera_user_page;
+$delibera_user_page = new Delibera_User_Page();
