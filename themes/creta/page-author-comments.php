@@ -25,7 +25,7 @@ $order  = isset( $_GET['order-by'] ) ?  esc_html( $_GET['order-by'] ) : '' ;
     </div>
     <form method="get">
       <label for="per-page"><?php echo __('Comentários por Página:' , 'delibera'); ?></label>
-      <select id="per-page" name="per-page"  onchange='if(user_display.value != 0) { user_display.form.submit(); }' >
+      <select id="per-page" name="per-page"  onchange='if(this.value != 0) { this.form.submit(); }' >
         <option value="5" <?php echo $per_page=='5' ? 'selected' : '' ;?> >5</option>
         <option value="10" <?php echo $per_page=='10' ? 'selected' : '' ;?> >10</option>
         <option value="20" <?php echo $per_page=='20' ? 'selected' : '' ;?> >20</option>
@@ -47,6 +47,7 @@ $order  = isset( $_GET['order-by'] ) ?  esc_html( $_GET['order-by'] ) : '' ;
           'number' => $per_page,
           'post_type' => 'pauta',
           'status' => 'approve',
+          'search' =>  $search,
           'offset' => get_query_var( 'paged' ) 
           );
 
@@ -113,7 +114,7 @@ $order  = isset( $_GET['order-by'] ) ?  esc_html( $_GET['order-by'] ) : '' ;
           ?>
           </div>
           <?php
-      } else { echo __('Usuário não possui nenhum comentário' , 'delibera'); }
+      } else { echo __('Nenhum Comentário encontrado!' , 'delibera'); }
    ?>
       <div id="user_pager" class="user_pager">
         <p>
