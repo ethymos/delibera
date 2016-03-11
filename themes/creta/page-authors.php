@@ -3,15 +3,14 @@
 Template Name: Authors Page
 */
 get_header();
-          global $user_display;
-              $per_page = isset( $_GET['per-page'] ) ?  esc_html( $_GET['per-page'] ) : '20' ;
-    $search = isset( $_GET['search'] ) ?  esc_html( $_GET['search'] ) : '' ;
-    $order  = isset( $_GET['order-by'] ) ?  esc_html( $_GET['order-by'] ) : '' ;
-          $order_by = $user_display->getOrderBy($order);
-          $paged = get_query_var( 'paged' );
-          $blogusers = $user_display->getUsers( $order_by , $search , $per_page , $paged );
-          
-          $number_of_pages = $user_display->getNumberOfPages( $blogusers->get_total() , $per_page );
+global $user_display;
+$per_page = isset( $_GET['per-page'] ) ?  esc_html( $_GET['per-page'] ) : '20' ;
+$search = isset( $_GET['search'] ) ?  esc_html( $_GET['search'] ) : '' ;
+$order  = isset( $_GET['order-by'] ) ?  esc_html( $_GET['order-by'] ) : '' ;
+$order_by = $user_display->getOrderBy($order);
+$paged = get_query_var( 'paged' );
+$blogusers = $user_display->getUsers( $order_by , $search , $per_page , $paged );          
+$number_of_pages = $user_display->getNumberOfPages( $blogusers->get_total() , $per_page );
 
           ?>
 <div id="user_form_search" class="user_form_search">
@@ -25,7 +24,7 @@ get_header();
       </form>
     </div>
 
-        <form method="get">
+    <form method="get">
       <label for="order-by"><?php echo __('Ordenar por: ' , 'delibera' ); ?></label>
       <select id="order-by" name="order-by"  onchange='if(this.value != 0) { this.form.submit(); }' >
         <!--option value="active" <?php echo $order=='active' ? 'selected' : '' ;?> >Atividade Recente</option-->
@@ -54,14 +53,14 @@ get_header();
        {
         ?>
       <h1>
-       <a id="user_name" class="user_name" href="<?php echo get_site_url()?>/delibera/membro/<?php echo $user->user_login; ?>">
+       <a id="user_name" class="user_name" href="<?php echo get_site_url()?>/blog/delibera/membro/<?php echo $user->user_login; ?>">
          <p>
            <?php echo get_avatar( $user->ID ); ?>
          </p>
          <p>
            <?php echo esc_html( $user->display_name ); ?>
             - 
-           <?php echo get_usernumposts($user->ID);?>
+           <?php echo get_usernumposts($user->ID); ?>
             posts
          </p>
        </a>

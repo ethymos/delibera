@@ -61,7 +61,27 @@ class UserDisplay
       return $current_user_posts[0];
    }
  
+  public function get_comment_meta($id, $control)
+  {
+    $string = 'delibera_comment_' . $control;
+    return  get_comment_meta( $id , $string  , true);
+    }
+
+  public function parse_comment_type($id, $control)
+  {
+    $type = $this->get_comment_meta( $id , $control );
+    switch($type)
+    {
+      case 'encaminhamento':
+        return 'Proposta de Encaminhamento';
+      case 'discussao':
+        return 'Discussão';
+         case 'validacao':
+        return 'Validação';
+    }
+  }
 }
+
 
 global $user_display;
 $user_display = new UserDisplay();
