@@ -1,4 +1,8 @@
 <?php
+namespace Delibera\ThemeTags;
+
+use WP_User_Query;
+use WP_Query;
 
 class UserDisplay
 {
@@ -62,15 +66,16 @@ class UserDisplay
       return $current_user_posts[0];
    }
  
-  public function get_comment_meta($id, $control)
+  public static function get_comment_meta($id, $control)
   {
     $string = 'delibera_comment_' . $control;
     return  get_comment_meta( $id , $string  , true);
-    }
+  }
 
-  public function parse_comment_type($id, $control)
+  public static function parse_comment_type($id, $control)
   {
-    $type = $this->get_comment_meta( $id , $control );
+    $string = 'delibera_comment_' . $control;
+    $type = get_comment_meta( $id , $string  , true);
     switch($type)
     {
       case 'encaminhamento':
@@ -97,8 +102,6 @@ class UserDisplay
   }
 
 }
-
-
 global $user_display;
-$user_display = new UserDisplay();
+$user_display = new \Delibera\ThemeTags\UserDisplay();
 

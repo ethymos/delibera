@@ -1,13 +1,17 @@
 <?php
-namespace Delibera\User{
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_user_display.php';
+namespace Delibera\Member;
+
+include __DIR__ . DIRECTORY_SEPARATOR . 'delibera_user_display.php';
+
+use Delibera\ThemeTags;
 
 class MemberPath
 {
 
   public function __construct()
   {
+    echo __NAMESPACE__;
     add_filter( 'query_vars', array( $this , 'userpage_rewrite_add_var' ) );
     add_action( 'init', array( $this , 'userpage_rewrite_rule') );
     add_action( 'template_redirect', array( $this , 'userpage_rewrite_catch') );
@@ -61,6 +65,15 @@ class MemberPath
           exit;
       }
       if ( array_key_exists( 'members', $wp_query->query_vars ) ) {
+          // var_dump(\Delibera\ThemeTags\UserDisplay::getOrderBy('active'));
+
+          // $per_page = isset( $_GET['per-page'] ) ?  esc_html( $_GET['per-page'] ) : '20' ;
+          // $search = isset( $_GET['search'] ) ?  esc_html( $_GET['search'] ) : '' ;
+          // $order  = isset( $_GET['order-by'] ) ?  esc_html( $_GET['order-by'] ) : '' ;
+          // $order_by = \Delibera\ThemeTags\UserDisplay::getOrderBy($order);
+          // $paged = get_query_var( 'paged' );
+          // var_dump(\Delibera\ThemeTags\UserDisplay::getUsers( $order_by , $search , $per_page , $paged ));          
+
           $conf = delibera_get_config();
           load_template($conf['theme'] . '/page-authors.php' , true);
           exit;
@@ -90,7 +103,4 @@ class MemberPath
    }
 
 }
-global $member_path;
-$member_path= new MemberPath();
-  
-}
+$member_path= new \Delibera\Member\MemberPath(); 
