@@ -27,19 +27,21 @@ class Cron
 	{
 		ignore_user_abort(true);
 		define('DOING_DELIBERA_CRON', true);
-		try
+		$crons =  get_option('delibera-cron', array());
+		$new_crons = array();
+		$dT = new \DateTime();
+		$now = $dT->getTimestamp();
+			
+		$exec = 0;
+		foreach ($crons as $key => $values)
 		{
-			$crons =  get_option('delibera-cron', array());
-			$new_crons = array();
-			$now = time();
-			$exec = 0;
-			foreach ($crons as $key => $values)
+			if($key <= $now)
 			{
-				if($key <= $now)
+				foreach ($values as $value)
 				{
-					foreach ($values as $value)
+					$exec++;
+					try
 					{
-						$exec++;
 						if(is_array($value['call_back']))
 						{
 							if(method_exists($value['call_back'][0], $value['call_back'][1]))
@@ -55,20 +57,21 @@ class Cron
 							}
 						}
 					}
-				}
-				else
-				{
-					$new_crons[$key] = $values;
+					catch (Exception $e)
+					{
+						$error = __('Erro no cron Delibera: ','delibera').$e->getMessage()."\n".$e->getCode()."\n".$e->getTraceAsString()."\n".$e->getLine()."\n".$e->getFile();
+						wp_mail("jacson@ethymos.com.br", get_bloginfo('name'), $error);
+						file_put_contents('/tmp/delibera_cron.log', $error, FILE_APPEND);
+					}
 				}
 			}
-			update_option('delibera-cron', $new_crons);
+			else
+			{
+				$new_crons[$key] = $values;
+			}
 		}
-		catch (Exception $e)
-		{
-			$error = __('Erro no cron Delibera: ','delibera').$e->getMessage()."\n".$e->getCode()."\n".$e->getTraceAsString()."\n".$e->getLine()."\n".$e->getFile();
-			wp_mail("jacson@ethymos.com.br", get_bloginfo('name'), $error);
-			file_put_contents('/tmp/delibera_cron.log', $error, FILE_APPEND);
-		}
+		update_option('delibera-cron', $new_crons);
+		
 		//wp_mail("jacson@ethymos.com.br", get_bloginfo('name'),"Foram executadas $exec tarefa(s)");
 	}
 	
@@ -104,6 +107,12 @@ class Cron
 						echo "\n<br/>\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[$ki]";
 						if(is_array($item))
 						{
+							if(array_key_exists('post_ID', $item))
+							{
+								$post = get_post($item['post_ID']);
+								$title = get_the_title($post);
+								echo "\n$title";
+							}
 							echo "\n<br/>\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".print_r($item, true);
 						}
 						else
