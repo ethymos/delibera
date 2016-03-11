@@ -34,7 +34,7 @@ function delibera_reabrir_pauta_action()
 {
 	if(current_user_can('delibera_reabrir_pauta') && check_admin_referer('delibera_reabrir_pauta_action'.$_REQUEST['post'], '_wpnonce'))
 	{
-		delibera_reabrir_pauta($_REQUEST['post']);
+		\Delibera\Flow::reabrirPauta($_REQUEST['post'], true);
 
 		wp_redirect( admin_url( 'edit.php?post_type=pauta') );
 	}
@@ -46,15 +46,6 @@ function delibera_reabrir_pauta_action()
 add_action('admin_action_delibera_reabrir_pauta_action', 'delibera_reabrir_pauta_action');
 
 require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_cron.php';
-
-function delibera_reabrir_pauta($postID)
-{
-	wp_set_object_terms($postID, 'validacao', 'situacao', false);
-	//delibera_notificar_situacao($postID);
-
-	delibera_novo_prazo($postID);
-}
-
 
 function delibera_novo_prazo($postID)
 {

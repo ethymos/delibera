@@ -317,7 +317,7 @@ class Validation extends \Delibera\Modules\ModuleBase
 	 */
 	public static function deadline($args)
 	{
-		$situacao = delibera_get_situacao($args['post_id']);
+		$situacao = delibera_get_situacao($args['post_ID']);
 		if($situacao->slug == 'validacao')
 		{
 			$this->marcarNaovalidada($post_id);

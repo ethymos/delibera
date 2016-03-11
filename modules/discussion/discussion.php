@@ -231,7 +231,7 @@ class Discussion extends \Delibera\Modules\ModuleBase
 	 */
 	public static function deadline($args)
 	{
-		$post_id = $args['post_id'];
+		$post_id = $args['post_ID'];
 		$situacao = delibera_get_situacao($post_id);
 		if($situacao->slug == 'discussao')
 		{

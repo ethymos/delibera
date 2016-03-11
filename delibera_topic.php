@@ -270,14 +270,7 @@ function delibera_save_post($post_id, $post)
 
 	foreach ($events_meta as $key => $value) // Buscar dados
 	{
-		if(get_post_meta($post->ID, $key, true)) // Se já existe
-		{
-			update_post_meta($post->ID, $key, $value); // Atualiza
-		}
-		else
-		{
-			add_post_meta($post->ID, $key, $value, true); // Senão, cria
-		}
+		update_post_meta($post->ID, $key, $value); // Atualiza
 	}
 
 	do_action('delibera_save_post', $post_id, $post, $opt);

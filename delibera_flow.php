@@ -18,7 +18,7 @@ class Flow
 		add_filter('delivera_config_page_rows', array($this, 'configPageRows'), 10, 2);
 		add_filter('delibera-pre-main-config-save', array($this, 'preMainConfigSave'));
 		add_action('delibera_topic_meta', array($this, 'topicMeta'), 10, 5);
-		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 1000, 2);
+		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 1, 2);
 		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 2);
 		add_filter('delibera_flow_list', array($this, 'filterFlowList'));
 		add_action('delibera_save_post', array($this, 'savePost'), 1000, 3);
@@ -182,6 +182,12 @@ class Flow
 	 */
 	public function publishPauta($postID, $opt)
 	{
+		/**
+		 * Update flow meta after publish because is before save metas  
+		 */
+		$flow = explode(',', trim(strip_tags($_POST['delibera_flow'])));
+		update_post_meta($postID, 'delibera_flow', $flow);
+		
 		self::reabrirPauta($postID, false);
 	}
 	

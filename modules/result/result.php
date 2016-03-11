@@ -21,7 +21,7 @@ class Result extends \Delibera\Modules\ModuleBase
 	 *
 	 * @var String Name of module deadline metadata
 	 */
-	protected $prazo_meta = 'prazo_validacao';
+	protected $prazo_meta = '';
 	
 	/**
 	 *
@@ -208,7 +208,7 @@ class Result extends \Delibera\Modules\ModuleBase
 	 */
 	public static function deadline($args)
 	{
-		
+		$post_id = $args['post_ID'];
 	}
 	
 }
