@@ -52,11 +52,13 @@ class MemberPath
   {
       global $wp_query;
       if ( array_key_exists( 'pautasfor', $wp_query->query_vars ) ) {
-          load_template(__DIR__ . DIRECTORY_SEPARATOR . 'themes/creta/page-author-pautas.php' , true);
+          $conf = delibera_get_config();
+          load_template($conf['theme'] . '/page-author-pautas.php' , true);
           exit;
       }
       if ( array_key_exists( 'commentsfor', $wp_query->query_vars ) ) {
-          load_template(__DIR__ . DIRECTORY_SEPARATOR . 'themes/creta/page-author-comments.php' , true);
+          $conf = delibera_get_config();
+          load_template($conf['theme'] . '/page-author-comments.php' , true);
           exit;
       }
       if ( array_key_exists( 'members', $wp_query->query_vars ) ) {
