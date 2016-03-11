@@ -4,6 +4,7 @@ Template Name: Author Page Comments
 */
 
 get_header();
+global $user_display;
 $login = $wp_query->query_vars['commentsfor'];
 $user = get_user_by( 'login' , $login ); 
 
@@ -12,7 +13,6 @@ $search = isset( $_GET['search'] ) ?  esc_html( $_GET['search'] ) : '' ;
 $order  = isset( $_GET['order-by'] ) ?  esc_html( $_GET['order-by'] ) : '' ;
 $paged = get_query_var( 'paged' );
 
-  global $user_display;
     ?>
     <div id="user_form_search" class="user_form_search">
       <form method="get"  name="form">
@@ -44,15 +44,13 @@ $paged = get_query_var( 'paged' );
   
     <?php
          
-      $comments = $user_display->getUserComments($user, $search, $per_page, $paged);
+      $comments = UserDisplay::getUserComments($user, $search, $per_page, $paged);
+
 
       ?>
       <div id="user_pager" class="user_pager">
         <p>
-          <?php echo $user_display->getPaginator( 
-          $user_display->getNumberOfPages($comments[0]->comment_count,$per_page) 
-          , $paged ); 
-          ?>
+          <?php echo UserDisplay::getPaginator( UserDisplay::getNumberOfPages($comments[0]->comment_count,$per_page) , $paged ); ?>
         </p>
       </div>
       <?php
@@ -108,8 +106,8 @@ $paged = get_query_var( 'paged' );
    ?>
       <div id="user_pager" class="user_pager">
         <p>
-          <?php echo $user_display->getPaginator( 
-          $user_display->getNumberOfPages($comments[0]->comment_count,$per_page) 
+          <?php echo UserDisplay::getPaginator( 
+          UserDisplay::getNumberOfPages($comments[0]->comment_count,$per_page) 
           , $paged); 
           ?>
         </p>

@@ -1,4 +1,5 @@
 <?php
+namespace Delibera\User{
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_user_display.php';
 
@@ -60,7 +61,8 @@ class MemberPath
           exit;
       }
       if ( array_key_exists( 'members', $wp_query->query_vars ) ) {
-          load_template(__DIR__ . DIRECTORY_SEPARATOR . 'themes/creta/page-authors.php' , true);
+          $conf = delibera_get_config();
+          load_template($conf['theme'] . '/page-authors.php' , true);
           exit;
       }
   }
@@ -90,3 +92,5 @@ class MemberPath
 }
 global $member_path;
 $member_path= new MemberPath();
+  
+}

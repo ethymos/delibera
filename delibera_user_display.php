@@ -3,7 +3,7 @@
 class UserDisplay
 {
 
-  function getOrderBy($order)
+  public static function getOrderBy($order)
   {
     switch( $order )
     {
@@ -16,7 +16,7 @@ class UserDisplay
     }
   }
 
-  public function getPaginator($total, $page)
+  public static function getPaginator($total, $page)
   {
     return paginate_links( array(
       'base'       =>  add_query_arg( 'paged', '%#%' ),
@@ -29,26 +29,27 @@ class UserDisplay
     ));
   }
 
-  function getNumberOfPages( $total_users , $users_per_page )
+  public static function getNumberOfPages( $total_users , $users_per_page )
   {
     return ($total_users/$users_per_page);
   }
 
-  function getUsers($order_by , $search , $per_page , $paged)
+  public static function getUsers($order_by , $search , $per_page , $paged)
   {
-    return new WP_User_Query( array( 
-                       'number'         => $per_page ,
-                       'offset'         => $paged,
-                       'fields'         => array( 'display_name', 'user_login' , 'ID' ),
-                       'search'         => $search . '*',
-                       'search_columns' => array( 'ID' , 'user_nicename' , 'user_login' , 'user_email' ),
-                       'orderby'        => $order_by['orderby'],
-                       'order'          => $order_by['order'],
-                       ) 
-                     );
+    return new WP_User_Query( 
+      array( 
+      'number'         => $per_page ,
+      'offset'         => $paged,
+      'fields'         => array( 'display_name', 'user_login' , 'ID' ),
+      'search'         => $search . '*',
+      'search_columns' => array( 'ID' , 'user_nicename' , 'user_login' , 'user_email' ),
+      'orderby'        => $order_by['orderby'],
+      'order'          => $order_by['order'],
+      ) 
+    );
   }
 
-   public function getLastPauta($user)
+   public static function getLastPauta($user)
    {
       $args = array(
         'author'          =>  $user->ID, 
@@ -81,7 +82,7 @@ class UserDisplay
     }
   }
 
-  public function getUserComments($user, $search, $per_page, $paged)
+  public static function getUserComments($user, $search, $per_page, $paged)
   {
     $args = array(
           'user_id' => $user->ID,
@@ -100,3 +101,4 @@ class UserDisplay
 
 global $user_display;
 $user_display = new UserDisplay();
+
