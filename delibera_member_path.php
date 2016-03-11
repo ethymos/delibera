@@ -10,9 +10,7 @@ class MemberPath
     add_filter( 'query_vars', array( $this , 'userpage_rewrite_add_var' ) );
     add_action( 'init', array( $this , 'userpage_rewrite_rule') );
     add_action( 'template_redirect', array( $this , 'userpage_rewrite_catch') );
-    add_filter( 'excerpt_length', array( $this , 'new_excerpt_length' ) );
-    add_filter( 'excerpt_more', array( $this , 'new_excerpt_more' ) );
-
+    add_action( 'init' , array( $this , 'check_rewrite' ) );
   }
 
   // Create the query var so that WP catches the custom /member/username url
@@ -67,17 +65,27 @@ class MemberPath
       }
   }
 
-  // Changing excerpt length
-  public function new_excerpt_length($length) 
+    public function check_rewrite()
   {
-    return 100;
-  }
-
-  // Changing excerpt more
-  public function new_excerpt_more($more)
-  {
-    return '...';
-  }
+    $rules = get_option( 'rewrite_rules' );
+    $found = false;
+    if(is_array($rules))
+    {
+       foreach ($rules as $rule)
+      {
+        if(strpos($rule, 'delibera') !== false)
+       {
+         $found = true;
+         break;
+       }
+      }
+      if ( ! $found )
+       {
+         global $wp_rewrite;
+         $wp_rewrite->flush_rules();
+       }
+     }
+   }
 
 }
 global $member_path;
