@@ -80,6 +80,21 @@ class UserDisplay
         return 'Validação';
     }
   }
+
+  public function getUserComments($user, $search, $per_page, $paged)
+  {
+    $args = array(
+          'user_id' => $user->ID,
+          'number' => $per_page,
+          'post_type' => 'pauta',
+          'status' => 'approve',
+          'search' =>  $search,
+          'offset' => $paged 
+          );
+
+    return get_comments( $args );
+  }
+
 }
 
 

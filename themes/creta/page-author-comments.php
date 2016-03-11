@@ -10,6 +10,7 @@ $user = get_user_by( 'login' , $login );
 $per_page = isset( $_GET['per-page'] ) ?  esc_html( $_GET['per-page'] ) : '20' ;
 $search = isset( $_GET['search'] ) ?  esc_html( $_GET['search'] ) : '' ;
 $order  = isset( $_GET['order-by'] ) ?  esc_html( $_GET['order-by'] ) : '' ;
+$paged = get_query_var( 'paged' );
 
   global $user_display;
     ?>
@@ -42,24 +43,15 @@ $order  = isset( $_GET['order-by'] ) ?  esc_html( $_GET['order-by'] ) : '' ;
     </p>
   
     <?php
-         $args = array(
-          'user_id' => $user->ID,
-          'number' => $per_page,
-          'post_type' => 'pauta',
-          'status' => 'approve',
-          'search' =>  $search,
-          'offset' => get_query_var( 'paged' ) 
-          );
-
-      $comments = get_comments( $args );
-      //var_dump($comments);
+         
+      $comments = $user_display->getUserComments($user, $search, $per_page, $paged);
 
       ?>
       <div id="user_pager" class="user_pager">
         <p>
           <?php echo $user_display->getPaginator( 
           $user_display->getNumberOfPages($comments[0]->comment_count,$per_page) 
-          , get_query_var( 'paged' ) ); 
+          , $paged ); 
           ?>
         </p>
       </div>
@@ -82,9 +74,7 @@ $order  = isset( $_GET['order-by'] ) ?  esc_html( $_GET['order-by'] ) : '' ;
             <a href="<?php echo get_comment_link( $comment->comment_ID )?>">
               <?php echo get_the_title($comment->comment_post_ID); ?>, em 
             </a>
-            <?php echo mysql2date('m/d/Y', $comment->comment_date, $translate); 
-                  echo $user_display->get_comment_meta( $comment->comment_ID , 'tipo');
-            ?>
+            <?php echo mysql2date('m/d/Y', $comment->comment_date, $translate); ?>
             <?php if( $user_display->get_comment_meta( $comment->comment_ID , 'tipo') === 'validacao')
                 {
               ?>
@@ -120,7 +110,7 @@ $order  = isset( $_GET['order-by'] ) ?  esc_html( $_GET['order-by'] ) : '' ;
         <p>
           <?php echo $user_display->getPaginator( 
           $user_display->getNumberOfPages($comments[0]->comment_count,$per_page) 
-          , get_query_var( 'paged' ) ); 
+          , $paged); 
           ?>
         </p>
       </div>
