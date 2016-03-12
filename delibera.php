@@ -45,7 +45,7 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_conf_themes.php';
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'print' . DIRECTORY_SEPARATOR . 'wp-print.php';
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_admin_functions.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'admin' . DIRECTORY_SEPARATOR . 'delibera_admin_functions.php';
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_setup.php';
 
@@ -63,7 +63,7 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_comments_template.php';
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_comments_edit.php';
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_cron.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR. 'admin'. DIRECTORY_SEPARATOR . 'delibera_cron.php';
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_topic.php';
 
@@ -88,7 +88,7 @@ if (file_exists(__DIR__.DIRECTORY_SEPARATOR.'mailer') &&
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_notificar.php';
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_user_painel.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'admin' . DIRECTORY_SEPARATOR . 'delibera_user_painel.php';
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_relatorio.php';
 
