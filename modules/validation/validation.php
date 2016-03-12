@@ -320,7 +320,7 @@ class Validation extends \Delibera\Modules\ModuleBase
 		$situacao = delibera_get_situacao($args['post_ID']);
 		if($situacao->slug == 'validacao')
 		{
-			self::marcarNaovalidada($post_id);
+			self::marcarNaovalidada($args['post_ID']);
 		}
 	}
 	

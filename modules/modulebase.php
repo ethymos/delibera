@@ -189,11 +189,17 @@ abstract class ModuleBase
 	/**
 	 * Create new deadline events calendar
 	 * @param int $post_id
+	 * @param int $appendDays number of day to append or false to get config option default
 	 */
-	public function newDeadline($post_id)
+	public function newDeadline($post_id, $appendDays = 0)
 	{
 		if(get_post_status($post_id) == 'publish')
 		{
+			if($appendDays == false)
+			{
+				$opts = delibera_get_config();
+				$appendDays = $opts['dias_novo_prazo'];
+			}
 			$prazos = $this->prazo_meta;
 			if(is_string($this->prazo_meta))
 			{
@@ -204,6 +210,13 @@ abstract class ModuleBase
 				$prazo_date = get_post_meta($post_id, $prazo, true);
 				if( ! empty($prazo_date) )
 				{
+					if($appendDays > 0)
+					{
+						$dateTime = \DateTime::createFromFormat('d/m/Y', $prazo_date);
+						$dateTime->add(new \DateInterval('P'.$appendDays.'D'));
+						$prazo_date = $dateTime->format('d/m/Y');
+					}
+					
 					\Delibera\Cron::del($post_id, array(get_class($this), 'deadline'));
 					\Delibera\Cron::del($post_id, 'delibera_notificar_fim_prazo');
 					

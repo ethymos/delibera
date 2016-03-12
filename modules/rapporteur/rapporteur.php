@@ -304,7 +304,8 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 			}
 			else
 			{
-				delibera_novo_prazo($post_id);
+				$rapporteur = \Delibera\Flow::getCurrentModule($post_id);
+				$rapporteur->newDeadline($post_id, false);
 			}
 		}
 		elseif($situacao->slug == 'eleicao_relator')
