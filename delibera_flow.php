@@ -131,6 +131,13 @@ class Flow
 		return $modules;
 	}
 	
+	/**
+	 * Get the last deadline before current module
+	 * @param string $situacao
+	 * @param int $post_id
+	 * 
+	 * @return string date (dd/mm/YYYY)
+	 */
 	public static function getLastDeadline($situacao, $post_id = false)
 	{
 		global $DeliberaFlow;
@@ -157,6 +164,13 @@ class Flow
 		}
 	}
 	
+	/**
+	 * Save post meta filter
+	 * @param array $events_meta metas to save
+	 * @param array $opt delibera config options
+	 * 
+	 * @return array return filtered $events_meta array
+	 */
 	public function savePostMetas($events_meta, $opt)
 	{
 		if(array_key_exists('delibera_flow', $_POST) )
@@ -167,11 +181,26 @@ class Flow
 		return $events_meta;
 	}
 	
+	/**
+	 * Create a new date triggers for current module
+	 * @param int $post_id
+	 * @param string $appendDays number of day to append or false to get config option default
+	 */
+	public function newDeadline($post_id, $appendDays = false)
+	{
+		$module = $this->getCurrentModule($post_id);
+		$module->newDeadline($post_id, $appendDays);
+	}
+	
+	/**
+	 * Action when pauta is saved
+	 * @param int $post_id
+	 * @param \WP_Post $post
+	 * @param array $opt delibera config options
+	 */
 	public function savePost($post_id, $post, $opt)
 	{
-		
-		$module = $this->getCurrentModule($post_id);
-		$module->newDeadline($post_id);
+		$this->newDeadline($post_id, 0);
 	}
 	
 	/**
@@ -231,32 +260,31 @@ class Flow
 		}
 	}
 	
+	/**
+	 * Trigger module deadline
+	 * @param int $post_id
+	 */
 	public static function forcarFimPrazo($post_id)
 	{
 		if(is_object($post_id)) $post_id = $post_id->ID;
 		
-		global $DeliberaFlow;
-		
-		$flow = $DeliberaFlow->get($post_id);
-		$situacao = delibera_get_situacao($post_id);
-		$current = array_search($situacao->slug, $flow);
-		$modules = $DeliberaFlow->getFlowModules(); //TODO cache?
-		
-		if(array_key_exists($current, $flow))
-		{
-			call_user_func(array(get_class($modules[$flow[$current]]), 'deadline'), array('post_id' => $post_id, 'prazo' => date('d/m/Y'), 'force' => true) );
-		}
-		$DeliberaFlow->next($post_id);
-		//delibera_notificar_situacao($postID); // Originaly comment, why?
+		$current = \Delibera\Flow::getCurrentModule($post_id);
+		\Delibera\Cron::del($post_id);
+		call_user_func(array(get_class($modules[$flow[$current]]), 'deadline'), array('post_id' => $post_id, 'prazo' => date('d/m/Y'), 'force' => true) );
 	}
 	
-	public static function reabrirPauta($postID, $new_deadline = false)
+	/**
+	 * Reopen finished topic
+	 * @param int $postID
+	 * @param bool $new_deadline_days if is true will add days to new dateline
+	 */
+	public static function reabrirPauta($postID, $new_deadline_days = false)
 	{
 		global $DeliberaFlow;
 		$flow = $DeliberaFlow->get($postID);
 		$modules = $DeliberaFlow->getFlowModules();
 		$modules[$flow[0]]->initModule($postID);
-		if($new_deadline) delibera_novo_prazo($postID);
+		if($new_deadline_days) $modules[$flow[0]]->newDeadline($postID, false);
 	}
 	
 	/**

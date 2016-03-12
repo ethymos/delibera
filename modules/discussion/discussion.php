@@ -246,7 +246,8 @@ class Discussion extends \Delibera\Modules\ModuleBase
 			}
 			else
 			{
-				delibera_novo_prazo($post_id);
+				$current = \Delibera\Flow::getCurrentModule($post_id);
+				$current->newDeadline($post_id, false);
 			}
 		}
 	}

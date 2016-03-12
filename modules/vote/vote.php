@@ -255,7 +255,7 @@ class Vote extends \Delibera\Modules\ModuleBase
 		// nao finaliza a votacao caso haja um empate, exceto quando o administrador clicar no botão "Forçar fim do prazo"
 		if(count($iguais) > 0 && !(isset($_REQUEST['action']) && $_REQUEST['action'] == 'delibera_forca_fim_prazo_action')) // Empato
 		{
-			delibera_novo_prazo($postID);
+			$this->newDeadline($postID, false);
 		}
 		else
 		{
@@ -308,12 +308,8 @@ class Vote extends \Delibera\Modules\ModuleBase
 	public static function deadline($args)
 	{
 		$post_id = $args['post_ID'];
-		$situacao = delibera_get_situacao($post_id);
-		if($situacao->slug == 'emvotacao')
-		{
-			$current = \Delibera\Flow::getCurrentModule($post_id);
-			$current->computaVotos($post_id);
-		}
+		$current = \Delibera\Flow::getCurrentModule($post_id);
+		$current->computaVotos($post_id);
 	}
 	
 }
