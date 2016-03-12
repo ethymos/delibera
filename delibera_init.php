@@ -227,12 +227,12 @@ function delibera_admin_scripts()
 	if(is_pauta())
 	{
 		wp_enqueue_script('jquery-ui-datepicker-ptbr', WP_CONTENT_URL.'/plugins/delibera/js/jquery.ui.datepicker-pt-BR.js', array('jquery-ui-datepicker'));
-		wp_enqueue_script('delibera-admin',WP_CONTENT_URL.'/plugins/delibera/js/admin_scripts.js', array( 'jquery-ui-datepicker-ptbr'));
+		wp_enqueue_script('delibera-admin',WP_CONTENT_URL.'/plugins/delibera/admin/js/admin_scripts.js', array( 'jquery-ui-datepicker-ptbr'));
 	}
 
 	if(isset($_REQUEST['page']) && $_REQUEST['page'] == 'delibera-notifications')
 	{
-		wp_enqueue_script('delibera-admin-notifica',WP_CONTENT_URL.'/plugins/delibera/js/admin_notifica_scripts.js', array('jquery'));
+		wp_enqueue_script('delibera-admin-notifica',WP_CONTENT_URL.'/plugins/delibera/admin/js/admin_notifica_scripts.js', array('jquery'));
 	}
 }
 add_action( 'admin_print_scripts', 'delibera_admin_scripts' );
