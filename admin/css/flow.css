@@ -58,6 +58,10 @@ margin:0px 2px;
 }
 
 
-#column1 .ui-sortable-handle a {
+.delibera-flow-panel-config #column2 .ui-sortable-handle a {
+    display: none;
+}
+
+.delibera-flow-panel-post #column1 .ui-sortable-handle a {
     display: none;
 }

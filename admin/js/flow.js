@@ -46,7 +46,10 @@ jQuery(document).ready(function() {
 		},
 		stop : function(event, ui) {
 			copyHelper && copyHelper.remove();
-			
+			if(delibera_admin_flow.post_id == '')
+			{
+				jQuery(ui.item).find('.dragbox-content').toggle();
+			}
 			jQuery(ui.item).find('h2').click();
 			sortorder = '';
 			jQuery('#column2').each(function() {
