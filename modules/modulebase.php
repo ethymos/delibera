@@ -38,7 +38,7 @@ abstract class ModuleBase
 		add_filter('delibera_get_main_config', array($this, 'getMainConfig'));
 		add_filter('delivera_config_page_rows', array($this, 'configPageRows'), 10, 2);
 		add_filter('delibera_situation_button_text', array($this, 'situationButtonText'));
-		add_action('delibera_topic_meta', array($this, 'topicMeta'), 10, 5);
+		//add_action('delibera_topic_meta', array($this, 'topicMeta'), 10, 5);
 		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 2);
 		add_filter('delibera_check_post_data', array($this, 'checkPostData'), 10, 3);
 		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 10, 2);

@@ -83,12 +83,13 @@ class Flow
 	public function topicMeta($post, $custom, $options_plugin_delibera, $situacao, $disable_edicao)
 	{
 		$flow = implode(',', array_map("htmlspecialchars", $this->get($post->ID)) ); 
-		?>
+		/*?>
 			<p>
 				<label for="delibera_flow" class="label_flow"><?php _e('Fluxo da Pauta','delibera'); ?>:</label>
 				<input <?php echo $disable_edicao ?> id="delibera_flow" name="delibera_flow" class="delibera_flow widefat" value="<?php echo $flow; ?>"/>
 			</p>
-		<?php
+		<?php*/
+		$this->confPage();
 	}
 	
 	/**
@@ -244,7 +245,7 @@ class Flow
 		$situacao = delibera_get_situacao($post_id);
 		$current = array_search($situacao->slug, $flow);
 		$modules = $DeliberaFlow->getFlowModules(); //TODO cache?
-		
+		if($current === false) $current = 0;
 		return $modules[$flow[$current]];
 	}
 	
@@ -322,7 +323,7 @@ class Flow
 	 * @param int $post_id
 	 * @return mixed|string deadline date
 	 */
-	public static function getDeadlineDays($post_id = false)
+	public static function getDeadlineDays($post_id = false, &$data = null)
 	{
 		$module = \Delibera\Flow::getCurrentModule($post_id);
 	
@@ -332,10 +333,13 @@ class Flow
 		$deadlineDate = \DateTime::createFromFormat('d/m/Y H:i:s', $deadline." 23:59:59");
 		
 		$diff = $dateTimeNow->diff($deadlineDate);
-		
+		if(!is_null($data))
+		{
+			$data = $deadlineDate->format('d/m/Y');
+		}
 		if($diff->d > 0)
 		{
-			return $diff->format('%a');
+			return $diff->format('%r%a');
 		}
 		if($diff->d < 1 && ($diff->i || $diff->h || $diff->s)) 
 		{
@@ -393,8 +397,8 @@ class Flow
 			?>
 			<div class="dragbox <?php echo $flow === false ? '' : 'clone'; ?>" id="<?php echo $situacao->slug; ?>" >
 				<h2><?php echo $situacao->name; ?>
-				  <a href="#" class="delete opIcons"> </a> 
-				  <a href="#" class="maxmin opIcons"> </a> 
+				  <span class="delete opIcons"> </span> 
+				  <span class="maxmin opIcons"> </span> 
 				</h2>
 				<div class="dragbox-content" style="<?php echo $is_post_meta ? "display: none;" : ''; ?>" >
 					<?php
@@ -429,7 +433,8 @@ class Flow
 		<div class="delibera-flow-panel <?php echo is_null($post) ? 'delibera-flow-panel-config' : 'delibera-flow-panel-post' ?>"><?php
 			wp_nonce_field( 'delibera-flow-nonce', '_delibera-flow-nonce' );
 			?>
-			<input type="hidden" id="delibera-flow-postid" value="<?php the_ID(); ?>" />
+			<input type="hidden" id="delibera-flow-postid" name="delibera-flow-postid" value="<?php the_ID(); ?>" />
+			<input type="hidden" id="delibera_flow" name="delibera_flow" value="<?php echo implode(',', $flow); ?>" />
 			<div class="column" id="column1">
 			<?php 
 				$this->listModulesConfigBoxes($post);
@@ -464,7 +469,6 @@ class Flow
 			
 			wp_enqueue_style('delibera-admin-flow',WP_CONTENT_URL.'/plugins/delibera/admin/css/flow.css');
 		}
-		else {var_dump($screen);die();}
 	}
 	
 	public function saveFlowCallback()
@@ -483,7 +487,7 @@ class Flow
 				$errors = array();
 				if(array_key_exists($situacao, $modules))
 				{
-					$errors = $modules[$situacao]->checkPostData($erros, $opt, false);
+					$errors = $modules[$situacao]->checkPostData($errors, $opt, false);
 					if(count($errors) == 0)
 					{
 						$events_meta = $modules[$situacao]->savePostMetas($events_meta, $opt);
