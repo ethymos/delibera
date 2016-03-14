@@ -89,7 +89,6 @@ class Validation extends \Delibera\Modules\ModuleBase
 	{
 		$opts['minimo_validacao'] = '10';
 		$opts['dias_validacao'] = '5';
-		$opts['validacao'] = 'S';
 		return $opts;
 	}
 	
@@ -99,11 +98,6 @@ class Validation extends \Delibera\Modules\ModuleBase
 	 */
 	public function configPageRows($rows, $opt)
 	{
-		$rows[] = array(
-				"id" => "validacao",
-				"label" => __('É necessário validação das pautas?', 'delibera'),
-				"content" => '<input type="checkbox" name="validacao" id="validacao" value="S" '.(htmlspecialchars_decode($opt['validacao']) == 'S' ? 'checked="checked"' : '').' />'
-		);
 		$rows[] = array(
 				"id" => "minimo_validacao",
 				"label" => __('Mínimo de validações para uma pauta:', 'delibera'),
@@ -281,12 +275,11 @@ class Validation extends \Delibera\Modules\ModuleBase
 	public function savePostMetas($events_meta, $opt)
 	{
 		if( // Se tem validação, tem que ter o prazo
-			$opt['validacao'] == 'N' ||
 			(array_key_exists('prazo_validacao', $_POST) && array_key_exists('min_validacoes', $_POST) )
 		)
 		{
-			$events_meta['prazo_validacao'] = $opt['validacao'] == 'S' ? $_POST['prazo_validacao'] : date('d/m/Y');
-			$events_meta['min_validacoes'] = $opt['validacao'] == 'S' ? $_POST['min_validacoes'] : 10;
+			$events_meta['prazo_validacao'] = $_POST['prazo_validacao'];
+			$events_meta['min_validacoes'] = $_POST['min_validacoes'];
 		}
 		
 		return $events_meta;
@@ -298,10 +291,8 @@ class Validation extends \Delibera\Modules\ModuleBase
 	 */
 	public function createPautaAtFront($opt)
 	{
-		if($opt['validacao'] == 'S'){
-			$_POST['prazo_validacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_validacao'].' DAYS'));
-			$_POST['min_validacoes'] = $opt['minimo_validacao'];
-		}
+		$_POST['prazo_validacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_validacao'].' DAYS'));
+		$_POST['min_validacoes'] = $opt['minimo_validacao'];
 	}
 	
 	/**

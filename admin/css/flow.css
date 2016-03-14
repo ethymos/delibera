@@ -57,8 +57,11 @@ margin:0px 2px;
 	padding-top:1px;
 }
 
+.delibera-flow-panel-config #column2 .ui-sortable-handle a:last-child {
+    display: none;
+}
 
-.delibera-flow-panel-config #column2 .ui-sortable-handle a {
+.delibera-flow-panel-config #column2 .dragbox-content {
     display: none;
 }
 

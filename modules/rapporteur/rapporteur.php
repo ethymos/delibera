@@ -29,38 +29,32 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 	 */
 	public function registerTax()
 	{
-		if(isset($opt['relatoria']) && $opt['relatoria'] == 'S')
+		if(term_exists('eleicaoredator', 'situacao', null) == false)
 		{
-			if($opt['eleicao_relator'] == 'S')
-			{
-				if(term_exists('eleicaoredator', 'situacao', null) == false)
-				{
-					delibera_insert_term('Regime de Votação de Relator', 'situacao', array(
-							'description'=> 'Pauta em Eleição de Relator',
-							'slug' => 'eleicaoredator',
-						),
-						array(
-							'qtrans_term_pt' => 'Regime de Votação de Relator',
-							'qtrans_term_en' => 'Election of Rapporteur',
-							'qtrans_term_es' => 'Elección del Relator',
-						)
-					);
-				}
-			}
+			delibera_insert_term('Regime de Votação de Relator', 'situacao', array(
+					'description'=> 'Pauta em Eleição de Relator',
+					'slug' => 'eleicaoredator',
+				),
+				array(
+					'qtrans_term_pt' => 'Regime de Votação de Relator',
+					'qtrans_term_en' => 'Election of Rapporteur',
+					'qtrans_term_es' => 'Elección del Relator',
+				)
+			);
+		}
 
-			if(term_exists('relatoria', 'situacao', null) == false)
-			{
-				delibera_insert_term('Relatoria', 'situacao', array(
-						'description'=> 'Pauta com encaminhamentos em Relatoria',
-						'slug' => 'relatoria',
-					),
-					array(
-						'qtrans_term_pt' => 'Relatoria',
-						'qtrans_term_en' => 'Rapporteur',
-						'qtrans_term_es' => 'Relator',
-					)
-				);
-			}
+		if(term_exists('relatoria', 'situacao', null) == false)
+		{
+			delibera_insert_term('Relatoria', 'situacao', array(
+					'description'=> 'Pauta com encaminhamentos em Relatoria',
+					'slug' => 'relatoria',
+				),
+				array(
+					'qtrans_term_pt' => 'Relatoria',
+					'qtrans_term_en' => 'Rapporteur',
+					'qtrans_term_es' => 'Relator',
+				)
+			);
 		}
 	}
 	
@@ -76,7 +70,7 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 		{
 			wp_set_object_terms($post_id, 'eleicaoredator', 'situacao', false); //Mudar situação para Votação
 		}
-		elseif($opts['relatoria'] == 'S')
+		else
 		{
 			wp_set_object_terms($post_id, 'relatoria', 'situacao', false); //Mudar situação para Votação
 		}
@@ -90,7 +84,6 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 	public function getMainConfig($opts)
 	{
 		$opts['dias_relatoria'] = '2';
-	    $opts['relatoria'] = 'N';
 	    $opts['eleicao_relator'] = 'N';
 	    $opts['dias_votacao_relator'] = '2';
 		return $opts;
@@ -102,11 +95,6 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 	 */
 	public function configPageRows($rows, $opt)
 	{
-		$rows[] = array(
-			"id" => "relatoria",
-			"label" => __('Necessário relatoria da discussão das pautas?', 'delibera'),
-			"content" => '<input type="checkbox" id="relatoria" name="relatoria" value="S" '.(htmlspecialchars_decode($opt['relatoria']) == 'S' ? 'checked="checked"' : '').' />'
-		);
 		$rows[] = array(
 			"id" => "dias_relatoria",
 			"label" => __('Prazo para relatoria:', 'delibera'),
@@ -193,24 +181,21 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 			$prazo_relatoria = array_key_exists("prazo_relatoria", $custom) ?  $custom["prazo_relatoria"][0] : $prazo_relatoria;
 		}
 		
-		if($options_plugin_delibera['relatoria'] == "S")
+		if($options_plugin_delibera['eleicao_relator'] == "S")
 		{
-			if($options_plugin_delibera['eleicao_relator'] == "S")
-			{
-			?>
-				<p>
-					<label for="prazo_eleicao_relator" class="label_prazo_eleicao_relator"><?php _e('Prazo para Eleição de Relator','delibera') ?>:</label>
-					<input <?php echo $disable_edicao ?> id="prazo_eleicao_relator" name="prazo_eleicao_relator" class="prazo_eleicao_relator widefat hasdatepicker" value="<?php echo $prazo_eleicao_relator; ?>"/>
-				</p>
-			<?php
-			}
-			?>
+		?>
 			<p>
-				<label for="prazo_relatoria" class="label_prazo_relatoria"><?php _e('Prazo para Relatoria','delibera') ?>:</label>
-				<input <?php echo $disable_edicao ?> id="prazo_relatoria" name="prazo_relatoria" class="prazo_relatoria widefat hasdatepicker" value="<?php echo $prazo_relatoria; ?>"/>
+				<label for="prazo_eleicao_relator" class="label_prazo_eleicao_relator"><?php _e('Prazo para Eleição de Relator','delibera') ?>:</label>
+				<input <?php echo $disable_edicao ?> id="prazo_eleicao_relator" name="prazo_eleicao_relator" class="prazo_eleicao_relator widefat hasdatepicker" value="<?php echo $prazo_eleicao_relator; ?>"/>
 			</p>
-			<?php
+		<?php
 		}
+		?>
+		<p>
+			<label for="prazo_relatoria" class="label_prazo_relatoria"><?php _e('Prazo para Relatoria','delibera') ?>:</label>
+			<input <?php echo $disable_edicao ?> id="prazo_relatoria" name="prazo_relatoria" class="prazo_relatoria widefat hasdatepicker" value="<?php echo $prazo_relatoria; ?>"/>
+		</p>
+		<?php
 		
 	}
 	
@@ -221,47 +206,40 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 	
 	function checkPostData($erros, $opt, $autosave)
 	{
-		if($opt['relatoria'] == 'S')
+		$value = $_POST ['prazo_relatoria'];
+		$valida = delibera_tratar_data ( $value );
+		if (! $autosave && ($valida === false || $valida < 1))
 		{
-			$value = $_POST['prazo_relatoria'];
-			$valida = delibera_tratar_data($value);
-            if(!$autosave && ($valida === false || $valida < 1))
-            {
-                $erros[] = __("É necessário definir corretamente o prazo para relatoria", "Delibera");
-			}
-
-			if($opt['eleicao_relator'] == 'S')
-			{
-				$value = $_POST['prazo__leicao_relator'];
-				$valida = delibera_tratar_data($value);
-				if(!$autosave && ($valida === false || $valida < 1))
-				{
-					$erros[] = __("É necessário definir corretamente o prazo para eleição de um relator", "delibera");
-				}
-			}
-
+			$erros [] = __ ( "É necessário definir corretamente o prazo para relatoria", "Delibera" );
 		}
+		
+		if ($opt ['eleicao_relator'] == 'S')
+		{
+			$value = $_POST ['prazo__leicao_relator'];
+			$valida = delibera_tratar_data ( $value );
+			if (! $autosave && ($valida === false || $valida < 1))
+			{
+				$erros [] = __ ( "É necessário definir corretamente o prazo para eleição de um relator", "delibera" );
+			}
+		}
+
 		return $erros;
 	}
 	
 	public function savePostMetas($events_meta, $opt)
 	{
 		if(
-			( // Se tem relatoria, tem que ter o prazo
-				$opt['relatoria'] == 'N' ||
-				array_key_exists('prazo_relatoria', $_POST)
-			) &&
+			// Se tem relatoria, tem que ter o prazo
+			array_key_exists('prazo_relatoria', $_POST)
+			&&
 			( // Se tem relatoria, e é preciso eleger o relator, tem que ter o prazo para eleição
-				$opt['relatoria'] == 'N' ||
-				(
-					$opt['eleicao_relator'] == 'N' ||
-					array_key_exists('prazo_eleicao_relator', $_POST)
-				)
+				$opt['eleicao_relator'] == 'N' ||
+				array_key_exists('prazo_eleicao_relator', $_POST)
 			)
 		)
 		{
-			$events_meta['prazo_relatoria'] = $opt['relatoria'] == 'S' ? $_POST['prazo_relatoria'] : date('d/m/Y');
-			$events_meta['prazo_eleicao_relator'] = $opt['relatoria'] == 'S' && $opt['eleicao_relator'] == 'S' ? $_POST['prazo_eleicao_relator'] : date('d/m/Y');
+			$events_meta['prazo_relatoria'] = $_POST['prazo_relatoria'];
+			$events_meta['prazo_eleicao_relator'] = $opt['eleicao_relator'] == 'S' ? $_POST['prazo_eleicao_relator'] : date('d/m/Y');
 		}
 		
 		return $events_meta;
@@ -269,13 +247,10 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 	
 	public function createPautaAtFront($opt)
 	{
-		if($opt['relatoria'] == 'S')
+		$_POST['prazo_relatoria'] = date('d/m/Y', strtotime ('+'.$opt['dias_relatoria'].' DAYS'));
+		if($opt['eleicao_relator'] == 'S')
 		{
-			$_POST['prazo_relatoria'] = date('d/m/Y', strtotime ('+'.$opt['dias_relatoria'].' DAYS'));
-			if($opt['eleicao_relator'] == 'S')
-			{
-				$_POST['prazo_eleicao_relator'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao_relator'].' DAYS'));
-			}
+			$_POST['prazo_eleicao_relator'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao_relator'].' DAYS'));
 		}
 	}
 	

@@ -353,11 +353,9 @@ class Flow
 		add_submenu_page($base_page, __('Delibera Flow','delibera'),__('Delibera Flow','delibera'), 'manage_options', 'delibera-flow', array($this, 'confPage'));
 	}
 	
-	public function listModulesConfigBoxes($post = null)
+	public function listModulesConfigBoxes($post = null, $flow = false)
 	{
 		$is_post_meta = !is_null($post);
-		
-		$modules = $this->getFlowModules();
 		
 		/**
 		 * Create Defaults value for topicMeta like in action TODO check if value is need after make this work
@@ -377,12 +375,23 @@ class Flow
 			$situacao = delibera_get_situacao($post->ID);
 		}
 		
+		$modules = $this->getFlowModules();
+		
+		if( $flow != false && is_array($flow) )
+		{
+			$allmodules = $modules;
+			$modules = array();
+			foreach ($flow as $step)
+			{
+				$modules[$step] = $allmodules[$step];
+			}
+		}
 		
 		foreach ($modules as $key => $module)
 		{
 			$situacao = get_term_by('slug', $key, 'situacao');
 			?>
-			<div class="dragbox" id="<?php echo $situacao->slug; ?>" >
+			<div class="dragbox <?php echo $flow === false ? '' : 'clone'; ?>" id="<?php echo $situacao->slug; ?>" >
 				<h2><?php echo $situacao->name; ?>
 				  <a href="#" class="delete opIcons"> </a> 
 				  <a href="#" class="maxmin opIcons"> </a> 
@@ -415,6 +424,7 @@ class Flow
 	public function confPage()
 	{
 		$post = get_post();
+		$flow = $this->get();
 		?>
 		<div class="delibera-flow-panel <?php echo is_null($post) ? 'delibera-flow-panel-config' : 'delibera-flow-panel-post' ?>"><?php
 			wp_nonce_field( 'delibera-flow-nonce', '_delibera-flow-nonce' );
@@ -425,8 +435,11 @@ class Flow
 				$this->listModulesConfigBoxes($post);
 			?>
 			</div>
+			<input type="button" class="dragbox-bt-save" value="<?php _e('Save', 'delibera'); ?>" />
 			<div class="column" id="column2" >
-				<input type="button" class="dragbox-bt-save" value="<?php _e('Save', 'delibera'); ?>" />
+			<?php 
+				$this->listModulesConfigBoxes($post, $flow);
+			?>
 			</div>
 		</div>
 		<?php
@@ -446,6 +459,8 @@ class Flow
 			);
 			
 			wp_localize_script('delibera-admin-flow', 'delibera_admin_flow', $data);
+			wp_enqueue_script('jquery-ui-datepicker-ptbr', WP_CONTENT_URL.'/plugins/delibera/js/jquery.ui.datepicker-pt-BR.js', array('jquery-ui-datepicker'));
+			wp_enqueue_script('delibera-admin',WP_CONTENT_URL.'/plugins/delibera/admin/js/admin_scripts.js', array( 'jquery-ui-datepicker-ptbr'));
 			
 			wp_enqueue_style('delibera-admin-flow',WP_CONTENT_URL.'/plugins/delibera/admin/css/flow.css');
 		}
@@ -481,7 +496,7 @@ class Flow
 			}
 			if(count($all_errors) > 0)
 			{
-				die(json_encode($all_errors));
+				die(json_encode($all_errors));//TODO error notice and parser
 			}
 			foreach ($events_meta as $key => $value) // Buscar dados
 			{
@@ -490,11 +505,23 @@ class Flow
 		}
 		else 
 		{
+			foreach (array_keys(delibera_get_main_config()) as $option_name) {
+				if (isset($_POST[$option_name])) {
+					$opt[$option_name] = htmlspecialchars($_POST[$option_name]);
+				} else {
+					$opt[$option_name] = "N";
+				}
+			}
+			$old = $opt['delibera_flow'];
 			$opt['delibera_flow'] = $flow;
-			if(! update_option('delibera-config', $opt))
+			if(! update_option('delibera-config', $opt) && $old != $flow)
 			{
-				$all_errors = array(_('can not update flow', 'delibera'));
-				die(json_encode($all_errors)); //TODO error notice and parser
+				$all_errors = array(__('can not update flow', 'delibera'));
+			}
+			
+			if(count($all_errors) > 0)
+			{
+				die(json_encode($all_errors));//TODO error notice and parser
 			}
 		}
 		die('ok');
