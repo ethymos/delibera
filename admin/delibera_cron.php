@@ -15,7 +15,10 @@ class Cron
 		add_action('admin_action_delibera_cron_action', array($this, 'action'));
 		add_action('wp',  array($this, 'registry') );
 		add_action('admin_action_delibera_cron_list', array($this, 'list'));
-		add_action('delibera_menu_itens', array($this, 'addMenu'));
+		//if(is_super_admin()) // TODO load after init
+		{
+			add_action('delibera_menu_itens', array($this, 'addMenu'));
+		}
 		add_action('wp_trash_post', array($this, 'del') );
 		add_action('before_delete_post', array($this, 'del') );
 	}
