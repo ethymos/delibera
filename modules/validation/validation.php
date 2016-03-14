@@ -172,8 +172,6 @@ class Validation extends \Delibera\Modules\ModuleBase
 			$prazo_validacao = array_key_exists("prazo_validacao", $custom) ?  $custom["prazo_validacao"][0] : $prazo_validacao;
 		}
 		
-		if($options_plugin_delibera['validacao'] == "S")
-		{
 		?>
 			<p>
 				<label for="min_validacoes" class="label_min_validacoes"><?php _e('Mínimo de Validações','delibera'); ?>:</label>
@@ -184,7 +182,6 @@ class Validation extends \Delibera\Modules\ModuleBase
 				<input <?php echo $disable_edicao ?> id="prazo_validacao" name="prazo_validacao" class="prazo_validacao widefat hasdatepicker" value="<?php echo $prazo_validacao; ?>"/>
 			</p>
 		<?php
-		}
 		
 	}
 	
@@ -223,21 +220,18 @@ class Validation extends \Delibera\Modules\ModuleBase
 	 */
 	public function checkPostData($erros, $opt, $autosave)
 	{
-		if($opt['validacao'] == 'S')
+		$value = $_POST['prazo_validacao'];
+		$valida = delibera_tratar_data($value);
+		if(!$autosave && ($valida === false || $valida < 1))
 		{
-			$value = $_POST['prazo_validacao'];
-			$valida = delibera_tratar_data($value);
-			if(!$autosave && ($valida === false || $valida < 1))
-			{
-				$erros[] = __("É necessário definir corretamente o prazo de validação", "delibera");
-			}
-			
-			$value = (int)$_POST['min_validacoes'];
-			$valida = is_int($value) && $value > 0;
-			if(!$autosave && ($valida === false))
-			{
-				$erros[] = __("É necessário definir corretamente o número mínimo de validações", "delibera");
-			}
+			$erros[] = __("É necessário definir corretamente o prazo de validação", "delibera");
+		}
+		
+		$value = (int)$_POST['min_validacoes'];
+		$valida = is_int($value) && $value > 0;
+		if(!$autosave && ($valida === false))
+		{
+			$erros[] = __("É necessário definir corretamente o número mínimo de validações", "delibera");
 		}
 		return $erros;
 	}
