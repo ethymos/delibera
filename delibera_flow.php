@@ -22,6 +22,15 @@ class Flow
 		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 2);
 		add_filter('delibera_flow_list', array($this, 'filterFlowList'));
 		add_action('delibera_save_post', array($this, 'savePost'), 1000, 3);
+		//if(is_super_admin()) // TODO load after init
+		{
+			add_action('delibera_menu_itens', array($this, 'addMenu'));
+		}
+		
+		add_action( 'admin_print_scripts', array($this, 'adminScripts') );
+		
+		add_action('wp_ajax_delibera_save_flow', array($this, 'saveFlowCallback'));
+		
 	}
 	
 	/**
@@ -120,6 +129,8 @@ class Flow
 	
 	/**
 	 * List of Modules and each situation for get information about the module, like deadline
+	 * 
+	 * @return \Delibera\Modules\ModuleBase[]
 	 */
 	public function getFlowModules()
 	{
@@ -336,6 +347,125 @@ class Flow
 		}
 		
 	}
+	
+	public function addMenu($base_page)
+	{
+		add_submenu_page($base_page, __('Delibera Flow','delibera'),__('Delibera Flow','delibera'), 'manage_options', 'delibera-flow', array($this, 'confPage'));
+	}
+	
+	public function listModulesConfigBoxes()
+	{
+		$modules = $this->getFlowModules();
+		/**
+		 * Create Defaults value for topicMeta like in action TODO check if value is need after make this work
+		 * @var unknown
+		 */
+		$post = new \WP_Post(new \stdClass());
+		$custom = array();
+		$options_plugin_delibera = delibera_get_config();
+		$situacao = "";
+		$disable_edicao = false;
+		foreach ($modules as $key => $module)
+		{
+			$situacao = get_term_by('slug', $key, 'situacao');
+			?>
+			<div class="dragbox" id="<?php echo $situacao->slug; ?>" >
+				<h2><?php echo $situacao->name; ?>
+				  <a href="#" class="delete opIcons"> </a> 
+				  <a href="#" class="maxmin opIcons"> </a> 
+				</h2>
+				<div class="dragbox-content" style="display: none;" >
+					<?php
+					$module->topicMeta($post, $custom, $options_plugin_delibera, $situacao, $disable_edicao);
+					?>
+					<input type="button" class="dragbox-bt-save" value="<?php _e('Save', 'delibera'); ?>" />
+				</div>
+			</div>
+			<?php
+		}
+	}
+	
+	public function confPage()
+	{
+		wp_nonce_field( 'delibera-flow-nonce', '_delibera-flow-nonce' );
+		?>
+		<input type="hidden" id="delibera-flow-postid" value="<?php the_ID(); ?>" />
+		<div class="column" id="column1">
+		<?php 
+			$this->listModulesConfigBoxes();
+		?>
+		</div>
+		<div class="column" id="column2" >
+			<input type="button" class="dragbox-bt-save" value="<?php _e('Save', 'delibera'); ?>" />
+		</div>
+
+		<?php
+	}
+	
+	public function adminScripts()
+	{
+		wp_enqueue_script('delibera-admin-flow',WP_CONTENT_URL.'/plugins/delibera/admin/js/flow.js', array( 'jquery-ui-core'));
+		$data = array(
+				//'post_id' => $post->ID,
+				'ajax_url' => admin_url('admin-ajax.php'),
+		);
+		/*if (is_object($situation)) {
+			$data['situation'] = $situation->slug;
+		}*/
+		
+		wp_localize_script('delibera-admin-flow', 'delibera_admin_flow', $data);
+		
+		wp_enqueue_style('delibera-admin-flow',WP_CONTENT_URL.'/plugins/delibera/admin/css/flow.css');
+	}
+	
+	public function saveFlowCallback()
+	{
+		$flow = explode(',', strip_tags($_POST['flow']));
+		$post_id = intval(strip_tags($_POST['post_id']));
+		$opt = delibera_get_config();
+		$all_errors = array();
+		
+		if($post_id > 0)
+		{
+			$modules = $this->getFlowModules();
+			$events_meta = array();
+			foreach ($flow as $situacao)
+			{
+				$errors = array();
+				if(array_key_exists($situacao, $modules))
+				{
+					$errors = $modules[$situacao]->checkPostData($erros, $opt, false);
+					if(count($errors) == 0)
+					{
+						$events_meta = $modules[$situacao]->savePostMetas($events_meta, $opt);
+					}
+					else 
+					{
+						$all_errors = array_merge($all_errors,$errors);
+					}
+				}
+			}
+			if(count($all_errors) > 0)
+			{
+				die(json_encode($all_errors));
+			}
+			foreach ($events_meta as $key => $value) // Buscar dados
+			{
+				update_post_meta($post_id, $key, $value); // Atualiza
+			}
+		}
+		else 
+		{
+			$opt['delibera_flow'] = $flow;
+			if(! update_option('delibera-config', $opt))
+			{
+				$all_errors = array(_('can not update flow', 'delibera'));
+				die(json_encode($all_errors));
+			}
+		}
+		die('ok');
+	}
+	
 	
 }
 

@@ -1,0 +1,63 @@
+@CHARSET "UTF-8";
+
+.column{
+	width:49%;
+	margin-right:.5%;
+	min-height:150px;
+	background:#fff;
+	float:left;
+}
+.column .dragbox{
+	margin:5px 2px  20px;
+	background:#fff;
+	position:"relative";
+	border:1px solid #946553;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+}
+.column .dragbox h2{
+	margin:0;
+	font-size:12px;
+	background:#946553;
+	color:#fff;
+	border-bottom:1px solid #946553;
+	font-family:Verdana;
+	cursor:move;
+	padding:5px;
+}
+
+.dragbox-content{
+	background:#fff;
+	min-height:100px; margin:5px;
+	font-family:'Lucida Grande', Verdana; font-size:0.8em; line-height:1.5em;
+}
+.column  .placeholder{
+	background: #EED5B7;
+	border:1px dashed #946553;
+}
+
+.opIcons
+{
+background-image: url('../images/iconSpirite.gif')!important;
+background-repeat: no-repeat;
+float:right;
+height:13px;
+width:13px;
+margin:0px 2px;
+}
+
+.maxmin
+{
+	background-position:-26px 1px;
+}
+
+.delete
+{
+	background-position:-269px center;
+	padding-top:1px;
+}
+
+
+#column1 .ui-sortable-handle a {
+    display: none;
+}
