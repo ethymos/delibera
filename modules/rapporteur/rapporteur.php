@@ -215,7 +215,7 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 		
 		if ($opt ['eleicao_relator'] == 'S')
 		{
-			$value = $_POST ['prazo__leicao_relator'];
+			$value = $_POST ['prazo_eleicao_relator'];
 			$valida = delibera_tratar_data ( $value );
 			if (! $autosave && ($valida === false || $valida < 1))
 			{
