@@ -195,6 +195,7 @@ function delibera_scripts()
 		wp_enqueue_script('delibera', WP_CONTENT_URL.'/plugins/delibera/js/scripts.js', array('jquery-expander'));
 		wp_enqueue_script('delibera-seguir', WP_CONTENT_URL . '/plugins/delibera/js/delibera_seguir.js', array('delibera'));
 		wp_enqueue_script('delibera-concordar', WP_CONTENT_URL . '/plugins/delibera/js/delibera_concordar.js', array('delibera'));
+        wp_enqueue_script('share-js', WP_CONTENT_URL . '/plugins/delibera/js/socialite.min.js');
 
 		$situation = delibera_get_situacao($post->ID);
 
@@ -255,7 +256,7 @@ add_action('wp_footer', 'delibera_footer');
 
 function delibera_loaded() {
 	// load plugin translations
-	load_plugin_textdomain('delibera', false, dirname(plugin_basename( __FILE__ )).'/lang');
+	load_plugin_textdomain('delibera', false, dirname(plugin_basename( __FILE__ )).'/languages');
 }
 add_action('plugins_loaded','delibera_loaded');
 
@@ -362,3 +363,95 @@ function delibera_convert_situacao_id_to_taxonomy_term_in_query(&$query)
 	}
 }
 add_filter('parse_query','delibera_convert_situacao_id_to_taxonomy_term_in_query');
+
+/**
+ * Include the TGM_Plugin_Activation class.
+ */
+require_once dirname( __FILE__ ) . '/includes/class-tgm-plugin-activation.php';
+
+add_action( 'tgmpa_register', 'delibera_register_required_plugins' );
+/**
+ * Register the required plugins for this theme.
+ *
+ * In this example, we register five plugins:
+ * - one included with the TGMPA library
+ * - two from an external source, one from an arbitrary source, one from a GitHub repository
+ * - two from the .org repo, where one demonstrates the use of the `is_callable` argument
+ *
+ * The variable passed to tgmpa_register_plugins() should be an array of plugin
+ * arrays.
+ *
+ * This function is hooked into tgmpa_init, which is fired within the
+ * TGM_Plugin_Activation class constructor.
+ */
+function delibera_register_required_plugins() {
+	/*
+	 * Array of plugin arrays. Required keys are name and slug.
+	 * If the source is NOT from the .org repo, then source is also required.
+	 */
+	$plugins = array(
+		array(
+			'name'      => 'mention-comments-authors',
+			'slug'      => 'mention-comments-authors',
+			'required'  => false
+		),
+		array(
+			'name'      => 'comment-attachment',
+			'slug'      => 'comment-attachment',
+			'required'  => false
+		),
+    );
+
+	$config = array(
+		'id'           => 'delibera',                 // Unique ID for hashing notices for multiple instances of TGMPA.
+		'default_path' => '',                      // Default absolute path to bundled plugins.
+		'menu'         => 'tgmpa-install-plugins', // Menu slug.
+		'parent_slug'  => 'plugins.php',            // Parent menu slug.
+		'capability'   => 'manage_options',    // Capability needed to view plugin install page, should be a capability associated with the parent menu used.
+		'has_notices'  => true,                    // Show admin notices or not.
+		'dismissable'  => true,                    // If false, a user cannot dismiss the nag message.
+		'dismiss_msg'  => '',                      // If 'dismissable' is false, this message will be output at top of nag.
+		'is_automatic' => true,                   // Automatically activate plugins after installation or not.
+		'message'      => '',                      // Message to output right before the plugins table.
+    );
+
+	tgmpa( $plugins, $config );
+}
+
+function doctype_opengraph($output) {
+    return $output . '
+    xmlns:og="http://opengraphprotocol.org/schema/"
+    xmlns:fb="http://www.facebook.com/2008/fbml"';
+}
+add_filter('language_attributes', 'doctype_opengraph');
+
+function fb_opengraph() {
+    global $post;
+ 
+    if(is_single()) {
+        if(has_post_thumbnail($post->ID)) {
+            $img_src = wp_get_attachment_image_src(get_post_thumbnail_id( $post->ID ), 'medium');
+        } else {
+            $img_src = get_stylesheet_directory_uri() . '/img/delibera_icon.png';
+        }
+        if($excerpt = $post->post_excerpt) {
+            $excerpt = strip_tags($post->post_excerpt);
+            $excerpt = str_replace("", "'", $excerpt);
+        } else {
+            $excerpt = get_bloginfo('description');
+        }
+        ?>
+ 
+    <meta property="og:title" content="<?php echo the_title(); ?>"/>
+    <meta property="og:description" content="<?php echo $excerpt; ?>"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:url" content="<?php echo the_permalink(); ?>"/>
+    <meta property="og:site_name" content="<?php echo get_bloginfo(); ?>"/>
+    <meta property="og:image" content="<?php echo $img_src; ?>"/>
+ 
+<?php
+    } else {
+        return;
+    }
+}
+add_action('wp_head', 'fb_opengraph', 5);

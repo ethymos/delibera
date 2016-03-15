@@ -2,10 +2,10 @@
     while (have_posts()) :
         the_post();
         $temas = wp_get_post_terms($post->ID, 'tema');
-        
+
         $user_id = get_current_user_id();
         $situacao = delibera_get_situacao($post->ID);
-        
+
         $seguir = false;
         if (!delibera_ja_seguiu($post->ID, $user_id) && $situacao->slug != 'relatoria') {
             $seguir = true;
@@ -26,10 +26,8 @@
             <h1><a href=""><?php the_title(); ?></a></h1>
             <p class="meta clearfix">Discussão criada por <span class="author"><?php the_author(); ?></span> em <span class="date"><?php the_date('d/m/y'); ?></span></p>
 
-            <div class="meta meta-social clearfix">
-                <a href="" class="btn btn-facebook">Facebook</a>
-                <a href="" class="btn btn-twitter">Twitter</a>
-                <a href="" class="btn btn-google-plus">Google+</a>
+           <div class="meta meta-social clearfix">
+                <?php social_buttons(get_permalink(), get_the_title()); ?>
                 <div class="alignright bottom">
                     <a href="?delibera_print=1" class="btn"><i class="icon-print"></i> Imprimir</a>
                     <button id="delibera_seguir" href="" class="btn">
@@ -40,7 +38,7 @@
             </div>
 
             <div class="content"><?php the_content(); ?></div>
-            
+
             <div class="meta">
                 <?php if (!empty($temas)) : ?>
                     <ul class="meta meta-tags">
@@ -52,7 +50,7 @@
                     </ul>
                 <?php endif; ?>
             </div>
-            
+
             <?php comments_template( '', true ); ?>
         </div>
     <?php endwhile; ?>
