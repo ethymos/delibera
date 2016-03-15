@@ -417,8 +417,12 @@ class Flow
 						}
 						echo $table;
 					}
+					if(!$is_post_meta) // Use post save
+					{?>
+						<input type="button" class="dragbox-bt-save" value="<?php _e('Save', 'delibera'); ?>" />
+					<?php
+					}
 					?>
-					<input type="button" class="dragbox-bt-save" value="<?php _e('Save', 'delibera'); ?>" />
 				</div>
 			</div>
 			<?php
