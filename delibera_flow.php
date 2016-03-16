@@ -395,7 +395,7 @@ class Flow
 		{
 			$situacao = get_term_by('slug', $key, 'situacao');
 			?>
-			<div class="dragbox <?php echo $flow === false ? '' : 'clone'; ?>" id="<?php echo $situacao->slug; ?>" >
+			<div class="dragbox <?php echo $situacao->slug.($flow === false ? '' : ' clone'); ?>" >
 				<h2><?php echo $situacao->name; ?>
 				  <span class="delete opIcons"> </span> 
 				  <span class="maxmin opIcons"> </span> 

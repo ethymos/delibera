@@ -168,12 +168,12 @@ class Validation extends \Delibera\Modules\ModuleBase
 		
 		?>
 			<p>
-				<label for="min_validacoes" class="label_min_validacoes"><?php _e('Mínimo de Validações','delibera'); ?>:</label>
-				<input <?php echo $disable_edicao ?> id="min_validacoes" name="min_validacoes" class="min_validacoes widefat" value="<?php echo $min_validacoes; ?>"/>
+				<label  class="label_min_validacoes"><?php _e('Mínimo de Validações','delibera'); ?>:</label>
+				<input <?php echo $disable_edicao ?> name="min_validacoes" class="min_validacoes widefat" value="<?php echo $min_validacoes; ?>"/>
 			</p>
 			<p>
-				<label for="prazo_validacao" class="label_prazo_validacao"><?php _e('Prazo para Validação','delibera') ?>:</label>
-				<input <?php echo $disable_edicao ?> id="prazo_validacao" name="prazo_validacao" class="prazo_validacao widefat hasdatepicker" value="<?php echo $prazo_validacao; ?>"/>
+				<label class="label_prazo_validacao"><?php _e('Prazo para Validação','delibera') ?>:</label>
+				<input <?php echo $disable_edicao ?> name="prazo_validacao" class="prazo_validacao widefat hasdatepicker" value="<?php echo $prazo_validacao; ?>"/>
 			</p>
 		<?php
 		

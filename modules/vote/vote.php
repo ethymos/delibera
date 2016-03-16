@@ -120,6 +120,10 @@ class Vote extends \Delibera\Modules\ModuleBase
 	 */
 	public function topicMeta($post, $custom, $options_plugin_delibera, $situacao, $disable_edicao)
 	{
+		/*global $DeliberaFlow;
+		$flow = $DeliberaFlow->get($post->ID);
+		$discussao = array_search('discussao', $haystack)*/
+		
 		$prazo_votacao = $this->generateDeadline($options_plugin_delibera);
 		
 		if(!($post->post_status == 'draft' ||
@@ -132,10 +136,11 @@ class Vote extends \Delibera\Modules\ModuleBase
 		
 		?>
 		<p>
-			<label for="prazo_votacao" class="label_prazo_votacao"><?php _e('Prazo para Votações','delibera') ?>:</label>
-			<input <?php echo $disable_edicao ?> id="prazo_votacao" name="prazo_votacao" class="prazo_votacao widefat hasdatepicker" value="<?php echo $prazo_votacao; ?>"/>
+			<label class="label_prazo_votacao"><?php _e('Prazo para Votações','delibera') ?>:</label>
+			<input <?php echo $disable_edicao ?> name="prazo_votacao" class="prazo_votacao widefat hasdatepicker" value="<?php echo $prazo_votacao; ?>"/>
 		</p>
 		<?php
+		comment_form();
 		
 	}
 	

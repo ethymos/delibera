@@ -41,6 +41,11 @@ jQuery(document).ready(function() {
 			jQuery(copyHelper).find('span.delete').click(function() {
 				deliberaFlowRemove(this);
 			});
+			jQuery(copyHelper).find('.hasdatepicker:not([readonly])').removeAttr('id');
+			jQuery(copyHelper).find('.hasdatepicker:not([readonly])').removeClass('hasDatepicker').datepicker({
+				userLang	: 'pt-BR',
+				americanMode: false,
+			});
 			div_copy = div.clone();
 			return div_copy;
 		},
@@ -49,6 +54,10 @@ jQuery(document).ready(function() {
 			jQuery(ui.item).addClass('clone');
 			jQuery(ui.item).find('h2').click();
 			sortorder = '';
+			jQuery(ui.item).find('.hasdatepicker:not([readonly])').removeClass('hasDatepicker').datepicker({
+				userLang	: 'pt-BR',
+				americanMode: false,
+			});
 			jQuery('.delibera-flow-panel').find('#column2').each(function() {
 				var itemorder = jQuery(this).sortable('toArray');
 				var columnId = jQuery(this).attr('id');

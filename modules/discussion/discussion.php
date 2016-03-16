@@ -142,8 +142,8 @@ class Discussion extends \Delibera\Modules\ModuleBase
 		
 		?>
 		<p>
-			<label for="prazo_discussao" class="label_prazo_discussao"><?php _e('Prazo para Discussões','delibera') ?>:</label>
-			<input <?php echo $disable_edicao ?> id="prazo_discussao" name="prazo_discussao" class="prazo_discussao widefat hasdatepicker" value="<?php echo $prazo_discussao; ?>"/>
+			<label class="label_prazo_discussao"><?php _e('Prazo para Discussões','delibera') ?>:</label>
+			<input <?php echo $disable_edicao ?> name="prazo_discussao" class="prazo_discussao widefat hasdatepicker" value="<?php echo $prazo_discussao; ?>"/>
 		</p>
 		<?php
 		
