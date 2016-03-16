@@ -208,7 +208,7 @@ class Discussion extends \Delibera\Modules\ModuleBase
 	{
 		if(array_key_exists('prazo_discussao', $_POST))
 		{
-			$events_meta['prazo_discussao'] = $_POST['prazo_discussao'];
+			$events_meta['prazo_discussao'] = sanitize_text_field($_POST['prazo_discussao']);
 		}
 		
 		return $events_meta;

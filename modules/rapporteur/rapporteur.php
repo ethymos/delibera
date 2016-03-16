@@ -238,8 +238,8 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 			)
 		)
 		{
-			$events_meta['prazo_relatoria'] = $_POST['prazo_relatoria'];
-			$events_meta['prazo_eleicao_relator'] = $opt['eleicao_relator'] == 'S' ? $_POST['prazo_eleicao_relator'] : date('d/m/Y');
+			$events_meta['prazo_relatoria'] = sanitize_text_field($_POST['prazo_relatoria']);
+			$events_meta['prazo_eleicao_relator'] = $opt['eleicao_relator'] == 'S' ? sanitize_text_field($_POST['prazo_eleicao_relator']) : date('d/m/Y');
 		}
 		
 		return $events_meta;

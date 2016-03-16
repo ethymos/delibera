@@ -278,8 +278,8 @@ class Validation extends \Delibera\Modules\ModuleBase
 			(array_key_exists('prazo_validacao', $_POST) && array_key_exists('min_validacoes', $_POST) )
 		)
 		{
-			$events_meta['prazo_validacao'] = $_POST['prazo_validacao'];
-			$events_meta['min_validacoes'] = $_POST['min_validacoes'];
+			$events_meta['prazo_validacao'] = sanitize_text_field($_POST['prazo_validacao']);
+			$events_meta['min_validacoes'] = sanitize_text_field($_POST['min_validacoes']);
 		}
 		
 		return $events_meta;
