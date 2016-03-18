@@ -12,10 +12,26 @@ function deliberaFlowRemove(element)
 	var sel = confirm('do you want to delete this step?');
 	if (sel) {
 		jQuery(element).parent().parent().remove();
+		deliberaUpdateFlow();
 	}
 }
 
 var sortorder = '';
+function deliberaUpdateFlow()
+{
+	sortorder = '';
+	jQuery('.delibera-flow-panel').find('#column2').each(function()
+	{
+		var itemorder = jQuery(this).sortable('toArray', { attribute: 'class'} );
+		for (i = 0; i < itemorder.length; i++)
+		{
+			var tmp = itemorder[i].replace("dragbox ", "").replace(" clone", "");
+			itemorder[i] = tmp;
+		}
+		sortorder += itemorder.toString();
+	});
+	jQuery('#delibera_flow').val(sortorder);
+}
 
 jQuery(document).ready(function() {
 	jQuery('.delibera-flow-panel').find('span.maxmin').click(function() {
@@ -58,18 +74,8 @@ jQuery(document).ready(function() {
 				userLang	: 'pt-BR',
 				americanMode: false,
 			});
-			sortorder = '';
-			jQuery('.delibera-flow-panel').find('#column2').each(function()
-			{
-				var itemorder = jQuery(this).sortable('toArray', { attribute: 'class'} );
-				for (i = 0; i < itemorder.length; i++)
-				{
-					var tmp = itemorder[i].replace("dragbox ", "").replace(" clone", "");
-					itemorder[i] = tmp;
-				}
-				sortorder += itemorder.toString();
-			});
-			jQuery('#delibera_flow').val(sortorder);
+			jQuery(ui.item).find("input").prop('disabled', false);
+			deliberaUpdateFlow();
 		}
 	});
 	jQuery('.delibera-flow-panel').find("#column2").sortable({
@@ -85,21 +91,20 @@ jQuery(document).ready(function() {
 	        }
 		}
 	});
+	if(delibera_admin_flow.post_id == '')
+	{
+		jQuery('.delibera-flow-panel').find("#column2").find("input").prop('disabled', true);
+	}
+	else
+	{
+		jQuery('.delibera-flow-panel').find("#column1").find("input").prop('disabled', true);
+	}
+	
 	jQuery('.delibera-flow-panel').find("input.dragbox-bt-save").click(function(){
-		sortorder = '';
-		jQuery('.delibera-flow-panel').find('#column2').each(function()
-		{
-			var itemorder = jQuery(this).sortable('toArray', { attribute: 'class'} );
-			for (i = 0; i < itemorder.length; i++)
-			{
-				var tmp = itemorder[i].replace("dragbox ", "").replace(" clone", "");
-				itemorder[i] = tmp;
-			}
-			sortorder += itemorder.toString();
-		});
+		deliberaUpdateFlow();
 		var data = {
             action : "delibera_save_flow",
-            flow: sortorder,
+            delibera_flow: sortorder,
             post_id: jQuery('#delibera-flow-postid').val(),
             nonce: jQuery('#_delibera-flow-nonce').val()
         };
@@ -142,6 +147,7 @@ jQuery(document).ready(function() {
             function(response) {
             	if(response == 'ok')
             		alert("OK");
+            		//window.location.reload(true);
             	else
             		alert("Errors");
             }
