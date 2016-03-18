@@ -40,8 +40,8 @@ abstract class ModuleBase
 		add_filter('delibera_situation_button_text', array($this, 'situationButtonText'));
 		//add_action('delibera_topic_meta', array($this, 'topicMeta'), 10, 5);
 		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 2);
-		add_filter('delibera_check_post_data', array($this, 'checkPostData'), 10, 3);
-		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 10, 2);
+		//add_filter('delibera_check_post_data', array($this, 'checkPostData'), 10, 3);
+		//add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 10, 2);
 		add_action('delibera_create_pauta_frontend', array($this, 'createPautaAtFront'));
 		
 		foreach ($this->shortcodes as $name => $function)
@@ -114,12 +114,12 @@ abstract class ModuleBase
 	
 	/**
 	 * Validate topic required data
-	 * @param array $erros erros report array
+	 * @param array $errors erros report array
 	 * @param array $opt Delibera configs
 	 * @param bool $autosave is autosave?
 	 * @return array erros report array append if needed
 	 */
-	abstract public function checkPostData($erros, $opt, $autosave);
+	abstract public function checkPostData($errors, $opt, $autosave);
 	
 	/**
 	 * Save topic metadata
@@ -128,7 +128,7 @@ abstract class ModuleBase
 	 *
 	 * @return array events_meta to be save on the topic
 	 */
-	abstract public function savePostMetas($events_meta, $opt);
+	abstract public function savePostMetas($events_meta, $opt, $post_id = false);
 	
 	/**
 	 * Treat postback of frotend topic
@@ -221,7 +221,6 @@ abstract class ModuleBase
 					\Delibera\Cron::del($post_id, 'delibera_notificar_fim_prazo');
 					
 					$cron = get_option('delibera-cron');
-					var_dump($cron);
 					
 					\Delibera\Cron::add(
 						delibera_tratar_data($prazo_date),
