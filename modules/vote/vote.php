@@ -230,6 +230,7 @@ class Vote extends \Delibera\Modules\ModuleBase
 				get_currentuserinfo();
 				
 				$all_saved_vote_options = delibera_get_comments_encaminhamentos($post->ID);
+				if(!is_array($all_saved_vote_options)) $all_saved_vote_options = array();
 				$all_saved_vote_options = array_object_value_recursive('comment_ID', $all_saved_vote_options);
 				
 				foreach ($_POST['delibera_comment_add_list'] as $vote_option)
@@ -272,7 +273,6 @@ class Vote extends \Delibera\Modules\ModuleBase
 						}
 					}
 				}
-
 				foreach ($all_saved_vote_options as $comment_delete_id)
 				{
 					wp_delete_comment($comment_delete_id);
