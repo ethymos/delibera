@@ -191,15 +191,15 @@ class Vote extends \Delibera\Modules\ModuleBase
 		
 	}
 	
-	function checkPostData($erros, $opt, $autosave)
+	function checkPostData($errors, $opt, $autosave)
 	{
 		$value = $_POST['prazo_votacao'];
 		$valida = delibera_tratar_data($value);
 		if(!$autosave && ($valida === false || $valida < 1))
 		{
-			$erros[] = __("É necessário definir corretamente o prazo para votação", "delibera");
+			$errors[] = __("É necessário definir corretamente o prazo para votação", "delibera");
 		}
-		return $erros;
+		return $errors;
 	}
 	
 	/**
@@ -212,21 +212,30 @@ class Vote extends \Delibera\Modules\ModuleBase
 		return self::getPautas($filtro);
 	}
 	
-	public function savePostMetas($events_meta, $opt)
+	public function savePostMetas($events_meta, $opt, $post_id = false)
 	{
 		if(array_key_exists('prazo_votacao', $_POST))
 		{
 			$events_meta['prazo_votacao'] = sanitize_text_field($_POST['prazo_votacao']);
 		}
-		if(array_key_exists('delibera_comment_add_list', $_POST) && array_key_exists('post_id', $_POST )  )
+		
+		global $post, $current_user;
+		if(!is_object($post))
+		{
+			if($post_id)
+			{
+				$post = get_post($post_id);
+			}
+			elseif(array_key_exists('post_id', $_POST ))
+			{
+				$post = get_post($_POST['post_id']);
+			}
+		}
+		
+		if(array_key_exists('delibera_comment_add_list', $_POST) )
 		{
 			if(is_array($_POST['delibera_comment_add_list']))
 			{
-				global $post, $current_user;
-				if(!is_object($post))
-				{
-					$post = get_post($_POST['post_id']);
-				}
 				get_currentuserinfo();
 				
 				$all_saved_vote_options = delibera_get_comments_encaminhamentos($post->ID);
@@ -236,26 +245,36 @@ class Vote extends \Delibera\Modules\ModuleBase
 				foreach ($_POST['delibera_comment_add_list'] as $vote_option)
 				{
 					$vote_option = explode(',', $vote_option);
+					if(count($vote_option) == 1) $vote_option = array('', $vote_option[0]);
 					if($vote_option[0] == '')
 					{
 						$commentdata = array(
-								'comment_post_ID' => $post->ID, 
+								'comment_post_ID' => (int) $post->ID, 
 								'comment_author' => $current_user->dispay_name, 
 								'comment_author_email' => $current_user->user_mail, 
 								'comment_author_url' => '',
 								'comment_content' => wp_kses_data( (string) $vote_option[1]),
 								'comment_type' => '',
 								'comment_parent' => 0,
-								'user_id' => $current_user->ID,
+								'user_id' => (int) $current_user->ID,
+								'comment_author_IP' => preg_replace( '/[^0-9a-fA-F:., ]/', '',$_SERVER['REMOTE_ADDR'] ),
+								'comment_agent'     => isset( $_SERVER['HTTP_USER_AGENT'] ) ? substr( $_SERVER['HTTP_USER_AGENT'], 0, 254 ) : '',
+								'comment_date'     => current_time('mysql'),
+								'comment_date_gmt' => current_time('mysql', 1),
+								'comment_approved' => 1
 						);
-						//Insert new comment and get the comment ID
-						$comment_id = wp_new_comment( $commentdata );
+						$commentdata = wp_filter_comment($commentdata);
 						
-						add_comment_meta($comment_id, 'delibera_comment_tipo', 'encaminhamento', true);
-						$nencaminhamentos = get_post_meta($comment_id, 'delibera_numero_comments_encaminhamentos', true);
-						$nencaminhamentos++;
-						update_post_meta($comment_id, 'delibera_numero_comments_encaminhamentos', $nencaminhamentos);
-						wp_set_comment_status($comment_id, 'approve');
+						
+						//Insert new comment and get the comment ID
+						$comment_id = wp_insert_comment($commentdata) ;
+						if($comment_id)
+						{
+							add_comment_meta($comment_id, 'delibera_comment_tipo', 'encaminhamento', true);
+							$nencaminhamentos = get_post_meta($comment_id, 'delibera_numero_comments_encaminhamentos', true);
+							$nencaminhamentos++;
+							update_post_meta($comment_id, 'delibera_numero_comments_encaminhamentos', $nencaminhamentos);
+						}
 					}
 					else 
 					{
