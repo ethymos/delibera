@@ -21,6 +21,7 @@ class Flow
 		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 1, 2);
 		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 2);
 		add_filter('delibera_flow_list', array($this, 'filterFlowList'));
+		add_filter('delibera_check_post_data', array($this, 'checkPostData'), 1000, 3);
 		add_action('delibera_save_post', array($this, 'savePost'), 1000, 3);
 		//if(is_super_admin()) // TODO load after init
 		{
@@ -187,9 +188,18 @@ class Flow
 	{
 		if(array_key_exists('delibera_flow', $_POST) )
 		{
-			$events_meta['delibera_flow'] = explode(',', trim($_POST['delibera_flow']));
+			$flow = explode(',', trim($_POST['delibera_flow']));
+			$events_meta['delibera_flow'] = $flow;
+			
+			$modules = $this->getFlowModules();
+			foreach ($flow as $situacao)
+			{
+				if(array_key_exists($situacao, $modules))
+				{
+					$events_meta = $modules[$situacao]->savePostMetas($events_meta, $opt);
+				}
+			}
 		}
-	
 		return $events_meta;
 	}
 	
@@ -228,7 +238,7 @@ class Flow
 		 */
 		$flow = explode(',', trim(strip_tags($_POST['delibera_flow'])));
 		update_post_meta($postID, 'delibera_flow', $flow);
-		
+		file_put_contents('/tmp/publish.log', date('Ymd H:i:s').$postID."\n", FILE_APPEND);
 		self::reabrirPauta($postID, false);
 	}
 	
@@ -478,9 +488,47 @@ class Flow
 		}
 	}
 	
+	/**
+	 * Validate topic required data
+	 * @param array $errors erros report array
+	 * @param array $opt Delibera configs
+	 * @param bool $autosave is autosave?
+	 * @return array erros report array append if needed
+	 */
+	public function checkPostData($errors, $opt, $autosave)
+	{
+		if(array_key_exists('delibera_flow', $_POST) )
+		{
+			$flow = $_POST['delibera_flow'];
+			$flow = explode(',', strip_tags($_POST['delibera_flow']));
+			$valida = is_array($flow) ? count($flow) : false;
+			if(!$autosave && ($valida === false || $valida < 1))
+			{
+				$errors[] = __("É necessário definir corretamente o fluxo da pauta", "delibera");
+			}
+			else 
+			{
+				$modules = $this->getFlowModules();
+				foreach ($flow as $situacao)
+				{
+					if(array_key_exists($situacao, $modules))
+					{
+						$errors = $modules[$situacao]->checkPostData($errors, $opt, false);
+					}
+				}
+			}
+		}
+		else 
+		{
+			$errors[] = __("É necessário definir corretamente o fluxo da pauta", "delibera");
+		}
+		
+		return $errors;
+	}
+	
 	public function saveFlowCallback()
 	{
-		$flow = explode(',', strip_tags($_POST['flow']));
+		$flow = explode(',', strip_tags($_POST['delibera_flow']));
 		$post_id = intval(strip_tags($_POST['post_id']));
 		$opt = delibera_get_config();
 		$all_errors = array();
@@ -507,7 +555,11 @@ class Flow
 			}
 			if(count($all_errors) > 0)
 			{
-				die(json_encode($all_errors));//TODO error notice and parser
+				if ( defined( 'DOING_AJAX' ) ) {
+					die(json_encode($all_errors));//TODO error notice and parser
+				}
+				wp_die( implode('<br/>', $errors) );
+				
 			}
 			foreach ($events_meta as $key => $value) // Buscar dados
 			{
