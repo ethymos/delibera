@@ -115,6 +115,8 @@ function delibera_current_user_can_participate($permissao = 'votar') {
  */
 function delibera_can_comment($postID = '')
 {
+	if(is_admin()) return true;
+	
 	if(is_null($postID))
 	{
 		$post = get_post($postID);
