@@ -400,7 +400,7 @@ class Flow
 				  <span class="delete opIcons"> </span> 
 				  <span class="maxmin opIcons"> </span> 
 				</h2>
-				<div class="dragbox-content" style="<?php echo $is_post_meta ? "display: none;" : ''; ?>" >
+				<div class="dragbox-content" style="<?php echo $is_post_meta && $flow === false ? "display: none;" : ''; ?>" >
 					<?php
 					if($is_post_meta)
 					{
@@ -429,6 +429,9 @@ class Flow
 		}
 	}
 	
+	/**
+	 * Create a config page for manange flow and modules config
+	 */
 	public function confPage()
 	{
 		$post = get_post();

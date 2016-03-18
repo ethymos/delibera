@@ -58,9 +58,15 @@ jQuery(document).ready(function() {
 				userLang	: 'pt-BR',
 				americanMode: false,
 			});
-			jQuery('.delibera-flow-panel').find('#column2').each(function() {
-				var itemorder = jQuery(this).sortable('toArray');
-				var columnId = jQuery(this).attr('id');
+			sortorder = '';
+			jQuery('.delibera-flow-panel').find('#column2').each(function()
+			{
+				var itemorder = jQuery(this).sortable('toArray', { attribute: 'class'} );
+				for (i = 0; i < itemorder.length; i++)
+				{
+					var tmp = itemorder[i].replace("dragbox ", "").replace(" clone", "");
+					itemorder[i] = tmp;
+				}
 				sortorder += itemorder.toString();
 			});
 			jQuery('#delibera_flow').val(sortorder);
@@ -79,10 +85,16 @@ jQuery(document).ready(function() {
 	        }
 		}
 	});
-	jQuery('.delibera-flow-panel').find(".dragbox-bt-save").click(function(){
-		jQuery('#column2').each(function() {
-			var itemorder = jQuery(this).sortable('toArray');
-			var columnId = jQuery(this).attr('id');
+	jQuery('.delibera-flow-panel').find("input.dragbox-bt-save").click(function(){
+		sortorder = '';
+		jQuery('.delibera-flow-panel').find('#column2').each(function()
+		{
+			var itemorder = jQuery(this).sortable('toArray', { attribute: 'class'} );
+			for (i = 0; i < itemorder.length; i++)
+			{
+				var tmp = itemorder[i].replace("dragbox ", "").replace(" clone", "");
+				itemorder[i] = tmp;
+			}
 			sortorder += itemorder.toString();
 		});
 		var data = {
@@ -100,7 +112,27 @@ jQuery(document).ready(function() {
 		else
 		{
 			jQuery('.delibera-flow-panel').find('#column2').find('input:not(input[type=button], input[type=submit], input[type=reset]), textarea, select').each(function(){
-				data[this.name] = this.value;
+				if(this.name.indexOf('[') > -1)
+				{
+					if(data[this.name] == null)
+					{
+						data[this.name] = [[
+							this.id,
+							this.value 
+						]];
+					}
+					else
+					{
+						data[this.name].push([
+							this.id,
+							this.value
+						]);
+					}
+				}
+				else
+				{
+					data[this.name] = this.value;
+				}
 			});
 		}
 		
