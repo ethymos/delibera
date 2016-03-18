@@ -24,6 +24,12 @@ class Vote extends \Delibera\Modules\ModuleBase
 	 */
 	protected $prazo_meta = 'prazo_votacao';
 	
+	public function __construct()
+	{
+		parent::__construct();
+		add_action( 'admin_print_scripts', array($this, 'adminScripts') );
+	}
+	
 	/**
 	 * Register Tax for the module
 	 */
@@ -139,9 +145,31 @@ class Vote extends \Delibera\Modules\ModuleBase
 			<label class="label_prazo_votacao"><?php _e('Prazo para Votações','delibera') ?>:</label>
 			<input <?php echo $disable_edicao ?> name="prazo_votacao" class="prazo_votacao widefat hasdatepicker" value="<?php echo $prazo_votacao; ?>"/>
 		</p>
-		<?php
-		comment_form();
 		
+		<div class="delibera_comment_list_panel">
+			<label class="label_opcoes_votacao"><?php _e('Opções de votação','delibera') ?>:</label>
+			<textarea class="delibera_comment_input_list" ></textarea><a class="btn_delibera_comment_createList" class="button" onclick="delibera_add_comment_input(this);return false;" href="#delibera_comment_input_list"><?php _e('Adicionar opção','delibera') ?></a>
+			<ul class="delibera_comment_add_current">
+			<?php
+				foreach (delibera_get_comments_encaminhamentos($post->ID) as $comment)
+				{?>
+					<p><textarea id="vote-comment-id-<?php echo $comment->comment_ID; ?>" name="delibera_comment_add_list[]"><?php echo get_comment_text($comment->comment_ID); ?></textarea><a href="#" class="delibera_comment_input_bt_remove delibera-icon-cancel"></a></p><?php	
+				}
+			?>
+			</ul>
+		</div>
+		
+		<?php
+	}
+	
+	public function adminScripts()
+	{
+		$screen = get_current_screen();
+		$screenid = $screen->id;
+		if(strpos($screenid, 'page_delibera') !== false || $screenid == 'pauta' )
+		{
+			wp_enqueue_script('delibera-module-vote',WP_PLUGIN_URL.'/delibera/modules/vote/assets/js/vote.js', array('jquery'));
+		}
 	}
 	
 	public function publishPauta($postID, $opt)
@@ -188,9 +216,70 @@ class Vote extends \Delibera\Modules\ModuleBase
 	{
 		if(array_key_exists('prazo_votacao', $_POST))
 		{
-			$events_meta['prazo_votacao'] = $_POST['prazo_votacao'];
+			$events_meta['prazo_votacao'] = sanitize_text_field($_POST['prazo_votacao']);
 		}
-		
+		if(array_key_exists('delibera_comment_add_list', $_POST) && array_key_exists('post_id', $_POST )  )
+		{
+			if(is_array($_POST['delibera_comment_add_list']))
+			{
+				global $post, $current_user;
+				if(!is_object($post))
+				{
+					$post = get_post($_POST['post_id']);
+				}
+				get_currentuserinfo();
+				
+				$all_saved_vote_options = delibera_get_comments_encaminhamentos($post->ID);
+				$all_saved_vote_options = array_object_value_recursive('comment_ID', $all_saved_vote_options);
+				
+				foreach ($_POST['delibera_comment_add_list'] as $vote_option)
+				{
+					$vote_option = explode(',', $vote_option);
+					if($vote_option[0] == '')
+					{
+						$commentdata = array(
+								'comment_post_ID' => $post->ID, 
+								'comment_author' => $current_user->dispay_name, 
+								'comment_author_email' => $current_user->user_mail, 
+								'comment_author_url' => '',
+								'comment_content' => wp_kses_data( (string) $vote_option[1]),
+								'comment_type' => '',
+								'comment_parent' => 0,
+								'user_id' => $current_user->ID,
+						);
+						//Insert new comment and get the comment ID
+						$comment_id = wp_new_comment( $commentdata );
+						
+						add_comment_meta($comment_id, 'delibera_comment_tipo', 'encaminhamento', true);
+						$nencaminhamentos = get_post_meta($comment_id, 'delibera_numero_comments_encaminhamentos', true);
+						$nencaminhamentos++;
+						update_post_meta($comment_id, 'delibera_numero_comments_encaminhamentos', $nencaminhamentos);
+						wp_set_comment_status($comment_id, 'approve');
+					}
+					else 
+					{
+						$comment_tmp_id = substr($vote_option[0], strlen('vote-comment-id-'));
+						$comment = get_comment($comment_tmp_id, ARRAY_A);
+						if(is_array($comment))
+						{
+							$comment['comment_content'] = wp_kses_data( (string) $vote_option[1]);
+							wp_update_comment($comment);
+							$all_saved_vote_options = array_diff($all_saved_vote_options, array($comment_tmp_id));	
+						}
+						else 
+						{
+							//TODO parse comment error
+						}
+					}
+				}
+
+				foreach ($all_saved_vote_options as $comment_delete_id)
+				{
+					wp_delete_comment($comment_delete_id);
+				}
+				
+			}
+		}
 		return $events_meta;
 	}
 	
