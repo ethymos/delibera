@@ -131,15 +131,15 @@ class Result extends \Delibera\Modules\ModuleBase
 	
 	/**
 	 * Validate topic required data 
-	 * @param array $erros erros report array
+	 * @param array $errors erros report array
 	 * @param array $opt Delibera configs
 	 * @param bool $autosave is autosave?
 	 * @return array erros report array append if needed
 	 */
-	public function checkPostData($erros, $opt, $autosave)
+	public function checkPostData($errors, $opt, $autosave)
 	{
 		
-		return $erros;
+		return $errors;
 	}
 	
 	/**
@@ -187,7 +187,7 @@ class Result extends \Delibera\Modules\ModuleBase
 	 * 
 	 * @return array events_meta to be save on the topic
 	 */
-	public function savePostMetas($events_meta, $opt)
+	public function savePostMetas($events_meta, $opt, $post_id = false)
 	{
 		return $events_meta;
 	}

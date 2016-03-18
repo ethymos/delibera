@@ -169,15 +169,15 @@ class Discussion extends \Delibera\Modules\ModuleBase
 		
 	}
 	
-	function checkPostData($erros, $opt, $autosave)
+	function checkPostData($errors, $opt, $autosave)
 	{
 		$value = $_POST['prazo_discussao'];
 		$valida = delibera_tratar_data($value);
 		if(!$autosave && ($valida === false || $valida < 1))
 		{
-			$erros[] = __("É necessário definir corretamente o prazo de discussão", "delibera");
+			$errors[] = __("É necessário definir corretamente o prazo de discussão", "delibera");
 		}
-		return $erros;
+		return $errors;
 	}
 	
 	public function replacePautas($matches)
@@ -204,7 +204,7 @@ class Discussion extends \Delibera\Modules\ModuleBase
 				
 	}
 	
-	public function savePostMetas($events_meta, $opt)
+	public function savePostMetas($events_meta, $opt, $post_id = false)
 	{
 		if(array_key_exists('prazo_discussao', $_POST))
 		{

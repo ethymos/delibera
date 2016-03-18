@@ -207,27 +207,27 @@ class Validation extends \Delibera\Modules\ModuleBase
 	
 	/**
 	 * Validate topic required data 
-	 * @param array $erros erros report array
+	 * @param array $errors erros report array
 	 * @param array $opt Delibera configs
 	 * @param bool $autosave is autosave?
 	 * @return array erros report array append if needed
 	 */
-	public function checkPostData($erros, $opt, $autosave)
+	public function checkPostData($errors, $opt, $autosave)
 	{
 		$value = $_POST['prazo_validacao'];
 		$valida = delibera_tratar_data($value);
 		if(!$autosave && ($valida === false || $valida < 1))
 		{
-			$erros[] = __("É necessário definir corretamente o prazo de validação", "delibera");
+			$errors[] = __("É necessário definir corretamente o prazo de validação", "delibera");
 		}
 		
 		$value = (int)$_POST['min_validacoes'];
 		$valida = is_int($value) && $value > 0;
 		if(!$autosave && ($valida === false))
 		{
-			$erros[] = __("É necessário definir corretamente o número mínimo de validações", "delibera");
+			$errors[] = __("É necessário definir corretamente o número mínimo de validações", "delibera");
 		}
-		return $erros;
+		return $errors;
 	}
 	
 	/**
@@ -272,7 +272,7 @@ class Validation extends \Delibera\Modules\ModuleBase
 	 * 
 	 * @return array events_meta to be save on the topic
 	 */
-	public function savePostMetas($events_meta, $opt)
+	public function savePostMetas($events_meta, $opt, $post_id = false)
 	{
 		if( // Se tem validação, tem que ter o prazo
 			(array_key_exists('prazo_validacao', $_POST) && array_key_exists('min_validacoes', $_POST) )

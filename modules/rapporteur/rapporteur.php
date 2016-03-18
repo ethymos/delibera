@@ -204,13 +204,13 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 		
 	}
 	
-	function checkPostData($erros, $opt, $autosave)
+	function checkPostData($errors, $opt, $autosave)
 	{
 		$value = $_POST ['prazo_relatoria'];
 		$valida = delibera_tratar_data ( $value );
 		if (! $autosave && ($valida === false || $valida < 1))
 		{
-			$erros [] = __ ( "É necessário definir corretamente o prazo para relatoria", "Delibera" );
+			$errors [] = __ ( "É necessário definir corretamente o prazo para relatoria", "Delibera" );
 		}
 		
 		if ($opt ['eleicao_relator'] == 'S')
@@ -219,14 +219,14 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 			$valida = delibera_tratar_data ( $value );
 			if (! $autosave && ($valida === false || $valida < 1))
 			{
-				$erros [] = __ ( "É necessário definir corretamente o prazo para eleição de um relator", "delibera" );
+				$errors [] = __ ( "É necessário definir corretamente o prazo para eleição de um relator", "delibera" );
 			}
 		}
 
-		return $erros;
+		return $errors;
 	}
 	
-	public function savePostMetas($events_meta, $opt)
+	public function savePostMetas($events_meta, $opt, $post_id = false)
 	{
 		if(
 			// Se tem relatoria, tem que ter o prazo
