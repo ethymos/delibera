@@ -133,6 +133,9 @@ function delibera_publish_pauta($post)
 	delibera_notificar_nova_pauta($postID);
 }
 add_action ('draft_to_publish', 'delibera_publish_pauta', 1, 1);
+add_action ('pending_to_publish', 'delibera_publish_pauta', 1, 1);
+add_action ('auto-draft_to_publish', 'delibera_publish_pauta', 1, 1);
+add_action ('new_to_publish', 'delibera_publish_pauta', 1, 1);
 
 /**
  * 
@@ -142,15 +145,15 @@ add_action ('draft_to_publish', 'delibera_publish_pauta', 1, 1);
 function delibera_check_post_data($data, $postarr)
 {
 	$opt = delibera_get_config();
-	$erros = array();
+	$errors = array();
 	$autosave = ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE );
 	if(get_post_type() == 'pauta' && (!isset($_REQUEST['action']) || $_REQUEST['action'] != 'trash'))
 	{
 		
-		$erros == apply_filters('delibera_check_post_data', $erros, $opt, $autosave);
+		$errors == apply_filters('delibera_check_post_data', $errors, $opt, $autosave);
 		
 		if(
-			count($erros) == 0
+			count($errors) == 0
 		)
 		{
 			return $data;
@@ -158,7 +161,7 @@ function delibera_check_post_data($data, $postarr)
 		else
 		{
 			//wp_die(__('Erro ao salvar dados da pauta, faltando informações de prazos e validações mínimas!','delibera'));
-			wp_die(implode("<BR/>", $erros));
+			wp_die(implode("<BR/>", $errors));
 		}
 	}
 	return $data;
@@ -266,7 +269,7 @@ function delibera_save_post($post_id, $post)
         /* ######### FOR PDF UPLOAD FILE ######### */
         /* ######### END ######### */
 	        
-	$events_meta = apply_filters('delibera_save_post_metas', $events_meta, $opt);
+	$events_meta = apply_filters('delibera_save_post_metas', $events_meta, $opt, $post_id);
 
 	foreach ($events_meta as $key => $value) // Buscar dados
 	{
