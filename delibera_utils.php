@@ -214,7 +214,7 @@ if(!function_exists('array_object_value_recursive'))
 	 *
 	 * @param $key string
 	 * @param $arr array
-	 * @return null|string|array
+	 * @return array
 	 */
 	function array_object_value_recursive($key, array $arr)
 	{
@@ -226,6 +226,6 @@ if(!function_exists('array_object_value_recursive'))
 				array_push($val, $v->$key);
 			}
 		});
-		return count($val) > 1 ? $val : array_pop($val);
+		return $val;
 	}
 }
