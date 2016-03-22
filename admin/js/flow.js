@@ -20,7 +20,7 @@ var sortorder = '';
 function deliberaUpdateFlow()
 {
 	sortorder = '';
-	jQuery('.delibera-flow-panel').find('#column2').each(function()
+	jQuery('.delibera-flow-panel').find('#delibera-flow-column2').each(function()
 	{
 		var itemorder = jQuery(this).sortable('toArray', { attribute: 'class'} );
 		for (i = 0; i < itemorder.length; i++)
@@ -31,6 +31,32 @@ function deliberaUpdateFlow()
 		sortorder += itemorder.toString();
 	});
 	jQuery('#delibera_flow').val(sortorder);
+	jQuery('#delibera-flow-column2').trigger('deliberaUpdateFlow');
+	if(delibera_admin_flow.post_id != '')
+	{
+		updateDates();
+	}
+}
+
+Date.prototype.addDays = function(days)
+{
+    var dat = new Date(this.valueOf());
+    dat.setDate(dat.getDate() + days);
+    return dat;
+}
+
+function updateDates()
+{
+	var boxes = jQuery('#delibera-flow-column2').find('.dragbox');
+	var lastDate = new Date();
+	for (var i = 0; i < boxes.length; i++)
+	{
+		var dateinput = jQuery(boxes[i]).find('input.hasDatepicker');
+		var daysinput = jQuery(boxes[i]).find('input.delibera_flow_module_days');
+		var daysToAdd = Number(jQuery(daysinput).val());
+		lastDate = lastDate.addDays(daysToAdd);
+		jQuery(dateinput).val( ('00' + lastDate.getDate()).slice(-2) + "/" + ('00' + (lastDate.getMonth()+1)).slice(-2) + "/" + lastDate.getFullYear());
+	}
 }
 
 jQuery(document).ready(function() {
@@ -42,8 +68,8 @@ jQuery(document).ready(function() {
 		deliberaFlowRemove(this);
 	});
 
-	jQuery('.column').sortable({
-		connectWith : '.column',
+	jQuery('.delibera-flow-column').sortable({
+		connectWith : '.delibera-flow-column',
 		handle : 'h2',
 		cursor : 'move',
 		placeholder : 'placeholder',
@@ -76,14 +102,17 @@ jQuery(document).ready(function() {
 			});
 			jQuery(ui.item).find("input").prop('disabled', false);
 			deliberaUpdateFlow();
+			if(delibera_admin_flow.post_id != '') {
+				jQuery(ui.item).find('.dragbox-content').show();
+			}
 		}
 	});
-	jQuery('.delibera-flow-panel').find("#column2").sortable({
+	jQuery('.delibera-flow-panel').find("#delibera-flow-column2").sortable({
 		receive : function(e, ui) {
 			copyHelper = null;
 		}
 	});
-	jQuery('.delibera-flow-panel').find("#column1").sortable({
+	jQuery('.delibera-flow-panel').find("#delibera-flow-column1").sortable({
 		receive : function(e, ui) {
 			if(ui.item.hasClass("clone"))
 			{
@@ -93,11 +122,11 @@ jQuery(document).ready(function() {
 	});
 	if(delibera_admin_flow.post_id == '')
 	{
-		jQuery('.delibera-flow-panel').find("#column2").find("input").prop('disabled', true);
+		jQuery('.delibera-flow-panel').find("#delibera-flow-column2").find("input").prop('disabled', true);
 	}
 	else
 	{
-		jQuery('.delibera-flow-panel').find("#column1").find("input").prop('disabled', true);
+		jQuery('.delibera-flow-panel').find("#delibera-flow-column1").find("input").prop('disabled', true);
 	}
 	
 	jQuery('.delibera-flow-panel').find("input.dragbox-bt-save").click(function(){
@@ -110,13 +139,13 @@ jQuery(document).ready(function() {
         };
 		if(delibera_admin_flow.post_id == '')
 		{
-			jQuery('.delibera-flow-panel').find('#column1').find('input:not(input[type=button], input[type=submit], input[type=reset]), textarea, select').each(function(){
+			jQuery('.delibera-flow-panel').find('#delibera-flow-column1').find('input:not(input[type=button], input[type=submit], input[type=reset]), textarea, select').each(function(){
 				data[this.name] = this.value;
 			});
 		}
 		else
 		{
-			jQuery('.delibera-flow-panel').find('#column2').find('input:not(input[type=button], input[type=submit], input[type=reset]), textarea, select').each(function(){
+			jQuery('.delibera-flow-panel').find('#delibera-flow-column2').find('input:not(input[type=button], input[type=submit], input[type=reset]), textarea, select').each(function(){
 				if(this.name.indexOf('[') > -1)
 				{
 					if(data[this.name] == null)

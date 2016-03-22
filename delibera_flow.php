@@ -434,6 +434,7 @@ class Flow
 					}
 					?>
 				</div>
+				<input type="hidden" class="delibera_flow_module_days" value="<?php echo $module->getDeadlineDays(); ?>" />
 			</div>
 			<?php
 		}
@@ -452,13 +453,13 @@ class Flow
 			?>
 			<input type="hidden" id="delibera-flow-postid" name="delibera-flow-postid" value="<?php the_ID(); ?>" />
 			<input type="hidden" id="delibera_flow" name="delibera_flow" value="<?php echo implode(',', $flow); ?>" />
-			<div class="column" id="column1">
+			<div class="delibera-flow-column" id="delibera-flow-column1">
 			<?php 
 				$this->listModulesConfigBoxes($post);
 			?>
 			</div>
 			<input type="button" class="dragbox-bt-save" value="<?php _e('Save', 'delibera'); ?>" />
-			<div class="column" id="column2" >
+			<div class="delibera-flow-column" id="delibera-flow-column2" >
 			<?php 
 				$this->listModulesConfigBoxes($post, $flow);
 			?>

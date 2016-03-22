@@ -8,14 +8,14 @@
     position: relative;
 }
 
-.delibera-flow-panel .column{
+.delibera-flow-panel .delibera-flow-column{
 	width:49%;
 	margin-right:.5%;
 	min-height:150px;
 	background:#fff;
 	float:left;
 }
-.delibera-flow-panel .column .dragbox{
+.delibera-flow-panel .delibera-flow-column .dragbox{
 	margin:5px 2px  20px;
 	background:#fff;
 	position:"relative";
@@ -23,8 +23,8 @@
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
 }
-#poststuff .delibera-flow-panel .column .dragbox h2,
-.delibera-flow-panel .column .dragbox h2 {
+#poststuff .delibera-flow-panel .delibera-flow-column .dragbox h2,
+.delibera-flow-panel .delibera-flow-column .dragbox h2 {
 	margin:0;
 	font-size:12px;
 	background:#946553;
@@ -40,7 +40,7 @@
 	min-height:100px; margin:5px;
 	font-family:'Lucida Grande', Verdana; font-size:0.8em; line-height:1.5em;
 }
-.delibera-flow-panel .column  .placeholder{
+.delibera-flow-panel .delibera-flow-column  .placeholder{
 	background: #EED5B7;
 	border:1px dashed #946553;
 }
@@ -68,14 +68,14 @@ margin:0px 2px;
 	cursor: pointer;
 }
 
-.delibera-flow-panel-config #column2 .ui-sortable-handle span:last-child {
+.delibera-flow-panel-config #delibera-flow-column2 .ui-sortable-handle span:last-child {
     display: none;
 }
 
-.delibera-flow-panel-config #column2 .dragbox-content {
+.delibera-flow-panel-config #delibera-flow-column2 .dragbox-content {
     display: none;
 }
 
-.delibera-flow-panel-post #column1 h2 span {
+.delibera-flow-panel-post #delibera-flow-column1 h2 span {
     display: none;
 }
