@@ -35,7 +35,23 @@ function deliberaUpdateFlow()
 	if(delibera_admin_flow.post_id != '')
 	{
 		updateDates();
+		deliberaHideUsedModules()
+		
 	}
+}
+
+function deliberaHideUsedModules()
+{
+	/** remove after multiple of the same has implemented **/
+	var boxes = jQuery('#delibera-flow-column2').find('.dragbox');
+	jQuery('.delibera-flow-panel').find("#delibera-flow-column1").find('.dragbox').show();
+	for (var i = 0; i < boxes.length; i++)
+	{
+	  var itemclass = jQuery(boxes[i]).attr('class').replace("dragbox ", "").replace(" clone", "");
+	  //console.log(itemclass);
+	  jQuery('.delibera-flow-panel').find("#delibera-flow-column1").find("."+itemclass).hide();
+	}
+	/** END remove after multiple of the same has implemented **/
 }
 
 Date.prototype.addDays = function(days)
@@ -60,6 +76,7 @@ function updateDates()
 }
 
 jQuery(document).ready(function() {
+	deliberaHideUsedModules();
 	jQuery('.delibera-flow-panel').find('span.maxmin').click(function() {
 		deliberaFlowToggle(this);
 	});
@@ -102,7 +119,7 @@ jQuery(document).ready(function() {
 			});
 			jQuery(ui.item).find("input").prop('disabled', false);
 			deliberaUpdateFlow();
-			if(delibera_admin_flow.post_id != '') {
+			if(delibera_admin_flow.post_id != '' && ui.item.parent().attr('id') != 'delibera-flow-column1' ) {
 				jQuery(ui.item).find('.dragbox-content').show();
 			}
 		}
@@ -175,7 +192,7 @@ jQuery(document).ready(function() {
             data,
             function(response) {
             	if(response == 'ok')
-            		alert("OK");
+            		alert("Saved");
             		//window.location.reload(true);
             	else
             		alert("Errors");
