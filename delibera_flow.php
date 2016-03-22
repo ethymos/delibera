@@ -338,6 +338,8 @@ class Flow
 		$module = \Delibera\Flow::getCurrentModule($post_id);
 	
 		$deadline = $module->getDeadline($post_id);
+		
+		if($deadline == -1) return $deadline;
 	
 		$dateTimeNow = new \DateTime();
 		$deadlineDate = \DateTime::createFromFormat('d/m/Y H:i:s', $deadline." 23:59:59");

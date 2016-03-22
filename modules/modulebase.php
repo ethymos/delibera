@@ -154,6 +154,8 @@ abstract class ModuleBase
 	 */
 	public function getDeadline($post_id = false)
 	{
+		if( empty($this->prazo_meta) ) return -1; // Do not have prazo
+		
 		if($post_id == false)
 		{
 			$post_id = get_the_ID();
@@ -220,6 +222,7 @@ abstract class ModuleBase
 						$dateTime = \DateTime::createFromFormat('d/m/Y', $prazo_date);
 						$dateTime->add(new \DateInterval('P'.$appendDays.'D'));
 						$prazo_date = $dateTime->format('d/m/Y');
+						update_post_meta($post_id, $prazo, $prazo_date);
 					}
 					
 					\Delibera\Cron::del($post_id, array(get_class($this), 'deadline'));
