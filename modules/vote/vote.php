@@ -24,6 +24,12 @@ class Vote extends \Delibera\Modules\ModuleBase
 	 */
 	protected $prazo_meta = 'prazo_votacao';
 	
+	/**
+	 * Config days to make new deadline
+	 * @var array
+	 */
+	protected $days = array('dias_votacao');
+	
 	public function __construct()
 	{
 		parent::__construct();
@@ -146,7 +152,7 @@ class Vote extends \Delibera\Modules\ModuleBase
 			<input <?php echo $disable_edicao ?> name="prazo_votacao" class="prazo_votacao widefat hasdatepicker" value="<?php echo $prazo_votacao; ?>"/>
 		</p>
 		
-		<div class="delibera_comment_list_panel">
+		<div class="delibera_comment_list_panel" style="display: none;">
 			<label class="label_opcoes_votacao"><?php _e('Opções de votação','delibera') ?>:</label>
 			<textarea class="delibera_comment_input_list" ></textarea><a class="btn_delibera_comment_createList" class="button" onclick="delibera_add_comment_input(this);return false;" href="#delibera_comment_input_list"><?php _e('Adicionar opção','delibera') ?></a>
 			<ul class="delibera_comment_add_current">

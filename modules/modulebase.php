@@ -3,7 +3,6 @@
 // PHP 5.3 and later:
 namespace Delibera\Modules;
 
-use JMS\SecurityExtraBundle\Security\Util\String;
 abstract class ModuleBase
 {
 
@@ -21,7 +20,7 @@ abstract class ModuleBase
 	
 	/**
 	 * 
-	 * @var String Name of module deadline metadata
+	 * @var string Name of module deadline metadata
 	 */
 	protected $prazo_meta = 'prazo';
 	
@@ -30,6 +29,12 @@ abstract class ModuleBase
 	 * @var array List of pair shotcode name => method
 	 */
 	protected $shortcodes = array();
+	
+	/**
+	 * Config days to make new deadline
+	 * @var array
+	 */
+	protected $days = array();
 	
 	public function __construct()
 	{
@@ -247,6 +252,20 @@ abstract class ModuleBase
 				}
 			}
 		}
+	}
+	
+	public function getDeadlineDays()
+	{
+		$days = 0;
+		$opt = delibera_get_config();
+		foreach ($this->days as $day)
+		{
+			if(array_key_exists($day, $opt))
+			{
+				$days += $opt[$day];
+			}
+		}
+		return $days;
 	}
 	
 }

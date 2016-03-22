@@ -24,6 +24,12 @@ class Validation extends \Delibera\Modules\ModuleBase
 	protected $prazo_meta = 'prazo_validacao';
 	
 	/**
+	 * Config days to make new deadline
+	 * @var array
+	 */
+	protected $days = array('dias_validacao');
+	
+	/**
 	 *
 	 * @var array List of pair shotcode name => method
 	 */

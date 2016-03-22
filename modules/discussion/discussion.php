@@ -31,6 +31,12 @@ class Discussion extends \Delibera\Modules\ModuleBase
 	protected $shorcodes = array('delibera_lista_de_pautas' => 'replacePautas' );
 	
 	/**
+	 * Config days to make new deadline
+	 * @var array
+	 */
+	protected $days = array('dias_discussao');
+	
+	/**
 	 * Register Tax for the module
 	 */
 	public function registerTax()

@@ -23,6 +23,11 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 	 */
 	protected $prazo_meta = array('relatoria' => 'prazo_relatoria', 'eleicao_relator' => 'prazo_eleicao_relator');
 	
+	/**
+	 * Config days to make new deadline
+	 * @var array
+	 */
+	protected $days = array('dias_relatoria', 'dias_votacao_relator');
 	
 	/**
 	 * Register Tax for the module
