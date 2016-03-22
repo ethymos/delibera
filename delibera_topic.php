@@ -150,11 +150,9 @@ function delibera_check_post_data($data, $postarr)
 	if(get_post_type() == 'pauta' && (!isset($_REQUEST['action']) || $_REQUEST['action'] != 'trash'))
 	{
 		
-		$errors == apply_filters('delibera_check_post_data', $errors, $opt, $autosave);
+		$errors = apply_filters('delibera_check_post_data', $errors, $opt, $autosave);
 		
-		if(
-			count($errors) == 0
-		)
+		if(count($errors) == 0)
 		{
 			return $data;
 		}

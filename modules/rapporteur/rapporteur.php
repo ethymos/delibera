@@ -213,7 +213,7 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 	{
 		$value = $_POST ['prazo_relatoria'];
 		$valida = delibera_tratar_data ( $value );
-		if (! $autosave && ($valida === false || $valida < 1))
+		if(!$autosave && (empty($value) ||  $valida === false || $valida < 1) )
 		{
 			$errors [] = __ ( "É necessário definir corretamente o prazo para relatoria", "Delibera" );
 		}
@@ -222,7 +222,7 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 		{
 			$value = $_POST ['prazo_eleicao_relator'];
 			$valida = delibera_tratar_data ( $value );
-			if (! $autosave && ($valida === false || $valida < 1))
+			if(!$autosave && (empty($value) ||  $valida === false || $valida < 1) )
 			{
 				$errors [] = __ ( "É necessário definir corretamente o prazo para eleição de um relator", "delibera" );
 			}

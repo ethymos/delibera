@@ -201,7 +201,7 @@ class Vote extends \Delibera\Modules\ModuleBase
 	{
 		$value = $_POST['prazo_votacao'];
 		$valida = delibera_tratar_data($value);
-		if(!$autosave && ($valida === false || $valida < 1))
+		if(!$autosave && (empty($value) ||  $valida === false || $valida < 1) )
 		{
 			$errors[] = __("É necessário definir corretamente o prazo para votação", "delibera");
 		}

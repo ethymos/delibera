@@ -523,7 +523,6 @@ class Flow
 		{
 			$errors[] = __("É necessário definir corretamente o fluxo da pauta", "delibera");
 		}
-		
 		return $errors;
 	}
 	
