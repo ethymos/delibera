@@ -292,7 +292,7 @@ class Flow
 		
 		$current = \Delibera\Flow::getCurrentModule($post_id);
 		\Delibera\Cron::del($post_id);
-		call_user_func(array(get_class($modules[$flow[$current]]), 'deadline'), array('post_id' => $post_id, 'prazo' => date('d/m/Y'), 'force' => true) );
+		call_user_func(array(get_class($current), 'deadline'), array('post_ID' => $post_id, 'prazo' => date('d/m/Y'), 'force' => true) );
 	}
 	
 	/**
