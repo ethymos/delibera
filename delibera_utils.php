@@ -209,8 +209,8 @@ function delibera_ultimas($tipo = 'pauta', $args = array(), $count = 5)
 if(!function_exists('array_object_value_recursive'))
 {
 	/**
-	 * Get all values from specific key in a multidimensional array
-	 * based on php.net
+	 * Get all values from specific key in a multidimensional array of objects
+	 * based on php.net http://php.net/manual/en/function.array-values.php
 	 *
 	 * @param $key string
 	 * @param $arr array
@@ -227,5 +227,24 @@ if(!function_exists('array_object_value_recursive'))
 			}
 		});
 		return $val;
+	}
+}
+
+if(!function_exists('array_value_recursive'))
+{
+	/**
+	 * Get all values from specific key in a multidimensional array
+	 * based on php.net http://php.net/manual/en/function.array-values.php
+	 * 
+	 * @param $key string
+	 * @param $arr array
+	 * @return null|string|array
+	 */
+	function array_value_recursive($key, array $arr){
+		$val = array();
+		array_walk_recursive($arr, function($v, $k) use($key, &$val){
+			if($k == $key) array_push($val, $v);
+		});
+			return count($val) > 1 ? $val : array_pop($val);
 	}
 }

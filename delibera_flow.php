@@ -570,16 +570,23 @@ class Flow
 		}
 		else 
 		{
-			foreach (array_keys(delibera_get_main_config()) as $option_name) {
-				if (isset($_POST[$option_name])) {
+			$rows = array();
+			$rows = apply_filters('delivera_config_page_rows', $rows, $opt);
+			$oldFlow = implode(',', $opt['delibera_flow']);
+			$configs_to_save = array_value_recursive('id', $rows); 
+			foreach (array_keys(delibera_get_main_config()) as $option_name) //TODO better way to do this
+			{
+				if (isset($_POST[$option_name]))
+				{
 					$opt[$option_name] = htmlspecialchars($_POST[$option_name]);
-				} else {
+				}
+				elseif( in_array($option_name, $configs_to_save) )
+				{
 					$opt[$option_name] = "N";
 				}
 			}
-			$old = $opt['delibera_flow'];
 			$opt['delibera_flow'] = $flow;
-			if(! update_option('delibera-config', $opt) && $old != $flow)
+			if(! update_option('delibera-config', $opt) && $oldFlow != implode(',', $flow) )
 			{
 				$all_errors = array(__('can not update flow', 'delibera'));
 			}
