@@ -36,7 +36,6 @@ function delibera_get_config() {
 }
 
 require_once('delibera_conf_themes.php');
-require_once('delibera_conf_roles.php');
 
 /**
  * Return Main Configuration from database
