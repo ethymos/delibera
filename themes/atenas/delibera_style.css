@@ -1,3 +1,4 @@
+/* GENERICS */
 .button {
   background: #166e87;
   border-radius: 7px;
@@ -5,13 +6,32 @@
   padding: 10px 20px;
   text-transform: uppercase;
   font-weight: bold;
+  display: inline-block;
 }
 
-#delibera-header {
+/*
+validacao - f67679
+discussao - d3c745
+relatoria - 283d7b
+votacao - 329534
+resolucao - 90248f
+*/
+
+.pauta-em-discussao .button { background-color: #d3c745; }
+.pauta-recusada .button { background-color: #283d7b; }
+.resolucao .button { background-color: #90248f; }
+
+
+/* HEADER */
+.delibera-header {
   background: 50% 50% url(images/topo.png) #fff no-repeat;
   padding: 50px 25px;
 }
-
+.page-title {
+  color: #000;
+  font-size: 36px;
+  font-weight: 700;
+}
 .delibera-boasvindas {
   color: #000;
   font-size: 16px;
@@ -19,15 +39,94 @@
   margin: 10px 0;
   max-width: 60%;
 }
-.page-title {
-  color: #000;
-  font-size: 36px;
-  font-weight: 700;
-}
-
-
-.delibera-apresentacao {
-
-}
-
+.delibera-participacao,
+.delibera-pagina-discussoes { display: inline-block; }
 .delibera-login { display: none; }
+.delibera-pagina-discussoes a{
+  background-color: transparent;
+  opacity: .8;
+  color: #fff;
+
+}
+
+/* ARCHIVE PAUTAS */
+.lista-de-pautas {
+  margin: 0 15px;
+}
+.lista-de-pautas .type-pauta {
+  box-sizing: border-box;
+  background-color: #58585a;
+  width: 33%;
+  display: inline-block;
+  padding: 30px;
+  border-radius: 7px;
+  border: 10px solid #fff;
+  vertical-align: top;
+  color: #fff;
+
+}
+.lista-de-pautas .type-pauta .entry-author,
+.lista-de-pautas .type-pauta .entry-date {
+  display: none;
+}
+.lista-de-pautas .type-pauta .entry-title {
+  height: 110px;
+  color: #fff;
+  line-height: normal;
+  margin: 0;
+  padding: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.lista-de-pautas .type-pauta .entry-content {
+  margin: 30px 0;
+  height: 210px;
+}
+
+.lista-de-pautas .type-pauta .archive-situacao {
+  vertical-align: top;
+  padding: 0 10px;
+  margin: 15px 0 0 0;
+  font-size: 12px;
+  display: inline-block;
+}
+.lista-de-pautas .type-pauta .entry-prazo {
+  width: 45%;
+  float: right;
+  text-align: right;
+  font-weight: bold;
+}
+.lista-de-pautas .type-pauta .entry-prazo .numero {
+  font-size: 28px;
+}
+.lista-de-pautas .type-pauta .entry-utility {
+  text-align: center;
+}
+.lista-de-pautas .type-pauta .entry-utility .comments-link {
+  background-color: #3dcff4;
+  padding: 5px 20px;
+  border-radius: 4px;
+}
+.lista-de-pautas .type-pauta .entry-utility .comments-link a {
+  color: #fff;
+}
+
+
+
+/* portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android) */
+@media (max-width:641px) {
+    .delibera-header {
+      background-size: cover;
+    }
+    .delibera-boasvindas {
+      max-width: 100%;
+    }
+    .lista-de-pautas .type-pauta {
+      width: 100%;
+    }
+    .lista-de-pautas .type-pauta .entry-title,
+    .lista-de-pautas .type-pauta .entry-content {
+      height: auto;
+    }
+}

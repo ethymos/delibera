@@ -4,7 +4,7 @@ function get_delibera_header() {
     $opt = delibera_get_config();
 	?>
 
-	<div id="delibera-header">
+	<div class="delibera-header">
 		<?php
 
 		$h = ( is_post_type_archive ( 'pauta' ) ) ? 'h1' : 'h2';
@@ -34,7 +34,6 @@ function get_delibera_header() {
             	?>
             	<a class="button" href="<?php echo get_page_link($about->ID); ?>"><?php _e( 'Saiba por que e como participar', 'delibera' ); ?></a>
             </p>
-        </div>
 		<p class="delibera-login">
 			<?php
 			if ( is_user_logged_in() )
@@ -62,8 +61,9 @@ function get_delibera_header() {
 		</p><!-- .delibera-login -->
 
 		<?php if ( ! ( is_home() || is_post_type_archive( 'pauta' ) ) ) : ?>
-			<p class="delibera-pagina-discussoes"><a href="<?php echo get_post_type_archive_link( 'pauta' ); ?>"><?php _e( 'Voltar à página de discussões', 'delibera' ); ?></a></p>
+			<p class="delibera-pagina-discussoes"><a class="button" href="<?php echo get_post_type_archive_link( 'pauta' ); ?>"><?php _e( 'Voltar à página de discussões', 'delibera' ); ?></a></p>
 		<?php endif; ?>
+    </div>
 	</div><!-- #delibera-header -->
 
 	<?php

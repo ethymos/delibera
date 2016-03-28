@@ -16,7 +16,7 @@
 				?>
 
 
-				<div id="lista-de-pautas">
+				<div class="lista-de-pautas">
 					<?php
 					// Chama o loop do arquivo
 					//wp_reset_query();
