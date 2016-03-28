@@ -152,7 +152,7 @@ resolucao - 90248f
 .banner-ciclo .title {
   color: #3dcff4;
   font-size: 36px;
-  font-weight: bold;
+  font-weight: 600;
 }
 .banner-ciclo .description {
   color: #000;
@@ -164,12 +164,33 @@ resolucao - 90248f
 .banner-ciclo .ciclos li {
   display: inline-block;
   color: #fff;
-  padding: 20px 30px;
+  padding: 15px 30px;
   margin: 20px 13px;
   font-weight: 600;
   line-height: 30px;
-  font-size: 24px;
+  font-size: 20px;
   border-radius: 5px;
+}
+.status-ciclo {
+  padding: 0 0 25px;
+}
+
+.status-ciclo .ciclos li {
+  background-color: #ccc;
+}
+
+/* SINGLE PAUTA */
+.single-pauta .pauta-content {
+  padding: 30px;
+}
+.single-pauta .type-pauta {
+  box-sizing: border-box;
+  background-color: #58585a;
+  display: inline-block;
+  padding: 30px;
+  border-radius: 7px;
+  vertical-align: top;
+  color: #fff;
 }
 
 

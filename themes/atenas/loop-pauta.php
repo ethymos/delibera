@@ -1,7 +1,23 @@
-<?php if ( have_posts() ) while ( have_posts() ) : the_post(); ?>
+<?php if ( have_posts() ) while ( have_posts() ) : the_post();
+	$status_pauta = sanitize_title(delibera_get_situacao($post->ID)->name);
+?>
+<div class="pauta-content <?php echo $status_pauta; ?>">
+
+	<div class="banner-ciclo status-ciclo">
+		<h3 class="title">Estágio da pauta</h3>
+		<ul class="ciclos">
+			<li class="pauta-em-validacao">1<br>Validação</li>
+			<li class="pauta-em-discussao">2<br>Discussão</li>
+			<li class="pauta-em-relatoria">3<br>Relatoria</li>
+			<li class="votacao">4<br>Votação</li>
+			<li class="resolucao">5<br>Resolução</li>
+		</ul>
+	</div>
+
+
 
 				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-					
+
 					<div id="leader">
 						<?php echo get_avatar( get_the_author_meta( 'user_email' ), 70 ); ?>
 						<h1 class="entry-title"><?php the_title(); ?></h1>
@@ -23,7 +39,7 @@
 								{?>
 									<a href="#delibera-comments">
 										<?php _e( 'Discuta', 'delibera' ); ?>
-										<?php comments_number( '', '('. __( 'Um comentário', 'delibera' ) . ')', '('. __( '% comentários', 'delibera' ) . ')' ); ?> 
+										<?php comments_number( '', '('. __( 'Um comentário', 'delibera' ) . ')', '('. __( '% comentários', 'delibera' ) . ')' ); ?>
 									</a>
 								<?php
 								}
@@ -32,18 +48,18 @@
 								?>
 									<a href="<?php echo wp_login_url( get_post_type() == "pauta" ? get_permalink() : delibera_get_comment_link());?>#delibera-comments">
 										<?php _e( 'Discuta', 'delibera' ); ?>
-										<?php comments_number( '', '('. __( 'Um comentário', 'delibera' ) . ')', '('. __( '% comentários', 'delibera' ) . ')' ); ?> 
+										<?php comments_number( '', '('. __( 'Um comentário', 'delibera' ) . ')', '('. __( '% comentários', 'delibera' ) . ')' ); ?>
 									</a>
 								<?php
 								}
 								?>
 							</div><!-- .entry-comment -->
-							
+
 							<div class="entry-attachment">
 							</div><!-- .entry-attachment -->
-							
+
 							<div class="entry-prazo">
-							
+
 								<?php
 								if ( \Delibera\Flow::getDeadlineDays( $post->ID ) == -1 )
 									_e( 'Prazo encerrado', 'delibera' );
@@ -63,14 +79,14 @@
 					<div class="entry-content">
 						<?php the_content(); ?>
 					</div><!-- .entry-content -->
-					
+
 					<div class="entry-utility">
 						<div class="entry-share">
 							<div class="share-twitter">
 								<script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
 								<a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
 							</div><!-- share-twitter -->
-							
+
 							<div class="share-facebook">
 								<div id="fb-root"></div>
 								<?php
@@ -78,7 +94,7 @@
 								if(function_exists('qtrans_getLanguage'))
 								{
 									$sitelang = qtrans_getLanguage();
-									
+
 									switch ( $sitelang ) {
 										case 'en':
 											$lang = 'en_US';
@@ -91,20 +107,20 @@
 											break;
 									}
 								}
-								
+
 								?>
 								<script src="http://connect.facebook.net/<?php echo $lang; ?>/all.js#appId=221052707924641&amp;xfbml=1"></script>
 								<fb:like href="<?php the_permalink() ?>" send="false" layout="button_count" width="90" show_faces="false" font="lucida grande" action="recommend"></fb:like>
 							</div>
-							
+
 							<div class="share-this">
 								<?php //sharethis_button(); ?>
 							</div>
 						</div>
 						<?php
-						
+
 						$situacao = delibera_get_situacao($post->ID);
-						
+
 						if ($situacao->slug != 'validacao') {
 							if(comments_open(get_the_ID()) && is_user_logged_in())
 							{
@@ -124,11 +140,11 @@
 							}
 						}
 						?>
-						
-						
+
+
 					</div><!-- .entry-utility -->
 				</div><!-- #post-## -->
-				
-				<?php comments_template( '', true ); ?>
 
+				<?php comments_template( '', true ); ?>
+</div>
 <?php endwhile; // end of the loop. ?>
