@@ -1,9 +1,9 @@
 /* GENERICS */
 .button {
-  background: #166e87;
-  border-radius: 7px;
+  background-color: #3dcff4;
   color: #fff;
-  padding: 10px 20px;
+  padding: 5px 20px;
+  border-radius: 5px;
   text-transform: uppercase;
   font-weight: bold;
   display: inline-block;
@@ -27,6 +27,9 @@ resolucao - 90248f
   background: 50% 50% url(images/topo.png) #fff no-repeat;
   padding: 50px 25px;
 }
+.delibera-header .button {
+    background: #166e87;
+}
 .page-title {
   color: #000;
   font-size: 36px;
@@ -39,16 +42,38 @@ resolucao - 90248f
   margin: 10px 0;
   max-width: 60%;
 }
+
 .delibera-participacao,
 .delibera-pagina-discussoes { display: inline-block; }
 .delibera-login { display: none; }
 .delibera-pagina-discussoes a{
   background-color: transparent;
-  opacity: .8;
+  opacity: .5;
   color: #fff;
 
 }
 
+/* FILTER BAR */
+
+.filter-bar {
+  width: 100%;
+  display: block;
+  clear: both;
+  float: left;
+}
+.filter-bar .title {
+  float: left;
+  margin: 15px 25px;
+}
+.filter-bar .title h2 {
+  font-size: 32px;
+  line-height: 43px;
+  padding: 0;
+}
+.filter-bar .actions {
+  float: right;
+  margin: 15px 30px;
+}
 /* ARCHIVE PAUTAS */
 .lista-de-pautas {
   margin: 0 15px;
@@ -105,8 +130,6 @@ resolucao - 90248f
 }
 .lista-de-pautas .type-pauta .entry-utility .comments-link {
   background-color: #3dcff4;
-  padding: 5px 20px;
-  border-radius: 4px;
 }
 .lista-de-pautas .type-pauta .entry-utility .comments-link a {
   color: #fff;

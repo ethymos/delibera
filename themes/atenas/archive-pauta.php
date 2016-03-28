@@ -6,7 +6,7 @@
 				// Chama o cabeçalho que apresenta o sistema de discussão
 				get_delibera_header();
 
-				delibera_filtros_gerar();
+				//delibera_filtros_gerar();
 
 
 
@@ -15,6 +15,15 @@
 
 				?>
 
+				<div class="filter-bar">
+					<div class="title">
+						<h2><?php echo _e('Todas as discussões', 'delibera'); ?></h2>
+					</div>
+					<div class="actions">
+						<a href="#" class="button">filtros</a>
+						<a href="#" class="button">nova pauta</a>
+					</div>
+				</div>
 
 				<div class="lista-de-pautas">
 					<?php
