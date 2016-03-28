@@ -68,11 +68,7 @@
 				*/
 				?>
 					<span class="comments-link button">
-						<?php if(comments_open(get_the_ID()) && is_user_logged_in()) { ?>
 							<a href="<?php echo delibera_get_comments_link(); ?>">
-						<?php } else { ?>
-							<a href="<?php echo wp_login_url( delibera_get_comment_link());?>">
-						<?php } ?>
 							<?php
 							// validacao,discussao,relatoria,emvotacao,comresolucao
 							switch ($status_pauta) {

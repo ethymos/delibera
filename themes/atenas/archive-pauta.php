@@ -36,6 +36,20 @@
 
 					?>
 
+					<div class="banner-ciclo">
+						<h3 class="title">Ciclo de vida de uma pauta</h3>
+						<p class="description">
+							Entenda como funciona o ciclo de pautas dentro do Delibera, <br>abaixo os possíveis ciclos.
+						</p>
+						<ul class="ciclos">
+							<li class="pauta-em-validacao">1<br>Validação</li>
+							<li class="pauta-em-discussao">2<br>Discussão</li>
+							<li class="pauta-em-relatoria">3<br>Relatoria</li>
+							<li class="votacao">4<br>Votação</li>
+							<li class="resolucao">5<br>Resolução</li>
+						</ul>
+					</div>
+
 
 					<div id="nav-below" class="navigation">
 						<?php if ( function_exists( 'wp_pagenavi' ) )

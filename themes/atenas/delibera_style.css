@@ -21,6 +21,11 @@ resolucao - 90248f
 .pauta-recusada .button { background-color: #283d7b; }
 .resolucao .button { background-color: #90248f; }
 
+.ciclos .pauta-em-validacao { background-color: #f67679; }
+.ciclos .pauta-em-discussao { background-color: #d3c745; }
+.ciclos .pauta-em-relatoria { background-color: #283d7b; }
+.ciclos .votacao { background-color: #329534; }
+.ciclos .resolucao { background-color: #90248f; }
 
 /* HEADER */
 .delibera-header {
@@ -63,7 +68,7 @@ resolucao - 90248f
 }
 .filter-bar .title {
   float: left;
-  margin: 15px 25px;
+  margin: 30px;
 }
 .filter-bar .title h2 {
   font-size: 32px;
@@ -72,7 +77,7 @@ resolucao - 90248f
 }
 .filter-bar .actions {
   float: right;
-  margin: 15px 30px;
+  margin: 30px;
 }
 /* ARCHIVE PAUTAS */
 .lista-de-pautas {
@@ -135,6 +140,34 @@ resolucao - 90248f
   color: #fff;
 }
 
+/* BANNER CICLO VIDAS */
+
+.banner-ciclo {
+  text-align: center;
+  padding: 60px 0;
+}
+.banner-ciclo .title {
+  color: #3dcff4;
+  font-size: 36px;
+  font-weight: bold;
+}
+.banner-ciclo .description {
+  color: #000;
+  font-size: 16px;
+  font-weight: 600;
+  max-width: 60%;
+  margin: 0 auto 30px auto;
+}
+.banner-ciclo .ciclos li {
+  display: inline-block;
+  color: #fff;
+  padding: 20px 30px;
+  margin: 20px 13px;
+  font-weight: 600;
+  line-height: 30px;
+  font-size: 24px;
+  border-radius: 5px;
+}
 
 
 /* portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android) */
