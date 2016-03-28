@@ -55,8 +55,11 @@ resolucao - 90248f
   background-color: transparent;
   opacity: .5;
   color: #fff;
-
 }
+.single-pauta .page-title,
+.single-pauta .delibera-apresentacao { display: inline-block; }
+.single-pauta .delibera-apresentacao { float: right; }
+.single-pauta .delibera-boasvindas { display: none; }
 
 /* FILTER BAR */
 

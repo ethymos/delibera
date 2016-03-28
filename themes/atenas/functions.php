@@ -10,7 +10,7 @@ function get_delibera_header() {
 		$h = ( is_post_type_archive ( 'pauta' ) ) ? 'h1' : 'h2';
 
 		$delibera_header = '<' . $h . ' class="page-title"><span>';
-		$delibera_header .= __( 'Seja bem vindo ao Delibera!', 'delibera' );
+		$delibera_header .= __( 'Conheça o Delibera', 'delibera' );
 		$delibera_header .= '</span></' . $h . '>';
 
 		echo $delibera_header;
@@ -32,7 +32,7 @@ function get_delibera_header() {
             		}
 
             	?>
-            	<a class="button" href="<?php echo get_page_link($about->ID); ?>"><?php _e( 'Saiba por que e como participar', 'delibera' ); ?></a>
+            	<a class="button" href="<?php echo get_page_link($about->ID); ?>"><?php _e( 'Saiba mais', 'delibera' ); ?></a>
             </p>
 		<p class="delibera-login">
 			<?php
@@ -61,7 +61,7 @@ function get_delibera_header() {
 		</p><!-- .delibera-login -->
 
 		<?php if ( ! ( is_home() || is_post_type_archive( 'pauta' ) ) ) : ?>
-			<p class="delibera-pagina-discussoes"><a class="button" href="<?php echo get_post_type_archive_link( 'pauta' ); ?>"><?php _e( 'Voltar à página de discussões', 'delibera' ); ?></a></p>
+			<p class="delibera-pagina-discussoes"><a class="button" href="<?php echo get_post_type_archive_link( 'pauta' ); ?>"><?php _e( 'Voltar à pautas', 'delibera' ); ?></a></p>
 		<?php endif; ?>
     </div>
 	</div><!-- #delibera-header -->
