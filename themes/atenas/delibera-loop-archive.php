@@ -2,11 +2,11 @@
 
 /*
  * O loop padrão do archive.php
- * 
+ *
  * Por enquanto, ele está apenas alinhado para funcionar com o Delibera. A ideia é deixa-lo específico
  * o suficiente pra trabalhar com datas, categorias, tags e até taxonomias, antes de, quem sabe, separar
  * os arquivos.
- * 
+ *
  */
 
 ?>
@@ -16,23 +16,23 @@
 ?>
 
 
-		<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+		<div id="post-<?php the_ID(); ?>" <?php post_class(sanitize_title(delibera_get_situacao($post->ID)->name)); ?>>
 			<h2 class="entry-title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
 
 			<div class="entry-meta">
-				
+
 				<span class="entry-author author vcard">
 					<?php _e( 'Discussão criada por', 'delibera' ); ?>
 					<a class="url fn n" href="<?php echo get_author_posts_url( get_the_author_meta( 'ID' ) ); ?>" title="<?php printf( __( 'Ver o perfil de %s', 'delibera' ), get_the_author() ); ?>">
 						<?php the_author(); ?>
 					</a>
 				</span><!-- entry-date -->
-				
+
 				<span class="entry-date">
 					<?php echo ' ' . __( 'em', 'delibera' ) . ' '; ?>
 					<?php the_date('m/d/y'); ?>
 				</span><!-- .entry-date -->
-			
+
 				<span class="entry-prazo">
 					<?php
 						if ( \Delibera\Flow::getDeadlineDays( $post->ID ) == -1 )
@@ -41,7 +41,7 @@
 							printf( _n( 'Encerra em um dia', 'Encerra em %1$s dias', \Delibera\Flow::getDeadlineDays( $post->ID ), 'delibera' ), number_format_i18n( \Delibera\Flow::getDeadlineDays( $post->ID ) ) );
 					?>
 				</span><!-- .entry-prazo -->
-				
+
 			</div><!-- .entry-meta -->
 
 	<?php if ( is_archive() || is_search() ) : // Only display excerpts for archives and search. ?>
@@ -93,8 +93,9 @@
 				?>
 					<span class="comments-link">
 						<a href="<?php echo wp_login_url( delibera_get_comment_link());?>">
+
 							<?php _e( 'Discuta', 'delibera' ); ?>
-							<?php comments_number( '', '('. __( 'Um comentário', 'delibera' ) . ')', '('. __( '% comentários', 'delibera' ) . ')' ); ?> 
+							<?php comments_number( '', '('. __( 'Um comentário', 'delibera' ) . ')', '('. __( '% comentários', 'delibera' ) . ')' ); ?>
 						</a>
 					</span>
 				<?php
