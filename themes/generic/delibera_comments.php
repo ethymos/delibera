@@ -1,7 +1,7 @@
 <?php
 
 require_once(ABSPATH . 'wp-admin/includes/screen.php');
-
+require_once(ABSPATH . 'wp-admin/includes/post.php');
 global $delibera_comments_padrao;
 
 $situacao = delibera_get_situacao($id);
@@ -35,7 +35,8 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
             <?php
                 global $delibera_comments_padrao;
                 // bug com Walker_Comment
-                //delibera_wp_list_comments( );
+
+                delibera_wp_list_comments();
             ?>
         </ol>
 
