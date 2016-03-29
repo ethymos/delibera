@@ -51,21 +51,21 @@
 								switch($situacao)
 								{
 									case 'validacao':?>
-										<li class="pauta-em-validacao"><?php echo $i; ?><br>Validação</li><?php
+										<li class="validacao"><?php echo $i; ?><br>Validação</li><?php
 									break;
 									case 'discussao': ?>
-										<li class="pauta-em-discussao"><?php echo $i; ?><br>Discussão</li><?php
+										<li class="discussao"><?php echo $i; ?><br>Discussão</li><?php
 									break;
 									case 'relatoria':
 									case 'eleicao_relator': ?>
-										<li class="pauta-em-relatoria"><?php echo $i; ?><br>Relatoria</li><?php
+										<li class="relatoria"><?php echo $i; ?><br>Relatoria</li><?php
 									break;
 									case 'emvotacao': ?>
-										<li class="regime-de-votacao"><?php echo $i; ?><br>Votação</li><?php
+										<li class="emvotacao"><?php echo $i; ?><br>Votação</li><?php
 									break;
 									case 'naovalidada':
 									case 'comresolucao': ?>
-										<li class="resolucao"><?php echo $i; ?><br>Resolução</li><?php
+										<li class="comresolucao"><?php echo $i; ?><br>Resolução</li><?php
 									break;
 								}
 								$i++;

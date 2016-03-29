@@ -1,5 +1,9 @@
 /* GENERICS */
 
+p {
+  font-size: 16px;
+}
+
 #submit,
 #submit:hover,
 .button {
@@ -22,15 +26,17 @@ votacao - 329534
 resolucao - 90248f
 */
 
-.pauta-em-discussao .button { background-color: #d3c745; }
-.pauta-recusada .button { background-color: #283d7b; }
-.resolucao .button { background-color: #90248f; }
+.validacao .button { background-color: #f67679; }
+.discussao .button { background-color: #d3c745; }
+.relatoria .button { background-color: #283d7b; }
+.emvotacao .button { background-color: #329534; }
+.comresolucao .button { background-color: #90248f; }
 
-.ciclos .pauta-em-validacao { background-color: #f67679; }
-.ciclos .pauta-em-discussao { background-color: #d3c745; }
-.ciclos .pauta-em-relatoria { background-color: #283d7b; }
-.ciclos .regime-de-votacao { background-color: #329534; }
-.ciclos .resolucao { background-color: #90248f; }
+.ciclos .validacao { background-color: #f67679; }
+.ciclos .discussao { background-color: #d3c745; }
+.ciclos .relatoria { background-color: #283d7b; }
+.ciclos .emvotacao { background-color: #329534; }
+.ciclos .comresolucao { background-color: #90248f; }
 
 /* HEADER */
 .delibera-header {
@@ -275,12 +281,19 @@ resolucao - 90248f
       height: auto;
     }
 
+    .single-pauta .delibera-apresentacao {
+      float: none;
+    }
     .single-pauta .pauta-content {
       padding: 15px;
     }
-
+    .single-pauta .social-buttons {
+      margin: 20px 0 0;
+    }
+    .single-pauta .type-pauta .entry-prazo,
     .single-pauta .type-pauta .entry-title {
       width: 100%;
+      float: none;
     }
     .banner-ciclo .ciclos li {
       font-size: 12px;
@@ -288,5 +301,30 @@ resolucao - 90248f
       margin: 15px 0 0;
       padding: 2px 0;
       width: 19%;
+    }
+
+    /* PROPRIEDADE FIXADA PARA TEMA DIVI */
+    .et_boxed_layout #page-container,
+    .et_boxed_layout.et_non_fixed_nav.et_transparent_nav #page-container #top-header,
+    .et_non_fixed_nav.et_transparent_nav.et_boxed_layout #page-container #main-header,
+    .et_fixed_nav.et_boxed_layout #page-container #top-header,
+    .et_fixed_nav.et_boxed_layout #page-container #main-header,
+    .et_boxed_layout #page-container .container,
+    .et_boxed_layout #page-container .et_pb_row,
+    .et_boxed_layout.et_pb_pagebuilder_layout.single.et_full_width_page #page-container .et_pb_row,
+    .et_boxed_layout.et_pb_pagebuilder_layout.single.et_full_width_portfolio_page #page-container .et_pb_row,
+    .et_boxed_layout.et_pb_pagebuilder_layout.single #page-container .et_pb_row {
+      width: 100%;
+    }
+
+    .delibera-comment-body {
+      padding: 15px;
+      margin: 15px 0;
+      background-color: #a8e7f9;
+    }
+    .delibera-comment-text {
+      color: #535550;
+      font-weight: 600;
+      font-size: 16px;
     }
 }

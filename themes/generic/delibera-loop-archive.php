@@ -13,7 +13,7 @@
 
 <?php
 	if ( have_posts() ) : while ( have_posts() ) : the_post();
-	$status_pauta = sanitize_title(delibera_get_situacao($post->ID)->name);
+	$status_pauta = delibera_get_situacao($post->ID)->slug;
 ?>
 
 
