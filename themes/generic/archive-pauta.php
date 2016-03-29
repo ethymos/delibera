@@ -34,6 +34,9 @@
 
 					load_template(dirname(__FILE__).DIRECTORY_SEPARATOR.'delibera-loop-archive.php', true);
 
+					$options_plugin_delibera = delibera_get_config();
+					$default_flow = isset($options_plugin_delibera['delibera_flow']) ? $options_plugin_delibera['delibera_flow'] : array();
+					$default_flow = apply_filters('delibera_flow_list', $default_flow);
 					?>
 
 					<div class="banner-ciclo">
@@ -41,12 +44,32 @@
 						<p class="description">
 							Entenda como funciona o ciclo de pautas dentro do Delibera, <br>abaixo os possíveis ciclos.
 						</p>
-						<ul class="ciclos">
-							<li class="validacao">1<br>Validação</li>
-							<li class="discussao">2<br>Discussão</li>
-							<li class="relatoria">3<br>Relatoria</li>
-							<li class="emvotacao">4<br>Votação</li>
-							<li class="comresolucao">5<br>Resolução</li>
+						<ul class="ciclos"><?php
+							$i = 1;
+							foreach ($default_flow as $situacao)
+							{
+								switch($situacao)
+								{
+									case 'validacao':?>
+										<li class="validacao"><?php echo $i; ?><br>Validação</li><?php
+									break;
+									case 'discussao': ?>
+										<li class="discussao"><?php echo $i; ?><br>Discussão</li><?php
+									break;
+									case 'relatoria':
+									case 'eleicao_relator': ?>
+										<li class="relatoria"><?php echo $i; ?><br>Relatoria</li><?php
+									break;
+									case 'emvotacao': ?>
+										<li class="emvotacao"><?php echo $i; ?><br>Votação</li><?php
+									break;
+									case 'naovalidada':
+									case 'comresolucao': ?>
+										<li class="comresolucao"><?php echo $i; ?><br>Resolução</li><?php
+									break;
+								}
+								$i++;
+							}?>
 						</ul>
 					</div>
 

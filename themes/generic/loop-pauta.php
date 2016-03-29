@@ -1,17 +1,39 @@
 <?php if ( have_posts() ) while ( have_posts() ) : the_post();
 	$status_pauta = delibera_get_situacao($post->ID)->slug;
 //echo $status_pauta;
+	global $DeliberaFlow;
+	$flow = $DeliberaFlow->get(get_the_ID());
 ?>
 <div class="pauta-content <?php echo $status_pauta; ?>">
 
 	<div class="banner-ciclo status-ciclo">
 		<h3 class="title">Estágio da pauta</h3>
-		<ul class="ciclos">
-			<li class="validacao <?php echo ($status_pauta != 'validacao' ? 'inactive' : ''); ?>">1<br>Validação</li>
-			<li class="discussao <?php echo ($status_pauta != 'discussao' ? 'inactive' : ''); ?>">2<br>Discussão</li>
-			<li class="relatoria <?php echo ($status_pauta != 'relatoria' ? 'inactive' : ''); ?>">3<br>Relatoria</li>
-			<li class="emvotacao <?php echo ($status_pauta != 'emvotacao' ? 'inactive' : ''); ?>">4<br>Votação</li>
-			<li class="comresolucao <?php echo ($status_pauta != 'comresolucao' ? 'inactive' : ''); ?>">5<br>Resolução</li>
+		<ul class="ciclos"><?php
+			$i = 1;
+			foreach ($flow as $situacao)
+			{
+				switch($situacao)
+				{
+					case 'validacao':?>
+						<li class="validacao <?php echo ($status_pauta != "validacao" ? "inactive" : ""); ?>"><?php echo $i; ?><br>Validação</li><?php
+					break;
+					case 'discussao': ?>
+						<li class="discussao <?php echo ($status_pauta != "discussao" ? "inactive" : ""); ?>"><?php echo $i; ?><br>Discussão</li><?php
+					break;
+					case 'relatoria':
+					case 'eleicao_relator': ?>
+						<li class="relatoria <?php echo ($status_pauta != "relatoria" ? "inactive" : ""); ?>"><?php echo $i; ?><br>Relatoria</li><?php
+					break;
+					case 'emvotacao': ?>
+						<li class="emvotacao <?php echo ($status_pauta != "emvotacao" ? "inactive" : ""); ?>"><?php echo $i; ?><br>Votação</li><?php
+					break;
+					case 'naovalidada':
+					case 'comresolucao': ?>
+						<li class="comresolucao <?php echo ($status_pauta != "comresolucao" && $status_pauta != "naovalidada" ? "inactive" : ""); ?>"><?php echo $i; ?><br>Resolução</li><?php
+					break;
+				}
+				$i++;
+			}?>
 		</ul>
 	</div>
 
