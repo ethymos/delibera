@@ -476,3 +476,4 @@ function delibera_gerar_discordar($ID, $type ='pauta')
         return $html;
     }
 }
+require_once(dirname(__FILE__) . "/social-buttons.php");

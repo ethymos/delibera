@@ -1,12 +1,17 @@
 /* GENERICS */
+
+#submit,
+#submit:hover,
 .button {
   background-color: #3dcff4;
   color: #fff;
   padding: 5px 20px;
   border-radius: 5px;
+  border-style: none;
   text-transform: uppercase;
   font-weight: bold;
   display: inline-block;
+  font-size: 16px;
 }
 
 /*
@@ -175,7 +180,7 @@ resolucao - 90248f
   padding: 0 0 25px;
 }
 
-.status-ciclo .ciclos li {
+.status-ciclo .ciclos li.inactive {
   background-color: #ccc;
 }
 
@@ -192,7 +197,67 @@ resolucao - 90248f
   vertical-align: top;
   color: #fff;
 }
-
+.single-pauta .type-pauta .entry-author {
+  margin: 5px 0 15px 0;
+  font-weight: bold;
+  font-size: 18px;
+}
+.single-pauta .type-pauta .entry-print,
+.single-pauta .type-pauta .entry-seguir {
+  display: inline-block;
+  background: #ccc;
+  color: #777;
+  padding: 0px 15px;
+  font-size: 14px;
+}
+.single-pauta .type-pauta .entry-print a,
+.single-pauta .type-pauta .entry-seguir a {
+  font-size: 14px;
+  color: #777;
+}
+.social-buttons {
+  display: inline-block;
+}
+.social-buttons li {
+  display: inline-block;
+  width: 70px;
+  vertical-align: top;
+}
+.single-pauta .type-pauta .entry-title {
+  color: #fff;
+  font-size: 36px;
+  width: 75%;
+}
+.single-pauta .type-pauta .entry-content {
+  margin: 15px 0 0;
+}
+.single-pauta .type-pauta .entry-prazo {
+  width: 45%;
+  float: right;
+  text-align: right;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 36px;
+}
+.single-pauta .type-pauta .entry-prazo .numero {
+  font-size: 36px;
+}
+.single-pauta .comment-respond {
+  width: 80%;
+  margin: 40px auto;
+  text-align: center;
+}
+.single-pauta .comment-respond .comment-form-attachment {
+  display: none;
+}
+.single-pauta .comment-respond h3 {
+  color: #3dcff4;
+  font-size: 36px;
+  font-weight: 600;
+}
+.single-pauta .form-submit {
+  float: none;
+}
 
 /* portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android) */
 @media (max-width:641px) {

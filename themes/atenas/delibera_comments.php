@@ -20,9 +20,9 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
     endif; ?>
 
     <?php if (have_comments()) : ?>
-        <h3 id="<?php echo $delibera_comments_padrao === true ? 'comments-title' : 'delibera-comments-title'; ?>">
+        <!--h3 id="<?php echo $delibera_comments_padrao === true ? 'comments-title' : 'delibera-comments-title'; ?>">
             <?php comments_number(__('No responses'), __('One response'), __('% responses')); ?>
-        </h3>
+        </h3-->
 
         <?php if (get_comment_pages_count() > 1 && get_option('page_comments')) : // Are there comments to navigate through? ?>
             <div class="navigation">
