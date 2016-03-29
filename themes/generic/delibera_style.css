@@ -1,0 +1,277 @@
+/* GENERICS */
+
+#submit,
+#submit:hover,
+.button {
+  background-color: #3dcff4;
+  color: #fff;
+  padding: 5px 20px;
+  border-radius: 5px;
+  border-style: none;
+  text-transform: uppercase;
+  font-weight: bold;
+  display: inline-block;
+  font-size: 16px;
+}
+
+/*
+validacao - f67679
+discussao - d3c745
+relatoria - 283d7b
+votacao - 329534
+resolucao - 90248f
+*/
+
+.pauta-em-discussao .button { background-color: #d3c745; }
+.pauta-recusada .button { background-color: #283d7b; }
+.resolucao .button { background-color: #90248f; }
+
+.ciclos .pauta-em-validacao { background-color: #f67679; }
+.ciclos .pauta-em-discussao { background-color: #d3c745; }
+.ciclos .pauta-em-relatoria { background-color: #283d7b; }
+.ciclos .votacao { background-color: #329534; }
+.ciclos .resolucao { background-color: #90248f; }
+
+/* HEADER */
+.delibera-header {
+  background: 50% 50% url(images/topo.png) #fff no-repeat;
+  padding: 50px 25px;
+}
+.delibera-header .button {
+    background: #166e87;
+}
+.page-title {
+  color: #000;
+  font-size: 36px;
+  font-weight: 700;
+}
+.delibera-boasvindas {
+  color: #000;
+  font-size: 16px;
+  font-weight: 400;
+  margin: 10px 0;
+  max-width: 60%;
+}
+
+.delibera-participacao,
+.delibera-pagina-discussoes { display: inline-block; }
+.delibera-login { display: none; }
+.delibera-pagina-discussoes a{
+  background-color: transparent;
+  opacity: .5;
+  color: #fff;
+}
+.single-pauta .page-title,
+.single-pauta .delibera-apresentacao { display: inline-block; }
+.single-pauta .delibera-apresentacao { float: right; }
+.single-pauta .delibera-boasvindas { display: none; }
+
+/* FILTER BAR */
+
+.filter-bar {
+  width: 100%;
+  display: block;
+  clear: both;
+  float: left;
+}
+.filter-bar .title {
+  float: left;
+  margin: 30px;
+}
+.filter-bar .title h2 {
+  font-size: 32px;
+  line-height: 43px;
+  padding: 0;
+}
+.filter-bar .actions {
+  float: right;
+  margin: 30px;
+}
+/* ARCHIVE PAUTAS */
+.lista-de-pautas {
+  margin: 0 15px;
+}
+.lista-de-pautas .type-pauta {
+  box-sizing: border-box;
+  background-color: #58585a;
+  width: 33%;
+  display: inline-block;
+  padding: 30px;
+  border-radius: 7px;
+  border: 10px solid #fff;
+  vertical-align: top;
+  color: #fff;
+
+}
+.lista-de-pautas .type-pauta .entry-author,
+.lista-de-pautas .type-pauta .entry-date {
+  display: none;
+}
+.lista-de-pautas .type-pauta .entry-title {
+  height: 110px;
+  color: #fff;
+  line-height: normal;
+  margin: 0;
+  padding: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.lista-de-pautas .type-pauta .entry-content {
+  margin: 30px 0;
+  height: 210px;
+}
+
+.lista-de-pautas .type-pauta .archive-situacao {
+  vertical-align: top;
+  padding: 0 10px;
+  margin: 15px 0 0 0;
+  font-size: 12px;
+  display: inline-block;
+}
+.lista-de-pautas .type-pauta .entry-prazo {
+  width: 45%;
+  float: right;
+  text-align: right;
+  font-weight: bold;
+}
+.lista-de-pautas .type-pauta .entry-prazo .numero {
+  font-size: 28px;
+}
+.lista-de-pautas .type-pauta .entry-utility {
+  text-align: center;
+}
+.lista-de-pautas .type-pauta .entry-utility .comments-link {
+  background-color: #3dcff4;
+}
+.lista-de-pautas .type-pauta .entry-utility .comments-link a {
+  color: #fff;
+}
+
+/* BANNER CICLO VIDAS */
+
+.banner-ciclo {
+  text-align: center;
+  padding: 60px 0;
+}
+.banner-ciclo .title {
+  color: #3dcff4;
+  font-size: 36px;
+  font-weight: 600;
+}
+.banner-ciclo .description {
+  color: #000;
+  font-size: 16px;
+  font-weight: 600;
+  max-width: 60%;
+  margin: 0 auto 30px auto;
+}
+.banner-ciclo .ciclos li {
+  display: inline-block;
+  color: #fff;
+  padding: 15px 30px;
+  margin: 20px 13px;
+  font-weight: 600;
+  line-height: 30px;
+  font-size: 20px;
+  border-radius: 5px;
+}
+.status-ciclo {
+  padding: 0 0 25px;
+}
+
+.status-ciclo .ciclos li.inactive {
+  background-color: #ccc;
+}
+
+/* SINGLE PAUTA */
+.single-pauta .pauta-content {
+  padding: 30px;
+}
+.single-pauta .type-pauta {
+  box-sizing: border-box;
+  background-color: #58585a;
+  display: inline-block;
+  padding: 30px;
+  border-radius: 7px;
+  vertical-align: top;
+  color: #fff;
+}
+.single-pauta .type-pauta .entry-author {
+  margin: 5px 0 15px 0;
+  font-weight: bold;
+  font-size: 18px;
+}
+.single-pauta .type-pauta .entry-print,
+.single-pauta .type-pauta .entry-seguir {
+  display: inline-block;
+  background: #ccc;
+  color: #777;
+  padding: 0px 15px;
+  font-size: 14px;
+}
+.single-pauta .type-pauta .entry-print a,
+.single-pauta .type-pauta .entry-seguir a {
+  font-size: 14px;
+  color: #777;
+}
+.social-buttons {
+  display: inline-block;
+}
+.social-buttons li {
+  display: inline-block;
+  width: 70px;
+  vertical-align: top;
+}
+.single-pauta .type-pauta .entry-title {
+  color: #fff;
+  font-size: 36px;
+  width: 75%;
+}
+.single-pauta .type-pauta .entry-content {
+  margin: 15px 0 0;
+}
+.single-pauta .type-pauta .entry-prazo {
+  width: 45%;
+  float: right;
+  text-align: right;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 36px;
+}
+.single-pauta .type-pauta .entry-prazo .numero {
+  font-size: 36px;
+}
+.single-pauta .comment-respond {
+  width: 80%;
+  margin: 40px auto;
+  text-align: center;
+}
+.single-pauta .comment-respond .comment-form-attachment {
+  display: none;
+}
+.single-pauta .comment-respond h3 {
+  color: #3dcff4;
+  font-size: 36px;
+  font-weight: 600;
+}
+.single-pauta .form-submit {
+  float: none;
+}
+
+/* portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android) */
+@media (max-width:641px) {
+    .delibera-header {
+      background-size: cover;
+    }
+    .delibera-boasvindas {
+      max-width: 100%;
+    }
+    .lista-de-pautas .type-pauta {
+      width: 100%;
+    }
+    .lista-de-pautas .type-pauta .entry-title,
+    .lista-de-pautas .type-pauta .entry-content {
+      height: auto;
+    }
+}

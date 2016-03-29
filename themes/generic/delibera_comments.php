@@ -7,7 +7,7 @@ global $delibera_comments_padrao;
 $situacao = delibera_get_situacao($id);
 
 if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$delibera_comments_padrao === true) {
-    comment_form(); 
+    comment_form();
 }
 
 ?>
@@ -20,9 +20,9 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
     endif; ?>
 
     <?php if (have_comments()) : ?>
-        <h3 id="<?php echo $delibera_comments_padrao === true ? 'comments-title' : 'delibera-comments-title'; ?>">
+        <!--h3 id="<?php echo $delibera_comments_padrao === true ? 'comments-title' : 'delibera-comments-title'; ?>">
             <?php comments_number(__('No responses'), __('One response'), __('% responses')); ?>
-        </h3>
+        </h3-->
 
         <?php if (get_comment_pages_count() > 1 && get_option('page_comments')) : // Are there comments to navigate through? ?>
             <div class="navigation">
@@ -34,7 +34,8 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
         <ol class="commentlist">
             <?php
                 global $delibera_comments_padrao;
-                delibera_wp_list_comments( );
+                // bug com Walker_Comment
+                //delibera_wp_list_comments( );
             ?>
         </ol>
 
@@ -51,7 +52,7 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
         comment_form();
         if (function_exists('ecu_upload_form_default')) {
             ecu_upload_form_default();
-        } 
+        }
     }
     ?>
 </div><!-- #comments -->
@@ -59,8 +60,7 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
 	if ( !is_user_logged_in() )
 	{
 		printf(
-        __( 'Para participar, você precisa <a href="%1$s" title="Faça o login">fazer o login</a> ou <a href="%2$s" title="Registre-se" class="register">registrar-se no site</a>.', 'delibera' ), 
+        __( 'Para participar, você precisa <a href="%1$s" title="Faça o login">fazer o login</a> ou <a href="%2$s" title="Registre-se" class="register">registrar-se no site</a>.', 'delibera' ),
         wp_login_url( get_permalink() ),
         site_url('wp-login.php?action=register', 'login')."&lang=");
 	}
-	

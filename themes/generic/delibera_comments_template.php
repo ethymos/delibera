@@ -34,10 +34,10 @@ class Delibera_Walker_Comment extends Walker_Comment
 		}
 
 		$GLOBALS['comment'] = $comment;
-		
+
 		$tipo = get_comment_meta($comment->comment_ID, "delibera_comment_tipo", true);
 		$situacao = delibera_get_situacao($comment->comment_post_ID);
-		
+
 		extract($args, EXTR_SKIP);
 
 		if ( 'div' == $args['style'] ) {
@@ -60,7 +60,7 @@ class Delibera_Walker_Comment extends Walker_Comment
 			<?php
 				$url = get_author_posts_url($comment->user_id);
 				//print_r($comment);
-				$autor_link = "<a href='$url' rel='external nofollow' class='url'>$comment->comment_author</a>"; 
+				$autor_link = "<a href='$url' rel='external nofollow' class='url'>$comment->comment_author</a>";
 				printf('<cite class="fn">%s</cite><span class="delibera-says"></span>', $autor_link);
 			?>
 			</div>
@@ -68,24 +68,24 @@ class Delibera_Walker_Comment extends Walker_Comment
 			<em class="delibera-comment-awaiting-moderation"><?php _e('Seu comentário está aguardando moderação.', 'delibera') ?></em>
 			<br />
 	<?php endif; ?>
-	
+
 			<div class="delibera-comment-meta commentmetadata">
 				<a href="<?php echo htmlspecialchars( delibera_get_comment_link( $comment->comment_ID ) ) ?>">
 					<?php
-    
+
 						$time = mysql2date( 'G', $comment->comment_date );
-					    
+
 					    $time_diff = time() - $time;
-					    
+
 					    if ( $time_diff > 0 && $time_diff < 30*24*60*60 )
 					    	printf( '&nbsp;' . __( 'há %s', 'delibera' ), human_time_diff( mysql2date( 'U', $comment->comment_date, true ) ) );
 					    else
 					        echo '&nbsp;' .  __( 'em', 'delibera' ) . '&nbsp;' .  get_comment_date();
-					
+
 					?>
 				</a>
 				&nbsp;
-				
+
 				<?php
 					if($situacao->slug == 'discussao' || ($situacao->slug == 'relatoria' && current_user_can('relatoria')))
 					{
@@ -97,7 +97,7 @@ class Delibera_Walker_Comment extends Walker_Comment
 			<?php
 			if ($situacao->slug == "discussao" || $situacao->slug == "relatoria")
 			{
-				$display_check = $tipo == "encaminhamento"? '' : 'style="display:none;"';  
+				$display_check = $tipo == "encaminhamento"? '' : 'style="display:none;"';
 			?>
 				<span id="checkbox-encaminhamento-<?php echo $comment->comment_ID ?>" class="checkbox-encaminhamento" <?php echo $display_check; ?>><span class="encaminhamento-figura"></span><label class="encaminhamento-label"><?php _e('Encaminhamento','delibera'); ?></label></span>
 			<?php
@@ -125,7 +125,7 @@ class Delibera_Walker_Comment extends Walker_Comment
 			{
 				?>
 				<div class="baseadoem-checkbox-div"><label class="baseadoem-checkbox-label"><input id="baseadoem-checkbox-<?php echo $comment->comment_ID; ?>" type="checkbox" name="baseadoem-checkbox[]" value="<?php echo $comment->comment_ID; ?>" class="baseadoem-checkbox" autocomplete="off" /><?php _e('basear-se neste encaminhamento?', 'delibera'); ?></label></div>
-				<?php 
+				<?php
 			}
 			if(delibera_comments_is_open($comment->comment_post_ID))
 			{
@@ -140,8 +140,8 @@ class Delibera_Walker_Comment extends Walker_Comment
 						}
 					}
 					elseif($situacao->slug != 'validacao' && is_user_logged_in())
-					{			
-						$args['reply_text'] = __("Responda este comentário", 'delibera');  
+					{
+						$args['reply_text'] = __("Responda este comentário", 'delibera');
 						comment_reply_link(array_merge( $args, array('add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth'])));
 					}
 					elseif(is_user_logged_in())
@@ -154,7 +154,7 @@ class Delibera_Walker_Comment extends Walker_Comment
 						</div>
 						<?php
 					}
-					else 
+					else
 					{
 					?>
 						<div class="entry-respond">
@@ -171,7 +171,7 @@ class Delibera_Walker_Comment extends Walker_Comment
 				echo delibera_gerar_discordar($comment->comment_ID, 'comment');
 			echo '</div>';
 			?>
-		
+
 		<?php if ( 'div' != $args['style'] ) : ?>
 		</div>
 		<?php endif;
@@ -179,6 +179,6 @@ class Delibera_Walker_Comment extends Walker_Comment
         $output .= ob_get_clean();
 	}
 
-	
+
 
 }

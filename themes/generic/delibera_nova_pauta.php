@@ -1,4 +1,8 @@
-<?php get_header(); ?>
+<?php 
+global $deliberaThemes;
+                
+get_header();
+?>
 
 		<div id="container">
 			<div id="content" role="main">
@@ -8,10 +12,10 @@
 				// Chama o cabeçalho que apresenta o sistema de discussão
 				get_delibera_header();
 				
-				// Chama o loop
-				//get_template_part( 'loop', 'pauta' );
-				load_template(dirname(__FILE__).DIRECTORY_SEPARATOR.'loop-pauta.php', true);
-				
+                // chama o formulário de nova pauta
+                if(is_user_logged_in())
+                    include $deliberaThemes->themeFilePath('form-nova-pauta.php');
+                
 				?>
 
 			</div><!-- #content -->
