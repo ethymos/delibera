@@ -20,7 +20,7 @@
 						<h2><?php echo _e('Todas as discussões', 'delibera'); ?></h2>
 					</div>
 					<div class="actions">
-						<a href="#" class="button">filtros</a>
+						<!--a href="#" class="button">filtros</a-->
 						<a href="/wp-admin/post-new.php?post_type=pauta" class="button">nova pauta</a>
 					</div>
 				</div>

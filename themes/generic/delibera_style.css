@@ -270,6 +270,9 @@ resolucao - 90248f
 .single-pauta .comment-respond .comment-form-attachment {
   display: none;
 }
+.discussao .comment-respond .comment-form-attachment {
+  display: block;
+}
 .single-pauta .comment-respond h3 {
   color: #3dcff4;
   font-size: 36px;
