@@ -30,7 +30,16 @@ p {
   box-shadow: 0 0 0 2px rgba(255,255,255, 0.25);
 }
 
-
+.warning.message {
+  text-align: center;
+  margin: 15px auto;
+  padding: 15px 0;
+}
+.warning.message .button {
+  padding: 3px 15px;
+  font-weight: 400;
+  background-color: #3dcff4;
+}
 
 /*
 validacao - f67679

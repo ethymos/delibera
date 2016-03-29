@@ -72,15 +72,21 @@
 							<?php
 							// validacao,discussao,relatoria,emvotacao,comresolucao
 							switch ($status_pauta) {
-								case 'pauta-recusada':
-									$labelButton = 'Ver discussão';
+								case 'validacao':
+									$labelButton = 'decida';
 									break;
-								case 'resolucao':
-									$labelButton = 'Ver resolução';
+								case 'discussao':
+									$labelButton = 'comente';
+									break;
+								case 'relatoria':
+									$labelButton = 'comente';
+									break;
+								case 'emvotacao':
+									$labelButton = 'Vote';
 									break;
 
 								default:
-									$labelButton = 'Discutir';
+									$labelButton = 'ver pauta';
 									break;
 							}
 							_e( $labelButton, 'delibera' );

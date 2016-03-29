@@ -57,6 +57,7 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
     }
     ?>
 </div><!-- #comments -->
+<div class="warning message">
 <?php
 	if ( !is_user_logged_in() )
 	{
@@ -65,3 +66,5 @@ if (($situacao->slug == "validacao" || $situacao->slug == "emvotacao") && !$deli
         wp_login_url( get_permalink() ),
         site_url('wp-login.php?action=register', 'login')."&lang=");
 	}
+  ?>
+</div>
