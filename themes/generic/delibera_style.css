@@ -29,7 +29,7 @@ resolucao - 90248f
 .ciclos .pauta-em-validacao { background-color: #f67679; }
 .ciclos .pauta-em-discussao { background-color: #d3c745; }
 .ciclos .pauta-em-relatoria { background-color: #283d7b; }
-.ciclos .votacao { background-color: #329534; }
+.ciclos .regime-de-votacao { background-color: #329534; }
 .ciclos .resolucao { background-color: #90248f; }
 
 /* HEADER */
@@ -273,5 +273,20 @@ resolucao - 90248f
     .lista-de-pautas .type-pauta .entry-title,
     .lista-de-pautas .type-pauta .entry-content {
       height: auto;
+    }
+
+    .single-pauta .pauta-content {
+      padding: 15px;
+    }
+
+    .single-pauta .type-pauta .entry-title {
+      width: 100%;
+    }
+    .banner-ciclo .ciclos li {
+      font-size: 12px;
+      line-height: 18px;
+      margin: 15px 0 0;
+      padding: 2px 0;
+      width: 19%;
     }
 }
