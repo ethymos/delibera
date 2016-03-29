@@ -846,3 +846,9 @@ function delibera_valida_permissoes($comment_ID)
 }
 add_action( 'wp_blacklist_check', 'delibera_valida_permissoes' );
 
+function delibera_comment_reply_link_args($args, $comment, $post)
+{
+	$args['add_below'] = 'delibera-div-comment';
+	return $args;
+}
+add_filter('comment_reply_link_args', 'delibera_comment_reply_link_args', 10, 3);
