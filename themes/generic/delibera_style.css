@@ -327,4 +327,25 @@ resolucao - 90248f
       font-weight: 600;
       font-size: 16px;
     }
+    /*.delibera-comment-body .reply {
+      text-align: right;
+    }*/
+    .delibera-comment-meta,
+    .delibera-comment-author {
+      width: 45%;
+      display: inline-block;
+    }
+    .delibera-comment-meta {
+      text-align: right;
+    }
+    .delibera-comment-body .comment-reply-link {
+      margin: 10px 0;
+      display: inline-block;
+      background-color: #3dcff4;
+      border: none;
+      color: #fff;
+      position: initial;
+      font-size: 14px;
+      text-align: right;
+    }
 }
