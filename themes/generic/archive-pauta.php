@@ -42,11 +42,11 @@
 							Entenda como funciona o ciclo de pautas dentro do Delibera, <br>abaixo os possíveis ciclos.
 						</p>
 						<ul class="ciclos">
-							<li class="pauta-em-validacao">1<br>Validação</li>
-							<li class="pauta-em-discussao">2<br>Discussão</li>
-							<li class="pauta-em-relatoria">3<br>Relatoria</li>
-							<li class="regime-de-votacao">4<br>Votação</li>
-							<li class="resolucao">5<br>Resolução</li>
+							<li class="validacao">1<br>Validação</li>
+							<li class="discussao">2<br>Discussão</li>
+							<li class="relatoria">3<br>Relatoria</li>
+							<li class="emvotacao">4<br>Votação</li>
+							<li class="comresolucao">5<br>Resolução</li>
 						</ul>
 					</div>
 

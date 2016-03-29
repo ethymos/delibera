@@ -1,5 +1,5 @@
 <?php if ( have_posts() ) while ( have_posts() ) : the_post();
-	$status_pauta = sanitize_title(delibera_get_situacao($post->ID)->name);
+	$status_pauta = delibera_get_situacao($post->ID)->slug;
 //echo $status_pauta;
 ?>
 <div class="pauta-content <?php echo $status_pauta; ?>">
@@ -7,11 +7,11 @@
 	<div class="banner-ciclo status-ciclo">
 		<h3 class="title">Estágio da pauta</h3>
 		<ul class="ciclos">
-			<li class="pauta-em-validacao <?php echo ($status_pauta != 'pauta-em-validacao' ? 'inactive' : ''); ?>">1<br>Validação</li>
-			<li class="pauta-em-discussao <?php echo ($status_pauta != 'pauta-em-discussao' ? 'inactive' : ''); ?>">2<br>Discussão</li>
-			<li class="pauta-em-relatoria <?php echo ($status_pauta != 'pauta-em-relatoria' ? 'inactive' : ''); ?>">3<br>Relatoria</li>
-			<li class="regime-de-votacao <?php echo ($status_pauta != 'regime-de-votacao' ? 'inactive' : ''); ?>">4<br>Votação</li>
-			<li class="resolucao <?php echo ($status_pauta != 'resolucao' && $status_pauta != 'pauta-recusada' ? 'inactive' : ''); ?>">5<br>Resolução</li>
+			<li class="validacao <?php echo ($status_pauta != 'validacao' ? 'inactive' : ''); ?>">1<br>Validação</li>
+			<li class="discussao <?php echo ($status_pauta != 'discussao' ? 'inactive' : ''); ?>">2<br>Discussão</li>
+			<li class="relatoria <?php echo ($status_pauta != 'relatoria' ? 'inactive' : ''); ?>">3<br>Relatoria</li>
+			<li class="emvotacao <?php echo ($status_pauta != 'emvotacao' ? 'inactive' : ''); ?>">4<br>Votação</li>
+			<li class="comresolucao <?php echo ($status_pauta != 'comresolucao' ? 'inactive' : ''); ?>">5<br>Resolução</li>
 		</ul>
 	</div>
 
