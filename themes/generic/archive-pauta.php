@@ -45,7 +45,7 @@
 							<li class="pauta-em-validacao">1<br>Validação</li>
 							<li class="pauta-em-discussao">2<br>Discussão</li>
 							<li class="pauta-em-relatoria">3<br>Relatoria</li>
-							<li class="votacao">4<br>Votação</li>
+							<li class="regime-de-votacao">4<br>Votação</li>
 							<li class="resolucao">5<br>Resolução</li>
 						</ul>
 					</div>

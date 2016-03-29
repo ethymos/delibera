@@ -10,7 +10,7 @@
 			<li class="pauta-em-validacao <?php echo ($status_pauta != 'pauta-em-validacao' ? 'inactive' : ''); ?>">1<br>Validação</li>
 			<li class="pauta-em-discussao <?php echo ($status_pauta != 'pauta-em-discussao' ? 'inactive' : ''); ?>">2<br>Discussão</li>
 			<li class="pauta-em-relatoria <?php echo ($status_pauta != 'pauta-em-relatoria' ? 'inactive' : ''); ?>">3<br>Relatoria</li>
-			<li class="votacao <?php echo ($status_pauta != 'votacao' ? 'inactive' : ''); ?>">4<br>Votação</li>
+			<li class="regime-de-votacao <?php echo ($status_pauta != 'regime-de-votacao' ? 'inactive' : ''); ?>">4<br>Votação</li>
 			<li class="resolucao <?php echo ($status_pauta != 'resolucao' && $status_pauta != 'pauta-recusada' ? 'inactive' : ''); ?>">5<br>Resolução</li>
 		</ul>
 	</div>
