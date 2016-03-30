@@ -162,7 +162,7 @@ function deliberaLoadModules()
 		$filename = $module.DIRECTORY_SEPARATOR.basename($module).'.php';
 		if(file_exists($filename))
 		{
-			include $filename;
+			require_once $filename;
 		}
 	}
 }
