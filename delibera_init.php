@@ -155,14 +155,14 @@ function delibera_Add_custom_taxonomy()
 
 function deliberaLoadModules()
 {
-	include dirname(__FILE__).'/modules/modulebase.php';
+	require_once dirname(__FILE__).'/modules/modulebase.php';
 	$modules = array_filter(glob(dirname(__FILE__).'/modules/*'), 'is_dir');
 	foreach ($modules as $module)
 	{
 		$filename = $module.DIRECTORY_SEPARATOR.basename($module).'.php';
 		if(file_exists($filename))
 		{
-			include $filename;
+			require_once $filename;
 		}
 	}
 }
