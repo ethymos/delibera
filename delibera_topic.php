@@ -11,7 +11,7 @@ add_filter('redirect_post_location', 'delibera_pauta_redirect_filter', '99');
 
 function delibera_pauta_custom_meta()
 {
-	add_meta_box("pauta_meta", "Detalhes da Pauta", 'delibera_pauta_meta', 'pauta', 'side', 'default');
+	add_meta_box("pauta_meta", __("Detalhes da Pauta", 'delibera'), 'delibera_pauta_meta', 'pauta', 'normal', 'high');
 }
 
 /**
