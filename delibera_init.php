@@ -34,7 +34,7 @@ function delibera_Add_custom_Post()
 		'capability_type' => array('pauta','pautas'),
 		'map_meta_cap' => true,
 		'hierarchical' => false,
-		'supports' => array('title', 'editor', 'author', 'excerpt', 'trackbacks', 'revisions', 'comments'),
+		'supports' => array('title', 'editor', 'author', 'excerpt', 'trackbacks', 'revisions', 'comments', 'thumbnail'),
 		'register_meta_box_cb' => 'delibera_pauta_custom_meta', // função para chamar na edição
 		'taxonomies' => array('post_tag'), // Taxionomias já existentes relaciondas, vamos criar e registrar na sequência
 		'permalink_epmask' => 'EP_PERMALINK ',
@@ -143,107 +143,7 @@ function delibera_Add_custom_taxonomy()
 
 	if(taxonomy_exists('situacao'))
 	{
-		if(term_exists('comresolucao', 'situacao', null) == false)
-		{
-			delibera_insert_term('Resolução', 'situacao', array(
-					'description'=> 'Pauta com resoluções aprovadas',
-					'slug' => 'comresolucao',
-				),
-				array(
-					'qtrans_term_pt' => 'Resolução',
-					'qtrans_term_en' => 'Resolution',
-					'qtrans_term_es' => 'Resolución',
-				)
-			);
-		}
-		if(term_exists('emvotacao', 'situacao', null) == false)
-		{
-			delibera_insert_term('Regime de Votação', 'situacao', array(
-					'description'=> 'Pauta com encaminhamentos em Votacao',
-					'slug' => 'emvotacao',
-				),
-				array(
-					'qtrans_term_pt' => 'Regime de Votação',
-					'qtrans_term_en' => 'Voting',
-					'qtrans_term_es' => 'Sistema de Votación',
-				)
-			);
-		}
-		if(isset($opt['relatoria']) && $opt['relatoria'] == 'S')
-		{
-			if($opt['eleicao_relator'] == 'S')
-			{
-				if(term_exists('eleicaoredator', 'situacao', null) == false)
-				{
-					delibera_insert_term('Regime de Votação de Relator', 'situacao', array(
-							'description'=> 'Pauta em Eleição de Relator',
-							'slug' => 'eleicaoredator',
-						),
-						array(
-							'qtrans_term_pt' => 'Regime de Votação de Relator',
-							'qtrans_term_en' => 'Election of Rapporteur',
-							'qtrans_term_es' => 'Elección del Relator',
-						)
-					);
-				}
-			}
-
-			if(term_exists('relatoria', 'situacao', null) == false)
-			{
-				delibera_insert_term('Relatoria', 'situacao', array(
-						'description'=> 'Pauta com encaminhamentos em Relatoria',
-						'slug' => 'relatoria',
-					),
-					array(
-						'qtrans_term_pt' => 'Relatoria',
-						'qtrans_term_en' => 'Rapporteur',
-						'qtrans_term_es' => 'Relator',
-					)
-				);
-				}
-		}
-		if(term_exists('discussao', 'situacao', null) == false)
-		{
-			delibera_insert_term('Pauta em discussão', 'situacao', array(
-					'description'=> 'Pauta em Discussão',
-					'slug' => 'discussao',
-				),
-				array(
-					'qtrans_term_pt' => 'Pauta em discussão',
-					'qtrans_term_en' => 'Agenda en discusión',
-					'qtrans_term_es' => 'Topic under discussion',
-				)
-			);
-		}
-		if(isset($opt['validacao']) && $opt['validacao'] == 'S')
-		{
-			if(term_exists('validacao', 'situacao', null) == false)
-			{
-				delibera_insert_term('Proposta de Pauta', 'situacao', array(
-						'description'=> 'Pauta em Validação',
-						'slug' => 'validacao',
-					),
-					array(
-						'qtrans_term_pt' => 'Proposta de Pauta',
-						'qtrans_term_en' => 'Proposed Topic',
-						'qtrans_term_es' => 'Agenda Propuesta',
-					)
-				);
-			}
-			if(term_exists('naovalidada', 'situacao', null) == false)
-			{
-				delibera_insert_term('Pauta Recusada', 'situacao', array(
-						'description'=> 'Pauta não Validação',
-						'slug' => 'naovalidada',
-					),
-					array(
-						'qtrans_term_pt' => 'Pauta Recusada',
-						'qtrans_term_en' => 'Rejected Topic',
-						'qtrans_term_es' => 'Agenda Rechazada',
-					)
-				);
-			}
-		}
+		do_action('delibera_situacao_register');
 	}
 
 	if(file_exists(__DIR__.DIRECTORY_SEPARATOR.'delibera_taxs.php'))
@@ -253,9 +153,25 @@ function delibera_Add_custom_taxonomy()
 
 }
 
+function deliberaLoadModules()
+{
+	require_once dirname(__FILE__).'/modules/modulebase.php';
+	$modules = array_filter(glob(dirname(__FILE__).'/modules/*'), 'is_dir');
+	foreach ($modules as $module)
+	{
+		$filename = $module.DIRECTORY_SEPARATOR.basename($module).'.php';
+		if(file_exists($filename))
+		{
+			require_once $filename;
+		}
+	}
+}
 
 function delibera_init()
 {
+	
+	deliberaLoadModules();
+	
 	add_action('admin_menu', 'delibera_config_menu');
 
 	delibera_Add_custom_Post();
@@ -279,6 +195,7 @@ function delibera_scripts()
 		wp_enqueue_script('delibera', WP_CONTENT_URL.'/plugins/delibera/js/scripts.js', array('jquery-expander'));
 		wp_enqueue_script('delibera-seguir', WP_CONTENT_URL . '/plugins/delibera/js/delibera_seguir.js', array('delibera'));
 		wp_enqueue_script('delibera-concordar', WP_CONTENT_URL . '/plugins/delibera/js/delibera_concordar.js', array('delibera'));
+        wp_enqueue_script('share-js', WP_CONTENT_URL . '/plugins/delibera/js/socialite.min.js');
 
 		$situation = delibera_get_situacao($post->ID);
 
@@ -311,15 +228,21 @@ function delibera_admin_scripts()
 	if(is_pauta())
 	{
 		wp_enqueue_script('jquery-ui-datepicker-ptbr', WP_CONTENT_URL.'/plugins/delibera/js/jquery.ui.datepicker-pt-BR.js', array('jquery-ui-datepicker'));
-		wp_enqueue_script('delibera-admin',WP_CONTENT_URL.'/plugins/delibera/js/admin_scripts.js', array( 'jquery-ui-datepicker-ptbr'));
+		wp_enqueue_script('delibera-admin',WP_CONTENT_URL.'/plugins/delibera/admin/js/admin_scripts.js', array( 'jquery-ui-datepicker-ptbr'));
 	}
 
 	if(isset($_REQUEST['page']) && $_REQUEST['page'] == 'delibera-notifications')
 	{
-		wp_enqueue_script('delibera-admin-notifica',WP_CONTENT_URL.'/plugins/delibera/js/admin_notifica_scripts.js', array('jquery'));
+		wp_enqueue_script('delibera-admin-notifica',WP_CONTENT_URL.'/plugins/delibera/admin/js/admin_notifica_scripts.js', array('jquery'));
 	}
 }
 add_action( 'admin_print_scripts', 'delibera_admin_scripts' );
+
+function delibera_print_font_styles()
+{
+	wp_enqueue_style('delibera-font', WP_CONTENT_URL.'/plugins/delibera/css/fonts/fontello-55880ab6/css/delibera.css');
+}
+add_action('admin_print_styles', 'delibera_print_font_styles');
 
 // Fim Scripts
 
@@ -468,9 +391,14 @@ function delibera_register_required_plugins() {
 	 */
 	$plugins = array(
 		array(
+			'name'      => 'mention-comments-authors',
+			'slug'      => 'mention-comments-authors',
+			'required'  => false
+		),
+		array(
 			'name'      => 'comment-attachment',
 			'slug'      => 'comment-attachment',
-			'required'  => true
+			'required'  => false
 		),
     );
 
@@ -483,9 +411,47 @@ function delibera_register_required_plugins() {
 		'has_notices'  => true,                    // Show admin notices or not.
 		'dismissable'  => true,                    // If false, a user cannot dismiss the nag message.
 		'dismiss_msg'  => '',                      // If 'dismissable' is false, this message will be output at top of nag.
-		'is_automatic' => false,                   // Automatically activate plugins after installation or not.
+		'is_automatic' => true,                   // Automatically activate plugins after installation or not.
 		'message'      => '',                      // Message to output right before the plugins table.
     );
 
 	tgmpa( $plugins, $config );
 }
+
+function doctype_opengraph($output) {
+    return $output . '
+    xmlns:og="http://opengraphprotocol.org/schema/"
+    xmlns:fb="http://www.facebook.com/2008/fbml"';
+}
+add_filter('language_attributes', 'doctype_opengraph');
+
+function fb_opengraph() {
+    global $post;
+ 
+    if(is_single()) {
+        if(has_post_thumbnail($post->ID)) {
+            $img_src = wp_get_attachment_image_src(get_post_thumbnail_id( $post->ID ), 'medium');
+        } else {
+            $img_src = get_stylesheet_directory_uri() . '/img/delibera_icon.png';
+        }
+        if($excerpt = $post->post_excerpt) {
+            $excerpt = strip_tags($post->post_excerpt);
+            $excerpt = str_replace("", "'", $excerpt);
+        } else {
+            $excerpt = get_bloginfo('description');
+        }
+        ?>
+ 
+    <meta property="og:title" content="<?php echo the_title(); ?>"/>
+    <meta property="og:description" content="<?php echo $excerpt; ?>"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:url" content="<?php echo the_permalink(); ?>"/>
+    <meta property="og:site_name" content="<?php echo get_bloginfo(); ?>"/>
+    <meta property="og:image" content="<?php echo $img_src; ?>"/>
+ 
+<?php
+    } else {
+        return;
+    }
+}
+add_action('wp_head', 'fb_opengraph', 5);
