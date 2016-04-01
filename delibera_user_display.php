@@ -69,7 +69,7 @@ class UserDisplay
  
   public static function get_comment_meta($id, $control)
   {
-    $string = 'delibera_comment_' . $control;
+    $string = 'delibera_' . $control;
     return  get_comment_meta( $id , $string  , true);
   }
 
@@ -77,14 +77,17 @@ class UserDisplay
   {
     $string = 'delibera_comment_' . $control;
     $type = get_comment_meta( $id , $string  , true);
+    //echo "DEBUG Tipo: " . $type;
     switch($type)
     {
       case 'encaminhamento':
         return __('Proposta de Encaminhamento','delibera');
       case 'discussao':
         return __('Discussão','delibera');
-         case 'validacao':
+      case 'validacao':
         return __('Validação','delibera');
+      case 'voto':
+        return __('Votação','delibera');
     }
   }
 

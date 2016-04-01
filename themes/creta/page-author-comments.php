@@ -35,9 +35,7 @@ $paged = get_query_var( 'paged' );
       <div>
         <?php echo get_avatar( $user->ID ); ?>
         <h1><?php echo $user->first_name ?></h1>
-      </div>
-      <div>
-        <h2><?php echo 'Comentários:'; ?></h2>
+        <h1><?php echo $user->ID ?></h1>
       </div>
     </p>
   
@@ -52,8 +50,10 @@ $paged = get_query_var( 'paged' );
       {
           ?>
           <h2>Comentários: </h2>
+          <br>
           <div class="user_comment">
-          <?php foreach ( $comments as $comment ) { ?>
+          <?php foreach ( $comments as $comment ) { 
+             $type = \Delibera\Theme\UserDisplay::get_comment_meta( $comment->comment_ID , 'comment_tipo');?>
             <strong>
               <?php echo \Delibera\Theme\UserDisplay::parse_comment_type( $comment->comment_ID , 'tipo'); ?>
             </strong>
@@ -62,33 +62,36 @@ $paged = get_query_var( 'paged' );
             <br>
             <?php echo wp_get_attachment_image(get_comment_meta( $comment->comment_ID , 'attachmentId', true)); ?>
             <br>
-            <p>Na pauta 
+            <p><?php _e('Na pauta','delibera'); ?> 
             <a href="<?php echo get_comment_link( $comment->comment_ID )?>">
-              <?php echo get_the_title($comment->comment_post_ID); ?>, em 
-            </a>
+              <?php echo get_the_title($comment->comment_post_ID); ?>
+            </a>,
+            <?php _e('em','delibera'); ?> 
             <?php echo mysql2date('d/m/Y', $comment->comment_date); ?>
-            <?php if( \Delibera\Theme\UserDisplay::get_comment_meta( $comment->comment_ID , 'tipo') === 'validacao')
+            <?php if( $type  === 'validacao' || $type === 'voto' )
                 {
               ?>
               <br><br>
-              Numero de votos:
+              <?php _e('Numero de votos' , 'delibera' ); ?>:
             <?php 
-               $votaram = \Delibera\Theme\UserDisplay::get_comment_meta( $comment->comment_ID , 'numero_votos');
-               echo $votaram ? $votaram : '0';
+              $votaram = \Delibera\Theme\UserDisplay::get_comment_meta( $comment->comment_ID , 'votos');
+              echo $votaram ? count($votaram) : '0';
+               //var_dump( get_comment_meta($comment->comment_ID) );
+               //var_dump( get_comment_meta($comment->comment_ID, 'delibera_votos' , true) );
             ?>
                <br>
             <?php
                   }
             ?>
-            <p>Concordaram:
+            <p><?php _e('Concordaram' , 'delibera' ); ?>:
             <?php 
               $curtiram = \Delibera\Theme\UserDisplay::get_comment_meta( $comment->comment_ID , 'numero_curtir' );
-              echo $curtiram ? $curtiram : '0';
+              echo $curtiram ? $curtiram[0] : '0';
              ?>
-            <br>Discordaram:
+            <br><?php _e('Discordaram' , 'delibera' ); ?>:
             <?php
               $discordaram =  \Delibera\Theme\UserDisplay::get_comment_meta( $comment->comment_ID , 'numero_discordar' );
-              echo $discordaram ? $discordaram : '0';
+              echo $discordaram ? $discordaram[0] : '0';
             ?>
              </p>
              <?php
@@ -96,7 +99,7 @@ $paged = get_query_var( 'paged' );
           ?>
           </div>
           <?php
-      } else { echo __('Nenhum Comentário encontrado!' , 'delibera'); }
+      } else { _e('Nenhum Comentário encontrado!' , 'delibera'); }
    ?>
       <div id="user_pager" class="user_pager">
         <p>
