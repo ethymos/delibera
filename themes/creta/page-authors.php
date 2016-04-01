@@ -6,10 +6,10 @@ get_header();
 $per_page = isset( $_GET['per-page'] ) ?  esc_html( $_GET['per-page'] ) : '20' ;
 $search = isset( $_GET['search'] ) ?  esc_html( $_GET['search'] ) : '' ;
 $order  = isset( $_GET['order-by'] ) ?  esc_html( $_GET['order-by'] ) : '' ;
-$order_by = \Delibera\ThemeTags\UserDisplay::getOrderBy($order);
+$order_by = \Delibera\Theme\UserDisplay::getOrderBy($order);
 $paged = get_query_var( 'paged' );
-$blogusers = \Delibera\ThemeTags\UserDisplay::getUsers( $order_by , $search , $per_page , $paged );          
-$number_of_pages = \Delibera\ThemeTags\UserDisplay::getNumberOfPages( $blogusers->get_total() , $per_page );
+$blogusers = \Delibera\Theme\UserDisplay::getUsers( $order_by , $search , $per_page , $paged );          
+$number_of_pages = \Delibera\Theme\UserDisplay::getNumberOfPages( $blogusers->get_total() , $per_page );
 
           ?>
 <div id="user_form_search" class="user_form_search">
@@ -41,7 +41,7 @@ $number_of_pages = \Delibera\ThemeTags\UserDisplay::getNumberOfPages( $blogusers
 
      <div id="user_pager" class="user_pager">
       <p>
-        <?php echo \Delibera\ThemeTags\UserDisplay::getPaginator( $number_of_pages, $paged ); ?>
+        <?php echo \Delibera\Theme\UserDisplay::getPaginator( $number_of_pages, $paged ); ?>
       </p>
     </div>
  <div id="user_list" class="user_list">
@@ -58,34 +58,36 @@ $number_of_pages = \Delibera\ThemeTags\UserDisplay::getNumberOfPages( $blogusers
          <p>
            <?php echo esc_html( $user->display_name ); ?>
             - 
-           <?php echo get_usernumposts($user->ID); ?>
+           <?php echo count_user_posts($user->ID); ?>
             posts
          </p>
-       <a id="link_pautas" class="link_pautas" href="<?php echo get_site_url()?>/blog/delibera/membro/<?php echo $user->user_login; ?>/pautas">
+       <a id="link_pautas" class="link_pautas" href="<?php echo get_site_url()?>/delibera/<?php echo $user->user_login; ?>/pautas">
          <?php echo __('Todas as Pautas' , 'delibera'); ?>
        </a>
        |
-       <a id="link_comments" class="link_comments" href="<?php echo get_site_url()?>/blog/delibera/membro/<?php echo $user->user_login; ?>/comentarios">
+       <a id="link_comments" class="link_comments" href="<?php echo get_site_url()?>/delibera/<?php echo $user->user_login; ?>/comentarios">
          <?php echo __('Todas os Comentários' , 'delibera'); ?>
        </a>
     </h1>
 
-   <?php  $last_content = \Delibera\ThemeTags\UserDisplay::getLastPauta($user);  ?> 
-
-    <div id="user_post" class="user_post" >
-      <div id="user_post_title" class="user_post_title" ><h2><a href="<?php echo $last_content->guid; ?>" ><?php echo  $last_content->post_title; ?></a></h2></div>
-      <div id="user_post_content" class="user_post_content"><p><?php echo $last_content->post_content;?></div>
-    </div>
+   <?php  $last_content = \Delibera\Theme\UserDisplay::getLastPauta($user); 
+          if ( $last_content )
+          {
+   ?> 
+             <div id="user_post" class="user_post" >
+               <div id="user_post_title" class="user_post_title" ><h2><a href="<?php echo $last_content->guid; ?>" ><?php echo  $last_content->post_title; ?></a></h2></div>
+               <div id="user_post_content" class="user_post_content"><p><?php echo $last_content->post_content;?></div>
+             </div>
 
     <?php
+          }
        }
      }
      else
      {
        echo __('Nenhum usuário encontrado!' , 'delibera');
      }
-   echo \Delibera\ThemeTags\UserDisplay::getPaginator( $number_of_pages , $paged );
-   wp_reset_post_data();
+   echo \Delibera\Theme\UserDisplay::getPaginator( $number_of_pages , $paged );
    ?>
    <div>
    <?php

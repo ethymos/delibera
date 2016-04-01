@@ -55,7 +55,7 @@ $order  = isset( $_GET['order-by'] ) ?  esc_html( $_GET['order-by'] ) : '' ;
     ?>
   <div id="user_pager" class="user_pager">
       <p>
-        <?php echo \Delibera\ThemeTags\UserDisplay::getPaginator( $author_posts->max_num_pages, $paged ); ?>
+        <?php echo \Delibera\Theme\UserDisplay::getPaginator( $author_posts->max_num_pages, $paged ); ?>
       </p>
     </div>
     <?php
@@ -74,11 +74,10 @@ $order  = isset( $_GET['order-by'] ) ?  esc_html( $_GET['order-by'] ) : '' ;
 ?>
     <div id="user_pager" class="user_pager">
       <p>
-        <?php echo \Delibera\ThemeTags\UserDisplay::getPaginator( $author_posts->max_num_pages , $per_page ); ?>
+        <?php echo \Delibera\Theme\UserDisplay::getPaginator( $author_posts->max_num_pages , $per_page ); ?>
       </p>
     </div>
 <?php
-wp_reset_post_data();
 wp_footer();
 ?>
 </body>

@@ -16,7 +16,7 @@ $paged = get_query_var( 'paged' );
     <div id="user_form_search" class="user_form_search">
       <form method="get"  name="form">
         <p>
-          <input type="text" name="search" placeholder="Pesquisar por Comentários ..." value="<?php echo $search; ?>"/>
+          <input type="text" name="search" placeholder="<?php _e('Pesquisar por Comentários', 'delibera'); ?> ..." value="<?php echo $search; ?>"/>
           <br>
           <br>
           <input type="submit" id="submit" class="button button-primary" value="Pesquisar"  />
@@ -41,10 +41,10 @@ $paged = get_query_var( 'paged' );
       </div>
     </p>
   
-    <?php $comments = \Delibera\ThemeTags\UserDisplay::getUserComments($user, $search, $per_page, $paged); ?>
+    <?php $comments = \Delibera\Theme\UserDisplay::getUserComments($user, $search, $per_page, $paged); ?>
       <div id="user_pager" class="user_pager">
         <p>
-          <?php echo \Delibera\ThemeTags\UserDisplay::getPaginator( \Delibera\ThemeTags\UserDisplay::getNumberOfPages($comments[0]->comment_count,$per_page) , $paged ); ?>
+          <?php echo \Delibera\Theme\UserDisplay::getPaginator( \Delibera\Theme\UserDisplay::getNumberOfPages($comments[0]->comment_count,$per_page) , $paged ); ?>
         </p>
       </div>
       <?php
@@ -55,7 +55,7 @@ $paged = get_query_var( 'paged' );
           <div class="user_comment">
           <?php foreach ( $comments as $comment ) { ?>
             <strong>
-              <?php echo \Delibera\ThemeTags\UserDisplay::parse_comment_type( $comment->comment_ID , 'tipo'); ?>
+              <?php echo \Delibera\Theme\UserDisplay::parse_comment_type( $comment->comment_ID , 'tipo'); ?>
             </strong>
             <br>
             <?php echo $comment->comment_content;?>
@@ -66,14 +66,14 @@ $paged = get_query_var( 'paged' );
             <a href="<?php echo get_comment_link( $comment->comment_ID )?>">
               <?php echo get_the_title($comment->comment_post_ID); ?>, em 
             </a>
-            <?php echo mysql2date('m/d/Y', $comment->comment_date, $translate); ?>
-            <?php if( \Delibera\ThemeTags\UserDisplay::get_comment_meta( $comment->comment_ID , 'tipo') === 'validacao')
+            <?php echo mysql2date('d/m/Y', $comment->comment_date); ?>
+            <?php if( \Delibera\Theme\UserDisplay::get_comment_meta( $comment->comment_ID , 'tipo') === 'validacao')
                 {
               ?>
               <br><br>
               Numero de votos:
             <?php 
-               $votaram = \Delibera\ThemeTags\UserDisplay::get_comment_meta( $comment->comment_ID , 'numero_votos');
+               $votaram = \Delibera\Theme\UserDisplay::get_comment_meta( $comment->comment_ID , 'numero_votos');
                echo $votaram ? $votaram : '0';
             ?>
                <br>
@@ -82,12 +82,12 @@ $paged = get_query_var( 'paged' );
             ?>
             <p>Concordaram:
             <?php 
-              $curtiram = \Delibera\ThemeTags\UserDisplay::get_comment_meta( $comment->comment_ID , 'numero_curtir' );
+              $curtiram = \Delibera\Theme\UserDisplay::get_comment_meta( $comment->comment_ID , 'numero_curtir' );
               echo $curtiram ? $curtiram : '0';
              ?>
             <br>Discordaram:
             <?php
-              $discordaram =  \Delibera\ThemeTags\UserDisplay::get_comment_meta( $comment->comment_ID , 'numero_discordar' );
+              $discordaram =  \Delibera\Theme\UserDisplay::get_comment_meta( $comment->comment_ID , 'numero_discordar' );
               echo $discordaram ? $discordaram : '0';
             ?>
              </p>
@@ -100,14 +100,13 @@ $paged = get_query_var( 'paged' );
    ?>
       <div id="user_pager" class="user_pager">
         <p>
-          <?php echo \Delibera\ThemeTags\UserDisplay::getPaginator( 
-          \Delibera\ThemeTags\UserDisplay::getNumberOfPages($comments[0]->comment_count,$per_page) 
+          <?php echo \Delibera\Theme\UserDisplay::getPaginator( 
+          \Delibera\Theme\UserDisplay::getNumberOfPages($comments[0]->comment_count,$per_page) 
           , $paged); 
           ?>
         </p>
       </div>
       <?php
-wp_reset_post_data();
 wp_footer();
 ?>
 </body>

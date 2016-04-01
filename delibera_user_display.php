@@ -1,5 +1,5 @@
 <?php
-namespace Delibera\ThemeTags;
+namespace Delibera\Theme;
 
 use WP_User_Query;
 use WP_Query;
@@ -63,7 +63,8 @@ class UserDisplay
         'order'           =>  'ASC' 
       );
       $current_user_posts = get_posts( $args );
-      return $current_user_posts[0];
+     
+      return $current_user_posts? $current_user_posts[0] : null;
    }
  
   public static function get_comment_meta($id, $control)
@@ -79,11 +80,11 @@ class UserDisplay
     switch($type)
     {
       case 'encaminhamento':
-        return 'Proposta de Encaminhamento';
+        return __('Proposta de Encaminhamento','delibera');
       case 'discussao':
-        return 'Discussão';
+        return __('Discussão','delibera');
          case 'validacao':
-        return 'Validação';
+        return __('Validação','delibera');
     }
   }
 
@@ -103,5 +104,5 @@ class UserDisplay
 
 }
 global $user_display;
-$user_display = new \Delibera\ThemeTags\UserDisplay();
+$user_display = new \Delibera\Theme\UserDisplay();
 

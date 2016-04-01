@@ -4,14 +4,14 @@ namespace Delibera\Member;
 
 include __DIR__ . DIRECTORY_SEPARATOR . 'delibera_user_display.php';
 
-use Delibera\ThemeTags;
+use Delibera\Theme;
 
 class MemberPath
 {
 
   public function __construct()
   {
-    echo __NAMESPACE__;
+    //echo __NAMESPACE__;
     add_filter( 'query_vars', array( $this , 'userpage_rewrite_add_var' ) );
     add_action( 'init', array( $this , 'userpage_rewrite_rule') );
     add_action( 'template_redirect', array( $this , 'userpage_rewrite_catch') );
@@ -32,19 +32,19 @@ class MemberPath
   {
       add_rewrite_tag( '%pautasfor%', '([^&]+)' );
       add_rewrite_rule(
-          '^blog/delibera/membro/([^/]*)/pautas?',
+          '^delibera/([^/]*)/pautas?',
           'index.php?pautasfor=$matches[1]',
           'top'
       );
       add_rewrite_tag( '%commentsfor%', '([^&]+)' );
       add_rewrite_rule(
-          '^blog/delibera/membro/([^/]*)/comentarios?',
+          '^delibera/([^/]*)/comentarios?',
           'index.php?commentsfor=$matches[1]',
           'top'
       );
       add_rewrite_tag( '%members%', '' );
       add_rewrite_rule(
-          '^blog/delibera/membros',
+          '^delibera/membros',
           'index.php?members',
           'top'
       );
@@ -65,14 +65,14 @@ class MemberPath
           exit;
       }
       if ( array_key_exists( 'members', $wp_query->query_vars ) ) {
-          // var_dump(\Delibera\ThemeTags\UserDisplay::getOrderBy('active'));
+          // var_dump(\Delibera\Theme\UserDisplay::getOrderBy('active'));
 
           // $per_page = isset( $_GET['per-page'] ) ?  esc_html( $_GET['per-page'] ) : '20' ;
           // $search = isset( $_GET['search'] ) ?  esc_html( $_GET['search'] ) : '' ;
           // $order  = isset( $_GET['order-by'] ) ?  esc_html( $_GET['order-by'] ) : '' ;
-          // $order_by = \Delibera\ThemeTags\UserDisplay::getOrderBy($order);
+          // $order_by = \Delibera\Theme\UserDisplay::getOrderBy($order);
           // $paged = get_query_var( 'paged' );
-          // var_dump(\Delibera\ThemeTags\UserDisplay::getUsers( $order_by , $search , $per_page , $paged ));          
+          // var_dump(\Delibera\Theme\UserDisplay::getUsers( $order_by , $search , $per_page , $paged ));          
 
           $conf = delibera_get_config();
           load_template($conf['theme'] . '/page-authors.php' , true);
