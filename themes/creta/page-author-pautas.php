@@ -69,6 +69,8 @@ $order  = isset( $_GET['order-by'] ) ?  esc_html( $_GET['order-by'] ) : '' ;
         </p>
         <?php
         the_excerpt();
+        echo '<br>';
+        echo delibera_get_situacao($post->ID)->name;
     }
 
 ?>

@@ -88,6 +88,8 @@ class UserDisplay
         return __('Validação','delibera');
       case 'voto':
         return __('Votação','delibera');
+      case 'relatoria':
+        return __('Em Relatoria','delibera');
     }
   }
 
