@@ -2,6 +2,11 @@
  * 
  */
 
+function deliberaIsConfig()
+{
+	return delibera_admin_flow.post_id == '';
+}
+
 function deliberaFlowToggle(element)
 {
 	jQuery(element).parent().siblings('.dragbox-content').toggle();
@@ -32,7 +37,7 @@ function deliberaUpdateFlow()
 	});
 	jQuery('#delibera_flow').val(sortorder);
 	jQuery('#delibera-flow-column2').trigger('deliberaUpdateFlow');
-	if(delibera_admin_flow.post_id != '')
+	if(deliberaIsConfig())
 	{
 		updateDates();
 		deliberaHideUsedModules()
@@ -40,18 +45,30 @@ function deliberaUpdateFlow()
 	}
 }
 
+function deliberaUsedModule(id)
+{
+	if(jQuery('.delibera-flow-panel').find("#delibera-flow-column2").find("."+id).length > 1)
+	{
+		return true;
+	}
+	return false;
+}
+
 function deliberaHideUsedModules()
 {
 	/** remove after multiple of the same has implemented **/
-	var boxes = jQuery('#delibera-flow-column2').find('.dragbox');
-	jQuery('.delibera-flow-panel').find("#delibera-flow-column1").find('.dragbox').show();
-	for (var i = 0; i < boxes.length; i++)
+	if(!deliberaIsConfig())
 	{
-	  var itemclass = jQuery(boxes[i]).attr('class').replace("dragbox ", "").replace(" clone", "");
-	  //console.log(itemclass);
-	  jQuery('.delibera-flow-panel').find("#delibera-flow-column1").find("."+itemclass).hide();
+		var boxes = jQuery('#delibera-flow-column2').find('.dragbox');
+		jQuery('.delibera-flow-panel').find("#delibera-flow-column1").find('.dragbox').show();
+		for (var i = 0; i < boxes.length; i++)
+		{
+		  var itemclass = jQuery(boxes[i]).attr('class').replace("dragbox ", "").replace(" clone", "");
+		  //console.log(itemclass);
+		  jQuery('.delibera-flow-panel').find("#delibera-flow-column1").find("."+itemclass).hide();
+		}
+		/** END remove after multiple of the same has implemented **/
 	}
-	/** END remove after multiple of the same has implemented **/
 }
 
 Date.prototype.addDays = function(days)
@@ -119,7 +136,7 @@ jQuery(document).ready(function() {
 			});
 			jQuery(ui.item).find("input").prop('disabled', false);
 			deliberaUpdateFlow();
-			if(delibera_admin_flow.post_id != '' && ui.item.parent().attr('id') != 'delibera-flow-column1' ) {
+			if(!deliberaIsConfig() && ui.item.parent().attr('id') != 'delibera-flow-column1' ) {
 				jQuery(ui.item).find('.dragbox-content').show();
 			}
 		}
@@ -127,6 +144,11 @@ jQuery(document).ready(function() {
 	jQuery('.delibera-flow-panel').find("#delibera-flow-column2").sortable({
 		receive : function(e, ui) {
 			copyHelper = null;
+			var id = ui.item.attr('class').replace("dragbox ", "").replace(" clone", "");
+			if(deliberaUsedModule(id))
+			{
+				ui.sender.sortable("cancel");
+			}
 		}
 	});
 	jQuery('.delibera-flow-panel').find("#delibera-flow-column1").sortable({
@@ -137,7 +159,7 @@ jQuery(document).ready(function() {
 	        }
 		}
 	});
-	if(delibera_admin_flow.post_id == '')
+	if(deliberaIsConfig())
 	{
 		jQuery('.delibera-flow-panel').find("#delibera-flow-column2").find("input").prop('disabled', true);
 	}
@@ -154,7 +176,7 @@ jQuery(document).ready(function() {
             post_id: jQuery('#delibera-flow-postid').val(),
             nonce: jQuery('#_delibera-flow-nonce').val()
         };
-		if(delibera_admin_flow.post_id == '')
+		if(deliberaIsConfig())
 		{
 			jQuery('.delibera-flow-panel').find('#delibera-flow-column1').find('input:not(input[type=button], input[type=submit], input[type=reset]), textarea, select').each(function(){
 				data[this.name] = this.value;

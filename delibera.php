@@ -51,7 +51,7 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_setup.php';
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_init.php';
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_flow.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'admin' . DIRECTORY_SEPARATOR . 'delibera_flow.php';
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_utils.php';
 
