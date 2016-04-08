@@ -393,12 +393,12 @@ function delibera_register_required_plugins() {
 		array(
 			'name'      => 'mention-comments-authors',
 			'slug'      => 'mention-comments-authors',
-			'required'  => false
+			'required'  => true
 		),
 		array(
 			'name'      => 'comment-attachment',
 			'slug'      => 'comment-attachment',
-			'required'  => false
+			'required'  => true
 		),
     );
 
