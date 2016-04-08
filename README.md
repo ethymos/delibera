@@ -1,4 +1,4 @@
-[![Stories in Ready](https://badge.waffle.io/redelivre/delibera.png?label=ready&title=Ready)](https://waffle.io/redelivre/delibera)
+[![Stories in Ready](https://badge.waffle.io/redelivre/delibera.png?label=ready&title=Ready)](https://waffle.io/redelivre/delibera) [![Build Status](http://jenkins.beta.redelivre.org.br:8081/job/Beta%20Delibera/badge/icon)]()
 Delibera
 ========
 
