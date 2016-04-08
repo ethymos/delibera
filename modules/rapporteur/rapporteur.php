@@ -9,7 +9,7 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 	 * List of of topic status
 	 * @var array
 	 */
-	protected $situacao = array('relatoria', 'eleicao_relator');
+	public $situacao = array('relatoria', 'eleicao_relator');
 	
 	/**
 	 * 
