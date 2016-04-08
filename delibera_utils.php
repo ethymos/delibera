@@ -247,3 +247,4 @@ if(!function_exists('array_value_recursive'))
 		});
 			return count($val) > 1 ? $val : array_pop($val);
 	}
+}

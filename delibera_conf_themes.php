@@ -70,8 +70,8 @@ class DeliberaThemes
     {
         $this->baseDir = __DIR__ . '/themes/';
         $this->baseUrl = plugins_url('/delibera/themes/');
-        $this->defaultThemePath = $this->baseDir . 'creta/';
-        $this->defaultThemeUrl = $this->baseUrl . 'creta/';
+        $this->defaultThemePath = $this->baseDir . 'generic/';
+        $this->defaultThemeUrl = $this->baseUrl . 'generic/';
 
         $this->wpThemePath = get_stylesheet_directory() . '/delibera';
         $this->wpThemeUrl = get_stylesheet_directory_uri() . '/delibera';
