@@ -34,11 +34,11 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 	 */
 	public function registerTax()
 	{
-		if(term_exists('eleicaoredator', 'situacao', null) == false)
+		if(term_exists('eleicao_redator', 'situacao', null) == false)
 		{
 			delibera_insert_term('Regime de Votação de Relator', 'situacao', array(
 					'description'=> 'Pauta em Eleição de Relator',
-					'slug' => 'eleicaoredator',
+					'slug' => 'eleicao_redator',
 				),
 				array(
 					'qtrans_term_pt' => 'Regime de Votação de Relator',
@@ -73,7 +73,7 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 		$opts = delibera_get_config();
 		if($opts['eleicao_relator'] == 'S')
 		{
-			wp_set_object_terms($post_id, 'eleicaoredator', 'situacao', false); //Mudar situação para Votação
+			wp_set_object_terms($post_id, 'eleicao_redator', 'situacao', false); //Mudar situação para Votação
 		}
 		else
 		{
