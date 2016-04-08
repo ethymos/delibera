@@ -529,13 +529,13 @@ function delibera_notificar_representantes($mensage, $tipo, $post = false, $user
 	{
 		$post = get_post();
 	}
-
-	if(is_numeric($post))
+	
+	if(!is_object($post))
 	{
 		$post = get_post($post);
 	}
-
-	if($post->post_status == 'publish')
+	
+	if(is_object($post) && $post->post_status == 'publish')
 	{
 
 		$options_plugin_delibera = delibera_get_config();
