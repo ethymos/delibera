@@ -138,7 +138,7 @@ resolucao - 90248f
   display: none;
 }
 .lista-de-pautas .type-pauta .entry-title {
-  height: 110px;
+  min-height: 110px;
   color: #fff;
   line-height: normal;
   margin: 0;
@@ -258,14 +258,16 @@ resolucao - 90248f
 	color: #fff;
 	font-size: 36px;
 	width: 75%;
+	line-height: 1.3;
 	margin: 0;
 	padding: 0;
+	display: inline-table;
 }
 .single-pauta .type-pauta .entry-content {
   margin: 15px 0 0;
 }
 .single-pauta .type-pauta .entry-prazo {
-  width: 45%;
+  width: 25%;
   float: right;
   text-align: right;
   font-weight: bold;
@@ -287,9 +289,9 @@ resolucao - 90248f
   display: block;
 }
 .single-pauta .comment-respond h3 {
-  color: #3dcff4;
-  font-size: 36px;
-  font-weight: 600;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.4;
 }
 .single-pauta .form-submit {
   float: none;
@@ -379,8 +381,23 @@ resolucao - 90248f
   margin: 0 auto;
 }
 
+.delibera-comment-author img {
+    width: auto;
+    height: auto;
+    max-height: 50px;
+}
+
 .checkbox-voto {
-	float: left;
+	display: inline;
+	font-weight: bold;
+}
+
+.delibera_comment_button {
+	margin: 5px auto;
+}
+
+.instrucoes-votacao {
+	margin: 5px auto;
 }
 
 a.button {
