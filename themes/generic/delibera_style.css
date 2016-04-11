@@ -67,7 +67,8 @@ resolucao - 90248f
   padding: 50px 25px;
 }
 .delibera-header .button {
-    background: #166e87;
+    background-color: #166e87;
+    opacity: 1;	
 }
 .page-title {
   color: #000;
@@ -220,11 +221,12 @@ resolucao - 90248f
 .single-pauta .type-pauta {
   box-sizing: border-box;
   background-color: #58585a;
-  display: inline-block;
   padding: 30px;
   border-radius: 7px;
   vertical-align: top;
   color: #fff;
+  max-width: 80%;
+  margin: 0 auto;
 }
 .single-pauta .type-pauta .entry-author {
   margin: 5px 0 15px 0;
@@ -253,9 +255,11 @@ resolucao - 90248f
   vertical-align: top;
 }
 .single-pauta .type-pauta .entry-title {
-  color: #fff;
-  font-size: 36px;
-  width: 75%;
+	color: #fff;
+	font-size: 36px;
+	width: 75%;
+	margin: 0;
+	padding: 0;
 }
 .single-pauta .type-pauta .entry-content {
   margin: 15px 0 0;
@@ -300,7 +304,7 @@ resolucao - 90248f
 }
 .delibera-comment-text {
   color: #535550;
-  font-weight: 600;
+  font-weight: 300;
   font-size: 16px;
   background: rgba(255, 255, 255, .2);
   padding: 15px;
@@ -315,17 +319,21 @@ resolucao - 90248f
   display: inline-block;
 }
 .delibera-comment-meta {
-  text-align: right;
+	text-align: right;
+	float: right;
+	margin-top: 20px;
 }
 .delibera-comment-body .comment-reply-link {
-  margin: 10px 0;
-  display: inline-block;
-  background-color: #3dcff4;
-  border: none;
-  color: #fff;
-  position: initial;
-  font-size: 14px;
-  text-align: right;
+	margin: 10px 0;
+	display: inline-block;
+	background-color: #3dcff4;
+	border: none;
+	color: #fff;
+	position: initial;
+	font-size: 14px;
+	text-align: right;
+	border-radius: 4px;
+	padding: 5px;
 }
 
 .reply,
@@ -370,6 +378,42 @@ resolucao - 90248f
   display: block;
   margin: 0 auto;
 }
+
+.checkbox-voto {
+	float: left;
+}
+
+a.button {
+
+	border: none;
+
+}
+
+
+/* social midia
+.twitter-share {
+    text-decoration: none!important;
+    display: inline-block;
+    margin: 0;
+    font-size: 12px;
+    font-family: "Open Sans",sans-serif;
+    font-weight: 400;
+    border-radius: 3px;
+    color: #777!important;
+    background: #f8f8f8;
+    border: 1px solid #ccc;
+    box-shadow: 0 1px 0 rgba(0,0,0,.08);
+    text-shadow: none;
+    line-height: 12px;
+    padding: 0;
+}
+
+.twitter-share a.btn {
+    background-color: #ccc;
+    color: #777;
+}
+*/
+
 /* portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android) */
 @media (max-width:641px) {
     .delibera-header {
