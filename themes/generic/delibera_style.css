@@ -240,11 +240,12 @@ resolucao - 90248f
 }
 .single-pauta .type-pauta .entry-print,
 .single-pauta .type-pauta .entry-seguir {
-  display: inline-block;
-  background: #ccc;
-  color: #777;
-  padding: 0px 15px;
-  font-size: 14px;
+	display: inline-block;
+	background: #ccc;
+	color: #777;
+	padding: 0px 15px;
+	font-size: 14px;
+	cursor: pointer;
 }
 .single-pauta .type-pauta .entry-print a,
 .single-pauta .type-pauta .entry-seguir a {
@@ -415,6 +416,7 @@ p.comment-form-url.comment-form-attachment {
 	display: inline;
 	float: left;
 	line-height: 2;
+	text-align: left;
 }
 
 .delibera_comment_button {
@@ -437,6 +439,18 @@ p.comment-form-url.comment-form-attachment {
 	margin: 0 auto;
 	float: none;
 	text-align: center;
+}
+
+span.read-more, span.re-collapse {
+	font-weight: bold;
+}
+
+.single-pauta .entry-seguir {
+    display: inline-block;
+    background: #CCC;
+    color: #777;
+    padding: 0px 15px;
+    font-size: 14px;
 }
 
 /* Debug em outros temas */
