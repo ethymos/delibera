@@ -10,7 +10,7 @@ class Vote extends \Delibera\Modules\ModuleBase
 	 * List of of topic status
 	 * @var array
 	 */
-	protected $situacao = array('emvotacao');
+	public $situacao = array('emvotacao');
 	
 	/**
 	 *

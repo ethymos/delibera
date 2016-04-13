@@ -9,7 +9,7 @@ class Validation extends \Delibera\Modules\ModuleBase
 	 *
 	 * @var array List of of topic status
 	 */
-	protected $situacao = array('validacao', 'naovalidada');
+	public $situacao = array('validacao', 'naovalidada');
 	
 	/**
 	 *

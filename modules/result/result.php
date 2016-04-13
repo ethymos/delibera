@@ -9,7 +9,7 @@ class Result extends \Delibera\Modules\ModuleBase
 	 *
 	 * @var array List of of topic status
 	 */
-	protected $situacao = array('comresolucao');
+	public $situacao = array('comresolucao');
 	
 	/**
 	 *

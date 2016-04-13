@@ -255,7 +255,23 @@ class Flow
 		$situacao = delibera_get_situacao($post_id);
 		$current = array_search($situacao->slug, $flow);
 		$modules = $DeliberaFlow->getFlowModules(); //TODO cache?
-		if($current === false) $current = 0;
+		
+		if($current === false)
+		{
+			$situacoes = array();
+			foreach ($modules as $module)
+			{
+				foreach ($module->situacao as $sit)
+				{
+					$situacoes[$sit] = $module;
+				}
+			}
+			if (array_key_exists($situacao->slug, $situacoes))
+			{
+				return $situacoes[$situacao->slug];
+			}
+			$current = 0;
+		}
 		return $modules[$flow[$current]];
 	}
 	

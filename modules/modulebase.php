@@ -10,7 +10,7 @@ abstract class ModuleBase
 	 * 
 	 * @var array List of of topic status
 	 */
-	protected $situacao = array();
+	public $situacao = array();
 	
 	/**
 	 *
