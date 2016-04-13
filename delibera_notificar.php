@@ -84,7 +84,7 @@ function delibera_notifications_page()
 			"label" => __('Permitir notificações por e-mail?','delibera'),
 			"content" => $content_notif
 		       );
-	$table .= delibera_form_table($rows);
+	$table = delibera_form_table($rows);
 	$rows_lang = array();
 
 	if(function_exists('qtrans_enableLanguage'))
