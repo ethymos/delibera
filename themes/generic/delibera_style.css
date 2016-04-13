@@ -284,7 +284,7 @@ resolucao - 90248f
 }
 .single-pauta .comment-respond {
   width: 80%;
-  margin: 40px auto;
+  margin: 20px auto;
   text-align: center;
 }
 /* 
@@ -301,7 +301,8 @@ resolucao - 90248f
     line-height: 1.4;
 }
 .single-pauta .form-submit {
-  float: none;
+	float: none;
+	margin: 15px auto;
 }
 
 /* COMMENTS */
@@ -406,9 +407,14 @@ p.comment-form-url.comment-form-attachment {
     max-height: 50px;
 }
 
+.delibera_checkbox_voto {
+	display: inline-block;
+}
+
 .checkbox-voto {
 	display: inline;
-	font-weight: bold;
+	float: left;
+	line-height: 2;
 }
 
 .delibera_comment_button {
@@ -416,7 +422,8 @@ p.comment-form-url.comment-form-attachment {
 }
 
 .instrucoes-votacao {
-	margin: 5px auto;
+	margin: 5px auto 15px;
+	font-weight: 600;
 }
 
 .delibera-comment-author .fn {
@@ -435,9 +442,12 @@ p.comment-form-url.comment-form-attachment {
 /* Debug em outros temas */
 
 a.button {
-
 	border: none;
+}
 
+#respond {
+	padding:0;
+	margin: 0;
 }
 
 
