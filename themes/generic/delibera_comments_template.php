@@ -141,7 +141,7 @@ class Delibera_Walker_Comment extends Walker_Comment
 					}
 					elseif($situacao->slug != 'validacao' && is_user_logged_in())
 					{
-						$args['reply_text'] = __("Responda este comentário", 'delibera');
+						$args['reply_text'] = __("Responda", 'delibera');
 						comment_reply_link(array_merge( $args, array('add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth'])));
 					}
 					elseif(is_user_logged_in())
