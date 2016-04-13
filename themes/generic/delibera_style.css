@@ -453,6 +453,21 @@ span.read-more, span.re-collapse {
     font-size: 14px;
 }
 
+.delibera-comment-body .comment-edit-link {
+	margin: 10px 0;
+	display: inline-block;
+	background-color: #3dcff4;
+	border: none;
+	color: #fff;
+	position: initial;
+	font-size: 14px;
+	text-align: right;
+	font-weight: 700;
+	text-transform: uppercase;
+	border-radius: 4px;
+	padding: 5px;
+}
+
 /* Debug em outros temas */
 
 a.button {
