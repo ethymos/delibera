@@ -5,7 +5,7 @@ Template Name: Author Page Comments
 
 get_header();
 $id = $wp_query->query_vars['commentsfor'];
-$user = get_user_by( 'id' , $id ); 
+$user = get_user_by( 'id' , encryptor('decrypt',$id) ); 
 
 $per_page = isset( $_GET['per-page'] ) ?  esc_html( $_GET['per-page'] ) : '20' ;
 $search = isset( $_GET['search'] ) ?  esc_html( $_GET['search'] ) : '' ;
@@ -32,7 +32,7 @@ $paged = get_query_var( 'paged' );
       </select>
     </form>
    <a href="<?php echo get_site_url(); ?>/delibera/membros" >Ver todos os Membros</a>
-   <a href="<?php echo get_site_url(); ?>/delibera/<?php echo $user->ID;?>/pautas" >Ver todas as Pautas de <?php echo $user->display_name; ?></a>
+   <a href="<?php echo get_site_url(); ?>/delibera/<?php echo encryptor('encrypt', $user->ID); ?>/pautas" >Ver todas as Pautas de <?php echo $user->display_name; ?></a>
     <p>
       <div>
         <?php echo get_avatar( $user->ID ); ?>
