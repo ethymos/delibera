@@ -94,6 +94,8 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_relatorio.php';
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_member_path.php';
 
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . 'oembed-in-comments.php';
+
  /**
    * Redir e ciona usuários que não são membros do site
  * onde o Delibera foi instalado para a página de pautas após o
