@@ -58,7 +58,9 @@ class Delibera_Walker_Comment extends Walker_Comment
 			<div class="delibera-comment-author vcard">
 			<?php if ($args['avatar_size'] != 0) echo get_avatar( $comment, $args['avatar_size'] ); ?>
 			<?php
-				$url = get_author_posts_url($comment->user_id);
+				//$url = get_author_posts_url($comment->user_id);
+                                // XXX colocar hash
+				$url = get_site_url() . '/delibera/' . $comment->user_id . '/pautas/';
 				//print_r($comment);
 				$autor_link = "<a href='$url' rel='external nofollow' class='url'>$comment->comment_author</a>";
 				printf('<cite class="fn">%s</cite><span class="delibera-says"></span>', $autor_link);

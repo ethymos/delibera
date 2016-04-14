@@ -59,7 +59,7 @@
 							<div class="entry-author">
 								<?php _e( 'Criado por', 'delibera' ); ?>
 								<span class="author vcard">
-									<a class="url fn n" href="<?php echo get_author_posts_url( get_the_author_meta( 'ID' ) ); ?>" title="<?php printf( __( 'Ver o perfil de %s', 'delibera' ), get_the_author() ); ?>">
+									<a class="url fn n" href="<?php echo get_site_url().'/delibera/' . get_the_author_meta( 'ID' ) . '/pautas' ; ?>" title="<?php printf( __( 'Ver o perfil de %s', 'delibera' ), get_the_author() ); ?>">
 										<?php the_author(); ?>
 									</a>
 								</span>
