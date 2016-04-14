@@ -240,11 +240,12 @@ resolucao - 90248f
 }
 .single-pauta .type-pauta .entry-print,
 .single-pauta .type-pauta .entry-seguir {
-  display: inline-block;
-  background: #ccc;
-  color: #777;
-  padding: 0px 15px;
-  font-size: 14px;
+	display: inline-block;
+	background: #ccc;
+	color: #777;
+	padding: 0px 15px;
+	font-size: 14px;
+	cursor: pointer;
 }
 .single-pauta .type-pauta .entry-print a,
 .single-pauta .type-pauta .entry-seguir a {
@@ -284,7 +285,7 @@ resolucao - 90248f
 }
 .single-pauta .comment-respond {
   width: 80%;
-  margin: 40px auto;
+  margin: 20px auto;
   text-align: center;
 }
 /* 
@@ -301,13 +302,14 @@ resolucao - 90248f
     line-height: 1.4;
 }
 .single-pauta .form-submit {
-  float: none;
+	float: none;
+	margin: 15px auto;
 }
 
 /* COMMENTS */
 .delibera-comment-body {
 	width: 75%;
-	padding: 15px;
+	padding: 10px 10px 5px;
 	margin: 10px auto;
 	background-color: #a8e7f9;
 	overflow: auto;
@@ -346,32 +348,32 @@ resolucao - 90248f
 	text-align: right;
 	border-radius: 4px;
 	padding: 5px;
+	font-weight: 700;
+	text-transform: uppercase;
 }
 
 .reply {
 	display: inline-block;
 	width: 45%;
 	float: left;
-	margin: 10px 0;
 }
 .delibera-comment-botoes {
 	text-align: right;
 	display: inline-block;
 	width: 45%;
 	float: right;
-	margin: 10px 0;
+	margin: 5px 0;
 }
 .delibera_unlike .delibera_unlike_text,
 .delibera_like .delibera_like_text {
-  cursor: pointer;
-  color: #fff;
-  font-weight: 400;
-  line-height: 18px;
-  font-size: 14px;
-  padding: 7px;
-
-  border-radius: 4px;
-  display: inline-block;
+	cursor: pointer;
+	color: #fff;
+	font-weight: 400;
+	line-height: 18px;
+	font-size: 14px;
+	padding: 7px;
+	border-radius: 4px;
+	display: inline-block;
 }
 .delibera_like .delibera_like_text {
   background-color: #58862c;
@@ -406,9 +408,15 @@ p.comment-form-url.comment-form-attachment {
     max-height: 50px;
 }
 
+.delibera_checkbox_voto {
+	display: inline-block;
+}
+
 .checkbox-voto {
 	display: inline;
-	font-weight: bold;
+	float: left;
+	line-height: 2;
+	text-align: left;
 }
 
 .delibera_comment_button {
@@ -416,7 +424,8 @@ p.comment-form-url.comment-form-attachment {
 }
 
 .instrucoes-votacao {
-	margin: 5px auto;
+	margin: 5px auto 15px;
+	font-weight: 600;
 }
 
 .delibera-comment-author .fn {
@@ -432,14 +441,44 @@ p.comment-form-url.comment-form-attachment {
 	text-align: center;
 }
 
+span.read-more, span.re-collapse {
+	font-weight: bold;
+}
+
+.single-pauta .entry-seguir {
+    display: inline-block;
+    background: #CCC;
+    color: #777;
+    padding: 0px 15px;
+    font-size: 14px;
+}
+
+.delibera-comment-body .comment-edit-link {
+	margin: 10px 0;
+	display: inline-block;
+	background-color: #3dcff4;
+	border: none;
+	color: #fff;
+	position: initial;
+	font-size: 14px;
+	text-align: right;
+	font-weight: 700;
+	text-transform: uppercase;
+	border-radius: 4px;
+	padding: 5px;
+}
+
+.delibera-edit-comment-button, .delibera-delete-comment-button  {
+	float: left;
+	margin: 0 5px;
+	cursor: pointer;	
+}
+
 /* Debug em outros temas */
 
 a.button {
-
 	border: none;
-
 }
-
 
 /* social midia
 .twitter-share {
