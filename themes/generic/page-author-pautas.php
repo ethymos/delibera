@@ -5,7 +5,7 @@ Template Name: Author Page
 
 get_header();
 $id = $wp_query->query_vars['pautasfor'];
-$user = get_user_by( 'id' , encryptor('decrypt',$id) ); 
+$user = get_user_by( 'id' , deliberaEncryptor('decrypt',$id) ); 
 
 $per_page = isset( $_GET['per-page'] ) ?  esc_html( $_GET['per-page'] ) : '20' ;
 $search = isset( $_GET['search'] ) ?  esc_html( $_GET['search'] ) : '' ;
@@ -31,8 +31,8 @@ $order  = isset( $_GET['order-by'] ) ?  esc_html( $_GET['order-by'] ) : '' ;
         <option value="20" <?php echo $per_page=='20' ? 'selected' : '' ;?> >20</option>
       </select>
     </form>
-   <a href="<?php echo get_site_url(); ?>/delibera/membros" >Ver todos os Membros</a>
-   <a href="<?php echo get_site_url(); ?>/delibera/<?php echo encryptor('encrypt', $user->ID); ?>/comentarios" >Ver todas os Comentários de <?php echo $user->display_name; ?></a>
+   <a href="<?php echo get_site_url(); ?>/delibera/membros" ><?php _e('Ver todos os Membros' , 'delibera' ); ?></a>
+   <a href="<?php echo get_site_url(); ?>/delibera/<?php echo deliberaEncryptor('encrypt', $user->ID); ?>/comentarios" ><? _e('Ver todas os Comentários de' , 'delibera' ); ?> <?php echo $user->display_name; ?></a>
     <p>
       <div>
         <?php echo get_avatar( $user->ID ); ?>

@@ -10,7 +10,6 @@ $order_by = \Delibera\Theme\UserDisplay::getOrderBy($order);
 $paged = get_query_var( 'paged' );
 $blogusers = \Delibera\Theme\UserDisplay::getUsers( $order_by , $search , $per_page , $paged );          
 $number_of_pages = \Delibera\Theme\UserDisplay::getNumberOfPages( $blogusers->get_total() , $per_page );
-
           ?>
 <div id="user_form_search" class="user_form_search">
       <form method="get"  name="form">
@@ -62,11 +61,11 @@ $number_of_pages = \Delibera\Theme\UserDisplay::getNumberOfPages( $blogusers->ge
            <?php echo count_user_posts($user->ID, 'pauta'); ?>
            <?php _e( 'pautas' , 'delibera'); ?>
          </p>
-       <a id="link_pautas" class="link_pautas" href="<?php echo get_site_url()?>/delibera/<?php echo encryptor('encrypt', $user->ID); ?>/pautas">
+       <a id="link_pautas" class="link_pautas" href="<?php echo get_site_url()?>/delibera/<?php echo deliberaEncryptor('encrypt', $user->ID); ?>/pautas">
          <?php echo __('Todas as Pautas' , 'delibera'); ?>
        </a>
        |
-       <a id="link_comments" class="link_comments" href="<?php echo get_site_url()?>/delibera/<?php echo encryptor('encrypt', $user->ID); ?>/comentarios">
+       <a id="link_comments" class="link_comments" href="<?php echo get_site_url()?>/delibera/<?php echo deliberaEncryptor('encrypt', $user->ID); ?>/comentarios">
          <?php echo __('Todas os Comentários' , 'delibera'); ?>
        </a>
     </h1>
