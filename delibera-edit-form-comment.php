@@ -39,7 +39,7 @@
 do_action('add_meta_boxes', 'comment', $comment);
 do_action('add_meta_boxes_comment', $comment);
 
-do_meta_boxes('comment', 'normal', $comment);
+do_meta_boxes(null, 'normal', $comment);
 ?>
 
 <div id="delibera-publishing-action">
