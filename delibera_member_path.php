@@ -45,7 +45,7 @@ class MemberPath
       add_rewrite_tag( '%members%', '' );
       add_rewrite_rule(
           '^delibera/membros',
-          'index.php?members',
+          'index.php?members&paged=1',
           'top'
       );
   }
