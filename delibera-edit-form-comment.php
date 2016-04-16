@@ -10,7 +10,6 @@
  * É adicionado formulário e botões para editar ou remover comentários
  *
  */
-function delibera_template_edit_comment() {}
 ?>
 
 <form name="delibera-edit-comment-<?php echo $comment->comment_ID;?>" action="comment.php" method="post" id="delibera-edit-comment-<?php echo $comment->comment_ID;?>" style="display:none;" class="delibera-edit-comment-form" >
