@@ -36,7 +36,7 @@ function delibera_Add_custom_Post()
 		'hierarchical' => false,
 		'supports' => array('title', 'editor', 'author', 'excerpt', 'trackbacks', 'revisions', 'comments', 'thumbnail'),
 		'register_meta_box_cb' => 'delibera_pauta_custom_meta', // função para chamar na edição
-		'taxonomies' => array('post_tag'), // Taxionomias já existentes relaciondas, vamos criar e registrar na sequência
+		'taxonomies' => array('post_tag', 'category'), // Taxionomias já existentes relaciondas, vamos criar e registrar na sequência
 		'permalink_epmask' => 'EP_PERMALINK ',
 		'has_archive' => true, // Opção de arquivamento por slug
 		'rewrite' => true,
