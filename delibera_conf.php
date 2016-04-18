@@ -1,20 +1,26 @@
 <?php
+/**
+ * Página de configuração do plugin.
+ * @package Configuracoes
+ */
+
 
 /**
  * Retorna todas as configurações do delibera
- * salvas no banco. Quando não houver um valor 
+ * salvas no banco. Quando não houver um valor
  * salvo no banco para determinada opções retorna o
  * valor padrão.
- * 
+ *
+ * @package Configuracoes\Template
  * @return array
  */
 function delibera_get_config() {
     $opt = array();
-    
+
     $opt = apply_filters('delibera_get_config', $opt);
-    
+
     $opt_conf = get_option('delibera-config', array());
-    
+
     if(!is_array($opt_conf))
     {
     	$opt_conf = array();
@@ -25,37 +31,41 @@ function delibera_get_config() {
     }
 
     $opt = array_merge($opt, $opt_conf);
-    
+
     return $opt;
 }
 
+require_once('delibera_conf_themes.php');
+
+/**
+ * Return Main Configuration from database
+ * there are two level of config, main (required) and others configs
+ *
+ * @param array $config -
+ * @return array
+ * @package Configuracoes\Template
+ *
+ */
 function delibera_get_main_config($config = array()) {
     global $deliberaThemes;
-    
+
     if(!is_object($deliberaThemes)) $deliberaThemes = new DeliberaThemes;
-    
+
     $opt = array();
-    $opt['theme'] = $deliberaThemes->getThemeDir('creta');
-    $opt['minimo_validacao'] = '10';
-    $opt['dias_validacao'] = '5';
-    $opt['dias_discussao'] = '5';
-    $opt['dias_votacao'] = '5';
+    $opt['theme'] = plugin_dir_path(__FILE__)."/themes/generic";
+    
     $opt['criar_pauta_pelo_front_end'] = 'N';
     $opt['representante_define_prazos'] = 'N';
-    $opt['pauta_suporta_encaminhamento'] = 'S';
     $opt['dias_novo_prazo'] = '2';
-    $opt['validacao'] = 'S';
-    $opt['dias_relatoria'] = '2';
-    $opt['relatoria'] = 'N';
-    $opt['eleicao_relator'] = 'N';
-    $opt['dias_votacao_relator'] = '2';
     $opt['limitar_tamanho_comentario'] = 'N';
     $opt['numero_max_palavras_comentario'] = '50';
     $opt['plan_restriction'] = 'N';
     $opt['cabecalho_arquivo'] = __( 'Bem-vindo a plataforma de debate do ', 'delibera' ).get_bloginfo('name');
     $opt['todos_usuarios_logados_podem_participar'] = 'N';
 	$opt['data_fixa_nova_pauta_externa'] = '';
-    
+	
+	$opt = apply_filters('delibera_get_main_config', $opt);
+
     return array_merge($opt, $config);
 }
 add_filter('delibera_get_config', 'delibera_get_main_config');
@@ -63,24 +73,25 @@ add_filter('delibera_get_config', 'delibera_get_main_config');
 /**
  * Gera o HTML da página de configuração
  * do Delibera
- * 
+ *
  * @return null
+ * @package Configuracoes\Admin
  */
 function delibera_conf_page()
 {
     global $deliberaThemes;
-    
+
     $mensagem = '';
 
     if ($_SERVER['REQUEST_METHOD']=='POST') {
         $opt = delibera_get_config();
-        
+
         if (!current_user_can('manage_options')) {
             die(__('Você não pode editar as configurações do delibera.','delibera'));
         }
-        
+
         check_admin_referer('delibera-config');
-        	
+
         foreach (array_keys(delibera_get_main_config()) as $option_name) {
             if (isset($_POST[$option_name])) {
                 $opt[$option_name] = htmlspecialchars($_POST[$option_name]);
@@ -96,10 +107,10 @@ function delibera_conf_page()
                 wp_die($e->getMessage());
             }
         }
-        
+
         // atualiza os permalinks por conta da opção "criar_pauta_pelo_front_end"
         flush_rewrite_rules();
-
+		$opt = apply_filters('delibera-pre-main-config-save', $opt);
         if (update_option('delibera-config', $opt) || (isset($_POST["delibera_reinstall"]) && $_POST['delibera_reinstall'] == 'S'))
             $mensagem = __('Configurações salvas!','delibera');
         else
@@ -108,11 +119,11 @@ function delibera_conf_page()
 
     $opt = delibera_get_config();
     ?>
-		
+
 <div class="wrap">
 <h2>Configurações gerais</h2>
 <div class="postbox-container" style="width:80%;">
-	<div class="metabox-holder">	
+	<div class="metabox-holder">
 		<div class="meta-box-sortables">
 			<?php if ($mensagem) {?>
 			<div id="message" class="updated">
@@ -120,9 +131,9 @@ function delibera_conf_page()
 			</div>
 			<?php }?>
 			<form action="<?php echo $_SERVER['REQUEST_URI'];?>" method="post" id="delibera-config" >
-			<?php if (function_exists('wp_nonce_field')) 		
+			<?php if (function_exists('wp_nonce_field'))
 					wp_nonce_field('delibera-config');
-						
+
 				$rows = array();
 				if(is_multisite() && get_current_blog_id() == 1)
 				{
@@ -147,65 +158,14 @@ function delibera_conf_page()
 					"label" => __('Representante define prazos?', 'delibera'),
 					"content" => '<input type="checkbox" name="representante_define_prazos" id="representante_define_prazos" value="S" '. ( htmlspecialchars_decode($opt['representante_define_prazos']) == "S" ? "checked='checked'" : "" ).'/>',
 				);
-                $rows[] = array(
-                    "id" => "pauta_suporta_encaminhamento",
-                    "label" => __('Pautas suportam sugestão de encaminhamento?', 'delibera'),
-                    "content" => '<input type="checkbox" name="pauta_suporta_encaminhamento" id="pauta_suporta_encaminhamento" value="S" '. ( htmlspecialchars_decode($opt['pauta_suporta_encaminhamento']) == "S" ? "checked='checked'" : "" ).'/>',
-                );
-				$rows[] = array(
-					"id" => "validacao",
-					"label" => __('É necessário validação das pautas?', 'delibera'),
-					"content" => '<input type="checkbox" name="validacao" id="validacao" value="S" '.(htmlspecialchars_decode($opt['validacao']) == 'S' ? 'checked="checked"' : '').' />'
-				);
-				$rows[] = array(
-					"id" => "minimo_validacao",
-					"label" => __('Mínimo de validações para uma pauta:', 'delibera'),
-					"content" => '<input type="text" name="minimo_validacao" id="minimo_validacao" value="'.htmlspecialchars_decode($opt['minimo_validacao']).'"/>'
-				);
 				
-				$rows[] = array(
-					"id" => "dias_validacao",
-					"label" => __('Dias para validação da pauta:', 'delibera'),
-					"content" => '<input type="text" name="dias_validacao" id="dias_validacao" value="'.htmlspecialchars_decode($opt['dias_validacao']).'"/>'
-				);
-				
-				$rows[] = array(
-					"id" => "dias_discussao",
-					"label" => __('Dias para discussão da pauta:', 'delibera'),
-					"content" => '<input type="text" name="dias_discussao" id="dias_discussao" value="'.htmlspecialchars_decode($opt['dias_discussao']).'"/>'
-				);
-				
-				$rows[] = array(
-					"id" => "dias_votacao",
-					"label" => __('Dias para votação de encaminhamentos:', 'delibera'),
-					"content" => '<input type="text" name="dias_votacao" id="dias_votacao" value="'.htmlspecialchars_decode($opt['dias_votacao']).'"/>'
-				);
-				
+                $rows = apply_filters('delivera_config_page_rows', $rows, $opt);
+
 				$rows[] = array(
 					"id" => "dias_novo_prazo",
 					"label" => __('Dias para novo prazo:', 'delibera'),
 					"content" => '<input type="text" name="dias_novo_prazo" id="dias_novo_prazo" value="'.htmlspecialchars_decode($opt['dias_novo_prazo']).'"/><p class="description">' . __('Utilizado para as pautas em discussão, em relatoria e em votação para dar mais alguns dias quando uma condição mínima não é atingida até o fim do prazo. Por exemplo, quando acaba o prazo de uma pauta em discussão ou relatoria e ela não tem nenhuma proposta de encaminhamento. Utilizado também quando uma pauta não validada é reaberta.', 'delibera'). '</p>'
 				);
-				$rows[] = array(
-					"id" => "relatoria",
-					"label" => __('Necessário relatoria da discussão das pautas?', 'delibera'),
-					"content" => '<input type="checkbox" id="relatoria" name="relatoria" value="S" '.(htmlspecialchars_decode($opt['relatoria']) == 'S' ? 'checked="checked"' : '').' />'
-				);
-				$rows[] = array(
-					"id" => "dias_relatoria",
-					"label" => __('Prazo para relatoria:', 'delibera'),
-					"content" => '<input type="text" name="dias_relatoria" id="dias_relatoria" value="'.htmlspecialchars_decode($opt['dias_relatoria']).'"/>'
-				);
-				/*$rows[] = array(
-					"id" => "eleicao_relator",
-					"label" => __('Necessário eleição de relator?', 'delibera'),
-					"content" => '<input type="checkbox" name="eleicao_relator" value="S" '.(htmlspecialchars_decode($opt['eleicao_relator']) == 'S' ? 'checked="checked"' : '').' />'
-				);
-				$rows[] = array(
-					"id" => "dias_votacao_relator",
-					"label" => __('Prazo para eleição de relator:', 'delibera'),
-					"content" => '<input type="text" name="dias_votacao_relator" id="dias_votacao_relator" value="'.htmlspecialchars_decode($opt['dias_votacao_relator']).'"/>'
-				);*/
 				$rows[] = array(
 					"id" => "limitar_tamanho_comentario",
 					"label" => __('Limitar o tamanho do comentário visível?', 'delibera'),
@@ -240,16 +200,16 @@ function delibera_conf_page()
 				}
 				echo $table.'<div class="submit"><input type="submit" class="button-primary" name="submit" value="'.__('Save Changes').'" /></form></div>';
 			?>
-				
+
 				</form>
 			</div> <!-- meta-box-sortables -->
 		</div> <!-- meta-box-holder -->
 	</div> <!-- postbox-container -->
 
 	<?php do_action('delibera_config_page_extra');?>
-	
+
 </div>
 
-<?php	
+<?php
 
 }

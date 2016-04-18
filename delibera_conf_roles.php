@@ -1,6 +1,8 @@
 <?php
+/**
+ * Configuração de permissões.
+ */
 
-// Configuração de permissões
 $delibera_permissoes = array(
 	'administrator' => array('Novo' => false, 'Caps' => array
 	(
@@ -74,5 +76,6 @@ $delibera_permissoes = array(
 		'votar',
 	)),*/
 );
+
 
 ?>

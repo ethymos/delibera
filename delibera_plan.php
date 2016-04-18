@@ -198,4 +198,23 @@ function delibera_plan_config_page()
 
 add_action('delibera_config_page_extra', 'delibera_plan_config_page');
 
+function delibera_get_plan_config()
+{
+	$plan = 'N';
+
+	if( is_multisite() && get_current_blog_id() != 1 )
+	{
+		switch_to_blog(1);
+		$opt = delibera_get_config();
+		$plan = $opt['plan_restriction'];
+		restore_current_blog();
+	}
+	else
+	{
+		$opt = delibera_get_config();
+		$plan = $opt['plan_restriction'];
+	}
+
+	return $plan;
+}
 ?>
