@@ -493,7 +493,7 @@ class Flow
 		if(strpos($screenid, 'page_delibera') !== false || $screenid == 'pauta' )
 		{
 			$post_id = get_the_ID();
-			wp_enqueue_script('delibera-admin-flow',WP_CONTENT_URL.'/plugins/delibera/admin/js/flow.js', array( 'jquery-ui-core'));
+			wp_enqueue_script('delibera-admin-flow',WP_CONTENT_URL.'/plugins/delibera/admin/js/flow.js', array( 'jquery-ui-core', 'jquery-ui-sortable'));
 			$data = array(
 					'ajax_url' => admin_url('admin-ajax.php'),
 					'post_id' => $post_id
