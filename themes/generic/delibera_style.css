@@ -273,7 +273,7 @@ resolucao - 90248f
   margin: 15px 0 0;
 }
 .single-pauta .type-pauta .entry-prazo {
-  width: 25%;
+  width: 20%;
   float: right;
   text-align: right;
   font-weight: bold;
@@ -338,7 +338,7 @@ resolucao - 90248f
 	font-weight: bold;
 }
 .delibera-comment-body .comment-reply-link {
-	margin: 10px 0;
+	margin: 5px 0;
 	display: inline-block;
 	background-color: #3dcff4;
 	border: none;
@@ -397,10 +397,11 @@ resolucao - 90248f
   display: block;
   margin: 0 auto;
 }
-
+/* 
 p.comment-form-url.comment-form-attachment {
 	display: none;
 }
+*/
 
 .delibera-comment-author img {
     width: auto;
