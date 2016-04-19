@@ -9,7 +9,7 @@ p {
 .button {
   background-color: #3dcff4;
   color: #fff;
-  padding: 5px 20px;
+  padding: 5px 10px;
   border-radius: 5px;
   border-style: none;
   text-transform: uppercase;
@@ -420,8 +420,32 @@ p.comment-form-url.comment-form-attachment {
 	text-align: left;
 }
 
+.submit-edit-comment-button {
+	margin: 10px 0 0 0;
+	display: inline-block;
+	background-color: #3dcff4;
+	border: none;
+	color: #fff;
+	position: initial;
+	font-size: 14px;
+	text-align: right;
+	border-radius: 4px;
+	padding: : 3px 13px
+	font-weight: 700;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+
 .delibera_comment_button {
 	margin: 5px auto;
+}
+
+.delibera-comment-body textarea {
+	padding: 10px;
+	font-family: sans-serif;
+	min-height: 200px;
+	line-height: 1.4;
+	
 }
 
 .instrucoes-votacao {
@@ -437,9 +461,7 @@ p.comment-form-url.comment-form-attachment {
 }
 
 .checkbox-encaminhamento {
-	margin: 0 auto;
-	float: none;
-	text-align: center;
+	font-weight: 600;
 }
 
 span.read-more, span.re-collapse {
@@ -469,11 +491,15 @@ span.read-more, span.re-collapse {
 	padding: 5px;
 }
 
-.delibera-edit-comment-button, .delibera-delete-comment-button  {
+.delibera-edit-comment-button, .delibera-delete-comment-button {
 	float: left;
 	margin: 0 5px;
-	cursor: pointer;	
+	cursor: pointer;
+	font-weight: 700;
+	text-transform: uppercase;
+	font-size: 0.9em;
 }
+
 
 /* Debug em outros temas */
 
