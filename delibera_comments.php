@@ -155,7 +155,7 @@ function delibera_comment_text($commentText)
 				$validacao = get_comment_meta($comment->comment_ID, "delibera_validacao", true);
 				$sim = ($validacao == "S" ? true : false);
 				$commentText = '
-					<div id="painel_validacao delibera-comment-text" >
+					<div id="painel_validacao" class="delibera-comment-text">
 						'.($sim ? '
 						<label class="delibera-aceitou-view">'.__('Aceitou','delibera').'</label>
 						' : '

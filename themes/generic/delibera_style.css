@@ -436,6 +436,42 @@ unlike_color: #ce282a
 	display: none;
 }
 
+#delibera-comments li{
+    list-style: none;
+}
+
+.delibera_lista_validacoes {
+	margin: 20px auto 0px;
+	overflow: overlay;
+}
+
+.delibera_lista_validacoes .delibera-comment-body {
+    width: 31%;
+    float: left;
+    padding: 10px 10px 5px;
+    margin: 1%;
+    background-color: #a8e7f9;
+    overflow: auto;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+#painel_validacao p {
+	font-weight: 700;
+	margin-bottom: 0px;
+	text-align: center;
+}
+
+.delibera_lista_validacoes .delibera-comment-text {
+	background: none;
+	padding: 0;
+}
+
+.delibera_lista_validacoes a.comment-reply-link {
+    display: none;
+}
+
 .delibera-comment-author img {
     width: auto;
     height: auto;
