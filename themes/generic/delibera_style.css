@@ -147,13 +147,13 @@ resolucao - 90248f
   display: none;
 }
 .lista-de-pautas .type-pauta .entry-title {
-  min-height: 110px;
-  color: #fff;
-  line-height: normal;
-  margin: 0;
-  padding: 0;
-  font-size: 24px;
-  font-weight: 600;
+	min-height: 50px;
+	color: #fff;
+	line-height: normal;
+	margin: 0 0 15px 0;
+	padding: 0;
+	font-size: 24px;
+	font-weight: 600;
 }
 
 .lista-de-pautas .type-pauta .entry-content {
@@ -420,7 +420,7 @@ unlike_color: #ce282a
 .delibera_unlike,
 .delibera_like {
   display: inline-block;
-  margin: 0 0 0 20px;
+  margin: 0 0 0 10px;
 }
 
 .comment-form-comment .delibera-encaminha-label {
@@ -431,11 +431,10 @@ unlike_color: #ce282a
   display: block;
   margin: 0 auto;
 }
-/* 
-p.comment-form-url.comment-form-attachment {
+ 
+.validacao p.comment-form-url.comment-form-attachment {
 	display: none;
 }
-*/
 
 .delibera-comment-author img {
     width: auto;
