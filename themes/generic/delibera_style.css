@@ -370,6 +370,7 @@ resolucao - 90248f
 	display: inline-block;
 	width: 45%;
 	float: left;
+	margin-top: 10px;
 }
 .delibera-comment-botoes {
 	text-align: right;
@@ -380,23 +381,42 @@ resolucao - 90248f
 }
 .delibera_unlike .delibera_unlike_text,
 .delibera_like .delibera_like_text {
+	
+	display: none;
+	
+}
+.delibera_like {
+	height: 46px;
+	width: 46px;
+	background: url(images/export-botoes.png) -1px -50px;
+	text-indent: -9999999px;
+	overflow: hidden;
 	cursor: pointer;
-	color: #fff;
-	font-weight: 400;
-	line-height: 18px;
-	font-size: 14px;
-	padding: 7px;
-	border-radius: 4px;
 	display: inline-block;
 }
-.delibera_like .delibera_like_text {
-  background-color: #58862c;
 
+.delibera_like:hover {
+	background: url(images/export-botoes.png) -1px -99px;
 }
 
-.delibera_unlike .delibera_unlike_text{
-  background-color: #ce282a;
+.delibera_unlike {
+	height: 46px;
+	width: 46px;
+	background: url(images/export-botoes.png) -54px -51px;
+	overflow: hidden;
+	cursor: pointer;
+	display: inline-block;
 }
+
+.delibera_unlike:hover {
+	background: url(images/export-botoes.png) -54px -100px;
+}
+
+/*
+like_color: #58862c
+unlike_color: #ce282a
+*/
+
 .delibera_unlike,
 .delibera_like {
   display: inline-block;
