@@ -379,6 +379,10 @@ resolucao - 90248f
 	float: right;
 	margin: 5px 0;
 }
+
+.delibera_lista_validacoes .delibera-comment-botoes {
+	display: none;
+}
 .delibera_unlike .delibera_unlike_text,
 .delibera_like .delibera_like_text {
 	
@@ -573,6 +577,9 @@ span.read-more, span.re-collapse {
 	font-size: 0.9em;
 }
 
+.captchaSizeDivLarge {
+    margin: 0 auto;
+}
 
 /* Debug em outros temas */
 
