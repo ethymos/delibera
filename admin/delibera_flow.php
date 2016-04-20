@@ -238,7 +238,7 @@ class Flow
 		 */
 		$flow = explode(',', trim(strip_tags($_POST['delibera_flow'])));
 		update_post_meta($postID, 'delibera_flow', $flow);
-		file_put_contents('/tmp/publish.log', date('Ymd H:i:s').$postID."\n", FILE_APPEND);
+		//file_put_contents('/tmp/publish.log', date('Ymd H:i:s').$postID."\n", FILE_APPEND);
 		self::reabrirPauta($postID, false);
 	}
 	
