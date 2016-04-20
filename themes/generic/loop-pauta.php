@@ -88,6 +88,12 @@
 							<div class="entry-attachment">
 							</div><!-- .entry-attachment -->
 
+						<!--/div><!-- .entry-meta -->
+					</div><!-- #leader -->
+
+					<div class="entry-content">
+						<?php the_content(); ?>
+					</div><!-- .entry-content -->
 
 							<div class="entry-print button">
 								<a href="?delibera_print=1" class="">Imprimir</a>
@@ -96,12 +102,7 @@
 								<?php echo delibera_gerar_seguir($post->ID); ?>
 							</div>
 							<?php social_buttons(get_permalink(), get_the_title()); ?>
-						<!--/div><!-- .entry-meta -->
-					</div><!-- #leader -->
 
-					<div class="entry-content">
-						<?php the_content(); ?>
-					</div><!-- .entry-content -->
 				</div><!-- #post-## -->
 
 				<?php comments_template( '', true ); ?>

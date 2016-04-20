@@ -559,7 +559,7 @@ span.read-more, span.re-collapse {
 	color: #fff;
 	position: initial;
 	font-size: 14px;
-	text-align: right;
+	text-align: left;
 	font-weight: 700;
 	text-transform: uppercase;
 	border-radius: 4px;
@@ -579,6 +579,18 @@ span.read-more, span.re-collapse {
 
 .captchaSizeDivLarge {
     margin: 0 auto;
+}
+
+p.comment-form-attachment {
+    background-color: #CCC;
+    padding: 10px;
+    margin: 0 auto;
+    font-size: 12px;
+    width: 80%;
+}
+
+.delibera_before_fields {
+    margin: 20px auto;
 }
 
 /* Debug em outros temas */
@@ -613,59 +625,102 @@ a.button {
 
 /* portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android) */
 @media (max-width:641px) {
-    .delibera-header {
-      background-size: cover;
-    }
-    .delibera-boasvindas {
-      max-width: 100%;
-    }
-    .lista-de-pautas .type-pauta {
-      width: 100%;
-    }
-    .lista-de-pautas .type-pauta .entry-title,
-    .lista-de-pautas .type-pauta .entry-content {
-      height: auto;
-    }
+	.delibera-header {
+		background-size: cover;
+	}
+	.delibera-boasvindas {
+		max-width: 100%;
+	}
+	.lista-de-pautas .type-pauta {
+		width: 100%;
+	}
+	.lista-de-pautas .type-pauta .entry-title,
+	.lista-de-pautas .type-pauta .entry-content {
+		height: auto;
+	}
 
-    .single-pauta .delibera-apresentacao {
-      float: none;
-    }
-    .single-pauta .pauta-content {
-      padding: 15px;
-    }
-    .single-pauta .social-buttons {
-      margin: 20px 0 0;
-    }
-    .single-pauta .type-pauta .entry-prazo,
-    .single-pauta .type-pauta .entry-title {
-      width: 100%;
-      float: none;
-    }
-    .banner-ciclo .ciclos li {
-      font-size: 12px;
-      line-height: 18px;
-      margin: 15px 0 0;
-      padding: 2px 0;
-      width: 19%;
-    }
+	.single-pauta .delibera-apresentacao {
+		float: none;
+	}
+	.single-pauta .pauta-content {
+		padding: 15px;
+	}
+	.single-pauta .social-buttons {
+		margin: 10px 0 0;
+	}
+	.single-pauta .type-pauta .entry-prazo,
+	.single-pauta .type-pauta .entry-title {
+		width: 100%;
+		float: none;
+	}
+	.banner-ciclo .ciclos li {
+		font-size: 15px;
+		line-height: 15px;
+		margin: 5px 0 0;
+		padding: 4px 0;
+		width: 60%;
+	}
 
-    /* PROPRIEDADE FIXADA PARA TEMA DIVI */
-    .et_boxed_layout #page-container,
-    .et_boxed_layout.et_non_fixed_nav.et_transparent_nav #page-container #top-header,
-    .et_non_fixed_nav.et_transparent_nav.et_boxed_layout #page-container #main-header,
-    .et_fixed_nav.et_boxed_layout #page-container #top-header,
-    .et_fixed_nav.et_boxed_layout #page-container #main-header,
-    .et_boxed_layout #page-container .container,
-    .et_boxed_layout #page-container .et_pb_row,
-    .et_boxed_layout.et_pb_pagebuilder_layout.single.et_full_width_page #page-container .et_pb_row,
-    .et_boxed_layout.et_pb_pagebuilder_layout.single.et_full_width_portfolio_page #page-container .et_pb_row,
-    .et_boxed_layout.et_pb_pagebuilder_layout.single #page-container .et_pb_row {
-      width: 100%;
-    }
+	.single-pauta .type-pauta {
+		max-width: 100%;
+	}
 
-    .delibera-comment-body {
-      width: 100%;
-    }
+	.banner-ciclo .title {
+		font-size: 24px;
+	}
+
+	.single-pauta .type-pauta .entry-title {
+		text-align: left;
+		font-size: 24px;
+		margin-bottom: 10px;
+	}
+
+	.single-pauta .type-pauta .entry-prazo {
+		text-align: left;
+		font-size: 20px;
+		border-top: 1px solid #FFF;
+		line-height: 30px;
+		padding-top: 5px;
+	}
+
+	.single-pauta .type-pauta .entry-prazo .numero {
+		font-size: 30px;
+	}
+
+	.single-pauta .type-pauta .entry-author {
+	    font-size: 14px;
+	    text-align: right;
+	}
+
+	.single-pauta .comment-respond h3 {
+	    font-size: 20px;
+	}
+
+	/* PROPRIEDADE FIXADA PARA TEMA DIVI */
+	.et_boxed_layout #page-container,
+	.et_boxed_layout.et_non_fixed_nav.et_transparent_nav #page-container #top-header,
+	.et_non_fixed_nav.et_transparent_nav.et_boxed_layout #page-container #main-header,
+	.et_fixed_nav.et_boxed_layout #page-container #top-header,
+	.et_fixed_nav.et_boxed_layout #page-container #main-header,
+	.et_boxed_layout #page-container .container,
+	.et_boxed_layout #page-container .et_pb_row,
+	.et_boxed_layout.et_pb_pagebuilder_layout.single.et_full_width_page #page-container .et_pb_row,
+	.et_boxed_layout.et_pb_pagebuilder_layout.single.et_full_width_portfolio_page #page-container .et_pb_row,
+	.et_boxed_layout.et_pb_pagebuilder_layout.single #page-container .et_pb_row {
+		width: 100%;
+	}
+
+	.delibera-comment-body {
+		width: 100%;
+	}
+	.comment .children {
+	    margin-left: 10% !important;
+	}
+
+	.comment-form-comment #comment {
+	    display: flex;
+	    width: 100%;
+	}
 
 
 }
