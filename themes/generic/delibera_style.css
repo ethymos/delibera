@@ -279,7 +279,7 @@ resolucao - 90248f
 	display: inline-table;
 }
 .single-pauta .type-pauta .entry-content {
-  margin: 15px 0 0;
+  margin: 15px 0;
 }
 .single-pauta .type-pauta .entry-prazo {
   width: 20%;
@@ -578,19 +578,20 @@ span.read-more, span.re-collapse {
 }
 
 .captchaSizeDivLarge {
-    margin: 0 auto;
+	margin: 0 auto;
 }
 
 p.comment-form-attachment {
-    background-color: #CCC;
-    padding: 10px;
-    margin: 0 auto;
-    font-size: 12px;
-    width: 80%;
+	background-color: #CCC;
+	padding: 10px;
+	margin: 0 auto;
+	font-size: 12px;
+	width: 80%;
+	overflow: hidden;
 }
 
 .delibera_before_fields {
-    margin: 20px auto;
+	margin: 20px auto;
 }
 
 /* Debug em outros temas */
