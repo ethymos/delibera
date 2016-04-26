@@ -222,11 +222,12 @@ class Discussion extends \Delibera\Modules\ModuleBase
 	
 	public function createPautaAtFront($opt)
 	{
-		if (trim($opt['data_fixa_nova_pauta_externa']) != '') {
-			$prazo_discussao = DateTime::createFromFormat('d/m/Y', $opt['data_fixa_nova_pauta_externa']);
+		$data_externa = trim($opt['data_fixa_nova_pauta_externa']);
+		if ( !empty($data_externa) && strlen($data_externa) == 10) {
+			$prazo_discussao = \DateTime::createFromFormat('d/m/Y', $data_externa);
 			$_POST['prazo_discussao'] = $prazo_discussao->format('d/m/Y');
 		} else {
-			$_POST['prazo_discussao'] = date('d/m/Y', strtotime ('+'.$opt['dias_discussao'].' DAYS'));
+			$_POST['prazo_discussao'] = $this->generateDeadline($opt);
 		}
 	}
 	

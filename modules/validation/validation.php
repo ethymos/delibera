@@ -297,7 +297,7 @@ class Validation extends \Delibera\Modules\ModuleBase
 	 */
 	public function createPautaAtFront($opt)
 	{
-		$_POST['prazo_validacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_validacao'].' DAYS'));
+		$_POST['prazo_validacao'] = $this->generateDeadline($opt);
 		$_POST['min_validacoes'] = $opt['minimo_validacao'];
 	}
 	

@@ -307,82 +307,257 @@ function delibera_pautas_suportam_encaminhamento()
 }
 
 add_action('init', 'delibera_nova_pauta_create_action');
-function delibera_nova_pauta_create_action(){
-    $opt = delibera_get_config();
-    if ($opt['criar_pauta_pelo_front_end'] == 'S' && is_user_logged_in() && isset($_POST['_wpnonce']) && wp_verify_nonce($_POST['_wpnonce'], 'delibera_nova_pauta')) {
-        $title = $_POST['nova-pauta-titulo'];
-        $content = $_POST['nova-pauta-conteudo'];
-        $excerpt = $_POST['nova-pauta-resumo'];
+function delibera_nova_pauta_create_action()
+{
+	$opt = delibera_get_config();
+	if($opt['criar_pauta_pelo_front_end'] == 'S' && is_user_logged_in() &&
+			 isset($_POST['_wpnonce']) &&
+			 wp_verify_nonce($_POST['_wpnonce'], 'delibera_nova_pauta'))
+	{
+		$title = $_POST['nova-pauta-titulo'];
+		$content = $_POST['nova-pauta-conteudo'];
+		$excerpt = $_POST['nova-pauta-resumo'];
+		
+		$pauta = array();
+		$pauta['post_title'] = $title;
+		$pauta['post_excerpt'] = $excerpt;
+		$pauta['post_type'] = 'pauta';
+		
+		// Check if there is any file uploaded
+		// If there is any, then ignore 'content' and use File.
+		// else do add 'pauta' with the text content
+		if(! empty($_FILES['post_pdf_contribution']['name']))
+		{
+			// Setup the array of supported file types. In this case, it's just
+			// PDF.
+			$supported_types = array(
+				'application/pdf'
+			);
+			// Get the file type of the upload
+			$pdf_contribution = wp_check_filetype(
+					basename($_FILES['post_pdf_contribution']['name']));
+			$sent_file_type = $pdf_contribution['type'];
+			// Check if the type is supported. If not, throw an error.
+			if(! in_array($sent_file_type, $supported_types))
+			{
+				// TODO: Improve this message and avoid wp_die
+				wp_die("O arquivo para web não é um PDF (formato permitido).");
+			}
+			$uploaded_file = wp_upload_bits(
+					$_FILES['pauta_pdf_contribution']['name'], null, 
+					file_get_contents(
+							$_FILES['pauta_pdf_contribution']['tmp_name']));
+			if(isset($uploaded_file['error']) && $uploaded_file['error'] != 0)
+			{
+				wp_die(
+						'Erro ao salvar arquivo para Web. O erro foi: ' .
+								 $upload['error']);
+			}
+			else
+			{
+				$pauta['pauta_pdf_contribution'] = $uploaded_file['url'];
+			}
+		}
+		else
+		{
+			$pauta['post_content'] = $content;
+		}
+		
+		// para que a situação da pauta seja criada corretamente,
+		// é necessário criar a pauta como rascunho para depois publicar no
+		// final desta função
+		$pauta['post_status'] = 'draft';
+		
+		$pauta_id = wp_insert_post($pauta);
+		
+		if(is_int($pauta_id) && $pauta_id > 0)
+		{
+			
+			do_action('delibera_create_pauta_frontend', $opt);
+			
+			// isto é necessário por causa do if da função
+			// delibera_publish_pauta()
+			$_POST['publish'] = 'Publicar';
+			$_POST['prev_status'] = 'draft';
+			
+			// verifica se todos os temas enviados por post são válidos
+			$temas = get_terms('tema', array(
+				'hide_empty' => true
+			));
+			$temas_ids = array();
+			
+			if(isset($_POST['tema']) && is_array($_POST['tema']))
+				foreach($temas as $tema)
+					if(in_array($tema->term_id, $_POST['tema']))
+						$temas_ids[] = $tema->term_id;
+				
+				// coloca o s termos de temas no post
+			wp_set_post_terms($pauta_id, $temas_ids, 'tema');
+			
+			// publica o post
+			wp_publish_post($pauta_id);
+			
+			// isto serve para criar o slug corretamente,
+			// já que no wp _ insert_post não cria o slug quando o status é
+			// draft e o wp_publish_post tb não cria o slug
+			unset($pauta['post_status']);
+			$pauta['ID'] = $pauta_id;
+			$pauta['post_name'] = sanitize_post_field('post_name', $title, 
+					$pauta_id, 'save');
+			wp_update_post($pauta);
+			
+			// redireciona para a pauta criada
+			$permalink = get_post_permalink($pauta_id);
+			wp_safe_redirect($permalink);
+			die();
+		}
+	}
+}
 
-        $pauta = array();
-        $pauta['post_title'] = $title;
-        $pauta['post_excerpt'] = $excerpt;
-        $pauta['post_type'] = 'pauta';
+/**
+ *
+ * @param array $args
+ *        	array with:
+ *        	post_title,
+ *        	post_excerpt,
+ *        	post_content,
+ *        	redirect (true or false),
+ *        	redirect_to (url to redirect or will redirect to new created pauta,
+ *        	delibera_flow is a comma separated list of situations, install
+ *        	default is: 'validacao,discussao,relatoria,emvotacao,comresolucao'
+ *        	modules config, check function savePostMetas on each module will be used, ex:
+ *        	prazo_validacao: date format dd/mm/yyyy,
+ *        	min_validacoes int ex: 10,
+ *        	prazo_discussao: date format dd/mm/yyyy,
+ *        	prazo_relatoria: date format dd/mm/yyyy,
+ *        	prazo_votacao: date format dd/mm/yyyy,
+ *        	
+ */
+function deliberaCreateTopic($args = array())
+{
+	$opt = delibera_get_config();
+	if($opt['criar_pauta_pelo_front_end'] == 'S' && is_user_logged_in() )
+	{
+		$defaults = array(
+			'post_title' => '',
+			'post_excerpt' => '',
+			'post_content' => '',
+			'redirect' => false,
+			'redirect_to' => '',
+			'delibera_flow' => $opt['delibera_flow'],
+		);
+		
+		$args = array_merge($defaults, $args);
+		if(!is_array($args['delibera_flow'])) $args['delibera_flow'] = explode(',', $args['delibera_flow']);
+		
+		$title = $args['post_title'];
+		$content = $args['post_content'];
+		$excerpt = $args['post_excerpt'];
+		
+		$pauta = array();
+		$pauta['post_title'] = $title;
+		$pauta['post_excerpt'] = $excerpt;
+		$pauta['post_type'] = 'pauta';
+		
+		$pauta['post_content'] = $content;
+		
+		// para que a situação da pauta seja criada corretamente,
+		// é necessário criar a pauta como rascunho para depois publicar no
+		// final desta função
+		$pauta['post_status'] = 'draft';
+		
+		$pauta_id = wp_insert_post($pauta);
+		
+		if(is_int($pauta_id) && $pauta_id > 0)
+		{
+			// Load defaults modules values at $_POST
+			do_action('delibera_create_pauta_frontend', $opt);
+			
+			// Load args values at $_POST for save_meta action
+			foreach (array_diff_key($args, $defaults) as $key => $arg)
+			{
+				if(array_key_exists($key, $_POST))
+				{
+					$_POST[$key] = $args[$key];
+				}
+			}
+			$_POST['delibera_flow'] = $args['delibera_flow'];
+			
+			// isto é necessário por causa do if da função
+			// delibera_publish_pauta()
+			$_POST['publish'] = 'Publicar';
+			$_POST['prev_status'] = 'draft';
+			
+			deliberaAddTerms($pauta_id, $args, 'tema', true);
+			
+			// publica o post
+			wp_publish_post($pauta_id);
+			
+			// isto serve para criar o slug corretamente,
+			// já que no wp _ insert_post não cria o slug quando o status é
+			// draft e o wp_publish_post tb não cria o slug
+			unset($pauta['post_status']);
+			$pauta['ID'] = $pauta_id;
+			$pauta['post_name'] = sanitize_post_field('post_name', $title, 
+					$pauta_id, 'save');
+			wp_update_post($pauta);
+			
+			if(array_key_exists('redirect', $args) && $args['redirect'])
+			{
+				if(array_key_exists('redirect_to', $args) &&
+						 ! empty($args['redirect_to']))
+				{
+					wp_safe_redirect($args['redirect_to']);
+					die();
+				}
+				else
+				{
+					// redireciona para a pauta criada
+					$permalink = get_post_permalink($pauta_id);
+					wp_safe_redirect($permalink);
+					die();
+				}
+			}
+		}
+	}
+}
 
-        //Check if there is any file uploaded
-        // If there is any, then ignore 'content' and use File.
-        // else do add 'pauta' with the text content
-        if(!empty($_FILES['post_pdf_contribution']['name'])) {
-            // Setup the array of supported file types. In this case, it's just PDF.
-            $supported_types = array('application/pdf');
-            // Get the file type of the upload
-            $pdf_contribution = wp_check_filetype(basename($_FILES['post_pdf_contribution']['name']));
-            $sent_file_type = $pdf_contribution['type'];
-            // Check if the type is supported. If not, throw an error.
-            if (!in_array($sent_file_type, $supported_types)) {
-                //TODO: Improve this message and avoid wp_die
-                wp_die("O arquivo para web não é um PDF (formato permitido).");
-            }
-            $uploaded_file = wp_upload_bits($_FILES['pauta_pdf_contribution']['name'], null, file_get_contents($_FILES['pauta_pdf_contribution']['tmp_name']));
-            if(isset($uploaded_file['error']) && $uploaded_file['error'] != 0) {
-                wp_die('Erro ao salvar arquivo para Web. O erro foi: ' . $upload['error']);
-            } else {
-                $pauta['pauta_pdf_contribution'] = $uploaded_file['url'];
-            }
-        } else {
-            $pauta['post_content'] = $content;
-        }
-
-        // para que a situação da pauta seja criada corretamente,
-        // é necessário criar a pauta como rascunho para depois publicar no final desta função
-        $pauta['post_status'] = 'draft';
-
-        $pauta_id = wp_insert_post($pauta);
-
-        if(is_int($pauta_id) && $pauta_id > 0){
-
-        	do_action('delibera_create_pauta_frontend', $opt);
-        
-            // isto é necessário por causa do if da função delibera_publish_pauta()
-            $_POST['publish'] = 'Publicar';
-            $_POST['prev_status'] = 'draft';
-
-            // verifica se todos os temas enviados por post são válidos
-            $temas = get_terms('tema', array('hide_empty'    => true));
-            $temas_ids = array();
-
-            if(isset($_POST['tema']) && is_array($_POST['tema']))
-                foreach($temas as $tema)
-                    if(in_array ($tema->term_id, $_POST['tema']))
-                        $temas_ids[] = $tema->term_id;
-
-               // coloca  o s termos de temas no post
-              wp_set_post_terms($pauta_id, $temas_ids, 'tema');
-
-               // publica o post
-              wp_publish_post($pauta_id);
-
-               // isto serve para criar o slug corretamente,
-                // já que no wp _ insert_post não cria o slug quando o status é draft e o wp_publish_post tb não cria o slug
-              unset($pauta['post_status']);
-              $pauta['ID'] = $pauta_id;
-              $pauta['post_name'] = sanitize_post_field('post_name', $title, $pauta_id, 'save');
-              wp_update_post($pauta);
-
-               // redireciona para a pauta criada
-              $permalink = get_post_permalink($pauta_id);
-              wp_safe_redirect($permalink);
-              die;
-          }
-      }
- }
+/**
+ * Add terms to a topic/pauta
+ * 
+ * @param int $pauta_id
+ * @param array $args with $taxonomy as key with array ex: $taxonomy = 'category so $args['category'] = array(id1, id2) or $args['post_tags'] = array(id1, id2)
+ * @param string $taxonomy like 'tema' or 'category'
+ * @param bool $insert insert or not on pauta
+ * 
+ * @return valids ids
+ */
+function deliberaAddTerms($pauta_id, $args, $taxonomy = 'tema', $insert = true )
+{
+	$terms_ids = array();
+	
+	if(array_key_exists($taxonomy, $args) && is_array($args[$taxonomy]))
+	{
+		$terms = get_terms( $taxonomy,
+			array(
+				'hide_empty' => true
+			)
+		);
+		
+		if(isset($args[$taxonomy]) && is_array($args[$taxonomy]))
+		{
+			// verifica se todos os temas enviados por post são válidos
+			foreach($terms as $term)
+			{
+				if(in_array($term->term_id, $args[$taxonomy]))
+				{
+					$terms_ids[] = $term->term_id;
+				}
+			}
+		}
+				
+		// coloca o s termos de temas no post
+		if($insert) wp_set_post_terms($pauta_id, $temas_ids, 'tema');
+	}
+	return $terms_ids;
+}
