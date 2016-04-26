@@ -436,7 +436,7 @@ unlike_color: #ce282a
   margin: 0 auto;
 }
  
-.validacao p.comment-form-url.comment-form-attachment, .relatoria p.comment-form-url.comment-form-attachment {
+.validacao p.comment-form-url.comment-form-attachment, .relatoria p.comment-form-url.comment-form-attachment, .emvotacao p.comment-form-attachment {
 	display: none;
 }
 
@@ -446,7 +446,7 @@ unlike_color: #ce282a
 
 .delibera_lista_validacoes {
 	margin: 20px auto 0px;
-	overflow: overlay;
+	overflow: auto;
 }
 
 .delibera_lista_validacoes .delibera-comment-body {
@@ -487,8 +487,7 @@ unlike_color: #ce282a
 }
 
 .checkbox-voto {
-	display: inline;
-	float: left;
+	display: table;
 	line-height: 2;
 	text-align: left;
 }
