@@ -311,11 +311,12 @@ class Vote extends \Delibera\Modules\ModuleBase
 	
 	public function createPautaAtFront($opt)
 	{
-		if (trim($opt['data_fixa_nova_pauta_externa']) != '') {
-			$prazo_discussao = DateTime::createFromFormat('d/m/Y', $opt['data_fixa_nova_pauta_externa']);
-			$_POST['prazo_votacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao'].' DAYS', $prazo_discussao->getTimestamp()));
+		$data_externa = trim($opt['data_fixa_nova_pauta_externa']);
+		if ( !empty($data_externa) && strlen($data_externa) == 10) {
+			$prazo_votacao = \DateTime::createFromFormat('d/m/Y', $data_externa);
+			$_POST['prazo_votacao'] = $prazo_votacao->format('d/m/Y');
 		} else {
-			$_POST['prazo_votacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao'].' DAYS'));
+			$_POST['prazo_votacao'] = $this->generateDeadline($opt);
 		}
 	}
 	

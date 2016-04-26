@@ -62,7 +62,8 @@ function delibera_get_main_config($config = array()) {
     $opt['plan_restriction'] = 'N';
     $opt['cabecalho_arquivo'] = __( 'Bem-vindo a plataforma de debate do ', 'delibera' ).get_bloginfo('name');
     $opt['todos_usuarios_logados_podem_participar'] = 'N';
-	$opt['data_fixa_nova_pauta_externa'] = '';
+    $now = new DateTime();
+	$opt['data_fixa_nova_pauta_externa'] = $now->format('d/m/Y');
 	
 	$opt = apply_filters('delibera_get_main_config', $opt);
 

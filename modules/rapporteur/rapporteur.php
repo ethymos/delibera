@@ -252,11 +252,7 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 	
 	public function createPautaAtFront($opt)
 	{
-		$_POST['prazo_relatoria'] = date('d/m/Y', strtotime ('+'.$opt['dias_relatoria'].' DAYS'));
-		if($opt['eleicao_relator'] == 'S')
-		{
-			$_POST['prazo_eleicao_relator'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao_relator'].' DAYS'));
-		}
+		$_POST['prazo_relatoria'] = $this->generateDeadline($opt);
 	}
 	
 	/**
