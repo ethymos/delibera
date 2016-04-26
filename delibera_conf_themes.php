@@ -315,7 +315,7 @@ class DeliberaThemes
         return $html;
     }
 }
-
+global $deliberaThemes;
 $deliberaThemes = new DeliberaThemes;
 
 add_filter('archive_template', array($deliberaThemes, 'archiveTemplate'));

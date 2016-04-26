@@ -23,7 +23,8 @@
 
 					//echo count(query_posts($args));
 
-					load_template(dirname(__FILE__).DIRECTORY_SEPARATOR.'delibera-loop-archive.php', true);
+					global $deliberaThemes;
+					$deliberaThemes->archiveLoop();
 
 					?>
 

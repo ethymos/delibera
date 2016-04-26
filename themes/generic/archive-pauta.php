@@ -32,7 +32,8 @@
 
 					//echo count(query_posts($args));
 
-					load_template(dirname(__FILE__).DIRECTORY_SEPARATOR.'delibera-loop-archive.php', true);
+					global $deliberaThemes;
+					$deliberaThemes->archiveLoop();
 
 					$options_plugin_delibera = delibera_get_config();
 					$default_flow = isset($options_plugin_delibera['delibera_flow']) ? $options_plugin_delibera['delibera_flow'] : array();
