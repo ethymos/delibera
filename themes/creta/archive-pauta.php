@@ -49,8 +49,9 @@ $options = delibera_get_config();
                     </form>
                 </div>
                 <div id="lista-de-pautas" class="site-content alignright">
-                    <?php load_template(dirname(__FILE__) . '/delibera-loop-archive.php', true); ?>
                     <?php
+                    global $deliberaThemes;
+					$deliberaThemes->archiveLoop();
                     
                     global $wp_query;
                     $big = 99999999; // need an unlikely integer
