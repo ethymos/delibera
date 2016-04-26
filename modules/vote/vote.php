@@ -87,7 +87,7 @@ class Vote extends \Delibera\Modules\ModuleBase
 		$rows[] = array(
 			"id" => "dias_votacao",
 			"label" => __('Dias para votação de encaminhamentos:', 'delibera'),
-			"content" => '<input type="text" name="dias_votacao" id="dias_votacao" value="'.htmlspecialchars_decode($opt['dias_votacao']).'"/>'
+			"content" => '<input type="text" name="dias_votacao" id="dias_votacao" value="'.htmlspecialchars_decode($opt['dias_votacao']).'" autocomplete="off" />'
 		);
 		return $rows;
 	}
