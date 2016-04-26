@@ -279,7 +279,7 @@ resolucao - 90248f
 	display: inline-table;
 }
 .single-pauta .type-pauta .entry-content {
-  margin: 15px 0 0;
+  margin: 15px 0;
 }
 .single-pauta .type-pauta .entry-prazo {
   width: 20%;
@@ -436,7 +436,7 @@ unlike_color: #ce282a
   margin: 0 auto;
 }
  
-.validacao p.comment-form-url.comment-form-attachment, .relatoria p.comment-form-url.comment-form-attachment {
+.validacao p.comment-form-url.comment-form-attachment, .relatoria p.comment-form-url.comment-form-attachment, .emvotacao p.comment-form-attachment {
 	display: none;
 }
 
@@ -446,7 +446,7 @@ unlike_color: #ce282a
 
 .delibera_lista_validacoes {
 	margin: 20px auto 0px;
-	overflow: overlay;
+	overflow: auto;
 }
 
 .delibera_lista_validacoes .delibera-comment-body {
@@ -487,8 +487,7 @@ unlike_color: #ce282a
 }
 
 .checkbox-voto {
-	display: inline;
-	float: left;
+	display: table;
 	line-height: 2;
 	text-align: left;
 }
@@ -578,19 +577,20 @@ span.read-more, span.re-collapse {
 }
 
 .captchaSizeDivLarge {
-    margin: 0 auto;
+	margin: 0 auto;
 }
 
 p.comment-form-attachment {
-    background-color: #CCC;
-    padding: 10px;
-    margin: 0 auto;
-    font-size: 12px;
-    width: 80%;
+	background-color: #CCC;
+	padding: 10px;
+	margin: 0 auto;
+	font-size: 12px;
+	width: 80%;
+	overflow: hidden;
 }
 
 .delibera_before_fields {
-    margin: 20px auto;
+	margin: 20px auto;
 }
 
 /* Debug em outros temas */
