@@ -87,12 +87,12 @@ class Discussion extends \Delibera\Modules\ModuleBase
 		$rows[] = array(
 			"id" => "dias_discussao",
 			"label" => __('Dias para discussão da pauta:', 'delibera'),
-			"content" => '<input type="text" name="dias_discussao" id="dias_discussao" value="'.htmlspecialchars_decode($opt['dias_discussao']).'"/>'
+			"content" => '<input type="text" name="dias_discussao" id="dias_discussao" value="'.htmlspecialchars_decode($opt['dias_discussao']).'" autocomplete="off" />'
 		);
 		$rows[] = array(
 			"id" => "pauta_suporta_encaminhamento",
 			"label" => __('Pautas suportam sugestão de encaminhamento?', 'delibera'),
-			"content" => '<input type="checkbox" name="pauta_suporta_encaminhamento" id="pauta_suporta_encaminhamento" value="S" '. ( htmlspecialchars_decode($opt['pauta_suporta_encaminhamento']) == "S" ? "checked='checked'" : "" ).'/>',
+			"content" => '<input type="checkbox" name="pauta_suporta_encaminhamento" id="pauta_suporta_encaminhamento" value="S" '. ( htmlspecialchars_decode($opt['pauta_suporta_encaminhamento']) == "S" ? "checked='checked'" : "" ).' autocomplete="off" />',
 		);
 		return $rows;
 	}

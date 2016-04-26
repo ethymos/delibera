@@ -103,17 +103,17 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 		$rows[] = array(
 			"id" => "dias_relatoria",
 			"label" => __('Prazo para relatoria:', 'delibera'),
-			"content" => '<input type="text" name="dias_relatoria" id="dias_relatoria" value="'.htmlspecialchars_decode($opt['dias_relatoria']).'"/>'
+			"content" => '<input type="text" name="dias_relatoria" id="dias_relatoria" value="'.htmlspecialchars_decode($opt['dias_relatoria']).'" autocomplete="off" />'
 		);
 		$rows[] = array(
 			"id" => "eleicao_relator",
 			"label" => __('Necessário eleição de relator?', 'delibera'),
-			"content" => '<input type="checkbox" name="eleicao_relator" value="S" '.(htmlspecialchars_decode($opt['eleicao_relator']) == 'S' ? 'checked="checked"' : '').' />'
+			"content" => '<input type="checkbox" name="eleicao_relator" value="S" '.(htmlspecialchars_decode($opt['eleicao_relator']) == 'S' ? 'checked="checked"' : '').' autocomplete="off"  />'
 		);
 		$rows[] = array(
 			"id" => "dias_votacao_relator",
 			"label" => __('Prazo para eleição de relator:', 'delibera'),
-			"content" => '<input type="text" name="dias_votacao_relator" id="dias_votacao_relator" value="'.htmlspecialchars_decode($opt['dias_votacao_relator']).'"/>'
+			"content" => '<input type="text" name="dias_votacao_relator" id="dias_votacao_relator" value="'.htmlspecialchars_decode($opt['dias_votacao_relator']).'" autocomplete="off" />'
 		);
 		return $rows;
 	}

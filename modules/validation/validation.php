@@ -107,13 +107,13 @@ class Validation extends \Delibera\Modules\ModuleBase
 		$rows[] = array(
 				"id" => "minimo_validacao",
 				"label" => __('Mínimo de validações para uma pauta:', 'delibera'),
-				"content" => '<input type="text" name="minimo_validacao" id="minimo_validacao" value="'.htmlspecialchars_decode($opt['minimo_validacao']).'"/>'
+				"content" => '<input type="text" name="minimo_validacao" id="minimo_validacao" value="'.htmlspecialchars_decode($opt['minimo_validacao']).'" autocomplete="off" />'
 		);
 		
 		$rows[] = array(
 				"id" => "dias_validacao",
 				"label" => __('Dias para validação da pauta:', 'delibera'),
-				"content" => '<input type="text" name="dias_validacao" id="dias_validacao" value="'.htmlspecialchars_decode($opt['dias_validacao']).'"/>'
+				"content" => '<input type="text" name="dias_validacao" id="dias_validacao" value="'.htmlspecialchars_decode($opt['dias_validacao']).'" autocomplete="off" />'
 		);
 		return $rows;
 	}
