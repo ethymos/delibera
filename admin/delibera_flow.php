@@ -15,7 +15,7 @@ class Flow
 	public function __construct()
 	{
 		add_filter('delibera_get_main_config', array($this, 'getMainConfig'));
-		add_filter('delivera_config_page_rows', array($this, 'configPageRows'), 10, 2);
+		//add_filter('delivera_config_page_rows', array($this, 'configPageRows'), 10, 2);
 		add_filter('delibera-pre-main-config-save', array($this, 'preMainConfigSave'));
 		add_action('delibera_topic_meta', array($this, 'topicMeta'), 10, 5);
 		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 1, 2);
@@ -587,16 +587,21 @@ class Flow
 		else 
 		{
 			$rows = array();
-			$rows = apply_filters('delivera_config_page_rows', $rows, $opt);
+			$rows = $this->configPageRows($rows, $opt);
+			$modules = \Delibera\Flow::getFlowModules();
+			foreach ($modules as $module)
+			{
+				$rows = $module->configPageRows($rows, $opt);
+			}
 			$oldFlow = implode(',', $opt['delibera_flow']);
-			$configs_to_save = array_value_recursive('id', $rows); 
-			foreach (array_keys(delibera_get_main_config()) as $option_name) //TODO better way to do this
+			$configs_to_save = array_value_recursive('id', $rows);
+			foreach ($configs_to_save as $option_name) //TODO better way to do this
 			{
 				if (isset($_POST[$option_name]))
 				{
 					$opt[$option_name] = htmlspecialchars($_POST[$option_name]);
 				}
-				elseif( in_array($option_name, $configs_to_save) )
+				else // checkbox maybe
 				{
 					$opt[$option_name] = "N";
 				}
@@ -604,7 +609,7 @@ class Flow
 			$opt['delibera_flow'] = $flow;
 			if(! update_option('delibera-config', $opt) && $oldFlow != implode(',', $flow) )
 			{
-				$all_errors = array(__('can not update flow', 'delibera'));
+				$all_errors = array(__('can not update modules configs', 'delibera'));
 			}
 			
 			if(count($all_errors) > 0)
