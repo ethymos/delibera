@@ -9,7 +9,14 @@ $situacao = delibera_get_situacao(get_the_ID());
     		<?php
     		
     		get_delibera_header();
-    		load_template(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'loop-pauta.php', true);
+    		if(file_exists(get_stylesheet_directory()."/content-pauta.php"))
+    		{
+    			load_template(get_stylesheet_directory()."/content-pauta.php");
+    		}
+    		else
+    		{
+    			load_template($this->themeFilePath('content-pauta.php'), true);
+    		}
     		
     		?>
     	</div><!-- #content -->
