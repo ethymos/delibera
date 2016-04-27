@@ -225,14 +225,13 @@ function delibera_comment_form($defaults)
                 }
                 else
                 {
-                    $defaults['title_reply'] = sprintf(__('Regime de votação para a pauta "%s"','delibera'),$post->post_title);
                     $defaults['must_log_in'] = sprintf(__('Você precisar <a href="%s">estar logado</a> e ter permissão para votar.'),wp_login_url( apply_filters( 'the_permalink', get_permalink( $post->ID ))));
                     $encaminhamentos = array();
                     if (delibera_current_user_can_participate()) {
                         $form = '<div class="delibera_checkbox_voto">';
                         $encaminhamentos = delibera_get_comments_encaminhamentos($post->ID);
 
-                        $form .= '<div class="instrucoes-votacao">'.__('Escolha os encaminhamentos que deseja aprovar e depois clique em "Votar":','delibera').'</div>';
+                        $form .= '<h3 class="comment-respond">'.__('Escolha os encaminhamentos que deseja aprovar e depois clique em "Votar":','delibera').'</h3>';
 
                         $i = 0;
                         foreach ($encaminhamentos as $encaminhamento)
