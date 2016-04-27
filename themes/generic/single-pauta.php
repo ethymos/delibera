@@ -14,7 +14,8 @@
 				}
 				else
 				{
-					load_template($this->themeFilePath('content-pauta.php'), true);
+					global $deliberaThemes;
+					load_template($deliberaThemes->themeFilePath('content-pauta.php'), true);
 				}
 				?>
 			</div><!-- #content -->
