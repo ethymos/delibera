@@ -465,24 +465,36 @@ function deliberaCreateTopic($args = array())
 		// é necessário criar a pauta como rascunho para depois publicar no
 		// final desta função
 		$pauta['post_status'] = 'draft';
+		if(array_key_exists('tags_input', $args))
+		{
+			$pauta['tags_input'] = $args['tags_input'];
+		}
+		if(array_key_exists('tags_input', $args))
+		{
+			$pauta['tags_input'] = $args['tags_input'];
+		}
+		if(array_key_exists('post_category', $args))
+		{
+			$pauta['post_category'] = $args['post_category'];
+		}
+		
+		// Load defaults modules values at $_POST
+		do_action('delibera_create_pauta_frontend', $opt);
+			
+		// Load args values at $_POST for save_meta action
+		foreach (array_diff_key($args, $defaults) as $key => $arg)
+		{
+			if(array_key_exists($key, $_POST))
+			{
+				$_POST[$key] = $args[$key];
+			}
+		}
+		$_POST['delibera_flow'] = $args['delibera_flow'];
 		
 		$pauta_id = wp_insert_post($pauta);
 		
 		if(is_int($pauta_id) && $pauta_id > 0)
 		{
-			// Load defaults modules values at $_POST
-			do_action('delibera_create_pauta_frontend', $opt);
-			
-			// Load args values at $_POST for save_meta action
-			foreach (array_diff_key($args, $defaults) as $key => $arg)
-			{
-				if(array_key_exists($key, $_POST))
-				{
-					$_POST[$key] = $args[$key];
-				}
-			}
-			$_POST['delibera_flow'] = $args['delibera_flow'];
-			
 			// isto é necessário por causa do if da função
 			// delibera_publish_pauta()
 			$_POST['publish'] = 'Publicar';
