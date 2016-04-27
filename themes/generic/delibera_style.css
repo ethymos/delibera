@@ -613,8 +613,11 @@ p.comment-form-attachment {
 	font-weight: 600;
 }
 
-.relatoria .single-pauta .form-submit {
+.single-pauta h3.comment-reply-title {
 	display: none;
+}
+span.delibera-like-count, span.delibera-unlike-count {
+	font-weight: 700;
 }
 
 /* Debug em outros temas */
