@@ -326,6 +326,7 @@ resolucao - 90248f
 	-moz-border-radius: 4px;
 	border-radius: 4px;
 }
+
 .delibera-comment-text {
   color: #535550;
   font-weight: 300;
@@ -569,11 +570,21 @@ span.read-more, span.re-collapse {
 
 .delibera-edit-comment-button, .delibera-delete-comment-button {
 	float: left;
-	margin: 0 5px;
 	cursor: pointer;
+	margin: 5px;
+	display: inline-block;
+	background-color: #3dcff4;
+	border: none;
+	color: #fff;
+	position: initial;
+	font-size: 14px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	padding: 2px 5px;
+	line-height: 1;
 	font-weight: 700;
 	text-transform: uppercase;
-	font-size: 0.9em;
 }
 
 .captchaSizeDivLarge {
@@ -591,6 +602,19 @@ p.comment-form-attachment {
 
 .delibera_before_fields {
 	margin: 20px auto;
+}
+
+
+.painel-baseouseem-link a {
+	float: left;
+}
+
+.painel-baseouseem-label {
+	font-weight: 600;
+}
+
+.relatoria .single-pauta .form-submit {
+	display: none;
 }
 
 /* Debug em outros temas */

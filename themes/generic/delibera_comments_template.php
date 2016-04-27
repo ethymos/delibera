@@ -91,8 +91,8 @@ class Delibera_Walker_Comment extends Walker_Comment
 				<?php
 					if($situacao->slug == 'discussao' || ($situacao->slug == 'relatoria' && current_user_can('relatoria')))
 					{
-						delibera_edit_comment_link( __('(Edit)'),'&nbsp;&nbsp;', '' );
-						delibera_delete_comment_link( __('(Deletar)'),'&nbsp;&nbsp;', '' );
+						delibera_edit_comment_link( __('Editar'),'&nbsp;&nbsp;', '' );
+						delibera_delete_comment_link( __('Deletar'),'&nbsp;&nbsp;', '' );
 					}
 				?>
 			</div>
@@ -138,12 +138,12 @@ class Delibera_Walker_Comment extends Walker_Comment
 					{
 						if($tipo == 'encaminhamento' && current_user_can('relatoria'))
 						{
-							edit_comment_link(__('Editar Encaminhamento', 'delibera'), '<p>', '</p>');
+							edit_comment_link(__('Editar', 'delibera'));
 						}
 					}
 					elseif($situacao->slug != 'validacao' && is_user_logged_in())
 					{
-						$args['reply_text'] = __("Responda", 'delibera');
+						$args['reply_text'] = __("Responder", 'delibera');
 						comment_reply_link(array_merge( $args, array('add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth'])));
 					}
 					elseif(is_user_logged_in())
