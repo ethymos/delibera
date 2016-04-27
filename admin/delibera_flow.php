@@ -188,7 +188,12 @@ class Flow
 	{
 		if(array_key_exists('delibera_flow', $_POST) )
 		{
-			$flow = explode(',', trim($_POST['delibera_flow']));
+			$flow = $_POST['delibera_flow'];
+			
+			if(is_string($flow))
+			{
+				$flow = explode(',', trim($_POST['delibera_flow']));
+			}
 			$events_meta['delibera_flow'] = $flow;
 			
 			$modules = $this->getFlowModules();
@@ -272,7 +277,14 @@ class Flow
 			}
 			$current = 0;
 		}
-		return $modules[$flow[$current]];
+		if(array_key_exists($current, $flow) && array_key_exists($flow[$current], $modules))
+		{
+			return $modules[$flow[$current]];
+		}
+		else 
+		{
+			return array_shift($modules);
+		}
 	}
 	
 	/**
@@ -519,7 +531,10 @@ class Flow
 		if(array_key_exists('delibera_flow', $_POST) )
 		{
 			$flow = $_POST['delibera_flow'];
-			$flow = explode(',', strip_tags($_POST['delibera_flow']));
+			if(is_string($flow))
+			{
+				$flow = explode(',', strip_tags($_POST['delibera_flow']));
+			}
 			$valida = is_array($flow) ? count($flow) : false;
 			if(!$autosave && ($valida === false || $valida < 1))
 			{
