@@ -587,6 +587,16 @@ span.read-more, span.re-collapse {
 	margin: 15px 5px;
 }
 
+.painel-baseouseem-item {
+    display: inline-block;
+    float: left;
+    margin-left: 5px;
+    overflow: hidden;
+    padding: 2px;
+    position: relative;
+    white-space: nowrap;
+}
+
 .captchaSizeDivLarge {
 	margin: 0 auto;
 }
@@ -610,7 +620,10 @@ p.comment-form-attachment {
 }
 
 .painel-baseouseem-label {
-	font-weight: 600;
+    display: block;
+    float: left;
+    font-weight: 600;
+    position: relative;
 }
 
 .relatoria .single-pauta .form-submit {
