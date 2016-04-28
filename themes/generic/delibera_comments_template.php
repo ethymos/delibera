@@ -111,7 +111,7 @@ class Delibera_Walker_Comment extends Walker_Comment
 					{
 						$baseouseem_elements .= do_shortcode($baseouseem_element);
 					}
-					echo '<div id="comment-painel-baseouseem" class="comment-painel-baseouseem"><label id="painel-baseouseem-label" class="painel-baseouseem-label" >'.__('Baseado na(s) proposta(s) de:', 'delibera').'&nbsp;</label>'.$baseouseem_elements.'</div>';
+					echo '<div id="comment-painel-baseouseem" class="comment-painel-baseouseem clearfix"><label id="painel-baseouseem-label" class="painel-baseouseem-label" >'.__('Baseado na(s) proposta(s) de:', 'delibera').'&nbsp;</label>'.$baseouseem_elements.'</div>';
 				}
 			}
 			comment_text();
