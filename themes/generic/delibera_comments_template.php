@@ -158,6 +158,9 @@ class Delibera_Walker_Comment extends Walker_Comment
 				<?php
 					if($situacao->slug == 'discussao' || ($situacao->slug == 'relatoria' && current_user_can('relatoria')))
 					{
+						//TODO gerar por função esse botão?>
+						<div id="submit-edit-comment-button-<?php echo $comment->comment_ID;?>" class="submit-edit-comment-button" ><span class="submit-edit-comment-button-text"><?php echo __('Atualizar','delibera')?></span></div>
+						<?php
 						delibera_edit_comment_link( __('Editar'),'&nbsp;&nbsp;', '' );
 						delibera_delete_comment_link( __('Deletar'),'&nbsp;&nbsp;', '' );
 					}
