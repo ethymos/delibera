@@ -111,7 +111,7 @@ class Delibera_Walker_Comment extends Walker_Comment
 					{
 						$baseouseem_elements .= do_shortcode($baseouseem_element);
 					}
-					echo '<div id="comment-painel-baseouseem" class="comment-painel-baseouseem"><label id="painel-baseouseem-label" class="painel-baseouseem-label" >'.__('Proposta baseada em:', 'delibera').'&nbsp;</label>'.$baseouseem_elements.'</div>';
+					echo '<div id="comment-painel-baseouseem" class="comment-painel-baseouseem"><label id="painel-baseouseem-label" class="painel-baseouseem-label" >'.__('Baseado na(s) proposta(s) de:', 'delibera').'&nbsp;</label>'.$baseouseem_elements.'</div>';
 				}
 			}
 			comment_text();
@@ -119,7 +119,7 @@ class Delibera_Walker_Comment extends Walker_Comment
 			if ($tipo == "encaminhamento" && current_user_can('relatoria') && (/*$situacao->slug == "discussao" || TODO Opção de baseamento na discussão */ $situacao->slug == "relatoria"))
 			{
 				?>
-				<div class="baseadoem-checkbox-div"><label class="baseadoem-checkbox-label"><input id="baseadoem-checkbox-<?php echo $comment->comment_ID; ?>" type="checkbox" name="baseadoem-checkbox[]" value="<?php echo $comment->comment_ID; ?>" class="baseadoem-checkbox" autocomplete="off" /><?php _e('basear-se neste encaminhamento?', 'delibera'); ?></label></div>
+				<div class="baseadoem-checkbox-div"><label class="baseadoem-checkbox-label"><input id="baseadoem-checkbox-<?php echo $comment->comment_ID; ?>" type="checkbox" name="baseadoem-checkbox[]" value="<?php echo $comment->comment_ID; ?>" class="baseadoem-checkbox" autocomplete="off" /><?php _e('basear-se nesta proposta?', 'delibera'); ?></label></div>
 				<?php
 			}
 			if(delibera_comments_is_open($comment->comment_post_ID))
