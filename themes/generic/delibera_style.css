@@ -310,12 +310,13 @@ resolucao - 90248f
 	font-weight: 600;
 	line-height: 1.4;
 }
-.single-pauta .discussion-title h2 {
+.single-pauta h2.discussion-title {
 	font-size: 28px;
 	font-weight: 600;
 	line-height: 1.4;
 	margin: 20px auto;
 	padding: 0 1em;
+	text-align: center;
 }
 .single-pauta .form-submit {
 	float: none;
