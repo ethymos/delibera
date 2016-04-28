@@ -474,13 +474,13 @@ unlike_color: #ce282a
 }
 
 .delibera_lista_validacoes a.comment-reply-link {
-    display: none;
+	display: none;
 }
 
 .delibera-comment-author img {
-    width: auto;
-    height: auto;
-    max-height: 50px;
+	width: auto;
+	height: auto;
+	max-height: 50px;
 }
 
 .delibera_checkbox_voto {
@@ -544,11 +544,11 @@ span.read-more, span.re-collapse {
 }
 
 .single-pauta .entry-seguir {
-    display: inline-block;
-    background: #CCC;
-    color: #777;
-    padding: 0px 15px;
-    font-size: 14px;
+	display: inline-block;
+	background: #CCC;
+	color: #777;
+	padding: 0px 15px;
+	font-size: 14px;
 }
 
 .delibera-comment-body .comment-edit-link {
@@ -588,13 +588,13 @@ span.read-more, span.re-collapse {
 }
 
 .painel-baseouseem-item {
-    display: inline-block;
-    float: left;
-    margin-left: 5px;
-    overflow: hidden;
-    padding: 2px;
-    position: relative;
-    white-space: nowrap;
+	display: inline-block;
+	float: left;
+	margin-left: 5px;
+	overflow: hidden;
+	padding: 2px;
+	position: relative;
+	white-space: nowrap;
 }
 
 .captchaSizeDivLarge {
@@ -620,17 +620,23 @@ p.comment-form-attachment {
 }
 
 .painel-baseouseem-label {
-    display: block;
-    float: left;
-    font-weight: 600;
-    position: relative;
+	display: block;
+	float: left;
+	font-weight: 600;
+	position: relative;
 }
 
-.single-pauta h3.comment-reply-title {
-	display: none;
-}
 span.delibera-like-count, span.delibera-unlike-count {
 	font-weight: 700;
+}
+
+.attachmentFile {
+	text-indent: -99px;
+	overflow: hidden;
+}
+
+.comment-form {
+	margin-top: 20px;
 }
 
 /* Debug em outros temas */
