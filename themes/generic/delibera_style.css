@@ -306,9 +306,16 @@ resolucao - 90248f
 }
 */
 .single-pauta .comment-respond h3 {
-    font-size: 24px;
-    font-weight: 600;
-    line-height: 1.4;
+	font-size: 24px;
+	font-weight: 600;
+	line-height: 1.4;
+}
+.single-pauta .discussion-title h2 {
+	font-size: 28px;
+	font-weight: 600;
+	line-height: 1.4;
+	margin: 20px auto;
+	padding: 0 1em;
 }
 .single-pauta .form-submit {
 	float: none;
