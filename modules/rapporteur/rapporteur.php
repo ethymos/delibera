@@ -108,7 +108,7 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 		$rows[] = array(
 			"id" => "eleicao_relator",
 			"label" => __('Necessário eleição de relator?', 'delibera'),
-			"content" => '<input type="checkbox" name="eleicao_relator" value="S" '.(htmlspecialchars_decode($opt['eleicao_relator']) == 'S' ? 'checked="checked"' : '').' autocomplete="off"  />'
+			"content" => '<input type="checkbox" name="eleicao_relator" value="S" '.(htmlspecialchars_decode($opt['eleicao_relator']) != 'N' ? 'checked="checked"' : '').' autocomplete="off"  />'
 		);
 		$rows[] = array(
 			"id" => "dias_votacao_relator",
