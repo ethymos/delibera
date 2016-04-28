@@ -88,13 +88,6 @@ class Delibera_Walker_Comment extends Walker_Comment
 				</a>
 				&nbsp;
 
-				<?php
-					if($situacao->slug == 'discussao' || ($situacao->slug == 'relatoria' && current_user_can('relatoria')))
-					{
-						delibera_edit_comment_link( __('Editar'),'&nbsp;&nbsp;', '' );
-						delibera_delete_comment_link( __('Deletar'),'&nbsp;&nbsp;', '' );
-					}
-				?>
 			</div>
 			<?php
 			if ($situacao->slug == "discussao" || $situacao->slug == "relatoria")
@@ -166,6 +159,13 @@ class Delibera_Walker_Comment extends Walker_Comment
 					}
 				?>
 				</div>
+				<?php
+					if($situacao->slug == 'discussao' || ($situacao->slug == 'relatoria' && current_user_can('relatoria')))
+					{
+						delibera_edit_comment_link( __('Editar'),'&nbsp;&nbsp;', '' );
+						delibera_delete_comment_link( __('Deletar'),'&nbsp;&nbsp;', '' );
+					}
+				?>
 		<?php
 			}
 			echo '<div id="delibera-comment-botoes-'.$comment->comment_ID.'" class="delibera-comment-botoes" >';

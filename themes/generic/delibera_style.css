@@ -369,7 +369,7 @@ resolucao - 90248f
 
 .reply {
 	display: inline-block;
-	width: 45%;
+	width: auto;
 	float: left;
 	margin-top: 10px;
 }
@@ -568,10 +568,9 @@ span.read-more, span.re-collapse {
 	padding: 5px;
 }
 
-.delibera-edit-comment-button, .delibera-delete-comment-button {
+.delibera-edit-comment-button span, .delibera-delete-comment-button span {
 	float: left;
 	cursor: pointer;
-	margin: 5px;
 	display: inline-block;
 	background-color: #3dcff4;
 	border: none;
@@ -581,10 +580,11 @@ span.read-more, span.re-collapse {
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
-	padding: 2px 5px;
+	padding: 10px;
 	line-height: 1;
 	font-weight: 700;
 	text-transform: uppercase;
+	margin: 15px 5px;
 }
 
 .captchaSizeDivLarge {
