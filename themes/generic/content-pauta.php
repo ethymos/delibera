@@ -108,7 +108,7 @@
 							<?php social_buttons(get_permalink(), get_the_title()); ?>
 
 				</div><!-- #post-## -->
-
+					<h2 class="discussion-title">Discussão sobre a Pauta</h3>
 				<?php comments_template( '', true ); ?>
 </div>
 <?php endwhile; // end of the loop. ?>
