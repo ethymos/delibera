@@ -54,7 +54,7 @@ function delibera_curtir($ID, $type = 'pauta')
 
 function delibera_numero_curtir($ID, $type ='pauta')
 {
-	if($type == 'puata')
+	if($type == 'pauta')
 	{
 		$postID = $ID;
 		$ncurtir = get_post_meta($postID, 'delibera_numero_curtir', true);
