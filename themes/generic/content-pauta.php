@@ -101,6 +101,10 @@
 							<div class="entry-seguir button">
 								<?php echo delibera_gerar_seguir($post->ID); ?>
 							</div>
+							<div id="delibera-comment-botoes-'.$comment->comment_ID.'" class="delibera-comment-botoes" ><?php
+								echo delibera_gerar_curtir($comment->comment_ID, 'comment');
+								echo delibera_gerar_discordar($comment->comment_ID, 'comment');?>
+							</div>
 							<?php social_buttons(get_permalink(), get_the_title()); ?>
 
 				</div><!-- #post-## -->
