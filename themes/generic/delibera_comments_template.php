@@ -127,27 +127,23 @@ class Delibera_Walker_Comment extends Walker_Comment
 				?>
 				<div class="reply">
 				<?php
-					if($situacao->slug == 'relatoria' && is_user_logged_in())
+					if(is_user_logged_in())
 					{
-						if($tipo == 'encaminhamento' && current_user_can('relatoria'))
+						if($situacao->slug == 'discussao' )
 						{
-							edit_comment_link(__('Editar', 'delibera'));
+							$args['reply_text'] = __("Responder", 'delibera');
+							comment_reply_link(array_merge( $args, array('add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth'])));
 						}
-					}
-					elseif($situacao->slug != 'validacao' && is_user_logged_in())
-					{
-						$args['reply_text'] = __("Responder", 'delibera');
-						comment_reply_link(array_merge( $args, array('add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth'])));
-					}
-					elseif(is_user_logged_in())
-					{
-						/*$args['reply_text'] = __("De sua opinião", 'delibera');
-						comment_reply_link(array_merge( $args, array('add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth'])));*/
-						?>
-						<div class="entry-respond">
-							<a href="<?php delibera_get_comment_link();?>#respond" class="comment-reply-link"><?php _e( 'De sua opinião', 'delibera' ); ?></a>
-						</div>
-						<?php
+						if($situacao->slug == 'validacao')
+						{
+							/*$args['reply_text'] = __("De sua opinião", 'delibera');
+							comment_reply_link(array_merge( $args, array('add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth'])));*/
+							?>
+							<div class="entry-respond">
+								<a href="<?php delibera_get_comment_link();?>#respond" class="comment-reply-link"><?php _e( 'De sua opinião', 'delibera' ); ?></a>
+							</div>
+							<?php
+						}
 					}
 					else
 					{
