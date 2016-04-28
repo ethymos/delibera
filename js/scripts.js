@@ -43,8 +43,17 @@ function delibera_showhide(comment)
 	return false;
 }
 
-function delibera_edit_comment_show(comment)
+function delibera_edit_comment_show(button, comment)
 {
 	jQuery('#delibera-comment-text-'+comment).toggle();
 	jQuery('#delibera-edit-comment-'+comment).toggle();
+	jQuery('#submit-edit-comment-button-'+comment).toggle();
+	if(jQuery(button).text() == "Editar")
+	{
+		jQuery(button).text('Cancelar'); // TODO translate
+	}
+	else
+	{
+		jQuery(button).text('Editar'); // TODO translate
+	}
 }

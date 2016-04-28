@@ -23,7 +23,7 @@ function delibera_edit_comment_link( $link = null, $before = '', $after = '' )
 		$link = __('Editar', delibera);
 
 	$html = '<div class="delibera-edit-comment-button"><span class="delibera-edit-comment-button" onclick="';
-	$html .= 'delibera_edit_comment_show(\''.$comment->comment_ID.'\');';
+	$html .= 'delibera_edit_comment_show(this, \''.$comment->comment_ID.'\');';
 	$html .= '" >'.$link.'</span></div>';
 	echo $html;
 }
