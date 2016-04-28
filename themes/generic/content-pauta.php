@@ -102,8 +102,8 @@
 								<?php echo delibera_gerar_seguir($post->ID); ?>
 							</div>
 							<div id="delibera-comment-botoes-'.$comment->comment_ID.'" class="delibera-comment-botoes" ><?php
-								echo delibera_gerar_curtir($comment->comment_ID, 'comment');
-								echo delibera_gerar_discordar($comment->comment_ID, 'comment');?>
+								echo delibera_gerar_curtir($comment->comment_ID, 'pauta');
+								echo delibera_gerar_discordar($comment->comment_ID, 'pauta');?>
 							</div>
 							<?php social_buttons(get_permalink(), get_the_title()); ?>
 
