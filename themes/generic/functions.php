@@ -157,7 +157,6 @@ function delibera_comment_form($defaults)
             case 'discussao':
             case 'relatoria':
             {
-            	$defaults['title_reply'] = sprintf(__('Escreva sua opinião ou proposta e clique em "Publicar"','delibera'));
                 $defaults['must_log_in'] = sprintf(__('Você precisar <a href="%s">estar logado</a> para contribuir com a discussão.','delibera'),wp_login_url( apply_filters( 'the_permalink', get_permalink( $post->ID ))));
                 $defaults['comment_notes_after'] = "";
                 $defaults['logged_in_as'] = "";
@@ -355,8 +354,8 @@ function delibera_gerar_seguir($ID)
 function delibera_gerar_curtir($ID, $type ='pauta')
 {
     global $post;
-    $html = '';
-    $situacoes_validas = array('validacao' => false, 'discussao' => true, 'relatoria' => true, 'emvotacao' => false, 'comresolucao' => true);
+
+    $situacoes_validas = array('validacao' => false, 'discussao' => true, 'emvotacao' => false, 'comresolucao' => true);
 
     $postID = 0;
     if(is_object($ID))
@@ -374,7 +373,25 @@ function delibera_gerar_curtir($ID, $type ='pauta')
     }
 
     $ncurtiu = intval($type == 'pauta' || $type == 'post' ? get_post_meta($ID, 'delibera_numero_curtir', true) : get_comment_meta($ID, 'delibera_numero_curtir', true));
+    $ndiscordou = intval($type == 'pauta' || $type == 'post' ? get_post_meta($ID, 'delibera_numero_discordar', true) : get_comment_meta($ID, 'delibera_numero_discordar', true));
     $situacao = delibera_get_situacao($postID);
+
+    if ($ncurtiu > 0) {
+        $html = '<div id="thebutton'.$type.$ID.'" class="delibera_like" >';
+        $html .= '<span class="delibera-like-count">' . "$ncurtiu " . ($ncurtiu > 1 ? __('', 'delibera') : __('', 'delibera')) . '</span>';
+        $html .= '</div>';
+    } else {
+        $html = '<span class="delibera-like-count" style="display: none;"></span>';
+    }
+
+
+    if ($ndiscordou > 0) {
+        $html = '<div id="thebuttonDiscordo'.$type.$ID.'" class="delibera_unlike" >';
+        $html .= '<span class="delibera-unlike-count">' . "$ndiscordou " . ($ndiscordou > 1 ? __('', 'delibera') : __('', 'delibera')) . '</span>';
+        $html .= '</div>';
+    } else {
+        $html = '<span class="delibera-unlike-count" style="display: none;"></span>';
+    }
 
     if (is_user_logged_in()) {
         $user_id = get_current_user_id();
@@ -393,11 +410,6 @@ function delibera_gerar_curtir($ID, $type ='pauta')
         }
     } else {
         $html .= '<div id="thebutton'.$type.$ID.'" class="delibera_like" >';
-        if ($ncurtiu > 0) {
-            $html .= '<span class="delibera-like-count">' . "$ncurtiu " . ($ncurtiu > 1 ? __('concordaram', 'delibera') : __('concordou', 'delibera')) . '</span>';
-        } else {
-            $html .= '<span class="delibera-like-count" style="display: none;"></span>';
-        }
         if (is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas) && $situacoes_validas[$situacao->slug]) { // é uma situação válida
             $html .= '<a class="delibera-like-login" href="';
             $html .= wp_login_url( $type == "pauta" ? get_permalink() : delibera_get_comment_link());
@@ -418,6 +430,7 @@ function delibera_gerar_curtir($ID, $type ='pauta')
 function delibera_gerar_discordar($ID, $type ='pauta')
 {
     global $post;
+
     $situacoes_validas = array('validacao' => false, 'discussao' => true, 'emvotacao' => false, 'comresolucao' => true);
 
     $postID = 0;
@@ -435,7 +448,6 @@ function delibera_gerar_discordar($ID, $type ='pauta')
         }
     }
 
-    $ndiscordou = intval($type == 'pauta' || $type == 'post' ? get_post_meta($ID, 'delibera_numero_discordar', true) : get_comment_meta($ID, 'delibera_numero_discordar', true));
     $situacao = delibera_get_situacao($postID);
 
     if(is_user_logged_in())
@@ -460,11 +472,6 @@ function delibera_gerar_discordar($ID, $type ='pauta')
     else
     {
         $html = '<div id="thebuttonDiscordo'.$type.$ID.'" class="delibera_unlike" >';
-        if ($ndiscordou > 0) {
-            $html .= '<span class="delibera-unlike-count">' . "$ndiscordou " . ($ndiscordou > 1 ? __('discordaram', 'delibera') : __('discordou', 'delibera')) . '</span>';
-        } else {
-            $html .= '<span class="delibera-unlike-count" style="display: none;"></span>';
-        }
         if(is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas) && $situacoes_validas[$situacao->slug]) // é uma situação válida
         {
             $html .= '<a class="delibera-unlike-login" href="';
