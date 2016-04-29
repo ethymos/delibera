@@ -639,6 +639,15 @@ p.comment-form-attachment {
 	overflow: hidden;
 }
 
+#attachment + label {
+
+	background-color: #ce282a;
+	font-size: 1.25em;
+	font-weight: 700;
+	color: white;
+
+}
+
 .delibera_before_fields {
 	margin: 20px auto;
 }
