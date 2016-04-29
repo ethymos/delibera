@@ -225,6 +225,7 @@ function delibera_comment_form($defaults)
                 }
                 else
                 {
+		    $defaults['title_reply'] = sprintf(__('Escreva sua opinião ou proposta','delibera'));
                     $defaults['must_log_in'] = sprintf(__('Você precisar <a href="%s">estar logado</a> e ter permissão para votar.'),wp_login_url( apply_filters( 'the_permalink', get_permalink( $post->ID ))));
                     $encaminhamentos = array();
                     if (delibera_current_user_can_participate()) {

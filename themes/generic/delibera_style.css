@@ -639,13 +639,37 @@ p.comment-form-attachment {
 	overflow: hidden;
 }
 
-#attachment + label {
+label#attachment {
+	display: none;
+}
 
+input#attachment {
+
+	background-image: url(images/attachment.png);
+	background-position: 3px 2px;
+	background-repeat: no-repeat;
 	background-color: #ce282a;
 	font-size: 1.25em;
 	font-weight: 700;
 	color: white;
+	cursor: pointer;
+	overflow: hidden;
+	text-indent: -999px;
 
+}
+
+input#attachment::before { 
+    content: "Anexar ";
+}
+
+input#attachment input  {
+
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
 }
 
 .delibera_before_fields {
