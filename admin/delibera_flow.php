@@ -241,10 +241,21 @@ class Flow
 		/**
 		 * Update flow meta after publish because is before save metas  
 		 */
-		$flow = explode(',', trim(strip_tags($_POST['delibera_flow'])));
-		update_post_meta($postID, 'delibera_flow', $flow);
-		//file_put_contents('/tmp/publish.log', date('Ymd H:i:s').$postID."\n", FILE_APPEND);
-		self::reabrirPauta($postID, false);
+		if(array_key_exists('delibera_flow', $_POST))
+		{
+			$flow = array();
+			if(is_array($_POST['delibera_flow']))
+			{
+				$flow = array_map("strip_tags", $_POST['delibera_flow']);
+			}
+			else 
+			{
+				$flow = explode(',', trim(strip_tags($_POST['delibera_flow'])));
+			}
+			update_post_meta($postID, 'delibera_flow', $flow);
+			//file_put_contents('/tmp/publish.log', date('Ymd H:i:s').$postID."\n", FILE_APPEND);
+			self::reabrirPauta($postID, false);
+		}
 	}
 	
 	/**
