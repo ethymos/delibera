@@ -359,7 +359,8 @@ function delibera_convert_situacao_id_to_taxonomy_term_in_query(&$query)
 	)
 	{
 		$situacao = get_term_by('id', $_REQUEST['situacao'], 'situacao');
-		$qv['situacao'] = $situacao->slug;
+		if(is_object($situacao))
+			$qv['situacao'] = $situacao->slug;
 	}
 }
 add_filter('parse_query','delibera_convert_situacao_id_to_taxonomy_term_in_query');

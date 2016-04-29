@@ -51,6 +51,7 @@ class Delibera_Walker_Comment extends Walker_Comment
         ob_start();
 ?>
 		<<?php echo $tag ?> <?php comment_class(empty( $args['has_children'] ) ? '' : 'parent') ?> id="delibera-comment-<?php comment_ID() ?>">
+
 		<?php if ( 'div' != $args['style'] ) : ?>
 		<div id="delibera-div-comment-<?php comment_ID() ?>" class="delibera-comment-body">
 		<?php endif; ?>
@@ -158,6 +159,9 @@ class Delibera_Walker_Comment extends Walker_Comment
 				<?php
 					if($situacao->slug == 'discussao' || ($situacao->slug == 'relatoria' && current_user_can('relatoria')))
 					{
+						//TODO gerar por função esse botão?>
+						<div id="submit-edit-comment-button-<?php echo $comment->comment_ID;?>" class="submit-edit-comment-button" style="display: none" ><span class="submit-edit-comment-button-text"><?php echo __('Atualizar','delibera')?></span></div>
+						<?php
 						delibera_edit_comment_link( __('Editar'),'&nbsp;&nbsp;', '' );
 						delibera_delete_comment_link( __('Deletar'),'&nbsp;&nbsp;', '' );
 					}

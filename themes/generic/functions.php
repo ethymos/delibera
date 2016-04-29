@@ -157,6 +157,7 @@ function delibera_comment_form($defaults)
             case 'discussao':
             case 'relatoria':
             {
+            	$defaults['title_reply'] = sprintf(__('Escreva sua opinião ou proposta e clique em "Publicar"','delibera'));
                 $defaults['must_log_in'] = sprintf(__('Você precisar <a href="%s">estar logado</a> para contribuir com a discussão.','delibera'),wp_login_url( apply_filters( 'the_permalink', get_permalink( $post->ID ))));
                 $defaults['comment_notes_after'] = "";
                 $defaults['logged_in_as'] = "";
@@ -355,7 +356,7 @@ function delibera_gerar_curtir($ID, $type ='pauta')
 {
     global $post;
 
-    $situacoes_validas = array('validacao' => false, 'discussao' => true, 'emvotacao' => false, 'comresolucao' => true);
+    $situacoes_validas = array('validacao' => false, 'discussao' => true, 'relatoria' => true, 'emvotacao' => false, 'comresolucao' => true);
 
     $postID = 0;
     if(is_object($ID))

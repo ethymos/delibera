@@ -552,7 +552,7 @@ function deliberaAddTerms($pauta_id, $args, $taxonomy = 'tema', $insert = true )
 	{
 		$terms = get_terms( $taxonomy,
 			array(
-				'hide_empty' => true
+				'hide_empty' => false
 			)
 		);
 		
@@ -568,8 +568,8 @@ function deliberaAddTerms($pauta_id, $args, $taxonomy = 'tema', $insert = true )
 			}
 		}
 				
-		// coloca o s termos de temas no post
-		if($insert) wp_set_post_terms($pauta_id, $temas_ids, 'tema');
+		// coloca os termos no post
+		if($insert) wp_set_post_terms($pauta_id, $terms_ids, 'tema');
 	}
 	return $terms_ids;
 }

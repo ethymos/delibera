@@ -43,7 +43,6 @@ do_meta_boxes(null, 'normal', $comment);
 ?>
 
 <div id="delibera-publishing-action">
-	<div id="submit-edit-comment-button-<?php echo $comment->comment_ID;?>" class="submit-edit-comment-button" ><span class="submit-edit-comment-button-text"><?php echo __('Atualizar','delibera')?></span></div>
 	<script type="text/javascript">
 		jQuery(document).ready(function ()
 	    {
