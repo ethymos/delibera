@@ -355,7 +355,7 @@ function delibera_gerar_seguir($ID)
 function delibera_gerar_curtir($ID, $type ='pauta')
 {
     global $post;
-
+    $html = '';
     $situacoes_validas = array('validacao' => false, 'discussao' => true, 'relatoria' => true, 'emvotacao' => false, 'comresolucao' => true);
 
     $postID = 0;
@@ -394,9 +394,9 @@ function delibera_gerar_curtir($ID, $type ='pauta')
     } else {
         $html .= '<div id="thebutton'.$type.$ID.'" class="delibera_like" >';
         if ($ncurtiu > 0) {
-            $html = '<span class="delibera-like-count">' . "$ncurtiu " . ($ncurtiu > 1 ? __('concordaram', 'delibera') : __('concordou', 'delibera')) . '</span>';
+            $html .= '<span class="delibera-like-count">' . "$ncurtiu " . ($ncurtiu > 1 ? __('concordaram', 'delibera') : __('concordou', 'delibera')) . '</span>';
         } else {
-            $html = '<span class="delibera-like-count" style="display: none;"></span>';
+            $html .= '<span class="delibera-like-count" style="display: none;"></span>';
         }
         if (is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas) && $situacoes_validas[$situacao->slug]) { // é uma situação válida
             $html .= '<a class="delibera-like-login" href="';
@@ -418,7 +418,6 @@ function delibera_gerar_curtir($ID, $type ='pauta')
 function delibera_gerar_discordar($ID, $type ='pauta')
 {
     global $post;
-
     $situacoes_validas = array('validacao' => false, 'discussao' => true, 'emvotacao' => false, 'comresolucao' => true);
 
     $postID = 0;
