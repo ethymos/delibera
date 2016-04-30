@@ -340,7 +340,7 @@ resolucao - 90248f
   font-weight: 300;
   font-size: 14px;
   background: rgba(255, 255, 255, .2);
-  padding: 10px;
+  padding: 5px;
   margin: 5px 0;
 }
 /*.delibera-comment-body .reply {
@@ -359,7 +359,7 @@ resolucao - 90248f
 	font-weight: bold;
 }
 .delibera-comment-body .comment-reply-link {
-	margin: 5px 0;
+	margin: 5px;
 	display: inline-block;
 	background-color: #3dcff4;
 	border: none;
@@ -379,7 +379,6 @@ resolucao - 90248f
 	display: inline-block;
 	width: auto;
 	float: left;
-	margin-top: 10px;
 }
 .delibera-comment-botoes {
 	text-align: right;
@@ -403,7 +402,7 @@ resolucao - 90248f
 .delibera_unlike,
 .delibera_like {
   display: inline-block;
-  margin: 0 0 0 10px;
+  margin-right: 10px;
 }
 
 .delibera_like {
@@ -613,7 +612,7 @@ span.read-more, span.re-collapse {
 	line-height: 1;
 	font-weight: 700;
 	text-transform: uppercase;
-	margin: 15px 5px;
+	margin: 5px;
 }
 
 .painel-baseouseem-item {
@@ -662,7 +661,7 @@ span.read-more, span.re-collapse {
 }
 
 .comment-form-attachment input {
-	text-indent: -140px;
+	text-indent: -166px;
 }
 
 .delibera_before_fields {
@@ -764,6 +763,7 @@ a.button {
 
 	.single-pauta .type-pauta {
 		max-width: 100%;
+		padding: 10px 15px;
 	}
 
 	.banner-ciclo .title {
@@ -794,7 +794,7 @@ a.button {
 	}
 
 	.single-pauta .comment-respond h3 {
-	    font-size: 20px;
+	    font-size: 18px;
 	}
 
 	/* PROPRIEDADE FIXADA PARA TEMA DIVI */
@@ -823,5 +823,32 @@ a.button {
 	    width: 100%;
 	}
 
+	.delibera-comment-meta {
+		display: none;
+	}
+
+	.comment-form-attachment input#attachment {
+		max-width: 150px;
+		text-indent: -166px;
+	}
+
+	.delibera-comment-botoes {
+		text-align: left;
+		display: inline-block;
+		width: auto;
+		float: left;
+		margin: 5px 0;
+	}
+
+	.delibera_lista_validacoes .delibera-comment-body {
+	    width: 100%;
+	}
+	.single-pauta h2.discussion-title {
+		font-size: 18px;
+	}
+
+	.page-title {
+		font-size: 28px;
+	}
 
 }
