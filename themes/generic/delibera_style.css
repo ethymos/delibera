@@ -630,46 +630,39 @@ span.read-more, span.re-collapse {
 	margin: 0 auto;
 }
 
-p.comment-form-attachment {
-	background-color: #CCC;
-	padding: 10px;
-	margin: 0 auto;
-	font-size: 12px;
-	width: 80%;
-	overflow: hidden;
-}
-
-label#attachment {
+.comment-form-attachment label,  .comment-form-attachment label .attachmentRules {
 	display: none;
 }
 
-input#attachment {
-
+.comment-form-attachment input#attachment {
 	background-image: url(images/attachment.png);
-	background-position: 3px 2px;
+	background-position: 7px 7px;
 	background-repeat: no-repeat;
-	background-color: #ce282a;
-	font-size: 1.25em;
-	font-weight: 700;
+	background-color: #3dcff4;
+	background-size: 28px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
 	color: white;
 	cursor: pointer;
 	overflow: hidden;
-	text-indent: -999px;
-
+	padding: 10px;
 }
 
-input#attachment::before { 
-    content: "Anexar ";
+.comment-form-attachment input#attachment:hover {
+	background-color: #3dcfff;
 }
 
-input#attachment input  {
+.comment-form-attachment input::after { 
+	content: "Anexar ";
+	padding-left: 62px;
+	text-transform: uppercase;
+	font-size: 1.25em;
+	font-weight: 700;
+}
 
-	width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
+.comment-form-attachment input {
+	text-indent: -140px;
 }
 
 .delibera_before_fields {
