@@ -723,6 +723,14 @@ a.button {
 }
 */
 
+[class^="icon-"], [class*=" icon-"] {
+    fill: currentcolor;
+    float: left;
+    height: 20px;
+    margin: 0;
+    width: 20px;
+}
+
 /* portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android) */
 @media (max-width:641px) {
 	.delibera-header {
