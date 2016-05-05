@@ -8,7 +8,7 @@ function delibera_curtir_comment_meta($comment_id)
 		$ncurtiram = array();
 		add_comment_meta($comment_id, 'delibera_numero_curtir', $ncurtiram, true);
 	}
-	
+
 	$curtiram = get_comment_meta($comment_id, "delibera_curtiram", true);
 	if($curtiram == false || $curtiram == "")
 	{
@@ -48,7 +48,7 @@ function delibera_curtir($ID, $type = 'pauta')
 			update_comment_meta($comment_id, 'delibera_curtiram', $curtiram);
 		}
 	}
-	return apply_filters('delibera_curtir', sprintf(_n('%d concordou', '%d concordaram', $ncurtir, 'delibera'), $ncurtir), $ncurtir);
+	return apply_filters('delibera_curtir', $ncurtir);
 }
 
 function delibera_numero_curtir($ID, $type ='pauta')
@@ -74,12 +74,12 @@ function delibera_ja_curtiu($postID, $user_id, $ip, $type)
 	{
 		$curtiram = get_post_meta($postID, 'delibera_curtiram', true);
 	}
-	else 
+	else
 	{
 		$curtiram = get_comment_meta($postID, 'delibera_curtiram', true);
 	}
 	if(!is_array($curtiram)) $curtiram = array();
-	
+
 	foreach ($curtiram as $hora => $curtiuem)
 	{
 		foreach ($curtiuem as $curtiu)
@@ -115,7 +115,7 @@ function delibera_get_quem_curtiu($ID, $type = 'pauta', $return = 'array')
 	{
 		$curtiram = get_post_meta($ID, 'delibera_curtiram', true);
 	}
-	else 
+	else
 	{
 		$curtiram = get_comment_meta($ID, 'delibera_curtiram', true);
 	}
@@ -139,6 +139,6 @@ function delibera_get_quem_curtiu($ID, $type = 'pauta', $return = 'array')
 			return $curtiram;
 		break;
 	}
-	
+
 }
 ?>

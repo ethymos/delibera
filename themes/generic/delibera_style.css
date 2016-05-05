@@ -407,7 +407,7 @@ resolucao - 90248f
 
 .delibera_like {
 	background-image: url(images/like.png);
-	background-position: 93px 2px;
+	background-position: 8px 2px;
 	background-color: #58862c;
 	background-repeat: no-repeat;
 	background-size: 34px;
@@ -425,11 +425,12 @@ resolucao - 90248f
 	overflow: hidden;
 	cursor: pointer;
 	display: inline-block;
+	text-indent: -99999999px;
 }
 
 .delibera_unlike {
 	background-image: url(images/deslike.png);
-	background-position: 82px 2px;
+	background-position:7px 2px;
 	background-repeat: no-repeat;
 	background-size: 31px;
 	background-color: #ce282a;
@@ -447,6 +448,7 @@ resolucao - 90248f
 	overflow: hidden;
 	cursor: pointer;
 	display: inline-block;
+	text-indent: -99999999px;
 }
 
 /*

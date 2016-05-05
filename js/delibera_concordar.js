@@ -1,10 +1,10 @@
 jQuery(document).ready(function() {
-	
+
     jQuery(".delibera_like").click(function() {
         var container = jQuery(this);
-        
+
         jQuery.post(
-            delibera.ajax_url, 
+            delibera.ajax_url,
             {
                 action : "delibera_curtir",
                 like_id : jQuery(this).children('input[name="object_id"]').val(),
@@ -12,16 +12,15 @@ jQuery(document).ready(function() {
             },
             function(response) {
                 jQuery(container).parent().children(".delibera_unlike").remove();
-                jQuery(container).parent().children('.delibera-like-count').text(response);
-                jQuery(container).parent().children('.delibera-like-count').show();
-                jQuery(container).remove();
+                jQuery(container).children('.delibera_like_text').text(response);
+                //jQuery(container).parent().children('.delibera-like-count').show();
             }
         );
     });
-    
+
     jQuery(".delibera_unlike").click(function() {
         var container = jQuery(this);
-        
+
         jQuery.post(
             delibera.ajax_url,
             {
@@ -31,9 +30,8 @@ jQuery(document).ready(function() {
             },
             function(response) {
                 jQuery(container).parent().children(".delibera_like").remove();
-                jQuery(container).parent().children('.delibera-unlike-count').text(response);
-                jQuery(container).parent().children('.delibera-unlike-count').show();
-                jQuery(container).remove();
+                jQuery(container).children('.delibera_unlike_text').text(response);
+                // jQuery(container).parent().children('.delibera-unlike-count').show();
             }
         );
     });
