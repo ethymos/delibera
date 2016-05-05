@@ -276,3 +276,20 @@ function deliberaEncryptor($action, $string) {
 
 	return $output;
 }
+
+// função que modifica o array global $mcaAuthors do plugin mentions, dependencia do delibera
+include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+if(is_plugin_active('mention-comments-authors/mention-comments-authors.php'))
+{
+	add_action( 'comment_form' , 'delibera_mca_printnames', 11 );
+
+	function delibera_mca_printnames()
+	{
+                $users = get_users( array( 'fields' => array ( 'user_login' ) ) );
+                foreach( $users as $user )
+			$authors[] = array( 'val' => $user->user_login, 'meta' => $user->user_login);
+		 wp_localize_script( 'mca-comment-script', 'mcaAuthors', $authors );
+	}
+}
+
+

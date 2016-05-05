@@ -70,7 +70,7 @@ resolucao - 90248f
 }
 .delibera-header .button {
     background-color: #166e87;
-    opacity: 1;	
+    opacity: 1;
 }
 .page-title {
   color: #000;
@@ -243,31 +243,34 @@ resolucao - 90248f
 	margin: 0 auto;
 }
 .single-pauta .type-pauta .entry-author {
-  margin: 5px 0 10px 0;
+  margin: 5px 10px 0 0;
   font-weight: bold;
   font-size: 16px;
+  display: inline-block;
 }
-.single-pauta .type-pauta .entry-print,
-.single-pauta .type-pauta .entry-seguir {
+.single-pauta .type-pauta .button {
 	display: inline-block;
 	background: #ccc;
 	color: #777;
-	padding: 0px 15px;
+	padding: 1px 15px;
 	font-size: 14px;
 	cursor: pointer;
 }
-.single-pauta .type-pauta .entry-print a,
-.single-pauta .type-pauta .entry-seguir a {
+.single-pauta .type-pauta .button a {
   font-size: 14px;
   color: #777;
 }
-.social-buttons {
-  display: inline-block;
+.single-pauta .type-pauta .button a i {
+  font-size: 18px;
 }
-.social-buttons li {
-  display: inline-block;
-  width: 70px;
-  vertical-align: top;
+.single-pauta .type-pauta .social-buttons {
+  text-align: right;
+  padding: 0;
+  font-size: 14px;
+}
+.single-pauta .type-pauta .social-buttons a {
+  font-size: 24px;
+  color: #fff;
 }
 .single-pauta .type-pauta .entry-title {
 	color: #fff;
@@ -279,7 +282,7 @@ resolucao - 90248f
 	display: inline-table;
 }
 .single-pauta .type-pauta .entry-content {
-  margin: 15px 0;
+  margin: 20px 0;
 }
 .single-pauta .type-pauta .entry-prazo {
   width: 20%;
@@ -297,7 +300,7 @@ resolucao - 90248f
   margin: 20px auto;
   text-align: center;
 }
-/* 
+/*
 .single-pauta .comment-respond .comment-form-attachment {
   display: none;
 }
@@ -394,9 +397,9 @@ resolucao - 90248f
 
 .delibera_unlike .delibera_unlike_text,
 .delibera_like .delibera_like_text {
-	
+
 	padding-right:25px;
-	
+
 }
 
 .delibera_unlike,
@@ -464,7 +467,7 @@ unlike_color: #ce282a
   display: block;
   margin: 0 auto;
 }
- 
+
 .validacao p.comment-form-url.comment-form-attachment, .relatoria p.comment-form-url.comment-form-attachment, .emvotacao p.comment-form-attachment {
 	display: none;
 }
@@ -548,7 +551,7 @@ unlike_color: #ce282a
 	font-family: sans-serif;
 	min-height: 200px;
 	line-height: 1.4;
-	
+
 }
 
 .instrucoes-votacao {
@@ -654,7 +657,7 @@ span.read-more, span.re-collapse {
 	background-color: #3dcfff;
 }
 
-.comment-form-attachment input::after { 
+.comment-form-attachment input::after {
 	content: "Anexar ";
 	padding-left: 62px;
 	text-transform: uppercase;
