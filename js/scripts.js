@@ -27,8 +27,8 @@ jQuery(document).ready(function()
     jQuery(window).resize(function(){
         delibera_setpdf_size("#pauta-pdf-content");
     });
-
-    Socialite.load();
+    if (typeof Socialite != 'undefined')
+    	Socialite.load();
 });
 
 function delibera_setpdf_size(element) {
