@@ -1,3 +1,6 @@
+[![Stories in Ready](https://badge.waffle.io/redelivre/delibera.png?label=ready&title=Ready)](https://waffle.io/redelivre/delibera)
+
+[![Build Status](http://jenkins.beta.redelivre.org.br:8081/buildStatus/icon?job=Beta%20Delibera)](https://github.com/redelivre/delibera)
 Delibera
 ========
 
@@ -18,10 +21,33 @@ Como usar?
 ==========
 
 Tudo o que você precisa para rodar este plugin é ter uma instalação de WordPress funcionando e saber como instalar um plugin. Para mais informações veja a [documentação](https://github.com/redelivre/delibera/wiki/Home).
- 
+
+Acessando pautas:
+
+Post type = pauta
+
+Exemplo sem links customizados:
+http://www.exemplo.com/?post_type=pauta
+
+Exemplo com links customizados:
+http://www.exemplo.com/pauta/
+
 Como Colaborar?
 ===============
 
 Existem algumas maneiras de colaborar com o desenvolvimento deste plugin. Se você é um usuário, você pode ter encontrado um problema (bug) ou ter tido alguma idéia de uma nova funcionalidade. Em qualquer um dos casos, entre em contato com os desenvolvedores criando uma [issue](https://github.com/redelivre/delibera/issues).
 
 Se você é um desenvolvedor, sinta-se livre para fazer um fork e contribuir com o desenvolvimento. Se quiser, dê uma olhada se você pode resolver alguma das [issues abertas](https://github.com/redelivre/delibera/issues).
+
+
+### Situações possíveis da pauta
+
+| Slugs           | Module          | Descrição  |
+| --------------- |:---------------:| -----:|
+| validacao       | Mod. validation | Proposta de pauta, precisa ser validada para ser continuar no fluxo, comentário é apenas se valida |
+| naovalidada     | Mod. validation | Proposta recusada por prazo sem minimo de validação ou forçada pelo admin |
+| discussao       | Mod. Discussion | Pauta em discussão, aceita comentários do tipo padrão ou encaminhamento    |
+| eleicao_relator | Mod. rapporteur | Pauta que precisa de relator, mas antes o relator precisa ser eleito (não implementado)   |
+| relatoria       | Mod. rapporteur | o Relator vai editar os encaminhamentos para criar opções válidas para votação   |
+| emvotacao       | Mod. vote       |  Pauta em votação, aqui o comentário é um voto simples  |
+| comresolucao    | Mod. result     |  Pauta chegou ao fim, apresentar resultado  |

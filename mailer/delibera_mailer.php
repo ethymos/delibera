@@ -284,7 +284,7 @@ function delibera_mailer_new_comment($comment_post_ID, $comment, $user, $deliber
 	
 	if ( !comments_open($comment_post_ID) ) {
 		do_action('comment_closed', $comment_post_ID);
-		$erros[] = __('Sorry, comments are closed for this item.');
+		$errors[] = __('Sorry, comments are closed for this item.');
 	} elseif ( 'trash' == $status ) {
 		do_action('comment_on_trash', $comment_post_ID);
 		exit;
@@ -314,7 +314,7 @@ function delibera_mailer_new_comment($comment_post_ID, $comment, $user, $deliber
 	$comment_type = '';
 	
 	if ( '' == $comment_content )
-		$erros[] = ( __('<strong>ERROR</strong>: please type a comment.') );
+		$errors[] = ( __('<strong>ERROR</strong>: please type a comment.') );
 	
 	$comment_parent = isset($comment_parent) ? absint($comment_parent) : 0;
 	

@@ -44,10 +44,10 @@ function delibera_install_roles()
 		$opt = delibera_get_config();
 
 		update_option('delibera-config', $opt);
-		if(file_exists(__DIR__.DIRECTORY_SEPARATOR.'delibera_roles.php'))
+		if(file_exists(__DIR__.DIRECTORY_SEPARATOR.'delibera_conf_roles.php'))
 		{
 			$delibera_permissoes = array();
-			require_once __DIR__.DIRECTORY_SEPARATOR.'delibera_roles.php';
+			include __DIR__.DIRECTORY_SEPARATOR.'delibera_conf_roles.php';
 			delibera_roles_install($delibera_permissoes);
 		}
 	}
