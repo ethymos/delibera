@@ -385,11 +385,9 @@ function delibera_gerar_curtir($ID, $type ='pauta')
 
     global $deliberaThemes;
 
-    $svg = $deliberaThemes->themeFileUrl('images/icons.svg');
-
     if ($ncurtiu > 0) {
       $html = '<div id="thebutton'.$type.$ID.'" class="delibera_like" >';
-      $html .= '<span class="delibera-like-count">' . $ncurtiu.'</span><svg class="icon-thumbs-up"><use xlink:href="'.$svg.'#icon-thumbs-up"></use></svg>';
+      $html .= '<span class="delibera-like-count">' . $ncurtiu.'</span><i class="delibera-icon-thumbs-up"></i>';
       $html .= '</div>';
     } else {
       $html = '<span class="delibera-like-count" style="display: none;"></span>';
@@ -405,7 +403,7 @@ function delibera_gerar_curtir($ID, $type ='pauta')
           !(delibera_ja_discordou($ID, $user_id, $ip, $type)) // não discordou
           )
       {
-        $html .= '<div id="thebutton'.$type.$ID.'" class="delibera_like" ><svg class="icon-thumbs-up"><use xlink:href="'.$svg.'#icon-thumbs-up"></use></svg>';
+        $html .= '<div id="thebutton'.$type.$ID.'" class="delibera_like" ><i class="delibera-icon-thumbs-up"></i>';
         $html .= "<input type='hidden' name='object_id' value='{$ID}' />";
         $html .= "<input type='hidden' name='type' value='{$type}' />";
         $html .= '</div>';
@@ -415,7 +413,7 @@ function delibera_gerar_curtir($ID, $type ='pauta')
       if (is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas) && $situacoes_validas[$situacao->slug]) { // é uma situação válida
         $html .= '<a class="delibera-like-login" href="';
         $html .= wp_login_url( $type == "pauta" ? get_permalink() : delibera_get_comment_link());
-        $html .= '" ><span class="delibera_like_text">'.__('Concordo','delibera').'</span></a>';
+        $html .= '" ><span class="delibera_like_text">'.__('Concordo','delibera').'</span><i class="delibera-icon-thumbs-up"></i></a>';
       }
       $html .= '</div>';
     }
@@ -463,11 +461,11 @@ function delibera_gerar_discordar($ID, $type ='pauta')
 
     if ($ndiscordou > 0) {
       $html = '<div id="thebuttonDiscordo'.$type.$ID.'" class="delibera_unlike" >';
-      $html .= '<span class="delibera-unlike-count">' . $ndiscordou .'</span><svg class="icon-thumbs-down"><use xlink:href="'.$svg.'#icon-thumbs-down"></use></svg>';
+      $html .= '<span class="delibera-unlike-count">' . $ndiscordou .'</span><i class="delibera-icon-thumbs-down"></i>';
       $html .= '</div>';
     } else {
       $html = '<div id="thebuttonDiscordo'.$type.$ID.'" class="delibera_unlike" >';
-      $html .= '<span class="delibera-unlike-count" style="display: none;"></span><svg class="icon-thumbs-down"><use xlink:href="'.$svg.'#icon-thumbs-down"></use></svg>';
+      $html .= '<span class="delibera-unlike-count" style="display: none;"></span><i class="delibera-icon-thumbs-down"></i>';
       $html .= '</div>';
     }
 
@@ -482,7 +480,7 @@ function delibera_gerar_discordar($ID, $type ='pauta')
           !(delibera_ja_curtiu($ID, $user_id, $ip, $type)) // não discordou
           )
       {
-        $html .= '<div id="thebuttonDiscordo'.$type.$ID.'" class="delibera_unlike" ><svg class="icon-thumbs-down"><use xlink:href="'.$svg.'#icon-thumbs-down"></use></svg>';
+        $html .= '<div id="thebuttonDiscordo'.$type.$ID.'" class="delibera_unlike" ><i class="delibera-icon-thumbs-down"></i>';
         $html .= "<input type='hidden' name='object_id' value='{$ID}' />";
         $html .= "<input type='hidden' name='type' value='{$type}' />";
         $html .= '</div>';
@@ -495,7 +493,7 @@ function delibera_gerar_discordar($ID, $type ='pauta')
       {
         $html .= '<a class="delibera-unlike-login" href="';
         $html .= wp_login_url( $type == "pauta" ? get_permalink() : delibera_get_comment_link());
-        $html .= '" ><span class="delibera_unlike_text">'.__('Discordo','delibera').'</span></a>';
+        $html .= '" ><span class="delibera_unlike_text">'.__('Discordo','delibera').'</span><i class="delibera-icon-thumbs-down"></i></a>';
       }
       $html .= '</div>';
     }
