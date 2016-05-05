@@ -169,9 +169,9 @@ function deliberaLoadModules()
 
 function delibera_init()
 {
-	
+
 	deliberaLoadModules();
-	
+
 	add_action('admin_menu', 'delibera_config_menu');
 
 	delibera_Add_custom_Post();
@@ -195,7 +195,6 @@ function delibera_scripts()
 		wp_enqueue_script('delibera', WP_CONTENT_URL.'/plugins/delibera/js/scripts.js', array('jquery-expander'));
 		wp_enqueue_script('delibera-seguir', WP_CONTENT_URL . '/plugins/delibera/js/delibera_seguir.js', array('delibera'));
 		wp_enqueue_script('delibera-concordar', WP_CONTENT_URL . '/plugins/delibera/js/delibera_concordar.js', array('delibera'));
-        wp_enqueue_script('share-js', WP_CONTENT_URL . '/plugins/delibera/js/socialite.min.js');
 
 		$situation = delibera_get_situacao($post->ID);
 
@@ -240,9 +239,9 @@ add_action( 'admin_print_scripts', 'delibera_admin_scripts' );
 
 function delibera_print_font_styles()
 {
-	wp_enqueue_style('delibera-font', WP_CONTENT_URL.'/plugins/delibera/css/fonts/fontello-55880ab6/css/delibera.css');
+	wp_enqueue_style('delibera-font', WP_CONTENT_URL.'/plugins/delibera/css/fonts/fontello-6aab4d0b/css/delibera.css');
 }
-add_action('admin_print_styles', 'delibera_print_font_styles');
+add_action('wp_print_scripts', 'delibera_print_font_styles');
 
 // Fim Scripts
 
@@ -428,7 +427,7 @@ add_filter('language_attributes', 'doctype_opengraph');
 
 function fb_opengraph() {
     global $post;
- 
+
     if(is_single()) {
         if(has_post_thumbnail($post->ID))
         {
@@ -449,14 +448,14 @@ function fb_opengraph() {
             $excerpt = get_bloginfo('description');
         }
         ?>
- 
+
     <meta property="og:title" content="<?php echo the_title(); ?>"/>
     <meta property="og:description" content="<?php echo $excerpt; ?>"/>
     <meta property="og:type" content="article"/>
     <meta property="og:url" content="<?php echo the_permalink(); ?>"/>
     <meta property="og:site_name" content="<?php echo get_bloginfo(); ?>"/>
     <meta property="og:image" content="<?php echo $img_src['url']; ?>"/>
- 
+
 <?php
     } else {
         return;

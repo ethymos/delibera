@@ -64,6 +64,12 @@
 									</a>
 								</span>
 							</div><!-- .entry-author -->
+							<div class="entry-seguir button">
+								<?php echo delibera_gerar_seguir($post->ID); ?>
+							</div>
+							<div class="entry-print button">
+								<a href="?delibera_print=1" class=""><i class="delibera-icon-print"></i></a>
+							</div><!-- .entry-print -->
 							<!--div class="entry-comment">
 								<?php if(comments_open(get_the_ID()) && is_user_logged_in())
 								{?>
@@ -87,7 +93,6 @@
 
 							<div class="entry-attachment">
 							</div><!-- .entry-attachment -->
-
 						<!--/div><!-- .entry-meta -->
 					</div><!-- #leader -->
 
@@ -95,20 +100,13 @@
 						<?php the_content(); ?>
 					</div><!-- .entry-content -->
 
-							<div class="entry-print button">
-								<a href="?delibera_print=1" class="">Imprimir</a>
-							</div><!-- .entry-print -->
-							<div class="entry-seguir button">
-								<?php echo delibera_gerar_seguir($post->ID); ?>
-							</div>
-							<div id="delibera-comment-botoes-'.$comment->comment_ID.'" class="delibera-comment-botoes" ><?php
-								echo delibera_gerar_curtir($post->ID, 'pauta');
-								echo delibera_gerar_discordar($post->ID, 'pauta');?>
-							</div>
-							<?php social_buttons(get_permalink(), get_the_title()); ?>
-
+					<?php social_buttons(get_permalink(), get_the_title()); ?>
+					<div id="delibera-comment-botoes-'.$comment->comment_ID.'" class="delibera-comment-botoes" ><?php
+						echo delibera_gerar_curtir($post->ID, 'pauta');
+						echo delibera_gerar_discordar($post->ID, 'pauta');?>
+					</div>
 				</div><!-- #post-## -->
-					<h2 class="discussion-title">Discussão sobre a Pauta</h3>
+				<h2 class="discussion-title">Discussão sobre a Pauta</h3>
 				<?php comments_template( '', true ); ?>
 </div>
 <?php endwhile; // end of the loop. ?>
