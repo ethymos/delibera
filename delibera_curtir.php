@@ -22,11 +22,12 @@ function delibera_curtir($ID, $type = 'pauta')
 	$user_id = get_current_user_id();
 	$ip = $_SERVER['REMOTE_ADDR'];
 	
+	$ncurtir = intval($type == 'pauta' || $type == 'post' ? get_post_meta($ID, 'delibera_numero_curtir', true) : get_comment_meta($ID, 'delibera_numero_curtir', true));
+	
 	if(!delibera_ja_curtiu($ID, $user_id, $ip, $type) && !(function_exists('delibera_ja_discordou') && delibera_ja_discordou($ID, $user_id, $ip, $type)) )
 	{
 		if ($type == 'pauta') {
 			$postID = $ID;
-			$ncurtir = get_post_meta($postID, 'delibera_numero_curtir', true);
 			$ncurtir++;
 			update_post_meta($postID, 'delibera_numero_curtir', $ncurtir);
 			$curtiram = get_post_meta($postID, 'delibera_curtiram', true);
@@ -37,7 +38,6 @@ function delibera_curtir($ID, $type = 'pauta')
 			update_post_meta($postID, 'delibera_curtiram', $curtiram);
 		} elseif ($type == 'comment') {
 			$comment_id = $ID;
-			$ncurtir = intval(get_comment_meta($comment_id, 'delibera_numero_curtir', true));
 			$ncurtir++;
 			update_comment_meta($comment_id, 'delibera_numero_curtir', $ncurtir);
 			$curtiram = get_comment_meta($comment_id, 'delibera_curtiram', true);
@@ -47,9 +47,8 @@ function delibera_curtir($ID, $type = 'pauta')
 			$curtiram[$hora][] = array('user' => $user_id, 'ip' => $ip);
 			update_comment_meta($comment_id, 'delibera_curtiram', $curtiram);
 		}
-
-		return sprintf(_n('%d concordou', '%d concordaram', $ncurtir, 'delibera'), $ncurtir);
 	}
+	return apply_filters('delibera_curtir', sprintf(_n('%d concordou', '%d concordaram', $ncurtir, 'delibera'), $ncurtir), $ncurtir);
 }
 
 function delibera_numero_curtir($ID, $type ='pauta')
