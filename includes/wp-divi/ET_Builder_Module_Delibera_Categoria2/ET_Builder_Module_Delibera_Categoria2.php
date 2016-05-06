@@ -273,7 +273,7 @@ class ET_Builder_Module_Delibera_Categoria2 extends ET_Builder_Module {
 		}
 		$output = do_shortcode($output);
 
-		$output = '<div class="et_pb_section  et_pb_section_2 et_section_regular clearfix">'.$output.'</div>';
+		$output = '<div class="et_pb_delibera_categoria et_pb_section  et_pb_section_2 et_section_regular clearfix">'.$output.'</div>';
 
 		return $output;
 	}
