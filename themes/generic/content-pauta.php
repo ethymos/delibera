@@ -57,7 +57,7 @@ $flow = $DeliberaFlow->get(get_the_ID());
 		<?php printf( __( 'Situação da pauta', 'delibera' ).': %s', delibera_get_situacao($post->ID)->name );?>
 	</div .entry-situacao -->
 	<div class="entry-author">
-		<?php _e( 'Criado por', 'delibera' ); ?>
+		<?php _e( 'Por', 'delibera' ); ?>
 		<span class="author vcard">
 			<a class="url fn n" href="<?php echo get_site_url().'/delibera/' . get_the_author_meta( 'ID' ) . '/pautas' ; ?>" title="<?php printf( __( 'Ver o perfil de %s', 'delibera' ), get_the_author() ); ?>">
 				<?php the_author(); ?>
@@ -101,10 +101,13 @@ elseif(delibera_comments_is_open(get_the_ID()) && !is_user_logged_in())
 </div><!-- .entry-content -->
 
 <?php
-social_buttons(get_permalink(), get_the_title());
 echo '<div id="delibera-comment-botoes-'.$comment->comment_ID.'" class="delibera-comment-botoes">';
+echo '<div class="group-button-like">
+<span>O que achou?</span>';
 echo delibera_gerar_curtir($post->ID, 'pauta');
 echo delibera_gerar_discordar($post->ID, 'pauta');
+echo '</div>';
+social_buttons(get_permalink(), get_the_title());
 ?>
 </div>
 </div><!-- #post-## -->
