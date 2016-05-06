@@ -1,7 +1,7 @@
 /* GENERICS */
 
 p {
-  font-size: 16px;
+	font-size: 16px;
 }
 
 #submit,
@@ -22,25 +22,25 @@ p {
 
 #submit:hover,
 .button:hover {
-  border-color: rgba(0, 0, 0, 0.125);
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.25);
+	border-color: rgba(0, 0, 0, 0.125);
+	box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.25);
 }
 
 .type-pauta #submit:hover,
 .type-pauta .button:hover {
-  border-color: rgba(255,255,255, 0.125);
-  box-shadow: 0 0 0 2px rgba(255,255,255, 0.25);
+	border-color: rgba(255,255,255, 0.125);
+	box-shadow: 0 0 0 2px rgba(255,255,255, 0.25);
 }
 
 .warning.message {
-  text-align: center;
-  margin: 15px auto;
-  padding: 15px 0;
+	text-align: center;
+	margin: 15px auto;
+	padding: 15px 0;
 }
 .warning.message .button {
-  padding: 3px 15px;
-  font-weight: 600;
-  background-color: #3dcff4;
+	padding: 3px 15px;
+	font-weight: 600;
+	background-color: #3dcff4;
 }
 
 /*
@@ -65,33 +65,33 @@ resolucao - 90248f
 
 /* HEADER */
 .delibera-header {
-  background: 50% 50% url(images/topo.png) #fff no-repeat;
-  padding: 50px 50px;
+	background: 50% 50% url(images/topo.png) #fff no-repeat;
+	padding: 50px 50px;
 }
 .delibera-header .button {
-    background-color: #166e87;
-    opacity: 1;
+	background-color: #166e87;
+	opacity: 1;
 }
 .page-title {
-  color: #000;
-  font-size: 36px;
-  font-weight: 700;
+	color: #000;
+	font-size: 36px;
+	font-weight: 700;
 }
 .delibera-boasvindas {
-  color: #000;
-  font-size: 16px;
-  font-weight: 400;
-  margin: 10px 0;
-  max-width: 60%;
+	color: #000;
+	font-size: 16px;
+	font-weight: 400;
+	margin: 10px 0;
+	max-width: 60%;
 }
 
 .delibera-participacao,
 .delibera-pagina-discussoes { display: inline-block; }
 .delibera-login { display: none; }
 .delibera-pagina-discussoes a{
-  background-color: transparent;
-  opacity: .5;
-  color: #fff;
+	background-color: transparent;
+	opacity: .5;
+	color: #fff;
 }
 .single-pauta .page-title,
 .single-pauta .delibera-apresentacao { display: inline-block; }
@@ -101,27 +101,27 @@ resolucao - 90248f
 /* FILTER BAR */
 
 .filter-bar {
-  width: 100%;
-  display: block;
-  clear: both;
-  float: left;
+	width: 100%;
+	display: block;
+	clear: both;
+	float: left;
 }
 .filter-bar .title {
-  float: left;
-  margin: 30px;
+	float: left;
+	margin: 30px;
 }
 .filter-bar .title h2 {
-  font-size: 32px;
-  line-height: 43px;
-  padding: 0;
+	font-size: 32px;
+	line-height: 43px;
+	padding: 0;
 }
 .filter-bar .actions {
-  float: right;
-  margin: 30px;
+	float: right;
+	margin: 30px;
 }
 /* ARCHIVE PAUTAS */
 .lista-de-pautas {
-  margin: 0 15px;
+	margin: 0 15px;
 }
 .lista-de-pautas .type-pauta {
 	box-sizing: border-box;
@@ -144,7 +144,7 @@ resolucao - 90248f
 
 .lista-de-pautas .type-pauta .entry-author,
 .lista-de-pautas .type-pauta .entry-date {
-  display: none;
+	display: none;
 }
 .lista-de-pautas .type-pauta .entry-title {
 	min-height: 50px;
@@ -157,53 +157,53 @@ resolucao - 90248f
 }
 
 .lista-de-pautas .type-pauta .entry-content {
-  margin: 30px 0;
-  height: 245px;
+	margin: 30px 0;
+	height: 245px;
 }
 
 .lista-de-pautas .type-pauta .archive-situacao {
-  vertical-align: top;
-  padding: 0 10px;
-  margin: 15px 0 0 0;
-  font-size: 12px;
-  display: inline-block;
+	vertical-align: top;
+	padding: 0 10px;
+	margin: 15px 0 0 0;
+	font-size: 12px;
+	display: inline-block;
 }
 .lista-de-pautas .type-pauta .entry-prazo {
-  width: 45%;
-  float: right;
-  text-align: right;
-  font-weight: bold;
+	width: 45%;
+	float: right;
+	text-align: right;
+	font-weight: bold;
 }
 .lista-de-pautas .type-pauta .entry-prazo .numero {
-  font-size: 28px;
+	font-size: 28px;
 }
 .lista-de-pautas .type-pauta .entry-utility {
-  text-align: center;
+	text-align: center;
 }
 .lista-de-pautas .type-pauta .entry-utility .comments-link {
-  background-color: #3dcff4;
+	background-color: #3dcff4;
 }
 .lista-de-pautas .type-pauta .entry-utility .comments-link a {
-  color: #fff;
+	color: #fff;
 }
 
 /* BANNER CICLO VIDAS */
 
 .banner-ciclo {
-  text-align: center;
-  padding: 60px 0;
+	text-align: center;
+	padding: 60px 0;
 }
 .banner-ciclo .title {
-  color: #3dcff4;
-  font-size: 36px;
-  font-weight: 600;
+	color: #3dcff4;
+	font-size: 36px;
+	font-weight: 600;
 }
 .banner-ciclo .description {
-  color: #000;
-  font-size: 16px;
-  font-weight: 600;
-  max-width: 60%;
-  margin: 0 auto 30px auto;
+	color: #000;
+	font-size: 16px;
+	font-weight: 600;
+	max-width: 60%;
+	margin: 0 auto 30px auto;
 }
 .banner-ciclo .ciclos li {
 	display: inline-block;
@@ -219,16 +219,16 @@ resolucao - 90248f
 
 }
 .status-ciclo {
-  padding: 0 0 25px;
+	padding: 0 0 25px;
 }
 
 .status-ciclo .ciclos li.inactive {
-  background-color: #ccc;
+	background-color: #ccc;
 }
 
 /* SINGLE PAUTA */
 .single-pauta .pauta-content {
-  padding: 30px;
+	padding: 30px;
 }
 .single-pauta .type-pauta {
 	box-sizing: border-box;
@@ -243,10 +243,10 @@ resolucao - 90248f
 	margin: 0 auto;
 }
 .single-pauta .type-pauta .entry-author {
-  margin: 5px 10px 0 0;
-  font-weight: bold;
-  font-size: 16px;
-  display: inline-block;
+	margin: 5px 10px 0 0;
+	font-weight: bold;
+	font-size: 16px;
+	display: inline-block;
 }
 .single-pauta .type-pauta .button {
 	display: inline-block;
@@ -257,20 +257,20 @@ resolucao - 90248f
 	cursor: pointer;
 }
 .single-pauta .type-pauta .button a {
-  font-size: 14px;
-  color: #777;
+	font-size: 14px;
+	color: #777;
 }
 .single-pauta .type-pauta .button a i {
-  font-size: 18px;
+	font-size: 18px;
 }
 .single-pauta .type-pauta .social-buttons {
-  text-align: right;
-  padding: 0;
-  font-size: 14px;
+	text-align: right;
+	padding: 0;
+	font-size: 14px;
 }
 .single-pauta .type-pauta .social-buttons a {
-  font-size: 24px;
-  color: #fff;
+	font-size: 24px;
+	color: #fff;
 }
 .single-pauta .type-pauta .entry-title {
 	color: #fff;
@@ -282,30 +282,30 @@ resolucao - 90248f
 	display: inline-table;
 }
 .single-pauta .type-pauta .entry-content {
-  margin: 20px 0;
+	margin: 20px 0;
 }
 .single-pauta .type-pauta .entry-prazo {
-  width: 20%;
-  float: right;
-  text-align: right;
-  font-weight: bold;
-  font-size: 24px;
-  line-height: 36px;
+	width: 20%;
+	float: right;
+	text-align: right;
+	font-weight: bold;
+	font-size: 24px;
+	line-height: 36px;
 }
 .single-pauta .type-pauta .entry-prazo .numero {
-  font-size: 36px;
+	font-size: 36px;
 }
 .single-pauta .comment-respond {
-  width: 80%;
-  margin: 20px auto;
-  text-align: center;
+	width: 80%;
+	margin: 20px auto;
+	text-align: center;
 }
 /*
 .single-pauta .comment-respond .comment-form-attachment {
-  display: none;
+display: none;
 }
 .discussao .comment-respond .comment-form-attachment {
-  display: block;
+display: block;
 }
 */
 .single-pauta .comment-respond h3 {
@@ -339,15 +339,15 @@ resolucao - 90248f
 }
 
 .delibera-comment-text {
-  color: #535550;
-  font-weight: 300;
-  font-size: 14px;
-  background: rgba(255, 255, 255, .2);
-  padding: 5px;
-  margin: 5px 0;
+	color: #535550;
+	font-weight: 300;
+	font-size: 14px;
+	background: rgba(255, 255, 255, .2);
+	padding: 5px;
+	margin: 5px 0;
 }
 /*.delibera-comment-body .reply {
-  text-align: right;
+text-align: right;
 }*/
 .delibera-comment-meta,
 .delibera-comment-author {
@@ -404,8 +404,8 @@ resolucao - 90248f
 
 .delibera-unlike,
 .delibera-like {
-  display: inline-block;
-  margin-right: 10px;
+	display: inline-block;
+	margin-right: 10px;
 }
 
 .delibera-like {
@@ -420,12 +420,12 @@ unlike_color: #ce282a
 */
 
 .comment-form-comment .delibera-encaminha-label {
-  margin: 10px;
-  display: inline-block;
+	margin: 10px;
+	display: inline-block;
 }
 .comment-form-comment #comment {
-  display: block;
-  margin: 0 auto;
+	display: block;
+	margin: 0 auto;
 }
 
 .validacao p.comment-form-url.comment-form-attachment, .relatoria p.comment-form-url.comment-form-attachment, .emvotacao p.comment-form-attachment {
@@ -433,7 +433,7 @@ unlike_color: #ce282a
 }
 
 #delibera-comments li{
-    list-style: none;
+	list-style: none;
 }
 
 .delibera_lista_validacoes {
@@ -442,15 +442,15 @@ unlike_color: #ce282a
 }
 
 .delibera_lista_validacoes .delibera-comment-body {
-    width: 31%;
-    float: left;
-    padding: 10px 10px 5px;
-    margin: 1%;
-    background-color: #a8e7f9;
-    overflow: auto;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
+	width: 31%;
+	float: left;
+	padding: 10px 10px 5px;
+	margin: 1%;
+	background-color: #a8e7f9;
+	overflow: auto;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
 }
 
 #painel_validacao p {
@@ -485,21 +485,21 @@ unlike_color: #ce282a
 }
 
 /*.submit-edit-comment-button {
-	margin: 10px 0 0 0;
-	display: inline-block;
-	background-color: #3dcff4;
-	border: none;
-	color: #fff;
-	position: initial;
-	font-size: 14px;
-	text-align: right;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	border-radius: 4px;
-	padding: 3px 13px;
-	font-weight: 700;
-	text-transform: uppercase;
-	cursor: pointer;
+margin: 10px 0 0 0;
+display: inline-block;
+background-color: #3dcff4;
+border: none;
+color: #fff;
+position: initial;
+font-size: 14px;
+text-align: right;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+padding: 3px 13px;
+font-weight: 700;
+text-transform: uppercase;
+cursor: pointer;
 }*/
 
 .delibera_comment_button {
@@ -594,7 +594,7 @@ span.read-more, span.re-collapse {
 	margin: 0 auto;
 }
 
-.comment-form-attachment label,  .comment-form-attachment label .attachmentRules {
+.comment-form-attachment label,	.comment-form-attachment label .attachmentRules {
 	display: none;
 }
 
@@ -666,34 +666,34 @@ a.button {
 
 /* social midia
 .twitter-share {
-    text-decoration: none!important;
-    display: inline-block;
-    margin: 0;
-    font-size: 12px;
-    font-family: "Open Sans",sans-serif;
-    font-weight: 400;
-    border-radius: 3px;
-    color: #777!important;
-    background: #f8f8f8;
-    border: 1px solid #ccc;
-    box-shadow: 0 1px 0 rgba(0,0,0,.08);
-    text-shadow: none;
-    line-height: 12px;
-    padding: 0;
+text-decoration: none!important;
+display: inline-block;
+margin: 0;
+font-size: 12px;
+font-family: "Open Sans",sans-serif;
+font-weight: 400;
+border-radius: 3px;
+color: #777!important;
+background: #f8f8f8;
+border: 1px solid #ccc;
+box-shadow: 0 1px 0 rgba(0,0,0,.08);
+text-shadow: none;
+line-height: 12px;
+padding: 0;
 }
 
 .twitter-share a.btn {
-    background-color: #ccc;
-    color: #777;
+background-color: #ccc;
+color: #777;
 }
 */
 
 [class^="icon-"], [class*=" icon-"] {
-    fill: currentcolor;
-    float: left;
-    height: 20px;
-    margin: 0;
-    width: 20px;
+	fill: currentcolor;
+	float: left;
+	height: 20px;
+	margin: 0;
+	width: 20px;
 }
 
 .delibera_like, .delibera_unlike {
@@ -766,12 +766,12 @@ a.button {
 	}
 
 	.single-pauta .type-pauta .entry-author {
-	    font-size: 14px;
-	    text-align: right;
+		font-size: 14px;
+		text-align: right;
 	}
 
 	.single-pauta .comment-respond h3 {
-	    font-size: 18px;
+		font-size: 18px;
 	}
 
 	/* PROPRIEDADE FIXADA PARA TEMA DIVI */
@@ -792,12 +792,12 @@ a.button {
 		width: 100%;
 	}
 	.comment .children {
-	    margin-left: 10% !important;
+		margin-left: 10% !important;
 	}
 
 	.comment-form-comment #comment {
-	    display: flex;
-	    width: 100%;
+		display: flex;
+		width: 100%;
 	}
 
 	.delibera-comment-meta {
@@ -818,7 +818,7 @@ a.button {
 	}
 
 	.delibera_lista_validacoes .delibera-comment-body {
-	    width: 100%;
+		width: 100%;
 	}
 	.single-pauta h2.discussion-title {
 		font-size: 18px;
