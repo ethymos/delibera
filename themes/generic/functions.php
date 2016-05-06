@@ -322,7 +322,7 @@ function delibera_gerar_seguir($ID)
 			$seguir = true;
 		}
 
-		$html = '<div id="delibera_seguir" class="delibera_seguir">
+		$html = '<div id="delibera_seguir" class="delibera_seguir" title="Clique para seguir esta pauta e receber notificações">
 		<span id="delibera-seguir-text" class="delibera_seguir_text" ' . (($seguir == false) ? 'style="display: none;"' : '') . '>' . __('Seguir','delibera') . '</span>'
 		. '<span id="delibera-seguindo-text" class="delibera_seguir_text" ' . (($seguir == true) ? 'style="display: none;"' : '') . '>' . __('Seguindo','delibera') . '<span class="delibera_seguir_cancel">&nbsp;('.__('Cancelar', 'delibera').')</span></span>'
 		. '</div>';
@@ -378,7 +378,7 @@ function delibera_gerar_curtir($ID, $type ='pauta')
 
 	global $deliberaThemes;
 
-	$html = '<div id="thebutton'.$type.$ID.'" class="delibera-like" >';
+	$html = '<div id="thebutton'.$type.$ID.'" class="delibera-like" title="Demonstre que você concorda com o assunto" >';
 
 	if ($num_curtiu > 0) {
 		$html .= '<span class="delibera-like-count">' . $num_curtiu.'</span>';
@@ -447,7 +447,7 @@ function delibera_gerar_discordar($ID, $type ='pauta')
 	$situacao = delibera_get_situacao($postID);
 
 	global $deliberaThemes;
-	$html = '<div id="thebuttonDiscordo'.$type.$ID.'" class="delibera-unlike" >';
+	$html = '<div id="thebuttonDiscordo'.$type.$ID.'" class="delibera-unlike" title="Demostre sua discordância com o assunto" >';
 	if ($ndiscordou > 0) {
 		$html .= '<span class="delibera-unlike-count">' . $ndiscordou .'</span>';
 	} else {
