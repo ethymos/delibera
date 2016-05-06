@@ -13,6 +13,7 @@ jQuery(document).ready(function() {
         },
         function(response) {
           jQuery(container).parent().children('.delibera-like-count').text(response);
+          jQuery(container).parent().children('.delibera-like-count').show();
         }
       );
     }
@@ -31,6 +32,7 @@ jQuery(document).ready(function() {
         },
         function(response) {
           jQuery(container).parent().children('.delibera-unlike-count').text(response);
+          jQuery(container).parent().children('.delibera-unlike-count').show();
         }
       );
     }
