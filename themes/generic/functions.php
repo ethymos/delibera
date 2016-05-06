@@ -474,7 +474,7 @@ function delibera_gerar_discordar($ID, $type ='pauta')
       $html .= "<input type='hidden' name='object_id' value='{$ID}' />";
       $html .= "<input type='hidden' name='type' value='{$type}' />";
     }
-    $html .= '<a href="javascript:void(0);" class="delibera-unlike-link"><i class="delibera-icon-thumbs-down"></i></a>';
+    $html .= '<i class="delibera-icon-thumbs-down"></i>';
   }
   else if(is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas) && $situacoes_validas[$situacao->slug]) // é uma situação válida
   {

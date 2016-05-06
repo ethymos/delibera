@@ -696,6 +696,10 @@ a.button {
     width: 20px;
 }
 
+.delibera_like, .delibera_unlike {
+	cursor: pointer;
+}
+
 /* portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android) */
 @media (max-width:641px) {
 	.delibera-header {
