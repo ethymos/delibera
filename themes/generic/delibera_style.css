@@ -279,7 +279,7 @@ resolucao - 90248f
 .single-pauta .type-pauta .group-button-like i {
 	font-size: 24px;
 }
-.single-pauta .type-pauta .delibera-like.active i,
+.single-pauta .type-pauta .delibera-like .active,
 .single-pauta .type-pauta .group-button-like i:hover {
 	cursor: pointer;
 	text-shadow: 0px 0px 10px rgba(200, 200, 200, 1);

@@ -398,10 +398,10 @@ function delibera_gerar_curtir($ID, $type ='pauta')
 		{
 			$html .= "<input type='hidden' name='object_id' value='{$ID}' />";
 			$html .= "<input type='hidden' name='type' value='{$type}' />";
-
+			$html .= '<i class="delibera-icon-thumbs-up"></i>';
+		} else {
+			$html .= '<i class="delibera-icon-thumbs-up active"></i>';
 		}
-
-		$html .= '<i class="delibera-icon-thumbs-up"></i>';
 	} else if (is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas) && $situacoes_validas[$situacao->slug]) { // é uma situação válida
 		$html .= '<a class="delibera-like-login" href="';
 		$html .= wp_login_url( $type == "pauta" ? get_permalink() : delibera_get_comment_link());
