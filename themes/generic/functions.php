@@ -379,18 +379,17 @@ function delibera_gerar_curtir($ID, $type ='pauta')
     }
   }
 
-  $ncurtiu = intval($type == 'pauta' || $type == 'post' ? get_post_meta($ID, 'delibera_numero_curtir', true) : get_comment_meta($ID, 'delibera_numero_curtir', true));
+  $num_curtiu = intval($type == 'pauta' || $type == 'post' ? get_post_meta($ID, 'delibera_numero_curtir', true) : get_comment_meta($ID, 'delibera_numero_curtir', true));
   $situacao = delibera_get_situacao($postID);
-  $html = '';
 
   global $deliberaThemes;
 
-  if ($ncurtiu > 0) {
-    $html = '<div id="thebutton'.$type.$ID.'" class="delibera_like" >';
-    $html .= '<span class="delibera-like-count">' . $ncurtiu.'</span><i class="delibera-icon-thumbs-up"></i>';
-    $html .= '</div>';
+  $html = '<div id="thebutton'.$type.$ID.'" class="delibera_like" >';
+
+  if ($num_curtiu > 0) {
+    $html .= '<span class="delibera-like-count">' . $num_curtiu.'</span>';
   } else {
-    $html = '<span class="delibera-like-count" style="display: none;"></span>';
+    $html .= '<span class="delibera-like-count" style="display: none;"></span>';
   }
 
   if (is_user_logged_in()) {
@@ -403,20 +402,19 @@ function delibera_gerar_curtir($ID, $type ='pauta')
     !(delibera_ja_discordou($ID, $user_id, $ip, $type)) // não discordou
     )
     {
-      $html .= '<div id="thebutton'.$type.$ID.'" class="delibera_like" ><i class="delibera-icon-thumbs-up"></i>';
       $html .= "<input type='hidden' name='object_id' value='{$ID}' />";
       $html .= "<input type='hidden' name='type' value='{$type}' />";
-      $html .= '</div>';
+
     }
-  } else {
-    $html .= '<div id="thebutton'.$type.$ID.'" class="delibera_like" >';
-    if (is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas) && $situacoes_validas[$situacao->slug]) { // é uma situação válida
+
+    $html .= '<a class="delibera-like-link" href="javascript:void(0);"><i class="delibera-icon-thumbs-up"></i></a>';
+  } else if (is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas) && $situacoes_validas[$situacao->slug]) { // é uma situação válida
       $html .= '<a class="delibera-like-login" href="';
       $html .= wp_login_url( $type == "pauta" ? get_permalink() : delibera_get_comment_link());
-      $html .= '" ><span class="delibera_like_text">'.__('Concordo','delibera').'</span><i class="delibera-icon-thumbs-up"></i></a>';
-    }
-    $html .= '</div>';
+      $html .= '" ><i class="delibera-icon-thumbs-up"></i></a>';
   }
+
+  $html .= '</div>';
 
   return $html;
 }

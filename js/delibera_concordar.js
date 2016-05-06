@@ -1,8 +1,23 @@
 jQuery(document).ready(function() {
 
-  jQuery(".delibera_like").click(function() {
+  jQuery(".delibera-like-link").click(function() {
     var container = jQuery(this);
-    if(jQuery(this).children('input[name="object_id"]').val() > 0)
+    if (container.hasClass('.active'))
+    {
+      jQuery.post(
+        delibera.ajax_url,
+        {
+          action : "delibera_descurtir",
+          like_id : jQuery(this).children('input[name="object_id"]').val(),
+          type : jQuery(this).children('input[name="type"]').val(),
+        },
+        function(response) {
+          container.removeClass('active');
+          jQuery(container).parent().children('.delibera-like-count').text(response);
+        }
+      );
+    }
+    else if(jQuery(this).children('input[name="object_id"]').val() > 0)
     {
       jQuery.post(
         delibera.ajax_url,
@@ -12,6 +27,7 @@ jQuery(document).ready(function() {
           type : jQuery(this).children('input[name="type"]').val(),
         },
         function(response) {
+          container.addClass('active');
           jQuery(container).parent().children('.delibera-like-count').text(response);
           jQuery(container).parent().children('.delibera-like-count').show();
         }
@@ -19,7 +35,7 @@ jQuery(document).ready(function() {
     }
   });
 
-  jQuery(".delibera_unlike").click(function() {
+  jQuery(".delibera-unlike-link").click(function() {
     var container = jQuery(this);
     if(jQuery(this).children('input[name="object_id"]').val() > 0)
     {
