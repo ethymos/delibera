@@ -48,6 +48,50 @@ function delibera_curtir($ID, $type = 'pauta')
 			update_comment_meta($comment_id, 'delibera_curtiram', $curtiram);
 		}
 	}
+	elseif(delibera_ja_curtiu($ID, $user_id, $ip, $type))
+	{
+		if ($type == 'pauta') {
+			$postID = $ID;
+			$ncurtir--;
+			update_post_meta($postID, 'delibera_numero_curtir', $ncurtir);
+			$curtiram = get_post_meta($postID, 'delibera_curtiram', true);
+			foreach ($curtiram as $hora => $curtiuem)
+			{
+				for($i = 0; $i < count($curtiuem); $i++)
+				{
+					if(intval($user_id) == 0 && $ip == $curtiuem[$i]['ip'])
+					{
+						unset($curtiuem[$i]);
+					}
+					elseif($user_id == $curtiuem[$i]['user'])
+					{
+						unset($curtiuem[$i]);
+					}
+				}
+			}
+			update_post_meta($postID, 'delibera_curtiram', $curtiram);
+		} elseif ($type == 'comment') {
+			$comment_id = $ID;
+			$ncurtir--;
+			update_comment_meta($comment_id, 'delibera_numero_curtir', $ncurtir);
+			$curtiram = get_comment_meta($comment_id, 'delibera_curtiram', true);
+			foreach ($curtiram as $hora => $curtiuem)
+			{
+				for($i = 0; $i < count($curtiuem); $i++)
+				{
+					if(intval($user_id) == 0 && $ip == $curtiuem[$i]['ip'])
+					{
+						unset($curtiuem[$i]);
+					}
+					elseif($user_id == $curtiuem[$i]['user'])
+					{
+						unset($curtiuem[$i]);
+					}
+				}
+			}
+			update_comment_meta($comment_id, 'delibera_curtiram', $curtiram);
+		}
+	}
 	return apply_filters('delibera_curtir', $ncurtir);
 }
 

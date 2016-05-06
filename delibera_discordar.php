@@ -50,6 +50,50 @@ function delibera_discordar($ID, $type ='pauta')
 			update_comment_meta($comment_id, 'delibera_discordaram', $discordaram);
 		}
 	}
+	elseif(delibera_ja_discordou($ID, $user_id, $ip, $type))
+	{
+		if ($type == 'pauta') {
+			$postID = $ID;
+			$ndiscordar--;
+			update_post_meta($postID, 'delibera_numero_discordar', $ndiscordar);
+			$discordaram = get_post_meta($postID, 'delibera_discordaram', true);
+			foreach ($discordaram as $hora => $discordouem)
+			{
+				for($i = 0; $i < count($discordouem); $i++)
+				{
+					if(intval($user_id) == 0 && $ip == $discordouem[$i]['ip'])
+					{
+						unset($discordouem[$i]);
+					}
+					elseif($user_id == $discordouem[$i]['user'])
+					{
+						unset($discordouem[$i]);
+					}
+				}
+			}
+			update_post_meta($postID, 'delibera_discordaram', $curtiram);
+		} elseif ($type == 'comment') {
+			$comment_id = $ID;
+			$ndiscordar--;
+			update_comment_meta($comment_id, 'delibera_numero_discordar', $ndiscordar);
+			$discordaram = get_comment_meta($comment_id, 'delibera_discordaram', true);
+			foreach ($discordaram as $hora => $discordouem)
+			{
+				for($i = 0; $i < count($discordouem); $i++)
+				{
+					if(intval($user_id) == 0 && $ip == $discordouem[$i]['ip'])
+					{
+						unset($discordouem[$i]);
+					}
+					elseif($user_id == $discordouem[$i]['user'])
+					{
+						unset($discordouem[$i]);
+					}
+				}
+			}
+			update_comment_meta($comment_id, 'delibera_discordaram', $curtiram);
+		}
+	}
 	return apply_filters('delibera_discordar', $ndiscordar);
 }
 
