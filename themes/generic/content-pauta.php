@@ -100,10 +100,12 @@ elseif(delibera_comments_is_open(get_the_ID()) && !is_user_logged_in())
 	<?php the_content(); ?>
 </div><!-- .entry-content -->
 
-<?php social_buttons(get_permalink(), get_the_title()); ?>
-<div id="delibera-comment-botoes-'.$comment->comment_ID.'" class="delibera-comment-botoes" ><?php
+<?php
+social_buttons(get_permalink(), get_the_title());
+echo '<div id="delibera-comment-botoes-'.$comment->comment_ID.'" class="delibera-comment-botoes">';
 echo delibera_gerar_curtir($post->ID, 'pauta');
-echo delibera_gerar_discordar($post->ID, 'pauta');?>
+echo delibera_gerar_discordar($post->ID, 'pauta');
+?>
 </div>
 </div><!-- #post-## -->
 <h2 class="discussion-title">Discussão sobre a Pauta</h3>
