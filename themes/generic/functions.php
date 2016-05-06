@@ -451,20 +451,13 @@ function delibera_gerar_discordar($ID, $type ='pauta')
   }
   $ndiscordou = intval($type == 'pauta' || $type == 'post' ? get_post_meta($ID, 'delibera_numero_discordar', true) : get_comment_meta($ID, 'delibera_numero_discordar', true));
   $situacao = delibera_get_situacao($postID);
-  $html = '';
 
   global $deliberaThemes;
-
-  $svg = $deliberaThemes->themeFileUrl('images/icons.svg');
-
+  $html = '<div id="thebuttonDiscordo'.$type.$ID.'" class="delibera_unlike" >';
   if ($ndiscordou > 0) {
-    $html = '<div id="thebuttonDiscordo'.$type.$ID.'" class="delibera_unlike" >';
-    $html .= '<span class="delibera-unlike-count">' . $ndiscordou .'</span><i class="delibera-icon-thumbs-down"></i>';
-    $html .= '</div>';
+    $html .= '<span class="delibera-unlike-count">' . $ndiscordou .'</span>';
   } else {
-    $html = '<div id="thebuttonDiscordo'.$type.$ID.'" class="delibera_unlike" >';
-    $html .= '<span class="delibera-unlike-count" style="display: none;"></span><i class="delibera-icon-thumbs-down"></i>';
-    $html .= '</div>';
+    $html .= '<span class="delibera-unlike-count" style="display: none;"></span>';
   }
 
   if(is_user_logged_in())
@@ -478,23 +471,18 @@ function delibera_gerar_discordar($ID, $type ='pauta')
     !(delibera_ja_curtiu($ID, $user_id, $ip, $type)) // não discordou
     )
     {
-      $html .= '<div id="thebuttonDiscordo'.$type.$ID.'" class="delibera_unlike" ><i class="delibera-icon-thumbs-down"></i>';
       $html .= "<input type='hidden' name='object_id' value='{$ID}' />";
       $html .= "<input type='hidden' name='type' value='{$type}' />";
-      $html .= '</div>';
     }
+    $html .= '<a href="javascript:void(0);" class="delibera-unlike-link"><i class="delibera-icon-thumbs-down"></i></a>';
   }
-  else
+  else if(is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas) && $situacoes_validas[$situacao->slug]) // é uma situação válida
   {
-    $html = '<div id="thebuttonDiscordo'.$type.$ID.'" class="delibera_unlike" >';
-    if(is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas) && $situacoes_validas[$situacao->slug]) // é uma situação válida
-    {
       $html .= '<a class="delibera-unlike-login" href="';
       $html .= wp_login_url( $type == "pauta" ? get_permalink() : delibera_get_comment_link());
       $html .= '" ><span class="delibera_unlike_text"><i class="delibera-icon-thumbs-down"></i></span></a>';
-    }
-    $html .= '</div>';
   }
+  $html .= '</div>';
   return $html;
 }
 require_once(dirname(__FILE__) . "/social-buttons.php");
