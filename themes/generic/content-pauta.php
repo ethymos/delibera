@@ -68,7 +68,7 @@ $flow = $DeliberaFlow->get(get_the_ID());
 		<?php echo delibera_gerar_seguir($post->ID); ?>
 	</div>
 	<div class="entry-print button">
-		<a href="?delibera_print=1" class=""><i class="delibera-icon-print"></i></a>
+		<a title="Versão simplificada para impressão" href="?delibera_print=1" class=""><i class="delibera-icon-print"></i></a>
 	</div><!-- .entry-print -->
 	<!--div class="entry-comment">
 	<?php if(comments_open(get_the_ID()) && is_user_logged_in())
