@@ -28,7 +28,7 @@ class ET_Builder_Module_Delibera_Categoria2 extends ET_Builder_Module {
 			'animation'         => array( 'off' ),
 			'background_layout' => array( 'light' ),
 			'background_color'	=> array( '#ffffff' ),
-			'button_image_url'	=> ''
+			'button_image_url'	=> array( '' )
 		);
 
 		$this->main_css_element = '%%order_class%%.et_pb_delibera_categoria';

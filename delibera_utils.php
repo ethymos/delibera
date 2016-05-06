@@ -285,7 +285,7 @@ if(is_plugin_active('mention-comments-authors/mention-comments-authors.php'))
 
 	function delibera_mca_printnames()
 	{
-                $users = get_users( array( 'fields' => array ( 'user_login' ) ) );
+                $users = get_users( array( 'number' => 1000 , 'fields' => array ( 'user_login' ) ) );
                 foreach( $users as $user )
 			$authors[] = array( 'val' => $user->user_login, 'meta' => $user->user_login);
 		 wp_localize_script( 'mca-comment-script', 'mcaAuthors', $authors );
