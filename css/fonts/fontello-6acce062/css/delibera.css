@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'delibera';
-  src: url('../font/delibera.eot?75596189');
-  src: url('../font/delibera.eot?75596189#iefix') format('embedded-opentype'),
-       url('../font/delibera.woff2?75596189') format('woff2'),
-       url('../font/delibera.woff?75596189') format('woff'),
-       url('../font/delibera.ttf?75596189') format('truetype'),
-       url('../font/delibera.svg?75596189#delibera') format('svg');
+  src: url('../font/delibera.eot?53664499');
+  src: url('../font/delibera.eot?53664499#iefix') format('embedded-opentype'),
+       url('../font/delibera.woff2?53664499') format('woff2'),
+       url('../font/delibera.woff?53664499') format('woff'),
+       url('../font/delibera.ttf?53664499') format('truetype'),
+       url('../font/delibera.svg?53664499#delibera') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -15,7 +15,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'delibera';
-    src: url('../font/delibera.svg?75596189#delibera') format('svg');
+    src: url('../font/delibera.svg?53664499#delibera') format('svg');
   }
 }
 */
@@ -85,3 +85,4 @@
 .delibera-icon-twitter:before { content: '\e81b'; } /* '' */
 .delibera-icon-twitter-squared:before { content: '\e81c'; } /* '' */
 .delibera-icon-whatsapp:before { content: '\e81d'; } /* '' */
+.delibera-icon-edit:before { content: '\e81e'; } /* '' */

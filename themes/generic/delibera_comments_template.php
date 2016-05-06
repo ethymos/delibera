@@ -116,6 +116,15 @@ class Delibera_Walker_Comment extends Walker_Comment
 				}
 			}
 			comment_text();
+
+			echo '<div id="delibera-comment-botoes-'.$comment->comment_ID.'" class="delibera-comment-botoes" >
+			<div class="group-button-like">';
+			echo delibera_gerar_curtir($comment, 'comment');
+			echo delibera_gerar_discordar($comment, 'comment');
+			echo '</div>';
+			echo '</div>';
+
+
 			delibera_comment_edit_form();
 			if ($tipo == "encaminhamento" && current_user_can('relatoria') && (/*$situacao->slug == "discussao" || TODO Opção de baseamento na discussão */ $situacao->slug == "relatoria"))
 			{
@@ -132,16 +141,14 @@ class Delibera_Walker_Comment extends Walker_Comment
 					{
 						if($situacao->slug == 'discussao' )
 						{
-							$args['reply_text'] = __("Responder", 'delibera');
-							comment_reply_link(array_merge( $args, array('add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth'])));
+							$args['reply_text'] = '<i class="delibera-icon-reply"></i>';
+							echo get_comment_reply_link(array_merge( $args, array('add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth'])));
 						}
 						if($situacao->slug == 'validacao')
 						{
-							/*$args['reply_text'] = __("De sua opinião", 'delibera');
-							comment_reply_link(array_merge( $args, array('add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth'])));*/
 							?>
 							<div class="entry-respond">
-								<a href="<?php delibera_get_comment_link();?>#respond" class="comment-reply-link"><?php _e( 'De sua opinião', 'delibera' ); ?></a>
+								<a href="<?php delibera_get_comment_link();?>#respond" class="comment-reply-link"><i class="delibera-icon-reply"></i></a>
 							</div>
 							<?php
 						}
@@ -150,7 +157,7 @@ class Delibera_Walker_Comment extends Walker_Comment
 					{
 						?>
 						<div class="entry-respond">
-							<a href="<?php echo wp_login_url(delibera_get_comment_link());?>#respond" class="comment-reply-link"><?php _e( 'Faça login e de sua opinião', 'delibera' ); ?></a>
+							<a href="<?php echo wp_login_url(delibera_get_comment_link());?>#respond" class="comment-reply-link"><i class="delibera-icon-reply"></i></a>
 						</div><!-- .entry-respond -->
 						<?php
 					}
@@ -160,18 +167,16 @@ class Delibera_Walker_Comment extends Walker_Comment
 				if($situacao->slug == 'discussao' || ($situacao->slug == 'relatoria' && current_user_can('relatoria')))
 				{
 					//TODO gerar por função esse botão?>
-					<div id="submit-edit-comment-button-<?php echo $comment->comment_ID;?>" class="submit-edit-comment-button" style="display: none" ><span class="submit-edit-comment-button-text"><?php echo __('Atualizar','delibera')?></span></div>
+					<div id="submit-edit-comment-button-<?php echo $comment->comment_ID;?>" class="submit-edit-comment-button" style="display: none" >
+						<span class="submit-edit-comment-button-text"><i class="delibera-icon-ok"></i></span>
+					</div>
 					<?php
-					delibera_edit_comment_link( __('Editar'),'&nbsp;&nbsp;', '' );
-					delibera_delete_comment_link( __('Deletar'),'&nbsp;&nbsp;', '' );
+					delibera_edit_comment_link( '<i class="delibera-icon-edit"></i>','&nbsp;&nbsp;', '' );
+					delibera_delete_comment_link( '<i class="delibera-icon-trash"></i>','&nbsp;&nbsp;', '' );
 				}
 				?>
 				<?php
 			}
-			echo '<div id="delibera-comment-botoes-'.$comment->comment_ID.'" class="delibera-comment-botoes" >';
-			echo delibera_gerar_curtir($comment, 'comment');
-			echo delibera_gerar_discordar($comment, 'comment');
-			echo '</div>';
 			?>
 			<?php if ( 'div' != $args['style'] ) : ?>
 			</div>

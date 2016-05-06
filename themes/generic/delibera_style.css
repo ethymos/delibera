@@ -248,7 +248,7 @@ resolucao - 90248f
 	font-size: 16px;
 	display: inline-block;
 }
-.single-pauta .type-pauta .button {
+.button {
 	display: inline-block;
 	background: #ccc;
 	color: #777;
@@ -256,14 +256,14 @@ resolucao - 90248f
 	font-size: 14px;
 	cursor: pointer;
 }
-.single-pauta .type-pauta .button a {
+.button a {
 	font-size: 14px;
 	color: #777;
 }
-.single-pauta .type-pauta .button a i {
+.button a i {
 	font-size: 18px;
 }
-.single-pauta .type-pauta .social-buttons {
+.social-buttons {
 	text-align: right;
 	float: right;
 	padding: 0;
@@ -272,30 +272,30 @@ resolucao - 90248f
 	display: inline-block;
 }
 
-.single-pauta .type-pauta .group-button-like {
+.group-button-like {
 	width: 45%;
 	display: inline-block;
 }
-.single-pauta .type-pauta .group-button-like i {
+.group-button-like i {
 	font-size: 24px;
 }
-.single-pauta .type-pauta .delibera-like .active,
-.single-pauta .type-pauta .group-button-like i:hover {
+.delibera-like .active,
+.group-button-like i:hover {
 	cursor: pointer;
 	text-shadow: 0px 0px 10px rgba(200, 200, 200, 1);
 }
-.single-pauta .type-pauta .group-button-unlike .label,
-.single-pauta .type-pauta .group-button-like .label {
+.group-button-unlike .label,
+.group-button-like .label {
 	font-size: 14px;
 	display: inline-block;
 	margin: 0 5px 0;
 }
 
-.single-pauta .type-pauta .social-buttons a {
+.social-buttons a {
 	font-size: 24px;
 	color: #fff;
 }
-.single-pauta .type-pauta .social-buttons a:hover {
+.social-buttons a:hover {
 	text-shadow: 0px 0px 10px rgba(200, 200, 200, 1);
 }
 .single-pauta .type-pauta .entry-title {
@@ -387,7 +387,7 @@ text-align: right;
 	margin-top: 15px;
 	font-weight: bold;
 }
-.delibera-comment-body .comment-reply-link {
+/*.delibera-comment-body .comment-reply-link {
 	margin: 5px;
 	display: inline-block;
 	background-color: #3dcff4;
@@ -402,15 +402,11 @@ text-align: right;
 	padding: 5px;
 	font-weight: 700;
 	text-transform: uppercase;
-}
+}*/
 
-.reply {
-	display: inline-block;
-	width: auto;
-	float: left;
-}
 .delibera-comment-botoes {
-
+	display: inline-block;
+	width: 50%;
 }
 
 .delibera_lista_validacoes .delibera-comment-botoes {
@@ -548,7 +544,7 @@ span.read-more, span.re-collapse {
 	font-size: 14px;
 }
 
-.delibera-comment-body .comment-edit-link {
+/*.delibera-comment-body .comment-edit-link {
 	margin: 10px 0;
 	display: inline-block;
 	background-color: #3dcff4;
@@ -563,19 +559,23 @@ span.read-more, span.re-collapse {
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	padding: 5px;
+}*/
+
+.delibera-edit-comment-button,
+.delibera-delete-comment-button,
+.reply {
+	display: inline-block;
 }
-/*
+
 .delibera-edit-comment-button span,
 .delibera-delete-comment-button span,
 .submit-edit-comment-button .submit-edit-comment-button-text {
-	float: left;
+
 	cursor: pointer;
 	display: inline-block;
-	background-color: #3dcff4;
 	border: none;
-	color: #fff;
 	position: initial;
-	font-size: 14px;
+	font-size: 18px;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
@@ -586,6 +586,8 @@ span.read-more, span.re-collapse {
 	margin: 5px;
 }
 
+
+/*
 .painel-baseouseem-item {
 	display: inline-block;
 	float: left;
@@ -710,6 +712,36 @@ color: #777;
 .delibera_like, .delibera_unlike {
 	cursor: pointer;
 }
+
+/* Button Styles */
+.comment-reply-link {
+	position: relative;
+	padding: 0;
+	border: none;
+	-webkit-border-radius: none;
+	-moz-border-radius: none;
+	border-radius: none;
+	background: none;
+	font-size: 24px;
+	font-weight: 100;
+	line-height: 1em !important;
+	-webkit-transition: none;
+	-moz-transition: none;
+	transition: none;
+}
+
+/* Button Hover */
+.comment-reply-link:hover {
+	padding: 0;
+	border: none;
+}
+
+/* Button Hover Light Text */
+.comment-reply-link:hover {
+	background: none;
+}
+
+
 
 /* portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android) */
 @media (max-width:641px) {
