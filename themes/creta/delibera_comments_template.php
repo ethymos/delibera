@@ -32,10 +32,10 @@ class Delibera_Walker_Comment extends Walker_Comment
         }
 
         $GLOBALS['comment'] = $comment;
-        
+
         $tipo = get_comment_meta($comment->comment_ID, "delibera_comment_tipo", true);
         $situacao = delibera_get_situacao($comment->comment_post_ID);
-        
+
         extract($args, EXTR_SKIP);
 
         if ('div' == $args['style']) {
@@ -45,16 +45,16 @@ class Delibera_Walker_Comment extends Walker_Comment
             $tag = 'li';
             $add_below = 'div-comment';
         }
-        
+
         $classes = array();
-        
+
         if (!empty($args['has_children'])) {
             $classes[] = 'parent';
         }
-        
+
         if ($tipo == 'encaminhamento' || $tipo == 'resolucao' || $tipo == 'encaminhamento_selecionado') {
             $classes[] = 'encaminhamento';
-            
+
             if (in_array($situacao->slug, array('comresolucao', 'emvotacao'))) {
                 $classes[] = 'encaminhamentos-selecionados';
             }
@@ -88,18 +88,19 @@ class Delibera_Walker_Comment extends Walker_Comment
                                 <time datetime="<?php echo get_comment_date('c'); ?>">
                                     <?php
                                     $time = mysql2date('G', $comment->comment_date);
-                                    
+
                                     $time_diff = time() - $time;
-                                    
+
                                     if ($time_diff > 0 && $time_diff < 30*24*60*60) {
                                         printf(__('há %s', 'delibera'), human_time_diff(mysql2date('U', $comment->comment_date, true)));
                                     } else {
                                         echo get_comment_date('d \d\e F \d\e Y à\s H:i');
                                     }
-                                    
+
                                     ?>
                                 </time>
                             </a>
+                        <?php social_buttons(delibera_get_comment_link($comment->comment_ID), comment_text()); ?>
                         </div>
                         <div class="alignright textright">
                             <span class="type"><?php delibera_get_comment_type_label($comment); ?></span>
@@ -125,7 +126,7 @@ class Delibera_Walker_Comment extends Walker_Comment
                             <div class="bottom alignleft">
                                 <div class="reply">
                                     <?php
-                                    if ($situacao->slug != 'validacao' && is_user_logged_in()) {            
+                                    if ($situacao->slug != 'validacao' && is_user_logged_in()) {
                                         $args['reply_text'] = __("Responder", 'delibera');
                                         ?>
                                         <?php comment_reply_link(array_merge($args, array('add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth']))); ?>
@@ -150,11 +151,11 @@ class Delibera_Walker_Comment extends Walker_Comment
                                 $elements = explode(',', $baseouseem);
                                 $result = '';
                                 $count = count($elements);
-                                
+
                                 foreach ($elements as $key => $element) {
                                     $reference_comment = get_comment($element);
                                     $result .= "<a href='#delibera-comment-{$reference_comment->comment_ID}'>{$reference_comment->comment_author}</a>";
-                                    
+
                                     if ($key + 1 < $count) {
                                         $result .= ', ';
                                     }
@@ -162,10 +163,10 @@ class Delibera_Walker_Comment extends Walker_Comment
                                 echo '<div>'.__('Proposta baseada em:', 'delibera') . '&nbsp;' . $result . '</div>';
                             }
                         }
-                        
+
                         if (($tipo == "encaminhamento" || $tipo == 'encaminhamento_selecionado') && current_user_can('relatoria') && $situacao->slug == "relatoria") {
                             $selecionados = delibera_get_comments_encaminhamentos_selecionados_ids($comment->comment_post_ID);
-                            
+
                             if (!$selecionados) {
                                 $selecionados = array();
                             }
@@ -181,26 +182,26 @@ class Delibera_Walker_Comment extends Walker_Comment
                                     <img class="usar-na-votacao-feedback" src="<?php echo $deliberaThemes->getThemeUrl(); ?>/img/accept.png" style="display: none;" />
                                 </p>
                             </div>
-                            <?php 
+                            <?php
                         }
-                        
+
                         $ncurtiu = get_comment_meta($comment->comment_ID, 'delibera_numero_curtir', true);
                         $ndiscordou = get_comment_meta($comment->comment_ID, 'delibera_numero_discordar', true);
-                        
+
                         if (is_user_logged_in() || $ncurtiu || $ndiscordou) : ?>
                             <div class="bottom alignright textright">
                                 <?php
-                                
+
                                 $curtir = delibera_gerar_curtir($comment->comment_ID, 'comment');
                                 $discordar = delibera_gerar_discordar($comment->comment_ID, 'comment');
-                                
+
                                 if ($curtir) {
                                     echo $curtir;
                                 }
-                                
+
                                 if ($discordar) {
                                     echo $discordar;
-                                }                                                
+                                }
                                 ?>
                             </div>
                         <?php endif; ?>
