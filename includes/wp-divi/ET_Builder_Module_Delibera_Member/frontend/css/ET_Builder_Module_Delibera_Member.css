@@ -7,12 +7,21 @@
     padding: 2px;
     position: relative;
     text-align: center;
-    width: 49%;
     float: left;
     box-shadow: 5px 5px 5px #888888;
-    
+    width: 100%;
 }
 
+.et_pb_delibera_categoria .et_pb_module.et_pb_delibera_member { 
+	width: 49%;
+}
+
+.et_pb_delibera_categoria {
+	display: block;
+	position: relative;
+	float:left;
+	width: 100%;
+}
 
 .et_pb_module.et_pb_delibera_member .comments {
     display: inline-block;
