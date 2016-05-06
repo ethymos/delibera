@@ -225,6 +225,7 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 				wp_enqueue_style('delibera_style', $deliberaThemes->themeFileUrl('delibera_style.css'));
 			}
 		}
+		wp_enqueue_style('ET_Builder_Module_Delibera_Member', plugins_url("frontend/css", __FILE__)."/ET_Builder_Module_Delibera_Member.css");
 	}
 
 	function javascriptFiles()
@@ -293,11 +294,13 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 
 			$autor = get_userdata($wp_posts[$key]->post_author)->display_name;
 
-			$tags = get_the_tag_list('Tags: ',', ','',$wp_posts[$key]->ID);
+			$tags = get_the_tag_list('#',' #','',$wp_posts[$key]->ID);
 
 			$tema = $term_list[0]->name;
 
-			$avatar = get_avatar( $wp_posts[$key]->post_author, '25');
+			$autor_url = \Delibera\Member\MemberPath::getAuthorPautasUrl($wp_posts[$key]->post_author);
+			
+			$avatar = get_avatar( $wp_posts[$key]->post_author, '32');
 
 			$temaLink = get_term_link($term_list[0]->slug,"tema");
 
@@ -366,26 +369,28 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 				$button = $button_image_url != '' ? '<img src="'.$button_image_url.'">' : __('Participar', 'et_builder');
 
 				$output = sprintf(
-						'<div%3$s class="et_pb_module et_pb_delibera_member%4$s%9$s et_pb_bg_layout_%8$s clearfix" %20$s>
+						'<div%3$s class="et_pb_module et_pb_delibera_member%4$s%9$s et_pb_bg_layout_%8$s clearfix">
 				%2$s
+				<div class="tema" %20$s><a href="%12$s">%11$s</a></div>
 				<div class="et_pb_delibera_member_description">
-					<div class="tema" id="tema"><a href="%12$s">%11$s</a></div>
-					<a href=%10$s>
+					<a href="%10$s">
 						%5$s
 						%6$s
 						%1$s
 						%7$s
         			</a>
+					<div class="tags" id="tags">%14$s</div>
+					<a href="%22$s">
+						<div class="user" id="user">
+							<div class="imageInterna">%15$s</div>
+							<div class="name">%13$s</div>
+						</div>
+					</a>
+					%16$s
+        			%17$s
+					<div class="comments"><span class="comments-count">%18$s<span><svg class="icon-comment"><use xlink:href="%19$s#icon-comment"></use></svg></div>
 				</div> <!-- .et_pb_delibera_member_description -->
-				<BR><div class="tags" id="tags">%14$s</div>
-				<BR><div class="user" id="user">
-					<div class="imageInterna">%15$s</div>
-					<div class="name">%13$s</div>
-				</div>
-				%16$s
-        		%17$s
-				<div class="comments"><span class="comments-count">%18$s<span><svg class="icon-comment"><use xlink:href="%19$s#icon-comment"></use></svg></div>
-				<a href=%10$s><div class="faixa">%21$s</div></a>
+				<a href="%10$s" ><div class="faixa" %20$s>%21$s</div></a>
 			</div> <!-- .et_pb_delibera_member -->',
 						$this->shortcode_content,
 						( '' !== $image ? $image : '' ),
@@ -407,8 +412,9 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 						$comment_count,
 						$svg,
 						( '' !== $style ? $style : '' ),
-						$button
-						);
+						$button,
+						$autor_url
+				);
 
 				return $output;
 	}

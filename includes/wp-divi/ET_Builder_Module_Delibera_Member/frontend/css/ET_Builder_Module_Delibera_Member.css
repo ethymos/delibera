@@ -1,0 +1,58 @@
+@CHARSET "UTF-8";
+
+.et_pb_module.et_pb_delibera_member {
+    border-radius: 12px;
+    display: block;
+    margin: 0 auto;
+    padding: 2px;
+    position: relative;
+    text-align: center;
+    width: auto;
+    box-shadow: 5px 5px 5px #888888;
+    
+}
+
+
+.et_pb_module.et_pb_delibera_member .comments {
+    display: inline-block;
+    position: relative;
+}
+
+.et_pb_module.et_pb_delibera_member .tema a {
+    color: #000;
+    font-size: 1.6em;
+    font-weight: bolder;
+    text-transform: uppercase;
+}
+
+.et_pb_module.et_pb_delibera_member .tema {
+    padding: 10px 0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.et_pb_module.et_pb_delibera_member .et_pb_delibera_member_description h4 {
+    color: #000 !important;
+}
+
+.et_pb_module.et_pb_delibera_member .et_pb_delibera_member_description {
+    background-color: #fff;
+    color: #000;
+    padding: 10px 20px;
+    text-align: left;
+}
+
+.et_pb_module.et_pb_delibera_member .user div {
+    display: inline-block;
+    margin: 10px;
+    vertical-align: top;
+    text-transform: capitalize;
+    color: #000;
+}
+
+.et_pb_module.et_pb_delibera_member .faixa {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 8px 20px 8px 8px;
+    text-align: right;
+}
