@@ -407,7 +407,7 @@ function delibera_gerar_curtir($ID, $type ='pauta')
 
     }
 
-    $html .= '<a class="delibera-like-link" href="javascript:void(0);"><i class="delibera-icon-thumbs-up"></i></a>';
+    $html .= '<i class="delibera-icon-thumbs-up"></i>';
   } else if (is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas) && $situacoes_validas[$situacao->slug]) { // é uma situação válida
       $html .= '<a class="delibera-like-login" href="';
       $html .= wp_login_url( $type == "pauta" ? get_permalink() : delibera_get_comment_link());
