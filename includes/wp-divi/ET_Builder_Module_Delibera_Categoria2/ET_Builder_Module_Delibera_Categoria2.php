@@ -1,9 +1,9 @@
 <?php
 
-class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
+class ET_Builder_Module_Delibera_Categoria2 extends ET_Builder_Module {
 	function init() {
-		$this->name = esc_html__( 'Delibera', 'et_builder' );
-		$this->slug = 'et_pb_delibera_pauta22v';
+		$this->name = esc_html__( 'Delibera categoria2', 'et_builder' );
+		$this->slug = 'et_pb_delibera_categoria2';
 
 		$this->whitelisted_fields = array(
 			'name',
@@ -18,19 +18,20 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 			'icon_color',
 			'icon_hover_color',
 			'include_categories',
+			'texto',
 			'url_tema',
 			'background_color',
 			'button_image_url'
 		);
 
 		$this->fields_defaults = array(
-			'animation'			=> array( 'off' ),
-			'background_layout'	=> array( 'light' ),
+			'animation'         => array( 'off' ),
+			'background_layout' => array( 'light' ),
 			'background_color'	=> array( '#ffffff' ),
 			'button_image_url'	=> ''
 		);
 
-		$this->main_css_element = '%%order_class%%.et_pb_delibera_member';
+		$this->main_css_element = '%%order_class%%.et_pb_delibera_categoria';
 		$this->advanced_options = array(
 			'fonts' => array(
 				'header' => array(
@@ -75,9 +76,6 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 				'selector' => '.et_pb_member_social_links',
 			),
 		);
-
-		add_action('wp_enqueue_scripts', array($this, 'cssFiles'), 1000);
-		add_action('wp_enqueue_scripts', array($this, 'javascriptFiles'), 1000);
 	}
 
 	function get_fields() {
@@ -100,7 +98,7 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 				'description'     => 'Insira um título',
 			),
 			'url_tema' => array(
-				'label'           => esc_html__( 'URL Tema', 'et_builder' ),
+				'label'           => esc_html__( 'Texto', 'et_builder' ),
 				'type'            => 'text',
 				'option_category' => 'basic_option',
 				'description'     => 'Se preenchida sobreescreve a url do tema',
@@ -143,11 +141,6 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 					'dark'  => esc_html__( 'Light', 'et_builder' ),
 				),
 				'description' => esc_html__( 'Here you can choose the value of your text. If you are working with a dark background, then your text should be set to light. If you are working with a light background, then your text should be dark.', 'et_builder' ),
-			),
-			'background_color' => array(
-				'label'       => esc_html__( 'Background Color', 'et_builder' ),
-				'type'        => 'color-alpha',
-				'description' => esc_html__( 'Use the color picker to choose a background color for this module.', 'et_builder' ),
 			),
 			'content_new' => array(
 				'label'           => esc_html__( 'Description', 'et_builder' ),
@@ -198,6 +191,11 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 				'tab_slug'        => 'custom_css',
 				'option_class'    => 'et_pb_custom_css_regular',
 			),
+			'background_color' => array(
+				'label'       => esc_html__( 'Background Color', 'et_builder' ),
+				'type'        => 'color-alpha',
+				'description' => esc_html__( 'Use the color picker to choose a background color for this module.', 'et_builder' ),
+			),
 			'button_image_url' => array(
 				'label'              => esc_html__( 'Button Image URL', 'et_builder' ),
 				'type'               => 'upload',
@@ -207,55 +205,32 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 				'update_text'        => esc_attr__( 'Set As Image', 'et_builder' ),
 				'description'        => esc_html__( 'Upload your desired image, or type in the URL to the image you would like to display as link button.', 'et_builder' ),
 			),
+			'url_tema' => array(
+				'label'           => esc_html__( 'URL Tema', 'et_builder' ),
+				'type'            => 'text',
+				'option_category' => 'basic_option',
+				'description'     => 'Se preenchida sobreescreve a url do tema',
+			),
 		);
 		return $fields;
 	}
 
-	function cssFiles()
-	{
-		if (!is_pauta())
-		{
-			if(file_exists(get_stylesheet_directory()."/delibera_style.css"))
-			{
-				wp_enqueue_style('delibera_style', get_stylesheet_directory_uri()."/delibera_style.css");
-			}
-			else
-			{
-				global $deliberaThemes;
-				wp_enqueue_style('delibera_style', $deliberaThemes->themeFileUrl('delibera_style.css'));
-			}
-		}
-		wp_enqueue_style('ET_Builder_Module_Delibera_Member', plugins_url("frontend/css", __FILE__)."/ET_Builder_Module_Delibera_Member.css");
-	}
-
-	function javascriptFiles()
-	{
-		if (!is_pauta())
-		{
-			wp_enqueue_script('delibera-concordar', WP_CONTENT_URL . '/plugins/delibera/js/delibera_concordar.js', array('jquery'));
-				
-			$data = array(
-				'ajax_url' => admin_url('admin-ajax.php'),
-			);
-			wp_localize_script('delibera-concordar', 'delibera', $data);
-		}
-	}
-
 	function shortcode_callback( $atts, $content = null, $function_name ) {
-		$module_id         = $this->shortcode_atts['module_id'];
-		$module_class      = $this->shortcode_atts['module_class'];
-		$name              = $this->shortcode_atts['name'];
-		$position          = $this->shortcode_atts['position'];
-		$image_url         = $this->shortcode_atts['image_url'];
-		$animation         = $this->shortcode_atts['animation'];
-		$background_layout = $this->shortcode_atts['background_layout'];
-		$background_color     = $this->shortcode_atts['background_color'];
-		$icon_color        = $this->shortcode_atts['icon_color'];
-		$icon_hover_color  = $this->shortcode_atts['icon_hover_color'];
-		$include_categories = $this->shortcode_atts['include_categories'];
-		$url_tema =          $this->shortcode_atts['url_tema'];
-		$button_image_url	= $this->shortcode_atts['button_image_url'];
-
+		$module_id        			= $this->shortcode_atts['module_id'];
+		$module_class     			= $this->shortcode_atts['module_class'];
+		$name             			= $this->shortcode_atts['name'];
+		$position         			= $this->shortcode_atts['position'];
+		$image_url        			= $this->shortcode_atts['image_url'];
+		$animation        			= $this->shortcode_atts['animation'];
+		$background_layout			= $this->shortcode_atts['background_layout'];
+		$icon_color					= $this->shortcode_atts['icon_color'];
+		$icon_hover_color			= $this->shortcode_atts['icon_hover_color'];
+		$include_categories			= $this->shortcode_atts['include_categories'];
+		$texto						= $this->shortcode_atts['texto'];
+		$background_color			= $this->shortcode_atts['background_color'];
+		$url_tema 					= $this->shortcode_atts['url_tema'];
+		$button_image_url			= $this->shortcode_atts['button_image_url'];
+		
 
 		$module_class = ET_Builder_Element::add_module_order_class( $module_class, $function_name );
 
@@ -265,7 +240,6 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 			'post_type' => 'pauta',
 			'orderby' => 'rand',
 			'post_status'        => 'publish',
-			'posts_per_page' => 1,
 			'tax_query' => array(
 				array(
 					'taxonomy' => 'tema',
@@ -275,155 +249,33 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 				)
 			)
 		);
-		$wp_posts = array();
-		if(array_key_exists('pauta_id', $this->shortcode_atts))
-		{
-			$wp_posts = array(get_post($this->shortcode_atts['pauta_id']));
-		}
-		else 
-		{
-			$wp_posts = get_posts($args);
-		}
 
-		$image_code = '';
-		$pauta_url = "";
-		$titulo = "";
-		$tema = false;
-		$temaLink = "";
-		$autor = "";
-		$tags = "";
-		$avatar = "";
-		$except = "";
+		$wp_posts = get_posts($args);
+
+		$output = "";
+
+		$auxClose = '';
+
+		$i = 0;
+
 		foreach($wp_posts as $key=>$value)
 		{
-
-			$term_list = wp_get_post_terms($wp_posts[$key]->ID, 'tema', array("fields" => "all"));
-
-			$autor = get_userdata($wp_posts[$key]->post_author)->display_name;
-
-			$tags = get_the_tag_list('#',' #','',$wp_posts[$key]->ID);
-
-			$tema = $term_list[0]->name;
-
-			$autor_url = \Delibera\Member\MemberPath::getAuthorPautasUrl($wp_posts[$key]->post_author);
 			
-			$avatar = get_avatar( $wp_posts[$key]->post_author, '32');
-
-			$temaLink = get_term_link($term_list[0]->slug,"tema");
-
-			if (has_post_thumbnail( $wp_posts[$key]->ID ) ){
-				$image_pauta_url = wp_get_attachment_image_src( get_post_thumbnail_id( $wp_posts[$key]->ID  ), 'thumbnail' );
-				$image_code = $image_pauta_url[0];
+			$output .= '[et_pb_delibera_pauta22v pauta_id="'.$wp_posts[$key]->ID.'"';
+			foreach ($this->shortcode_atts as $key => $value)
+			{
+				if(!empty($value))
+				{
+					$output .= $key.'="'.$value.'" ';
+				}
 			}
-			$pauta_url = $wp_posts[$key]->guid;
-			$titulo = get_the_title($wp_posts[$key]);
-			$except = apply_filters( 'get_the_excerpt', $wp_posts[$key]->post_excerpt );
+			$output .= '][/et_pb_delibera_pauta22v]';
 		}
+		$output = do_shortcode($output);
 
-		if($url_tema!=="")
-			$temaLink = $url_tema;
+		$output = '<div class="et_pb_section  et_pb_section_2 et_section_regular clearfix">'.$output.'</div>';
 
-			if ( '' !== $icon_color ) {
-				ET_Builder_Element::set_style( $function_name, array(
-					'selector'    => '%%order_class%% .et_pb_member_social_links a',
-					'declaration' => sprintf(
-							'color: %1$s;',
-							esc_html( $icon_color )
-							),
-				) );
-			}
-
-			if ( '' !== $icon_hover_color ) {
-				ET_Builder_Element::set_style( $function_name, array(
-					'selector'    => '%%order_class%% .et_pb_member_social_links a:hover',
-					'declaration' => sprintf(
-							'color: %1$s;',
-							esc_html( $icon_hover_color )
-							),
-				) );
-			}
-
-			if($image_code !='')
-				$image_url = $image_code;
-
-				if ( '' !== $image_url ) {
-					$image = sprintf(
-							'<div class="et_pb_delibera_member_image et-waypoint%3$s">
-					<img src="%1$s" alt="%2$s" />
-				</div>',
-							esc_url( $image_url ),
-							esc_attr( $titulo ),
-							esc_attr( " et_pb_animation_{$animation}" )
-							);
-				}
-
-				$style = $class = '';
-
-				if ( '' !== $background_color ) {
-					$style .= sprintf( 'background-color:%s;',
-							esc_attr( $background_color )
-							);
-				}
-
-				$style = '' !== $style ? " style='{$style}'" : '';
-
-				global $deliberaThemes;
-				$svg = $deliberaThemes->themeFileUrl('images/icons.svg');
-				$like = delibera_gerar_curtir($wp_posts[$key]->ID);
-				$unlike = delibera_gerar_discordar($wp_posts[$key]->ID);
-				$comment_count = delibera_comment_number($wp_posts[$key]->ID,'todos');
-
-				$button = $button_image_url != '' ? '<img src="'.$button_image_url.'">' : __('Participar', 'et_builder');
-
-				$output = sprintf(
-						'<div%3$s class="et_pb_module et_pb_delibera_member%4$s%9$s et_pb_bg_layout_%8$s clearfix">
-				%2$s
-				<div class="tema" %20$s><a href="%12$s">%11$s</a></div>
-				<div class="et_pb_delibera_member_description">
-					<a href="%10$s">
-						%5$s
-						%6$s
-						%1$s
-						%7$s
-        			</a>
-					<div class="tags" id="tags">%14$s</div>
-					<a href="%22$s">
-						<div class="user" id="user">
-							<div class="imageInterna">%15$s</div>
-							<div class="name">%13$s</div>
-						</div>
-					</a>
-					%16$s
-        			%17$s
-					<div class="comments"><span class="comments-count">%18$s<span><svg class="icon-comment"><use xlink:href="%19$s#icon-comment"></use></svg></div>
-				</div> <!-- .et_pb_delibera_member_description -->
-				<a href="%10$s" ><div class="faixa" %20$s>%21$s</div></a>
-			</div> <!-- .et_pb_delibera_member -->',
-						$this->shortcode_content,
-						( '' !== $image ? $image : '' ),
-						( '' !== $module_id ? sprintf( ' id="%1$s"', esc_attr( $module_id ) ) : '' ),
-						( '' !== $module_class ? sprintf( ' %1$s', esc_attr( str_replace("delibera","team",$module_class) ) ) : '' ),
-						( '' !== $titulo ? sprintf( '<h4>%1$s</h4>', esc_html( $titulo ) ) : '' ),
-						( '' !== $position ? sprintf( '<p class="et_pb_member_position">%1$s</p>', esc_html( $position ) ) : '' ),
-						$social_links,
-						$background_layout,
-						( '' === $image ? ' et_pb_delibera_member_no_image' : '' ),
-						$pauta_url,
-						$tema,
-						$temaLink,
-						$autor,
-						$tags,
-						$avatar,
-						$like,
-						$unlike,
-						$comment_count,
-						$svg,
-						( '' !== $style ? $style : '' ),
-						$button,
-						$autor_url
-				);
-
-				return $output;
+		return $output;
 	}
 }
-new ET_Builder_Module_Delibera_Member;
+new ET_Builder_Module_Delibera_Categoria2;

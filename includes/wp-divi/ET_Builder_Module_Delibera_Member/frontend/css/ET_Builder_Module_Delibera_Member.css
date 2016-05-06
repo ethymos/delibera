@@ -7,7 +7,8 @@
     padding: 2px;
     position: relative;
     text-align: center;
-    width: auto;
+    width: 49%;
+    float: left;
     box-shadow: 5px 5px 5px #888888;
     
 }
