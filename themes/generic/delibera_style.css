@@ -707,7 +707,7 @@ color: #777;
 	width: 20px;
 }
 
-.delibera_like, .delibera_unlike {
+.delibera_like, .delibera_unlike,.delibera-like, .delibera-unlike {
 	cursor: pointer;
 }
 
