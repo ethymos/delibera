@@ -363,7 +363,6 @@ function delibera_gerar_curtir($ID, $type ='pauta')
   {
     $situacoes_validas = array('validacao' => true, 'discussao' => true, 'relatoria' => true, 'emvotacao' => true, 'comresolucao' => true);
   }
-
   $postID = $ID;
   if(is_object($ID))
   {
@@ -377,6 +376,11 @@ function delibera_gerar_curtir($ID, $type ='pauta')
       $postID = $ID->comment_post_ID;
       $ID = $ID->comment_ID;
     }
+  }
+  elseif( !($type == 'post' || $type == 'pauta') )
+  {
+  	$comment = get_comment($ID);
+  	$postID = $comment->comment_post_ID;
   }
 
   $num_curtiu = intval($type == 'pauta' || $type == 'post' ? get_post_meta($ID, 'delibera_numero_curtir', true) : get_comment_meta($ID, 'delibera_numero_curtir', true));
@@ -395,7 +399,7 @@ function delibera_gerar_curtir($ID, $type ='pauta')
   if (is_user_logged_in()) {
     $user_id = get_current_user_id();
     $ip = $_SERVER['REMOTE_ADDR'];
-
+    
     if(
     !delibera_ja_curtiu($ID, $user_id, $ip, $type) && // Ainda não curitu
     (is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas)) && $situacoes_validas[$situacao->slug] && // é uma situação válida
