@@ -388,7 +388,7 @@ function delibera_gerar_curtir($ID, $type ='pauta')
 
   global $deliberaThemes;
 
-  $html = '<div id="thebutton'.$type.$ID.'" class="delibera_like" >';
+  $html = '<div id="thebutton'.$type.$ID.'" class="delibera-like" >';
 
   if ($num_curtiu > 0) {
     $html .= '<span class="delibera-like-count">' . $num_curtiu.'</span>';
@@ -399,7 +399,7 @@ function delibera_gerar_curtir($ID, $type ='pauta')
   if (is_user_logged_in()) {
     $user_id = get_current_user_id();
     $ip = $_SERVER['REMOTE_ADDR'];
-    
+
     if(
     !delibera_ja_curtiu($ID, $user_id, $ip, $type) && // Ainda não curitu
     (is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas)) && $situacoes_validas[$situacao->slug] && // é uma situação válida
@@ -457,7 +457,7 @@ function delibera_gerar_discordar($ID, $type ='pauta')
   $situacao = delibera_get_situacao($postID);
 
   global $deliberaThemes;
-  $html = '<div id="thebuttonDiscordo'.$type.$ID.'" class="delibera_unlike" >';
+  $html = '<div id="thebuttonDiscordo'.$type.$ID.'" class="delibera-unlike" >';
   if ($ndiscordou > 0) {
     $html .= '<span class="delibera-unlike-count">' . $ndiscordou .'</span>';
   } else {

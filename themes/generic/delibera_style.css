@@ -402,16 +402,16 @@ resolucao - 90248f
 
 }
 
-.delibera_unlike,
-.delibera_like {
+.delibera-unlike,
+.delibera-like {
   display: inline-block;
   margin-right: 10px;
 }
 
-.delibera_like {
+.delibera-like {
 }
 
-.delibera_unlike {
+.delibera-unlike {
 }
 
 /*
