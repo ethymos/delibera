@@ -31,7 +31,7 @@ function get_delibera_header() {
 		$about =	get_page_by_slug( DELIBERA_ABOUT_PAGE );
 	}
 
-	echo '<a class="button" href="'. get_page_link($about->ID).'">'._e( 'Saiba mais', 'delibera' ).'</a>
+	echo '<a class="button" href="'. get_page_link($about->ID).'">'.__( 'Saiba mais', 'delibera' ).'</a>
 	</p>
 	<p class="delibera-login">';
 	if ( is_user_logged_in() )
@@ -59,7 +59,7 @@ else
 echo '	</p><!-- .delibera-login -->';
 
 if ( ! ( is_home() || is_post_type_archive( 'pauta' ) ) ) :
-	echo '<p class="delibera-pagina-discussoes"><a class="button" href="'. get_post_type_archive_link( 'pauta' ).'">'. _e( 'Voltar à pautas', 'delibera' ).'</a></p>';
+	echo '<p class="delibera-pagina-discussoes"><a class="button" href="'. get_post_type_archive_link( 'pauta' ).'">'. __( 'Voltar à pautas', 'delibera' ).'</a></p>';
 endif;
 echo '</div>
 </div><!-- #delibera-header -->';
@@ -467,8 +467,12 @@ function delibera_gerar_discordar($ID, $type ='pauta')
 		{
 			$html .= "<input type='hidden' name='object_id' value='{$ID}' />";
 			$html .= "<input type='hidden' name='type' value='{$type}' />";
+			$html .= '<i class="delibera-icon-thumbs-down"></i>';
 		}
-		$html .= '<i class="delibera-icon-thumbs-down"></i>';
+		else
+		{
+			$html .= '<i class="delibera-icon-thumbs-down active"></i>';
+		}
 	}
 	else if(is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas) && $situacoes_validas[$situacao->slug]) // é uma situação válida
 	{

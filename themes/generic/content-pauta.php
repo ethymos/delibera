@@ -103,7 +103,7 @@ elseif(delibera_comments_is_open(get_the_ID()) && !is_user_logged_in())
 <?php
 echo '<div id="delibera-comment-botoes-'.$comment->comment_ID.'" class="delibera-comment-botoes">';
 echo '<div class="group-button-like">
-<span>O que achou?</span>';
+<!--span class="label">O que achou?</span-->';
 echo delibera_gerar_curtir($post->ID, 'pauta');
 echo delibera_gerar_discordar($post->ID, 'pauta');
 echo '</div>';

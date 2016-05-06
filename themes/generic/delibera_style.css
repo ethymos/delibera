@@ -284,10 +284,11 @@ resolucao - 90248f
 	cursor: pointer;
 	text-shadow: 0px 0px 10px rgba(200, 200, 200, 1);
 }
-.single-pauta .type-pauta .group-button-like span {
+.single-pauta .type-pauta .group-button-unlike .label,
+.single-pauta .type-pauta .group-button-like .label {
 	font-size: 14px;
-	margin: 0 5px 0 0;
 	display: inline-block;
+	margin: 0 5px 0;
 }
 
 .single-pauta .type-pauta .social-buttons a {
@@ -427,6 +428,9 @@ text-align: right;
 .delibera-like {
 	display: inline-block;
 	margin-right: 10px;
+	padding: 5px;
+	/*border-bottom: 1px solid #fff;
+	border-radius: 7px;*/
 }
 
 .delibera-like {
@@ -505,24 +509,6 @@ unlike_color: #ce282a
 	text-align: left;
 }
 
-/*.submit-edit-comment-button {
-margin: 10px 0 0 0;
-display: inline-block;
-background-color: #3dcff4;
-border: none;
-color: #fff;
-position: initial;
-font-size: 14px;
-text-align: right;
--webkit-border-radius: 4px;
--moz-border-radius: 4px;
-border-radius: 4px;
-padding: 3px 13px;
-font-weight: 700;
-text-transform: uppercase;
-cursor: pointer;
-}*/
-
 .delibera_comment_button {
 	margin: 5px auto;
 }
@@ -541,7 +527,6 @@ cursor: pointer;
 }
 
 .delibera-comment-author .fn {
-
 	margin: 0;
 	padding: 10px;
 	position: absolute;
@@ -579,7 +564,7 @@ span.read-more, span.re-collapse {
 	-moz-border-radius: 4px;
 	padding: 5px;
 }
-
+/*
 .delibera-edit-comment-button span,
 .delibera-delete-comment-button span,
 .submit-edit-comment-button .submit-edit-comment-button-text {
@@ -644,7 +629,7 @@ span.read-more, span.re-collapse {
 	text-transform: uppercase;
 	font-size: 1.25em;
 	font-weight: 700;
-}
+}*/
 
 .comment-form-attachment input {
 	text-indent: -166px;
@@ -666,8 +651,13 @@ span.read-more, span.re-collapse {
 	position: relative;
 }
 
-span.delibera-like-count, span.delibera-unlike-count {
-	font-weight: 700;
+.single-pauta .type-pauta .group-button-like span.delibera-like-count,
+.single-pauta .type-pauta .group-button-like span.delibera-unlike-count {
+	font-size: 18px;
+	text-align: center;
+	width: 20px;
+	vertical-align: top;
+	display: inline-block;
 }
 
 .attachmentFile {
