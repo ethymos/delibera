@@ -232,7 +232,7 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 	{
 		if (!is_pauta())
 		{
-			wp_enqueue_script('delibera-concordar', WP_CONTENT_URL . '/plugins/delibera/js/delibera_concordar.js', array('jquery'));
+			wp_enqueue_script('delibera-concordar', DELIBERA_DIR_URL . '/js/delibera_concordar.js', array('jquery'));
 				
 			$data = array(
 				'ajax_url' => admin_url('admin-ajax.php'),

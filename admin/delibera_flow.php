@@ -516,17 +516,17 @@ class Flow
 		if(strpos($screenid, 'page_delibera') !== false || $screenid == 'pauta' )
 		{
 			$post_id = get_the_ID();
-			wp_enqueue_script('delibera-admin-flow',WP_CONTENT_URL.'/plugins/delibera/admin/js/flow.js', array( 'jquery-ui-core', 'jquery-ui-sortable'));
+			wp_enqueue_script('delibera-admin-flow', plugin_dir_url(__FILE__).'/js/flow.js', array( 'jquery-ui-core', 'jquery-ui-sortable'));
 			$data = array(
 					'ajax_url' => admin_url('admin-ajax.php'),
 					'post_id' => $post_id
 			);
 			
 			wp_localize_script('delibera-admin-flow', 'delibera_admin_flow', $data);
-			wp_enqueue_script('jquery-ui-datepicker-ptbr', WP_CONTENT_URL.'/plugins/delibera/js/jquery.ui.datepicker-pt-BR.js', array('jquery-ui-datepicker'));
-			wp_enqueue_script('delibera-admin',WP_CONTENT_URL.'/plugins/delibera/admin/js/admin_scripts.js', array( 'jquery-ui-datepicker-ptbr'));
+			wp_enqueue_script('jquery-ui-datepicker-ptbr', DELIBERA_DIR_URL.'/js/jquery.ui.datepicker-pt-BR.js', array('jquery-ui-datepicker'));
+			wp_enqueue_script('delibera-admin', plugin_dir_url(__FILE__).'/js/admin_scripts.js', array( 'jquery-ui-datepicker-ptbr'));
 			
-			wp_enqueue_style('delibera-admin-flow',WP_CONTENT_URL.'/plugins/delibera/admin/css/flow.css');
+			wp_enqueue_style('delibera-admin-flow',plugin_dir_url(__FILE__).'/css/flow.css');
 		}
 	}
 	

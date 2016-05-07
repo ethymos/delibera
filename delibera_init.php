@@ -169,7 +169,9 @@ function deliberaLoadModules()
 
 function delibera_init()
 {
-
+	define('DELIBERA_DIR_URL', plugin_dir_url(__FILE__));
+	define('DELIBERA_DIR_PATH', plugin_dir_path(__FILE__));
+	
 	deliberaLoadModules();
 
 	add_action('admin_menu', 'delibera_config_menu');
@@ -191,10 +193,10 @@ function delibera_scripts()
 	global $post;
 
 	if (is_pauta()) {
-		wp_enqueue_script('jquery-expander', WP_CONTENT_URL.'/plugins/delibera/js/jquery.expander.js', array('jquery'));
-		wp_enqueue_script('delibera', WP_CONTENT_URL.'/plugins/delibera/js/scripts.js', array('jquery-expander'));
-		wp_enqueue_script('delibera-seguir', WP_CONTENT_URL . '/plugins/delibera/js/delibera_seguir.js', array('delibera'));
-		wp_enqueue_script('delibera-concordar', WP_CONTENT_URL . '/plugins/delibera/js/delibera_concordar.js', array('delibera'));
+		wp_enqueue_script('jquery-expander', plugin_dir_url(__FILE__).'/js/jquery.expander.js', array('jquery'));
+		wp_enqueue_script('delibera', plugin_dir_url(__FILE__).'/js/scripts.js', array('jquery-expander'));
+		wp_enqueue_script('delibera-seguir', plugin_dir_url(__FILE__) . '/js/delibera_seguir.js', array('delibera'));
+		wp_enqueue_script('delibera-concordar', plugin_dir_url(__FILE__) . '/js/delibera_concordar.js', array('delibera'));
 
 		$situation = delibera_get_situacao($post->ID);
 
@@ -215,10 +217,10 @@ add_action( 'wp_print_scripts', 'delibera_scripts' );
 function delibera_print_styles()
 {
 	if (is_pauta()) {
-		wp_enqueue_style('jquery-ui-custom', plugins_url() . '/delibera/css/jquery-ui-1.9.2.custom.min.css');
+		wp_enqueue_style('jquery-ui-custom', plugin_dir_url(__FILE__) . '/css/jquery-ui-1.9.2.custom.min.css');
 	}
 
-	wp_enqueue_style('delibera_style', WP_CONTENT_URL.'/plugins/delibera/css/delibera.css');
+	wp_enqueue_style('delibera_style', plugin_dir_url(__FILE__).'/css/delibera.css');
 }
 add_action('admin_print_styles', 'delibera_print_styles');
 
@@ -226,20 +228,20 @@ function delibera_admin_scripts()
 {
 	if(is_pauta())
 	{
-		wp_enqueue_script('jquery-ui-datepicker-ptbr', WP_CONTENT_URL.'/plugins/delibera/js/jquery.ui.datepicker-pt-BR.js', array('jquery-ui-datepicker'));
-		wp_enqueue_script('delibera-admin',WP_CONTENT_URL.'/plugins/delibera/admin/js/admin_scripts.js', array( 'jquery-ui-datepicker-ptbr'));
+		wp_enqueue_script('jquery-ui-datepicker-ptbr', plugin_dir_url(__FILE__).'/js/jquery.ui.datepicker-pt-BR.js', array('jquery-ui-datepicker'));
+		wp_enqueue_script('delibera-admin', plugin_dir_url(__FILE__).'/admin/js/admin_scripts.js', array( 'jquery-ui-datepicker-ptbr'));
 	}
 
 	if(isset($_REQUEST['page']) && $_REQUEST['page'] == 'delibera-notifications')
 	{
-		wp_enqueue_script('delibera-admin-notifica',WP_CONTENT_URL.'/plugins/delibera/admin/js/admin_notifica_scripts.js', array('jquery'));
+		wp_enqueue_script('delibera-admin-notifica', plugin_dir_url(__FILE__).'/admin/js/admin_notifica_scripts.js', array('jquery'));
 	}
 }
 add_action( 'admin_print_scripts', 'delibera_admin_scripts' );
 
 function delibera_print_font_styles()
 {
-	wp_enqueue_style('delibera-font', WP_CONTENT_URL.'/plugins/delibera/css/fonts/fontello-6acce062/css/delibera.css');
+	wp_enqueue_style('delibera-font', plugin_dir_url(__FILE__). '/css/fonts/fontello-6acce062/css/delibera.css');
 }
 add_action('wp_print_scripts', 'delibera_print_font_styles');
 

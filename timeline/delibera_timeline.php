@@ -217,8 +217,8 @@ function delibera_timeline_template_redirect()
 {
 	if(intval(get_query_var('delibera_timeline')) == 1 || intval(get_query_var('delibera_timelinepage')) == 1)
 	{
-		wp_enqueue_style('delibera_timeline_css',  WP_CONTENT_URL.'/plugins/delibera/timeline/delibera_timeline.css');
-		wp_enqueue_script( 'delibera_timeline_js', WP_CONTENT_URL.'/plugins/delibera/timeline/js/delibera_timeline.js', array( 'jquery' ));
+		wp_enqueue_style('delibera_timeline_css',  plugin_dir_url(__FILE__).'/delibera_timeline.css');
+		wp_enqueue_script( 'delibera_timeline_js', plugin_dir_url(__FILE__).'/js/delibera_timeline.js', array( 'jquery' ));
 		wp_enqueue_script( 'jquery-ui-draggable');
 		echo delibera_timeline(get_the_ID());
 	}
@@ -251,8 +251,8 @@ function delibera_the_posts($posts)
     if ( ($timeline_found) && (!is_admin()) )
 	{
 		// enqueue here
-		wp_enqueue_style('delibera_timeline_css',  WP_CONTENT_URL.'/plugins/delibera/timeline/delibera_timeline.css');
-		wp_enqueue_script( 'delibera_timeline_js', WP_CONTENT_URL.'/plugins/delibera/timeline/js/delibera_timeline.js', array( 'jquery' ));
+		wp_enqueue_style('delibera_timeline_css',  plugin_dir_url(__FILE__).'/delibera_timeline.css');
+		wp_enqueue_script( 'delibera_timeline_js', plugin_dir_url(__FILE__).'/js/delibera_timeline.js', array( 'jquery' ));
 		wp_enqueue_script( 'jquery-ui-draggable');
 	}
 
