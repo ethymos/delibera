@@ -14,6 +14,7 @@
 
 .et_pb_delibera_categoria .et_pb_module.et_pb_delibera_member { 
 	width: 49%;
+	margin-right: 5px;
 }
 
 .et_pb_delibera_categoria {
@@ -28,6 +29,14 @@
     position: relative;
 }
 
+.et_pb_delibera_member_image.et-waypoint.et_pb_animation_off.et-animated {
+    display: block;
+    float: left;
+    position: relative;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
 .et_pb_module.et_pb_delibera_member .tema a {
     color: #000;
     font-size: 1.6em;
@@ -39,6 +48,15 @@
     padding: 10px 0;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    position: relative;
+    display: block;
+    float: left;
+    width: 100%;
+}
+
+.et_pb_module.et_pb_delibera_member.has-thumbnail .tema {
+    border-top-left-radius: unset;
+    border-top-right-radius: unset;
 }
 
 .et_pb_module.et_pb_delibera_member .et_pb_delibera_member_description h4 {

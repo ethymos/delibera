@@ -314,6 +314,7 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 			if (has_post_thumbnail( $wp_posts[$key]->ID ) ){
 				$image_pauta_url = wp_get_attachment_image_src( get_post_thumbnail_id( $wp_posts[$key]->ID  ), 'thumbnail' );
 				$image_code = $image_pauta_url[0];
+				$module_class .= ' has-thumbnail';
 			}
 			$pauta_url = $wp_posts[$key]->guid;
 			$titulo = get_the_title($wp_posts[$key]);
