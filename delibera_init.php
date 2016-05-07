@@ -239,7 +239,7 @@ add_action( 'admin_print_scripts', 'delibera_admin_scripts' );
 
 function delibera_print_font_styles()
 {
-	wp_enqueue_style('delibera-font', WP_CONTENT_URL.'/plugins/delibera/css/fonts/fontello-6aab4d0b/css/delibera.css');
+	wp_enqueue_style('delibera-font', WP_CONTENT_URL.'/plugins/delibera/css/fonts/fontello-6acce062/css/delibera.css');
 }
 add_action('wp_print_scripts', 'delibera_print_font_styles');
 
