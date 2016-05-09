@@ -38,6 +38,7 @@
     background-position: center center;
     background-repeat: no-repeat;
     width: 100%;
+    background-size: 100% auto;
 }
 
 .et_pb_module.et_pb_delibera_member .tema a {
