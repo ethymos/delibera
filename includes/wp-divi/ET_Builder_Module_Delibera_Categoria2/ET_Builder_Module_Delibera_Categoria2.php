@@ -238,17 +238,22 @@ class ET_Builder_Module_Delibera_Categoria2 extends ET_Builder_Module {
 
 		$args = array(
 			'post_type' => 'pauta',
-			'orderby' => 'rand',
+			'orderby' => 'date',
+			'order' => 'DESC',
 			'post_status'        => 'publish',
-			'tax_query' => array(
+		);
+		
+		if(is_array($include_categories))
+		{
+			$args['tax_query']	= array(
 				array(
 					'taxonomy' => 'tema',
 					'field' => 'tag_id',
 					'terms' => $include_categories,
 					'include_children' => false
 				)
-			)
-		);
+			);
+		}
 
 		$wp_posts = get_posts($args);
 
@@ -258,13 +263,15 @@ class ET_Builder_Module_Delibera_Categoria2 extends ET_Builder_Module {
 
 		$i = 0;
 
+		$ignore_keys = array('orderby', 'order', 'pauta_id');
+		
 		foreach($wp_posts as $key=>$value)
 		{
 			
-			$output .= '[et_pb_delibera_pauta22v pauta_id="'.$wp_posts[$key]->ID.'"';
+			$output .= '[et_pb_delibera_pauta22v orderby="pauta" pauta_id="'.$wp_posts[$key]->ID.'" ';
 			foreach ($this->shortcode_atts as $key => $value)
 			{
-				if(!empty($value))
+				if(!empty($value) && !in_array($key, $ignore_keys))
 				{
 					$output .= $key.'="'.$value.'" ';
 				}

@@ -20,14 +20,20 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 			'include_categories',
 			'url_tema',
 			'background_color',
-			'button_image_url'
+			'button_image_url',
+			'orderby',
+			'order',
+			'pauta_id'
 		);
 
 		$this->fields_defaults = array(
 			'animation'			=> array( 'off' ),
 			'background_layout'	=> array( 'light' ),
 			'background_color'	=> array( '#ffffff' ),
-			'button_image_url'	=> array( '' )
+			'button_image_url'	=> array( '' ),
+			'orderby'			=> array( 'date' ),
+			'order'				=> array( 'DESC' ),
+			'pauta_id'			=> array( false )
 		);
 
 		$this->main_css_element = '%%order_class%%.et_pb_delibera_member';
@@ -207,6 +213,37 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 				'update_text'        => esc_attr__( 'Set As Image', 'et_builder' ),
 				'description'        => esc_html__( 'Upload your desired image, or type in the URL to the image you would like to display as link button.', 'et_builder' ),
 			),
+			'orderby' => array(
+				'label'             => esc_html__( 'Ordenar por', 'et_builder' ),
+				'type'              => 'select',
+				'option_category'   => 'basic_option',
+				'options'           => array(
+					'date'			=> esc_html__( 'Cronológico, última ou primeira criada', 'et_builder' ),
+					'rand'			=> esc_html__( 'Randômico', 'et_builder' ),
+					'pauta'			=> esc_html__( 'Pauta Selecionada', 'et_builder' ),
+				),
+				'description'       => esc_html__( 'Ordem de onde pegar a pauta', 'et_builder' ),
+			),
+			'order' => array(
+				'label'             => esc_html__( 'Ordem', 'et_builder' ),
+				'type'              => 'select',
+				'option_category'   => 'basic_option',
+				'options'           => array(
+					'DESC'			=> esc_html__( 'Descendete', 'et_builder' ),
+					'ASC'			=> esc_html__( 'Acendente', 'et_builder' ),
+				),
+				'description'       => esc_html__( 'Ordem', 'et_builder' ),
+			),
+			'pauta_id' => array(
+				'label'				=> esc_html__( 'Selecionar uma pauta', 'et_builder' ),
+				'type'				=> 'select',
+				'option_category'	=> 'basic_option',
+				'renderer_options'	=> array(
+					'post_type'		=> 'pauta'
+				),
+				'options'			=> $this->get_pautas(),
+				'description'		=> esc_html__( 'Escolha qual pauta deve mostrar na caixa.', 'et_builder' ),
+			),
 		);
 		return $fields;
 	}
@@ -242,19 +279,22 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 	}
 
 	function shortcode_callback( $atts, $content = null, $function_name ) {
-		$module_id         = $this->shortcode_atts['module_id'];
-		$module_class      = $this->shortcode_atts['module_class'];
-		$name              = $this->shortcode_atts['name'];
-		$position          = $this->shortcode_atts['position'];
-		$image_url         = $this->shortcode_atts['image_url'];
-		$animation         = $this->shortcode_atts['animation'];
-		$background_layout = $this->shortcode_atts['background_layout'];
-		$background_color     = $this->shortcode_atts['background_color'];
-		$icon_color        = $this->shortcode_atts['icon_color'];
-		$icon_hover_color  = $this->shortcode_atts['icon_hover_color'];
+		$module_id         	= $this->shortcode_atts['module_id'];
+		$module_class      	= $this->shortcode_atts['module_class'];
+		$name              	= $this->shortcode_atts['name'];
+		$position          	= $this->shortcode_atts['position'];
+		$image_url         	= $this->shortcode_atts['image_url'];
+		$animation         	= $this->shortcode_atts['animation'];
+		$background_layout 	= $this->shortcode_atts['background_layout'];
+		$background_color   = $this->shortcode_atts['background_color'];
+		$icon_color			= $this->shortcode_atts['icon_color'];
+		$icon_hover_color	= $this->shortcode_atts['icon_hover_color'];
 		$include_categories = $this->shortcode_atts['include_categories'];
-		$url_tema =          $this->shortcode_atts['url_tema'];
+		$url_tema			= $this->shortcode_atts['url_tema'];
 		$button_image_url	= $this->shortcode_atts['button_image_url'];
+		$orderby			= $this->shortcode_atts['orderby'];
+		$order				= $this->shortcode_atts['order'];
+		$pauta_id			= $this->shortcode_atts['pauta_id'];
 
 
 		$module_class = ET_Builder_Element::add_module_order_class( $module_class, $function_name );
@@ -262,23 +302,35 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 		$image = $social_links = '';
 
 		$args = array(
-			'post_type' => 'pauta',
-			'orderby' => 'rand',
-			'post_status'        => 'publish',
-			'posts_per_page' => 1,
-			'tax_query' => array(
+			'post_type'			=> 'pauta',
+			'orderby'			=> $orderby,
+			'order'				=> $order,
+			'post_status'       => 'publish',
+			'posts_per_page'	=> 1,
+		);
+		
+		if(is_array($include_categories))
+		{
+			$args['tax_query']	= array(
 				array(
 					'taxonomy' => 'tema',
 					'field' => 'tag_id',
 					'terms' => $include_categories,
 					'include_children' => false
 				)
-			)
-		);
+			);
+		}
 		$wp_posts = array();
-		if(array_key_exists('pauta_id', $this->shortcode_atts))
+		if($orderby == 'pauta' && $pauta_id != false && $pauta_id > 0)
 		{
-			$wp_posts = array(get_post($this->shortcode_atts['pauta_id']));
+			$post = get_post($pauta_id);
+			if(!is_object($post))
+			{
+				$args['orderby'] = 'rand';
+				$post = get_posts($args);
+				$post->post_title = __("Error: invalid pauta id!", 'et_builder');
+			}
+			$wp_posts = array($post);
 		}
 		else 
 		{
@@ -349,9 +401,9 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 
 				if ( '' !== $image_url ) {
 					$image = sprintf(
-							'<div class="et_pb_delibera_member_image et-waypoint%3$s">
-					<img src="%1$s" alt="%2$s" />
-				</div>',
+							'<div class="et_pb_delibera_member_image et-waypoint%3$s" style="background-image:url(%1$s);" title="%2$s" >
+								<img src="%1$s" style="visibility: hidden;" />
+							</div>',
 							esc_url( $image_url ),
 							esc_attr( $titulo ),
 							esc_attr( " et_pb_animation_{$animation}" )
@@ -426,5 +478,30 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 
 				return $output;
 	}
+	
+	/**
+	 * @return array array of pauta in format: id => tittle 
+	 */
+	function get_pautas()
+	{
+		$pautas = get_posts(array(
+			'post_type' 		=> 'pauta',
+			'posts_per_page'	=> -1,
+			'orderby'			=> 'date',
+			'order'				=> 'DESC',
+			'post_status'       => 'publish',
+		));
+		$ret = array('-1' => __('Selecione uma pauta', 'et_builder'));
+		if(is_array($pautas))
+		{
+			/** @var WP_POST $pauta **/ 
+			foreach ($pautas as $pauta)
+			{
+				$ret[$pauta->ID] = get_the_title($pauta);
+			}
+		}
+		return $ret;
+	}
 }
 new ET_Builder_Module_Delibera_Member;
+
