@@ -76,6 +76,12 @@ class ET_Builder_Module_Delibera_Categoria2 extends ET_Builder_Module {
 				'selector' => '.et_pb_member_social_links',
 			),
 		);
+		add_action('wp_enqueue_scripts', array($this, 'cssFiles'), 1000);
+	}
+	
+	function cssFiles()
+	{
+		wp_enqueue_style('ET_Builder_Module_Delibera_Categoria2', plugins_url("frontend/css", __FILE__)."/ET_Builder_Module_Delibera_Categoria2.css");
 	}
 
 	function get_fields() {
