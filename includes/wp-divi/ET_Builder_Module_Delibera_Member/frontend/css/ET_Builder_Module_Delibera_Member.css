@@ -12,11 +12,6 @@
     width: 100%;
 }
 
-.et_pb_delibera_categoria .et_pb_module.et_pb_delibera_member { 
-	width: 49%;
-	margin-right: 5px;
-}
-
 .et_pb_delibera_categoria {
 	display: block;
 	position: relative;
