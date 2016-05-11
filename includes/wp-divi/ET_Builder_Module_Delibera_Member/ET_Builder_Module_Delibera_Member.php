@@ -350,18 +350,19 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 		{
 
 			$term_list = wp_get_post_terms($wp_posts[$key]->ID, 'tema', array("fields" => "all"));
+			if(is_array($term_list) && count($term_list) > 0)
+			{
+				$tema = $term_list[0]->name;
+				$temaLink = get_term_link($term_list[0]->slug,"tema");
+			}
 
 			$autor = get_userdata($wp_posts[$key]->post_author)->display_name;
 
 			$tags = get_the_tag_list('#',' #','',$wp_posts[$key]->ID);
 
-			$tema = $term_list[0]->name;
-
 			$autor_url = \Delibera\Member\MemberPath::getAuthorPautasUrl($wp_posts[$key]->post_author);
 			
 			$avatar = get_avatar( $wp_posts[$key]->post_author, '32');
-
-			$temaLink = get_term_link($term_list[0]->slug,"tema");
 
 			if (has_post_thumbnail( $wp_posts[$key]->ID ) ){
 				$image_pauta_url = wp_get_attachment_image_src( get_post_thumbnail_id( $wp_posts[$key]->ID  ), 'thumbnail' );
