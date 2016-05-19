@@ -354,20 +354,22 @@ display: block;
 
 /* COMMENTS */
 .index-comments {
-	display: block;
-	width: 80%;
+	display: inline-table;
+	margin-bottom: 30px;
 	font-weight: bolder;
+	width: 400px;
 	text-transform: uppercase;
 }
 .index-comments-encaminhamento {
 	float: left;
-	width: 30%;
+	margin-right: 20px;
+	width: 180px;
 	text-align: center;
 	background-color: #a8e7f9;
 }
 .index-comments-opiniao {
 	float: left;
-	width: 30%;
+	width: 180px;
 	text-align: center;
 	background-color: #cfcfcf;
 }
