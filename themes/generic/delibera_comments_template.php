@@ -1,7 +1,7 @@
 <?php
 
 /**
-* Baseado em no comments-template
+* Baseado no comments-template
 */
 
 /**
@@ -95,7 +95,7 @@ class Delibera_Walker_Comment extends Walker_Comment
 				{
 					$display_check = $tipo == "encaminhamento"? '' : 'style="display:none;"';
 					?>
-					<span id="checkbox-encaminhamento-<?php echo $comment->comment_ID ?>" class="checkbox-encaminhamento" <?php echo $display_check; ?>><span class="encaminhamento-figura"></span><label class="encaminhamento-label"><?php _e('Encaminhamento','delibera'); ?></label></span>
+					<!--span id="checkbox-encaminhamento-<?php echo $comment->comment_ID ?>" class="checkbox-encaminhamento" <?php echo $display_check; ?>><span class="encaminhamento-figura"></span><label class="encaminhamento-label"><?php _e('Encaminhamento','delibera'); ?></label></span-->
 					<?php
 				}
 				?>
