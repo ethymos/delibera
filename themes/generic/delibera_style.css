@@ -391,7 +391,7 @@ display: block;
 		background-color: #cfcfcf;
 }
 
-.delibera-comment-encaminhamento .children .delibera-comment-discussao {
+#delibera-comment-encaminhamento .children #delibera-comment-discussao {
 	background-color: #a8e7f9;
 }
 
