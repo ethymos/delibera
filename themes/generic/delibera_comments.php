@@ -23,9 +23,9 @@ endif; ?>
   <!--h3 id="<?php echo $delibera_comments_padrao === true ? 'comments-title' : 'delibera-comments-title'; ?>">
   <?php comments_number(__('No responses'), __('One response'), __('% responses')); ?>
 </h3-->
-	<center><div class="index-comments">
-		<div class="index-comments-encaminhamento">Encaminhamento</div>
-		<div class="index-comments-opiniao">Opinião</div>
+	<center><div class="delibera-index-comments">
+		<div class="delibera-index-comments-encaminhamento">Encaminhamento</div>
+		<div class="delibera-index-comments-opiniao">Opinião</div>
 	</div></center>
 <?php if (get_comment_pages_count() > 1 && get_option('page_comments')) : // Are there comments to navigate through? ?>
   <div class="navigation">
