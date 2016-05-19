@@ -353,21 +353,21 @@ display: block;
 }
 
 /* COMMENTS */
-.index-comments {
+.delibera-index-comments {
 	display: inline-table;
 	margin-bottom: 30px;
 	font-weight: bolder;
 	width: 400px;
 	text-transform: uppercase;
 }
-.index-comments-encaminhamento {
+.delibera-index-comments-encaminhamento {
 	float: left;
 	margin-right: 20px;
 	width: 180px;
 	text-align: center;
 	background-color: #a8e7f9;
 }
-.index-comments-opiniao {
+.delibera-index-comments-opiniao {
 	float: left;
 	width: 180px;
 	text-align: center;
@@ -383,6 +383,10 @@ display: block;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
+}
+
+.delibera-comment-discussao {
+		background-color: #cfcfcf;
 }
 
 .delibera-comment-text {
