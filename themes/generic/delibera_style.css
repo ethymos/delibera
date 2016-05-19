@@ -353,6 +353,23 @@ display: block;
 }
 
 /* COMMENTS */
+.index-comments {
+	display: block;
+	width: 100%;
+	font-weight: bolder;
+	text-transform: uppercase;
+}
+.index-comments-encaminhamento {
+	float: left;
+	width: 40%;
+	background-color: ;#a8e7f9;
+}
+.index-comments-opiniao {
+	float: left;
+	width: 40%;
+	background-color: #cfcfcf;
+}
+
 .delibera-comment-body {
 	width: 75%;
 	padding: 10px 10px 5px;
