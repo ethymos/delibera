@@ -186,13 +186,6 @@ class Flow
 	 */
 	public function savePostMetas($events_meta, $opt, $post_id)
 	{
-		if(array_key_exists('REQUEST_URI', $_SERVER) && strpos($_SERVER['REQUEST_URI'], 'wp-json/wp/v2/pautas') !== false)
-		{
-			$args = clone $_POST;
-			$args['post_id'] = $post_id;
-			deliberaCreateTopic($args);
-			
-		}
 		if(array_key_exists('delibera_flow', $_POST) )
 		{
 			$flow = $_POST['delibera_flow'];

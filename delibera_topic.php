@@ -480,7 +480,7 @@ function deliberaCreateTopic($args = array())
 		
 		// Load defaults modules values at $_POST
 		do_action('delibera_create_pauta_frontend', $opt);
-			
+		
 		// Load args values at $_POST for save_meta action
 		foreach (array_diff_key($args, $defaults) as $key => $arg)
 		{
@@ -510,6 +510,10 @@ function deliberaCreateTopic($args = array())
 			
 			//TODO tratar as categorias e tags
 			deliberaAddTerms($pauta_id, $args, 'tema', true);
+			
+			ini_set('display_errors', 1);
+			ini_set('display_startup_errors', 1);
+			error_reporting(E_ALL & ~E_STRICT);
 			
 			// publica o post
 			wp_publish_post($pauta_id);
@@ -582,3 +586,12 @@ function deliberaAddTerms($pauta_id, $args, $taxonomy = 'tema', $insert = true )
 	}
 	return $terms_ids;
 }
+
+
+function deliberaApiCreate($post, $request)
+{
+	$args = $_POST;
+	$args['post_id'] = $post->ID;
+	deliberaCreateTopic($args);
+}
+add_action('rest_insert_pauta', 'deliberaApiCreate', 10, 2);
