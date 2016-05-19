@@ -355,18 +355,20 @@ display: block;
 /* COMMENTS */
 .index-comments {
 	display: block;
-	width: 100%;
+	width: 80%;
 	font-weight: bolder;
 	text-transform: uppercase;
 }
 .index-comments-encaminhamento {
 	float: left;
-	width: 40%;
-	background-color: ;#a8e7f9;
+	width: 30%;
+	text-align: center;
+	background-color: #a8e7f9;
 }
 .index-comments-opiniao {
 	float: left;
-	width: 40%;
+	width: 30%;
+	text-align: center;
 	background-color: #cfcfcf;
 }
 
