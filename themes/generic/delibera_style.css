@@ -353,27 +353,6 @@ display: block;
 }
 
 /* COMMENTS */
-.delibera-index-comments {
-	display: inline-table;
-	margin-bottom: 30px;
-	font-weight: bolder;
-	width: 400px;
-	text-transform: uppercase;
-}
-.delibera-index-comments-encaminhamento {
-	float: left;
-	margin-right: 20px;
-	width: 180px;
-	text-align: center;
-	background-color: #a8e7f9;
-}
-.delibera-index-comments-opiniao {
-	float: left;
-	width: 180px;
-	text-align: center;
-	background-color: #cfcfcf;
-}
-
 .delibera-comment-body {
 	width: 75%;
 	padding: 10px 10px 5px;
@@ -383,6 +362,33 @@ display: block;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
+}
+
+.delibera-index-comments {
+	display: inline-table;
+	margin-bottom: 30px;
+	font-weight: bolder;
+	width: 400px;
+	text-transform: uppercase;
+}
+
+.delibera-index-comments-encaminhamento {
+	float: left;
+	margin-right: 20px;
+	width: 180px;
+	text-align: center;
+	background-color: #a8e7f9;
+}
+
+.delibera-comment-encaminhamento .children .delibera-comment-discussao {
+	background-color: #a8e7f9;
+}
+
+.delibera-index-comments-opiniao {
+	float: left;
+	width: 180px;
+	text-align: center;
+	background-color: #cfcfcf;
 }
 
 .delibera-comment-discussao {
