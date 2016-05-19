@@ -490,8 +490,16 @@ function deliberaCreateTopic($args = array())
 			}
 		}
 		$_POST['delibera_flow'] = $args['delibera_flow'];
+		$pauta_id = 0;
 		
-		$pauta_id = wp_insert_post($pauta);
+		if(array_key_exists('post_id', $args) && $args['post_id'] > 0)
+		{
+			$pauta_id = $args['post_id'];
+		}
+		else 
+		{
+			$pauta_id = wp_insert_post($pauta);
+		}
 		
 		if(is_int($pauta_id) && $pauta_id > 0)
 		{
@@ -500,6 +508,7 @@ function deliberaCreateTopic($args = array())
 			$_POST['publish'] = 'Publicar';
 			$_POST['prev_status'] = 'draft';
 			
+			//TODO tratar as categorias e tags
 			deliberaAddTerms($pauta_id, $args, 'tema', true);
 			
 			// publica o post

@@ -18,7 +18,7 @@ class Flow
 		//add_filter('delivera_config_page_rows', array($this, 'configPageRows'), 10, 2);
 		add_filter('delibera-pre-main-config-save', array($this, 'preMainConfigSave'));
 		add_action('delibera_topic_meta', array($this, 'topicMeta'), 10, 5);
-		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 1, 2);
+		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 1, 3);
 		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 2);
 		add_filter('delibera_flow_list', array($this, 'filterFlowList'));
 		add_filter('delibera_check_post_data', array($this, 'checkPostData'), 1000, 3);
@@ -184,27 +184,14 @@ class Flow
 	 * 
 	 * @return array return filtered $events_meta array
 	 */
-	public function savePostMetas($events_meta, $opt)
+	public function savePostMetas($events_meta, $opt, $post_id)
 	{
 		if(array_key_exists('REQUEST_URI', $_SERVER) && strpos($_SERVER['REQUEST_URI'], 'wp-json/wp/v2/pautas') !== false)
 		{
-			$opt = delibera_get_config();
-			if(array_key_exists('delibera_flow', $_POST) )
-			{
-				$_POST['delibera_flow'] = $opt['delibera_flow'];
-			}
 			$args = clone $_POST;
-			// Load defaults modules values at $_POST
-			do_action('delibera_create_pauta_frontend', $opt);
-			// Load args values at $_POST for save_meta action
-			foreach (array_diff_key($args, $defaults) as $key => $arg)
-			{
-				if(array_key_exists($key, $_POST))
-				{
-					$_POST[$key] = $args[$key];
-				}
-			}
-			$_POST['delibera_flow'] = $args['delibera_flow'];
+			$args['post_id'] = $post_id;
+			deliberaCreateTopic($args);
+			
 		}
 		if(array_key_exists('delibera_flow', $_POST) )
 		{
