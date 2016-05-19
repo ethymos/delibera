@@ -380,10 +380,6 @@ display: block;
 	background-color: #a8e7f9;
 }
 
-.delibera-comment-encaminhamento .children .delibera-comment-discussao {
-	background-color: #a8e7f9;
-}
-
 .delibera-index-comments-opiniao {
 	float: left;
 	width: 180px;
@@ -393,6 +389,10 @@ display: block;
 
 .delibera-comment-discussao {
 		background-color: #cfcfcf;
+}
+
+.delibera-comment-encaminhamento .children .delibera-comment-discussao {
+	background-color: #a8e7f9;
 }
 
 .delibera-comment-text {
