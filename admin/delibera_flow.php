@@ -186,6 +186,26 @@ class Flow
 	 */
 	public function savePostMetas($events_meta, $opt)
 	{
+		if(array_key_exists('REQUEST_URI', $_SERVER) && strpos($_SERVER['REQUEST_URI'], 'wp-json/wp/v2/pautas') !== false)
+		{
+			$opt = delibera_get_config();
+			if(array_key_exists('delibera_flow', $_POST) )
+			{
+				$_POST['delibera_flow'] = $opt['delibera_flow'];
+			}
+			$args = clone $_POST;
+			// Load defaults modules values at $_POST
+			do_action('delibera_create_pauta_frontend', $opt);
+			// Load args values at $_POST for save_meta action
+			foreach (array_diff_key($args, $defaults) as $key => $arg)
+			{
+				if(array_key_exists($key, $_POST))
+				{
+					$_POST[$key] = $args[$key];
+				}
+			}
+			$_POST['delibera_flow'] = $args['delibera_flow'];
+		}
 		if(array_key_exists('delibera_flow', $_POST) )
 		{
 			$flow = $_POST['delibera_flow'];
