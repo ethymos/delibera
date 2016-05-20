@@ -27,8 +27,8 @@ jQuery(document).ready(function()
     jQuery(window).resize(function(){
         delibera_setpdf_size("#pauta-pdf-content");
     });
-
-    Socialite.load();
+    if (typeof Socialite != 'undefined')
+    	Socialite.load();
 });
 
 function delibera_setpdf_size(element) {
@@ -43,8 +43,17 @@ function delibera_showhide(comment)
 	return false;
 }
 
-function delibera_edit_comment_show(comment)
+function delibera_edit_comment_show(button, comment)
 {
 	jQuery('#delibera-comment-text-'+comment).toggle();
 	jQuery('#delibera-edit-comment-'+comment).toggle();
+	jQuery('#submit-edit-comment-button-'+comment).toggle();
+	if(jQuery(button).text() == "Editar")
+	{
+		jQuery(button).text('Cancelar'); // TODO translate
+	}
+	else
+	{
+		jQuery(button).text('Editar'); // TODO translate
+	}
 }

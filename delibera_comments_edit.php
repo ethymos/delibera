@@ -23,7 +23,7 @@ function delibera_edit_comment_link( $link = null, $before = '', $after = '' )
 		$link = __('Editar', delibera);
 
 	$html = '<div class="delibera-edit-comment-button"><span class="delibera-edit-comment-button" onclick="';
-	$html .= 'delibera_edit_comment_show(\''.$comment->comment_ID.'\');';
+	$html .= 'delibera_edit_comment_show(this, \''.$comment->comment_ID.'\');';
 	$html .= '" >'.$link.'</span></div>';
 	echo $html;
 }
@@ -109,7 +109,7 @@ function delibera_comment_edit_form()
 	global $comment;
 	$comment = delibera_get_comment_to_edit($comment->comment_ID);
 	require_once(WP_CONTENT_DIR.'/../wp-admin/includes/template.php');
-	require_once(__DIR__.'/delibera-edit-form-comment.php');
+	include(__DIR__.'/delibera-edit-form-comment.php');
 }
 
 function delibera_delete_comment_link( $link = null, $before = '', $after = '' )

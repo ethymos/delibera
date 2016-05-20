@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'delibera';
-  src: url('../font/delibera.eot?11545039');
-  src: url('../font/delibera.eot?11545039#iefix') format('embedded-opentype'),
-       url('../font/delibera.woff2?11545039') format('woff2'),
-       url('../font/delibera.woff?11545039') format('woff'),
-       url('../font/delibera.ttf?11545039') format('truetype'),
-       url('../font/delibera.svg?11545039#delibera') format('svg');
+  src: url('../font/delibera.eot?53664499');
+  src: url('../font/delibera.eot?53664499#iefix') format('embedded-opentype'),
+       url('../font/delibera.woff2?53664499') format('woff2'),
+       url('../font/delibera.woff?53664499') format('woff'),
+       url('../font/delibera.ttf?53664499') format('truetype'),
+       url('../font/delibera.svg?53664499#delibera') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -15,7 +15,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'delibera';
-    src: url('../font/delibera.svg?11545039#delibera') format('svg');
+    src: url('../font/delibera.svg?53664499#delibera') format('svg');
   }
 }
 */
@@ -74,3 +74,15 @@
 .delibera-icon-newspaper:before { content: '\e810'; } /* '' */
 .delibera-icon-key:before { content: '\e811'; } /* '' */
 .delibera-icon-cancel:before { content: '\e812'; } /* '' */
+.delibera-icon-thumbs-up:before { content: '\e813'; } /* '' */
+.delibera-icon-thumbs-down:before { content: '\e814'; } /* '' */
+.delibera-icon-chat-empty:before { content: '\e815'; } /* '' */
+.delibera-icon-cog:before { content: '\e816'; } /* '' */
+.delibera-icon-facebook-official:before { content: '\e817'; } /* '' */
+.delibera-icon-facebook:before { content: '\e818'; } /* '' */
+.delibera-icon-gplus-squared:before { content: '\e819'; } /* '' */
+.delibera-icon-gplus:before { content: '\e81a'; } /* '' */
+.delibera-icon-twitter:before { content: '\e81b'; } /* '' */
+.delibera-icon-twitter-squared:before { content: '\e81c'; } /* '' */
+.delibera-icon-whatsapp:before { content: '\e81d'; } /* '' */
+.delibera-icon-edit:before { content: '\e81e'; } /* '' */

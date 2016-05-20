@@ -11,8 +11,9 @@ class UserDisplay
   {
     switch( $order )
     {
-      case "active":
-        return array( 'orderby' => 'post_count' , 'order' => 'DESC' );
+      //XXX essa opção não funciona, pois nao conta o numero de pautas de um usuário apenas de posts
+      //case "active":
+      //  return array( 'orderby' => 'post_count' , 'order' => 'DESC' );
       case "newest":
         return array( 'orderby' => 'registered' , 'order' => 'DESC' );
       default:
@@ -27,7 +28,7 @@ class UserDisplay
       'format'     => '',
       'prev_text'  => __('&laquo;'),
       'next_text'  => __('&raquo;'),
-      'show_all'   =>  true ,
+      'show_all'   =>  false ,
       'total'      =>  $total,
       'current'    =>  $page
     ));

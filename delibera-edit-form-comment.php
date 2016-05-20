@@ -10,7 +10,6 @@
  * É adicionado formulário e botões para editar ou remover comentários
  *
  */
-function delibera_template_edit_comment() {}
 ?>
 
 <form name="delibera-edit-comment-<?php echo $comment->comment_ID;?>" action="comment.php" method="post" id="delibera-edit-comment-<?php echo $comment->comment_ID;?>" style="display:none;" class="delibera-edit-comment-form" >
@@ -40,11 +39,10 @@ function delibera_template_edit_comment() {}
 do_action('add_meta_boxes', 'comment', $comment);
 do_action('add_meta_boxes_comment', $comment);
 
-do_meta_boxes('comment', 'normal', $comment);
+do_meta_boxes(null, 'normal', $comment);
 ?>
 
 <div id="delibera-publishing-action">
-	<div id="submit-edit-comment-button-<?php echo $comment->comment_ID;?>" class="submit-edit-comment-button" ><span class="submit-edit-comment-button-text"><?php echo __('Atualizar','delibera')?></span></div>
 	<script type="text/javascript">
 		jQuery(document).ready(function ()
 	    {

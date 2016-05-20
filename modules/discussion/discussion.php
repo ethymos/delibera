@@ -92,7 +92,7 @@ class Discussion extends \Delibera\Modules\ModuleBase
 		$rows[] = array(
 			"id" => "pauta_suporta_encaminhamento",
 			"label" => __('Pautas suportam sugestão de encaminhamento?', 'delibera'),
-			"content" => '<input type="checkbox" name="pauta_suporta_encaminhamento" id="pauta_suporta_encaminhamento" value="S" '. ( htmlspecialchars_decode($opt['pauta_suporta_encaminhamento']) == "S" ? "checked='checked'" : "" ).' autocomplete="off" />',
+			"content" => '<input type="checkbox" name="pauta_suporta_encaminhamento" id="pauta_suporta_encaminhamento" value="S" '. ( htmlspecialchars_decode($opt['pauta_suporta_encaminhamento']) != "N" ? "checked='checked'" : "" ).' autocomplete="off" />',
 		);
 		return $rows;
 	}

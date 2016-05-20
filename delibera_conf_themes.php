@@ -325,7 +325,16 @@ add_action('wp_enqueue_scripts', array($deliberaThemes, 'publicStyles'), 100);
 
 // inclui arquivos específicos do tema
 require_once($deliberaThemes->themeFilePath('functions.php'));
-require_once($deliberaThemes->themeFilePath('delibera_comments_template.php'));
+
+if(file_exists(get_stylesheet_directory()."/delibera_comments_template.php"))
+{
+	require_once(get_stylesheet_directory()."/delibera_comments_template.php");
+}
+else
+{
+	require_once($deliberaThemes->themeFilePath('delibera_comments_template.php'));
+}
+
 
 /**
  * Usa o template de comentário do Delibera

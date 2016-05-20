@@ -8,7 +8,7 @@ function delibera_discordar_comment_meta($comment_id)
 		$ndiscordaram = array();
 		add_comment_meta($comment_id, 'delibera_numero_discordar', $ndiscordaram, true);
 	}
-	
+
 	$discordaram = get_comment_meta($comment_id, "delibera_discordaram", true);
 	if($discordaram == false || $discordaram == "")
 	{
@@ -21,13 +21,13 @@ function delibera_discordar($ID, $type ='pauta')
 {
 	$user_id = get_current_user_id();
 	$ip = $_SERVER['REMOTE_ADDR'];
-	
+        $ndiscordar = intval($type == 'pauta' || $type == 'post' ? get_post_meta($ID, 'delibera_numero_discordar', true) : get_comment_meta($ID, 'delibera_numero_discordar', true));
+
 	if(!delibera_ja_discordou($ID, $user_id, $ip, $type) && !(function_exists('delibera_ja_curtiu') && delibera_ja_curtiu($ID, $user_id, $ip, $type)) )
 	{
 		if($type == 'pauta')
 		{
 			$postID = $ID;
-			$ndiscordar = get_post_meta($postID, 'delibera_numero_discordar', true);
 			$ndiscordar++;
 			update_post_meta($postID, 'delibera_numero_discordar', $ndiscordar);
 			$discordaram = get_post_meta($postID, 'delibera_discordaram', true);
@@ -40,7 +40,6 @@ function delibera_discordar($ID, $type ='pauta')
 		elseif($type == 'comment')
 		{
 			$comment_id = $ID;
-			$ndiscordar = intval(get_comment_meta($comment_id, 'delibera_numero_discordar', true));
 			$ndiscordar++;
 			update_comment_meta($comment_id, 'delibera_numero_discordar', $ndiscordar);
 			$discordaram = get_comment_meta($comment_id, 'delibera_discordaram', true);
@@ -50,14 +49,57 @@ function delibera_discordar($ID, $type ='pauta')
 			$discordaram[$hora][] = array('user' => $user_id, 'ip' => $ip);
 			update_comment_meta($comment_id, 'delibera_discordaram', $discordaram);
 		}
-		
-		return sprintf(_n('%d discordou', '%d discordaram', $ndiscordar, 'delibera'), $ndiscordar);
 	}
+	elseif(delibera_ja_discordou($ID, $user_id, $ip, $type))
+	{
+		if ($type == 'pauta') {
+			$postID = $ID;
+			$ndiscordar--;
+			update_post_meta($postID, 'delibera_numero_discordar', $ndiscordar);
+			$discordaram = get_post_meta($postID, 'delibera_discordaram', true);
+			foreach ($discordaram as $hora => $discordouem)
+			{
+				for($i = 0; $i < count($discordouem); $i++)
+				{
+					if(intval($user_id) == 0 && $ip == $discordouem[$i]['ip'])
+					{
+						unset($discordouem[$i]);
+					}
+					elseif($user_id == $discordouem[$i]['user'])
+					{
+						unset($discordouem[$i]);
+					}
+				}
+			}
+			update_post_meta($postID, 'delibera_discordaram', $curtiram);
+		} elseif ($type == 'comment') {
+			$comment_id = $ID;
+			$ndiscordar--;
+			update_comment_meta($comment_id, 'delibera_numero_discordar', $ndiscordar);
+			$discordaram = get_comment_meta($comment_id, 'delibera_discordaram', true);
+			foreach ($discordaram as $hora => $discordouem)
+			{
+				for($i = 0; $i < count($discordouem); $i++)
+				{
+					if(intval($user_id) == 0 && $ip == $discordouem[$i]['ip'])
+					{
+						unset($discordouem[$i]);
+					}
+					elseif($user_id == $discordouem[$i]['user'])
+					{
+						unset($discordouem[$i]);
+					}
+				}
+			}
+			update_comment_meta($comment_id, 'delibera_discordaram', $curtiram);
+		}
+	}
+	return apply_filters('delibera_discordar', $ndiscordar);
 }
 
 function delibera_numero_discordar($ID, $type ='pauta')
 {
-	if($type == 'puata')
+	if($type == 'pauta')
 	{
 		$postID = $ID;
 		$ndiscordar = get_post_meta($postID, 'delibera_numero_discordar', true);
@@ -78,12 +120,12 @@ function delibera_ja_discordou($postID, $user_id, $ip, $type)
 	{
 		$discordaram = get_post_meta($postID, 'delibera_discordaram', true);
 	}
-	else 
+	else
 	{
 		$discordaram = get_comment_meta($postID, 'delibera_discordaram', true);
 	}
 	if(!is_array($discordaram)) $discordaram = array();
-	
+
 	foreach ($discordaram as $hora => $discordouem)
 	{
 		foreach ($discordouem as $discordou)
@@ -119,7 +161,7 @@ function delibera_get_quem_discordou($ID, $type = 'pauta', $return = 'array')
 	{
 		$discordaram = get_post_meta($ID, 'delibera_discordaram', true);
 	}
-	else 
+	else
 	{
 		$discordaram = get_comment_meta($ID, 'delibera_discordaram', true);
 	}
@@ -143,6 +185,6 @@ function delibera_get_quem_discordou($ID, $type = 'pauta', $return = 'array')
 			return $discordaram;
 		break;
 	}
-	
+
 }
 ?>

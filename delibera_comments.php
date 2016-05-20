@@ -155,7 +155,7 @@ function delibera_comment_text($commentText)
 				$validacao = get_comment_meta($comment->comment_ID, "delibera_validacao", true);
 				$sim = ($validacao == "S" ? true : false);
 				$commentText = '
-					<div id="painel_validacao delibera-comment-text" >
+					<div id="painel_validacao" class="delibera-comment-text">
 						'.($sim ? '
 						<label class="delibera-aceitou-view">'.__('Aceitou','delibera').'</label>
 						' : '
@@ -852,3 +852,17 @@ function delibera_comment_reply_link_args($args, $comment, $post)
 	return $args;
 }
 add_filter('comment_reply_link_args', 'delibera_comment_reply_link_args', 10, 3);
+
+function delibera_duplicate_comment_id($dupe_id, $commentdata )
+{
+	$tipos = array();
+	$tipos = apply_filters('delibera_unfilter_duplicate', $filtro);
+	
+	if( array_key_exists('delibera_comment_tipo', $_POST) && in_array($_POST['delibera_comment_tipo'], $tipos) )
+	{
+		return '';
+	}
+	return $dupe_id;
+}
+add_filter('duplicate_comment_id', 'delibera_duplicate_comment_id', 10, 2);
+

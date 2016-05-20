@@ -34,6 +34,7 @@ class Vote extends \Delibera\Modules\ModuleBase
 	{
 		parent::__construct();
 		add_action( 'admin_print_scripts', array($this, 'adminScripts') );
+		add_filter('delibera_unfilter_duplicate', array($this, 'unfilterDuplicate'));
 	}
 	
 	/**
@@ -430,6 +431,12 @@ class Vote extends \Delibera\Modules\ModuleBase
 		$post_id = $args['post_ID'];
 		$current = \Delibera\Flow::getCurrentModule($post_id);
 		$current->computaVotos($post_id);
+	}
+	
+	public function unfilterDuplicate($tipos)
+	{
+		$tipos[] = 'voto';
+		return $tipos;
 	}
 	
 }

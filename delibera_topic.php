@@ -465,30 +465,55 @@ function deliberaCreateTopic($args = array())
 		// é necessário criar a pauta como rascunho para depois publicar no
 		// final desta função
 		$pauta['post_status'] = 'draft';
+		if(array_key_exists('tags_input', $args))
+		{
+			$pauta['tags_input'] = $args['tags_input'];
+		}
+		if(array_key_exists('tags_input', $args))
+		{
+			$pauta['tags_input'] = $args['tags_input'];
+		}
+		if(array_key_exists('post_category', $args))
+		{
+			$pauta['post_category'] = $args['post_category'];
+		}
 		
-		$pauta_id = wp_insert_post($pauta);
+		// Load defaults modules values at $_POST
+		do_action('delibera_create_pauta_frontend', $opt);
+		
+		// Load args values at $_POST for save_meta action
+		foreach (array_diff_key($args, $defaults) as $key => $arg)
+		{
+			if(array_key_exists($key, $_POST))
+			{
+				$_POST[$key] = $args[$key];
+			}
+		}
+		$_POST['delibera_flow'] = $args['delibera_flow'];
+		$pauta_id = 0;
+		
+		if(array_key_exists('post_id', $args) && $args['post_id'] > 0)
+		{
+			$pauta_id = $args['post_id'];
+		}
+		else 
+		{
+			$pauta_id = wp_insert_post($pauta);
+		}
 		
 		if(is_int($pauta_id) && $pauta_id > 0)
 		{
-			// Load defaults modules values at $_POST
-			do_action('delibera_create_pauta_frontend', $opt);
-			
-			// Load args values at $_POST for save_meta action
-			foreach (array_diff_key($args, $defaults) as $key => $arg)
-			{
-				if(array_key_exists($key, $_POST))
-				{
-					$_POST[$key] = $args[$key];
-				}
-			}
-			$_POST['delibera_flow'] = $args['delibera_flow'];
-			
 			// isto é necessário por causa do if da função
 			// delibera_publish_pauta()
 			$_POST['publish'] = 'Publicar';
 			$_POST['prev_status'] = 'draft';
 			
+			//TODO tratar as categorias e tags
 			deliberaAddTerms($pauta_id, $args, 'tema', true);
+			
+			ini_set('display_errors', 1);
+			ini_set('display_startup_errors', 1);
+			error_reporting(E_ALL & ~E_STRICT);
 			
 			// publica o post
 			wp_publish_post($pauta_id);
@@ -540,7 +565,7 @@ function deliberaAddTerms($pauta_id, $args, $taxonomy = 'tema', $insert = true )
 	{
 		$terms = get_terms( $taxonomy,
 			array(
-				'hide_empty' => true
+				'hide_empty' => false
 			)
 		);
 		
@@ -556,8 +581,17 @@ function deliberaAddTerms($pauta_id, $args, $taxonomy = 'tema', $insert = true )
 			}
 		}
 				
-		// coloca o s termos de temas no post
-		if($insert) wp_set_post_terms($pauta_id, $temas_ids, 'tema');
+		// coloca os termos no post
+		if($insert) wp_set_post_terms($pauta_id, $terms_ids, 'tema');
 	}
 	return $terms_ids;
 }
+
+
+function deliberaApiCreate($post, $request)
+{
+	$args = $_POST;
+	$args['post_id'] = $post->ID;
+	deliberaCreateTopic($args);
+}
+add_action('rest_insert_pauta', 'deliberaApiCreate', 10, 2);

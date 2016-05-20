@@ -36,7 +36,7 @@ function delibera_Add_custom_Post()
 		'hierarchical' => false,
 		'supports' => array('title', 'editor', 'author', 'excerpt', 'trackbacks', 'revisions', 'comments', 'thumbnail'),
 		'register_meta_box_cb' => 'delibera_pauta_custom_meta', // função para chamar na edição
-		'taxonomies' => array('post_tag'), // Taxionomias já existentes relaciondas, vamos criar e registrar na sequência
+		'taxonomies' => array('post_tag', 'category'), // Taxionomias já existentes relaciondas, vamos criar e registrar na sequência
 		'permalink_epmask' => 'EP_PERMALINK ',
 		'has_archive' => true, // Opção de arquivamento por slug
 		'rewrite' => true,
@@ -169,9 +169,11 @@ function deliberaLoadModules()
 
 function delibera_init()
 {
+	define('DELIBERA_DIR_URL', plugin_dir_url(__FILE__));
+	define('DELIBERA_DIR_PATH', plugin_dir_path(__FILE__));
 	
 	deliberaLoadModules();
-	
+
 	add_action('admin_menu', 'delibera_config_menu');
 
 	delibera_Add_custom_Post();
@@ -191,11 +193,10 @@ function delibera_scripts()
 	global $post;
 
 	if (is_pauta()) {
-		wp_enqueue_script('jquery-expander', WP_CONTENT_URL.'/plugins/delibera/js/jquery.expander.js', array('jquery'));
-		wp_enqueue_script('delibera', WP_CONTENT_URL.'/plugins/delibera/js/scripts.js', array('jquery-expander'));
-		wp_enqueue_script('delibera-seguir', WP_CONTENT_URL . '/plugins/delibera/js/delibera_seguir.js', array('delibera'));
-		wp_enqueue_script('delibera-concordar', WP_CONTENT_URL . '/plugins/delibera/js/delibera_concordar.js', array('delibera'));
-        wp_enqueue_script('share-js', WP_CONTENT_URL . '/plugins/delibera/js/socialite.min.js');
+		wp_enqueue_script('jquery-expander', plugin_dir_url(__FILE__).'/js/jquery.expander.js', array('jquery'));
+		wp_enqueue_script('delibera', plugin_dir_url(__FILE__).'/js/scripts.js', array('jquery-expander'));
+		wp_enqueue_script('delibera-seguir', plugin_dir_url(__FILE__) . '/js/delibera_seguir.js', array('delibera'));
+		wp_enqueue_script('delibera-concordar', plugin_dir_url(__FILE__) . '/js/delibera_concordar.js', array('delibera'));
 
 		$situation = delibera_get_situacao($post->ID);
 
@@ -216,10 +217,10 @@ add_action( 'wp_print_scripts', 'delibera_scripts' );
 function delibera_print_styles()
 {
 	if (is_pauta()) {
-		wp_enqueue_style('jquery-ui-custom', plugins_url() . '/delibera/css/jquery-ui-1.9.2.custom.min.css');
+		wp_enqueue_style('jquery-ui-custom', plugin_dir_url(__FILE__) . '/css/jquery-ui-1.9.2.custom.min.css');
 	}
 
-	wp_enqueue_style('delibera_style', WP_CONTENT_URL.'/plugins/delibera/css/delibera.css');
+	wp_enqueue_style('delibera_style', plugin_dir_url(__FILE__).'/css/delibera.css');
 }
 add_action('admin_print_styles', 'delibera_print_styles');
 
@@ -227,22 +228,22 @@ function delibera_admin_scripts()
 {
 	if(is_pauta())
 	{
-		wp_enqueue_script('jquery-ui-datepicker-ptbr', WP_CONTENT_URL.'/plugins/delibera/js/jquery.ui.datepicker-pt-BR.js', array('jquery-ui-datepicker'));
-		wp_enqueue_script('delibera-admin',WP_CONTENT_URL.'/plugins/delibera/admin/js/admin_scripts.js', array( 'jquery-ui-datepicker-ptbr'));
+		wp_enqueue_script('jquery-ui-datepicker-ptbr', plugin_dir_url(__FILE__).'/js/jquery.ui.datepicker-pt-BR.js', array('jquery-ui-datepicker'));
+		wp_enqueue_script('delibera-admin', plugin_dir_url(__FILE__).'/admin/js/admin_scripts.js', array( 'jquery-ui-datepicker-ptbr'));
 	}
 
 	if(isset($_REQUEST['page']) && $_REQUEST['page'] == 'delibera-notifications')
 	{
-		wp_enqueue_script('delibera-admin-notifica',WP_CONTENT_URL.'/plugins/delibera/admin/js/admin_notifica_scripts.js', array('jquery'));
+		wp_enqueue_script('delibera-admin-notifica', plugin_dir_url(__FILE__).'/admin/js/admin_notifica_scripts.js', array('jquery'));
 	}
 }
 add_action( 'admin_print_scripts', 'delibera_admin_scripts' );
 
 function delibera_print_font_styles()
 {
-	wp_enqueue_style('delibera-font', WP_CONTENT_URL.'/plugins/delibera/css/fonts/fontello-55880ab6/css/delibera.css');
+	wp_enqueue_style('delibera-font', plugin_dir_url(__FILE__). '/css/fonts/fontello-6acce062/css/delibera.css');
 }
-add_action('admin_print_styles', 'delibera_print_font_styles');
+add_action('wp_print_scripts', 'delibera_print_font_styles');
 
 // Fim Scripts
 
@@ -359,7 +360,8 @@ function delibera_convert_situacao_id_to_taxonomy_term_in_query(&$query)
 	)
 	{
 		$situacao = get_term_by('id', $_REQUEST['situacao'], 'situacao');
-		$qv['situacao'] = $situacao->slug;
+		if(is_object($situacao))
+			$qv['situacao'] = $situacao->slug;
 	}
 }
 add_filter('parse_query','delibera_convert_situacao_id_to_taxonomy_term_in_query');
@@ -427,7 +429,7 @@ add_filter('language_attributes', 'doctype_opengraph');
 
 function fb_opengraph() {
     global $post;
- 
+
     if(is_single()) {
         if(has_post_thumbnail($post->ID))
         {
@@ -448,14 +450,14 @@ function fb_opengraph() {
             $excerpt = get_bloginfo('description');
         }
         ?>
- 
+
     <meta property="og:title" content="<?php echo the_title(); ?>"/>
     <meta property="og:description" content="<?php echo $excerpt; ?>"/>
     <meta property="og:type" content="article"/>
     <meta property="og:url" content="<?php echo the_permalink(); ?>"/>
     <meta property="og:site_name" content="<?php echo get_bloginfo(); ?>"/>
     <meta property="og:image" content="<?php echo $img_src['url']; ?>"/>
- 
+
 <?php
     } else {
         return;

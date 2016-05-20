@@ -299,7 +299,7 @@ function delibera_filtros_scripts()
 {
 	if(is_pauta())
 	{
-		wp_enqueue_script('ui-tooltip',WP_CONTENT_URL.'/plugins/delibera/js/jquery.ui.tooltip.js', array( 'jquery', 'jquery-ui-widget'));
+		wp_enqueue_script('ui-tooltip',plugin_dir_url(__FILE__).'/js/jquery.ui.tooltip.js', array( 'jquery', 'jquery-ui-widget'));
 	}
 }
 add_action( 'wp_print_scripts', 'delibera_filtros_scripts' );
