@@ -50,7 +50,7 @@ class Delibera_Walker_Comment extends Walker_Comment
 
 		ob_start();
 		?>
-		<<?php echo $tag ?> <?php comment_class(empty( $args['has_children'] ) ? "delibera-comment-$tipo" : "parent delibera-comment-$tipo") ?> id="delibera-comment-<?php comment_ID() ?>">
+		<<?php echo $tag ?> <?php comment_class(empty( $args['has_children'] ) ? '' : 'parent') ?> id="delibera-comment-<?php comment_ID() ?>">
 
 		<?php if ( 'div' != $args['style'] ) : ?>
 			<div id="delibera-div-comment-<?php comment_ID() ?>" class="delibera-comment-body delibera-comment-<?php echo $tipo; ?>">
