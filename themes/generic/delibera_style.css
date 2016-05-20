@@ -364,6 +364,37 @@ display: block;
 	border-radius: 4px;
 }
 
+.delibera-index-comments {
+	display: inline-table;
+	margin-bottom: 30px;
+	font-weight: bolder;
+	width: 400px;
+	text-transform: uppercase;
+}
+
+.delibera-index-comments-encaminhamento {
+	float: left;
+	margin-right: 20px;
+	width: 180px;
+	text-align: center;
+	background-color: #a8e7f9;
+}
+
+.delibera-index-comments-opiniao {
+	float: left;
+	width: 180px;
+	text-align: center;
+	background-color: #cfcfcf;
+}
+
+.delibera-comment-discussao {
+		background-color: #cfcfcf;
+}
+
+#delibera-comment-encaminhamento .children .delibera-comment-discussao {
+	background-color: #a8e7f9 !important;
+}
+
 .delibera-comment-text {
 	color: #535550;
 	font-weight: 300;

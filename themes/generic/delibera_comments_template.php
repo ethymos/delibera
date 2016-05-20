@@ -1,7 +1,7 @@
 <?php
 
 /**
-* Baseado em no comments-template
+* Baseado no comments-template
 */
 
 /**
@@ -50,10 +50,10 @@ class Delibera_Walker_Comment extends Walker_Comment
 
 		ob_start();
 		?>
-		<<?php echo $tag ?> <?php comment_class(empty( $args['has_children'] ) ? '' : 'parent') ?> id="delibera-comment-<?php comment_ID() ?>">
+		<<?php echo $tag ?> <?php comment_class(empty( $args['has_children'] ) ? '' : 'parent') ?> id="delibera-comment-<?php comment_ID() ?> delibera-comment-<?php echo $tipo; ?>">
 
 		<?php if ( 'div' != $args['style'] ) : ?>
-			<div id="delibera-div-comment-<?php comment_ID() ?>" class="delibera-comment-body">
+			<div id="delibera-div-comment-<?php comment_ID() ?>" class="delibera-comment-body delibera-comment-<?php echo $tipo; ?>">
 			<?php endif; ?>
 			<div id="delibera-div-comment-header-<?php comment_ID() ?>" class="delibera-comment-header">
 				<div class="delibera-comment-author vcard">
@@ -95,7 +95,7 @@ class Delibera_Walker_Comment extends Walker_Comment
 				{
 					$display_check = $tipo == "encaminhamento"? '' : 'style="display:none;"';
 					?>
-					<span id="checkbox-encaminhamento-<?php echo $comment->comment_ID ?>" class="checkbox-encaminhamento" <?php echo $display_check; ?>><span class="encaminhamento-figura"></span><label class="encaminhamento-label"><?php _e('Encaminhamento','delibera'); ?></label></span>
+					<!--span id="checkbox-encaminhamento-<?php echo $comment->comment_ID ?>" class="checkbox-encaminhamento" <?php echo $display_check; ?>><span class="encaminhamento-figura"></span><label class="encaminhamento-label"><?php _e('Encaminhamento','delibera'); ?></label></span-->
 					<?php
 				}
 				?>
