@@ -78,20 +78,32 @@ function delibera_api_avatar($object, $field_name, $request)
 	return $avatar;
 }
 
-function delibera_curtir_api($data)
+function delibera_like_api($data)
 {
 	if(is_object($data))
 	{
-		delibera_curtir($data->get_param('id'));
-		return 'OK';
+		return delibera_curtir($data->get_param('id'));
 	}
-	return "ops, id";
+	return "ops, need id";
+}
+
+function delibera_unlike_api($data)
+{
+	if(is_object($data))
+	{
+		return delibera_discordar($data->get_param('id'));
+	}
+	return "ops, need id";
 }
 
 add_action( 'rest_api_init', function () {
 	register_rest_route( 'wp/v2', '/pautas/(?P<id>\d+)/like', array(
 		'methods' => 'POST',
-		'callback' => 'delibera_curtir_api',
+		'callback' => 'delibera_like_api',
+	) );
+	register_rest_route( 'wp/v2', '/pautas/(?P<id>\d+)/unlike', array(
+		'methods' => 'POST',
+		'callback' => 'delibera_unlike_api',
 	) );
 } );
 
