@@ -49,7 +49,16 @@ $status_pauta = delibera_get_situacao($post->ID)->slug;
 				<?php printf( __( 'Arquivado em', 'delibera' ), 'entry-utility-prep entry-utility-prep-cat-links', get_the_category_list( ', ' ) ); ?>
 			</span>
 			<span class="meta-sep">|</span>
-		<?php endif; ?>
+		<?php endif;
+		echo '<div id="delibera-comment-botoes-'.$comment->comment_ID.'" class="delibera-comment-botoes">';
+		echo '<div class="group-button-like">
+		<!--span class="label">O que achou?</span-->';
+		echo delibera_gerar_curtir($post->ID, 'pauta');
+		echo delibera_gerar_discordar($post->ID, 'pauta');
+		echo '</div>';
+		?>
+		</div>
+		
 		<?php
 		/*
 		$tags_list = get_the_tag_list( '', ', ' );

@@ -308,19 +308,21 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 			'post_status'       => 'publish',
 			'posts_per_page'	=> 1,
 		);
-		
-		if(is_array($include_categories))
+
+		if($include_categories)
 		{
 			$args['tax_query']	= array(
 				array(
 					'taxonomy' => 'tema',
-					'field' => 'tag_id',
+					'field' => 'tag_ID',
 					'terms' => $include_categories,
 					'include_children' => false
 				)
 			);
 		}
+
 		$wp_posts = array();
+
 		if($orderby == 'pauta' && $pauta_id != false && $pauta_id > 0)
 		{
 			$post = get_post($pauta_id);
@@ -337,19 +339,21 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 			$wp_posts = get_posts($args);
 		}
 
-		$image_code = '';
+    	$image_code = '';
 		$pauta_url = "";
 		$titulo = "";
-		$tema = false;
+		$tema = '';
 		$temaLink = "";
 		$autor = "";
 		$tags = "";
 		$avatar = "";
 		$except = "";
+
 		foreach($wp_posts as $key=>$value)
 		{
 
 			$term_list = wp_get_post_terms($wp_posts[$key]->ID, 'tema', array("fields" => "all"));
+            print_r($term_list);
 			if(is_array($term_list) && count($term_list) > 0)
 			{
 				$tema = $term_list[0]->name;
