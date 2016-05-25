@@ -561,28 +561,42 @@ function deliberaAddTerms($pauta_id, $args, $taxonomy = 'tema', $insert = true )
 {
 	$terms_ids = array();
 	
-	if(array_key_exists($taxonomy, $args) && is_array($args[$taxonomy]))
+	if(array_key_exists($taxonomy, $args))
 	{
+		// check array of terms itens
+		$itens = $args[$taxonomy];
+		if(!is_array($itens) && is_string($itens))
+		{
+			if(strpos($itens, ',') != false)
+			{
+				$itens = explode(',', $itens);
+			}
+			else 
+			{
+				$itens = array($itens);
+			}
+		}
+		
 		$terms = get_terms( $taxonomy,
 			array(
 				'hide_empty' => false
 			)
 		);
 		
-		if(isset($args[$taxonomy]) && is_array($args[$taxonomy]))
+		if(is_array($itens))
 		{
 			// verifica se todos os temas enviados por post são válidos
 			foreach($terms as $term)
 			{
-				if(in_array($term->term_id, $args[$taxonomy]))
+				if(in_array($term->term_id, $itens))
 				{
 					$terms_ids[] = $term->term_id;
 				}
 			}
+			
+			// coloca os termos no post
+			if($insert && count($terms_ids) > 0) wp_set_post_terms($pauta_id, $terms_ids, 'tema');
 		}
-				
-		// coloca os termos no post
-		if($insert) wp_set_post_terms($pauta_id, $terms_ids, 'tema');
 	}
 	return $terms_ids;
 }
@@ -604,3 +618,4 @@ function deliberaApiCreate($post, $request)
 	deliberaCreateTopic($args);
 }
 add_action('rest_insert_pauta', 'deliberaApiCreate', 10, 2);
+?>
