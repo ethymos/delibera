@@ -353,7 +353,7 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 		{
 
 			$term_list = wp_get_post_terms($wp_posts[$key]->ID, 'tema', array("fields" => "all"));
-            print_r($term_list);
+            //print_r($term_list);
 			if(is_array($term_list) && count($term_list) > 0)
 			{
 				$tema = $term_list[0]->name;
