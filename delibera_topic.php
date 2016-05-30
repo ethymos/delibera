@@ -601,21 +601,4 @@ function deliberaAddTerms($pauta_id, $args, $taxonomy = 'tema', $insert = true )
 	return $terms_ids;
 }
 
-/**
- * 
- * @param WP_Post $post
- * @param WP_REST_Request $request
- */
-function deliberaApiCreate($post, $request)
-{
-	$args = $_POST;
-	$args['post_id'] = $post->ID;
-	if(empty($post->post_name))
-	{
-		$post->post_name = sanitize_title($post->post_title);
-		wp_update_post($post);
-	}
-	deliberaCreateTopic($args);
-}
-add_action('rest_insert_pauta', 'deliberaApiCreate', 10, 2);
 ?>
