@@ -91,10 +91,18 @@
     text-align: right;
 }
 
-a.delibera-like-login, a.delibera-unlike-login {
+a.delibera-like-login .delibera-icon-thumbs-up, a.delibera-unlike-login .delibera-icon-thumbs-down {
     color: #000000;
 }
 
-a.delibera-like-login:hover, a.delibera-unlike-login:hover {
+a.delibera-like-login .delibera-icon-thumbs-up:hover, a.delibera-unlike-login .delibera-icon-thumbs-down:hover {
     color: #cccccc;
+}
+
+a.delibera-like-login .delibera-icon-thumbs-up.active {
+    color: blue;
+}
+
+a.delibera-like-login .delibera-icon-thumbs-down.active {
+    color: red;
 }
