@@ -543,6 +543,7 @@ function deliberaCreateTopic($args = array())
 					die();
 				}
 			}
+		return $pauta_id;	
 		}
 	}
 }

@@ -247,7 +247,7 @@ class ET_Builder_Module_Delibera_Categoria extends ET_Builder_Module {
 
 			$avatar = get_avatar( $wp_posts[$key]->post_author, '25');
 
-			$temaLink = get_term_link($term_list[0]->slug,"tema");
+			$temaLink = get_home_url().'/'.$term_list[0]->slug;
 
 			$image_code = '';
 			$pauta_url = "";
