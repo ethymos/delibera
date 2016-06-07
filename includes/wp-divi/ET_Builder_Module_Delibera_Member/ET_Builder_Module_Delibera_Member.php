@@ -453,7 +453,7 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 					</a>
 					%16$s
         			%17$s
-					<div class="comments"><span class="comments-count">%18$s<span><svg class="icon-comment"><use xlink:href="%19$s#icon-comment"></use></svg></div>
+					<div class="comments"><span class="comments-count">%18$s</span><i class="delibera-icon-chat"></i></div>
 				</div> <!-- .et_pb_delibera_member_description -->
 				<a href="%10$s" ><div class="faixa" %20$s>%21$s</div></a>
 			</div> <!-- .et_pb_delibera_member -->',

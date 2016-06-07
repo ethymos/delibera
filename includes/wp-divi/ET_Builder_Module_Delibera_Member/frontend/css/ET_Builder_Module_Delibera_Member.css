@@ -90,3 +90,11 @@
     padding: 8px 20px 8px 8px;
     text-align: right;
 }
+
+a.delibera-like-login, a.delibera-unlike-login {
+    color: #000000;
+}
+
+a.delibera-like-login:hover, a.delibera-unlike-login:hover {
+    color: #cccccc;
+}
