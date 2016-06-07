@@ -91,23 +91,23 @@
     text-align: right;
 }
 
-a.delibera-like .delibera-icon-thumbs-up, a.delibera-unlike .delibera-icon-thumbs-down,
+.delibera-like .delibera-icon-thumbs-up, .delibera-unlike .delibera-icon-thumbs-down,
 a.delibera-like-login .delibera-icon-thumbs-up, a.delibera-unlike-login .delibera-icon-thumbs-down {
     color: #000000;
 }
 
-a.delibera-like .delibera-icon-thumbs-up:hover, a.delibera-unlike .delibera-icon-thumbs-down:hover,
+.delibera-like .delibera-icon-thumbs-up:hover, .delibera-unlike .delibera-icon-thumbs-down:hover,
 a.delibera-like-login .delibera-icon-thumbs-up:hover, a.delibera-unlike-login .delibera-icon-thumbs-down:hover {
     color: #cccccc;
 }
 
-a.delibera-like .delibera-icon-thumbs-up.active,
+.delibera-like .delibera-icon-thumbs-up.active,
 a.delibera-like-login .delibera-icon-thumbs-up.active {
     color: blue;
 }
 
-a.delibera-like .delibera-icon-thumbs-down.active,
-a.delibera-like-login .delibera-icon-thumbs-down.active {
+.delibera-unlike .delibera-icon-thumbs-down.active,
+a.delibera-unlike-login .delibera-icon-thumbs-down.active {
     color: red;
 }
 
