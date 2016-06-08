@@ -71,6 +71,7 @@ resolucao - 90248f
 .delibera-header .button {
 	background-color: #166e87;
 	opacity: 1;
+	color: #FFF;
 }
 .page-title {
 	color: #000;
@@ -157,8 +158,8 @@ resolucao - 90248f
 }
 
 .lista-de-pautas .type-pauta .entry-content {
-	margin: 30px 0;
-	height: 245px;
+	margin: 30px 0 10px;
+	height: auto;
 }
 
 .lista-de-pautas .type-pauta .archive-situacao {
@@ -251,7 +252,7 @@ resolucao - 90248f
 .button {
 	display: inline-block;
 	background: #ccc;
-	color: #777;
+	color: #FFF;
 	padding: 1px 15px;
 	font-size: 14px;
 	cursor: pointer;
