@@ -249,7 +249,7 @@ class ET_Builder_Module_Delibera_Categoria2 extends ET_Builder_Module {
 			'post_status'        => 'publish',
 		);
 		
-		if(is_array($include_categories))
+		if($include_categories)
 		{
 			$args['tax_query']	= array(
 				array(
