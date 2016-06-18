@@ -64,13 +64,23 @@ class Flow
 	 */
 	public function preMainConfigSave($opts)
 	{
-		if(array_key_exists('delibera_flow', $opts) && !is_array($opts['delibera_flow']))
+		$save_opts = delibera_get_config();
+		
+		if(array_key_exists('delibera_flow', $opts) && is_string($opts['delibera_flow']) && strlen($opts['delibera_flow']) > 1)
 		{
 			$opts['delibera_flow'] = explode(',', trim($opts['delibera_flow']));
 		}
-		if(empty($opts['delibera_flow']))
+		
+		if( empty($opts['delibera_flow']) || (is_string($opts['delibera_flow']) && strlen($opts['delibera_flow']) < 2 ) )
 		{
-			$opts = $this->getMainConfig($opts);
+			if(empty($save_opts['delibera_flow']))
+			{
+				$opts = $this->getMainConfig($opts);
+			}
+			else 
+			{
+				$opts['delibera_flow'] = $save_opts['delibera_flow'];
+			}
 		}
 		return $opts;
 	}
