@@ -35,7 +35,7 @@ class Flow
 	}
 	
 	/**
-	 * Append configurations 
+	 * Append defaults configurations 
 	 * @param array $opts
 	 */
 	public function getMainConfig($opts)
@@ -67,6 +67,10 @@ class Flow
 		if(array_key_exists('delibera_flow', $opts) && !is_array($opts['delibera_flow']))
 		{
 			$opts['delibera_flow'] = explode(',', trim($opts['delibera_flow']));
+		}
+		if(empty($opts['delibera_flow']))
+		{
+			$opts = $this->getMainConfig($opts);
 		}
 		return $opts;
 	}
