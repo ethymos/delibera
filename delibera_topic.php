@@ -547,6 +547,10 @@ function deliberaCreateTopic($args = array())
 			return $pauta_id;	
 		}
 	}
+	elseif($opt['criar_pauta_pelo_front_end'] == 'S')
+	{
+		wp_die(__('Criação de pauta fora do painel está desabilitada, favor contactar o administrador e pedir sua ativação.', 'delibera'));
+	}
 }
 
 /**
