@@ -21,14 +21,20 @@ class ET_Builder_Module_Delibera_Categoria2 extends ET_Builder_Module {
 			'texto',
 			'url_tema',
 			'background_color',
-			'button_image_url'
+			'button_image_url',
+			'orderby',
+			'order',
+			'num_posts',
 		);
 
 		$this->fields_defaults = array(
 			'animation'         => array( 'off' ),
 			'background_layout' => array( 'light' ),
 			'background_color'	=> array( '#ffffff' ),
-			'button_image_url'	=> array( '' )
+			'button_image_url'	=> array( '' ),
+			'orderby'			=> array( 'date' ),
+			'order'				=> array( 'DESC' ),
+			'num_posts'			=> array( '12' )
 		);
 
 		$this->main_css_element = '%%order_class%%.et_pb_delibera_categoria';
@@ -217,6 +223,35 @@ class ET_Builder_Module_Delibera_Categoria2 extends ET_Builder_Module {
 				'option_category' => 'basic_option',
 				'description'     => 'Se preenchida sobreescreve a url do tema',
 			),
+			'orderby' => array(
+				'label'             => esc_html__( 'Ordenar por', 'et_builder' ),
+				'type'              => 'select',
+				'option_category'   => 'basic_option',
+				'options'           => array(
+					'date'			=> esc_html__( 'Cronológico, última ou primeira criada', 'et_builder' ),
+					'rand'			=> esc_html__( 'Randômicas', 'et_builder' ),
+				),
+				'description'       => esc_html__( 'Ordem de onde pegar as pautas', 'et_builder' ),
+			),
+			'order' => array(
+				'label'             => esc_html__( 'Ordem', 'et_builder' ),
+				'type'              => 'select',
+				'option_category'   => 'basic_option',
+				'options'           => array(
+					'DESC'			=> esc_html__( 'Descendete', 'et_builder' ),
+					'ASC'			=> esc_html__( 'Acendente', 'et_builder' ),
+				),
+				'description'       => esc_html__( 'Ordem', 'et_builder' ),
+			),
+			'num_posts' => array(
+				'label'             => esc_html__( 'Número de Pautas', 'et_builder' ),
+				'description'       => esc_html__( 'Número máximo de pautas que devem ser exibidas', 'et_builder' ),
+				'type'        => 'range',
+				'input_attrs' => array(
+					'min'  => 1,
+					'step' => 1
+				),
+			),
 		);
 		return $fields;
 	}
@@ -236,6 +271,9 @@ class ET_Builder_Module_Delibera_Categoria2 extends ET_Builder_Module {
 		$background_color			= $this->shortcode_atts['background_color'];
 		$url_tema 					= $this->shortcode_atts['url_tema'];
 		$button_image_url			= $this->shortcode_atts['button_image_url'];
+		$orderby					= $this->shortcode_atts['orderby'];
+		$order						= $this->shortcode_atts['order'];
+		$num_posts					= $this->shortcode_atts['num_posts'];
 		
 
 		$module_class = ET_Builder_Element::add_module_order_class( $module_class, $function_name );
@@ -243,10 +281,11 @@ class ET_Builder_Module_Delibera_Categoria2 extends ET_Builder_Module {
 		$image = $social_links = '';
 
 		$args = array(
-			'post_type' => 'pauta',
-			'orderby' => 'date',
-			'order' => 'DESC',
-			'post_status'        => 'publish',
+			'post_type' 		=> 'pauta',
+			'orderby'			=> $orderby,
+			'order'				=> $order,
+			'post_status'       => 'publish',
+			'posts_per_page'	=> $num_posts
 		);
 		
 		if($include_categories)
