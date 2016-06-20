@@ -247,9 +247,11 @@ class ET_Builder_Module_Delibera_Categoria2 extends ET_Builder_Module {
 				'label'             => esc_html__( 'Número de Pautas', 'et_builder' ),
 				'description'       => esc_html__( 'Número máximo de pautas que devem ser exibidas', 'et_builder' ),
 				'type'        => 'range',
-				'input_attrs' => array(
-					'min'  => 1,
-					'step' => 1
+				'default'	  => 12,
+				'range_settings' => array(
+					'min'  => '1',
+					'max'  => '120',
+					'step' => '1',
 				),
 			),
 		);
