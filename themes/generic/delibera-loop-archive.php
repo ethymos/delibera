@@ -51,13 +51,12 @@ $status_pauta = delibera_get_situacao($post->ID)->slug;
 			<span class="meta-sep">|</span>
 		<?php endif;
 		echo '<div id="delibera-comment-botoes-'.$comment->comment_ID.'" class="delibera-comment-botoes">';
-		echo '<div class="group-button-like">
-		<!--span class="label">O que achou?</span-->';
+		echo '<div class="archive-botoes">';
 		echo delibera_gerar_curtir($post->ID, 'pauta');
 		echo delibera_gerar_discordar($post->ID, 'pauta');
 		echo '</div>';
+		echo '</div>';
 		?>
-		</div>
 		
 		<?php
 		/*

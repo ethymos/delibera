@@ -269,12 +269,11 @@ resolucao - 90248f
 	float: right;
 	padding: 0;
 	font-size: 14px;
-	width: 45%;
+	width: 50%;
 	display: inline-block;
 }
 
 .group-button-like {
-	width: 45%;
 	display: inline-block;
 }
 .group-button-like i {
@@ -290,6 +289,28 @@ resolucao - 90248f
 	font-size: 14px;
 	display: inline-block;
 	margin: 0 5px 0;
+}
+.archive-botoes {
+	font-size: 22px;
+	float: none;
+	margin-bottom: 10px;
+	margin-top: -25px;
+}
+.type-pauta .group-button-like {
+	width: 45%;
+	float: left;
+}
+.delibera-comment-body .group-button-like i {
+	font-size: 18px;
+}
+
+.delibera-comment-body .delibera-like, .delibera-comment-body .delibera-unlike {
+    margin-right: 0px;
+}
+
+.delibera-comment-body .comment-reply-link {
+    font-size: 18px;
+    margin-bottom: 0px;
 }
 
 .social-buttons a {
@@ -416,7 +437,7 @@ text-align: right;
 .delibera-comment-meta {
 	text-align: right;
 	float: right;
-	margin-top: 15px;
+	padding: 0px;
 	font-weight: bold;
 }
 /*.delibera-comment-body .comment-reply-link {
@@ -438,7 +459,7 @@ text-align: right;
 
 .delibera-comment-botoes {
 	display: inline-block;
-	width: 50%;
+	width: 100%;
 }
 
 .delibera_lista_validacoes .delibera-comment-botoes {
@@ -457,14 +478,10 @@ text-align: right;
 	display: inline-block;
 	margin-right: 10px;
 	padding: 5px;
-	/*border-bottom: 1px solid #fff;
-	border-radius: 7px;*/
 }
 
-.delibera-like {
-}
-
-.delibera-unlike {
+.type-pauta span.cat-links, .type-pauta span.meta-sep{
+	display: none;
 }
 
 /*
@@ -524,7 +541,7 @@ unlike_color: #ce282a
 .delibera-comment-author img {
 	width: auto;
 	height: auto;
-	max-height: 50px;
+	max-height: 40px;
 }
 
 .delibera_checkbox_voto {
@@ -555,8 +572,7 @@ unlike_color: #ce282a
 }
 
 .delibera-comment-author .fn {
-	margin: 0;
-	padding: 10px;
+	margin-left: 10px;
 	position: absolute;
 }
 
@@ -569,6 +585,14 @@ span.read-more, span.re-collapse {
 }
 
 .single-pauta .entry-seguir {
+	display: inline-block;
+	background: #CCC;
+	color: #777;
+	padding: 0px 15px;
+	font-size: 14px;
+}
+
+.single-pauta .entry-print {
 	display: inline-block;
 	background: #CCC;
 	color: #777;
@@ -611,11 +635,15 @@ span.read-more, span.re-collapse {
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
-	padding: 10px;
+	padding: 5px;
 	line-height: 1;
 	font-weight: 700;
 	text-transform: uppercase;
-	margin: 5px;
+	margin: 0px;
+}
+
+.delibera-comment-header {
+	margin-bottom: 5px;
 }
 
 
@@ -665,10 +693,6 @@ span.read-more, span.re-collapse {
 	font-weight: 700;
 }*/
 
-.comment-form-attachment input {
-	text-indent: -166px;
-}
-
 .delibera_before_fields {
 	margin: 20px auto;
 }
@@ -695,7 +719,6 @@ span.read-more, span.re-collapse {
 }
 
 .attachmentFile {
-	text-indent: -99px;
 	overflow: hidden;
 }
 

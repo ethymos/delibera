@@ -117,11 +117,9 @@ class Delibera_Walker_Comment extends Walker_Comment
 			}
 			comment_text();
 
-			echo '<div id="delibera-comment-botoes-'.$comment->comment_ID.'" class="delibera-comment-botoes" >
-			<div class="group-button-like">';
+			echo '<div class="group-button-like">';
 			echo delibera_gerar_curtir($comment, 'comment');
 			echo delibera_gerar_discordar($comment, 'comment');
-			echo '</div>';
 			echo '</div>';
 
 
