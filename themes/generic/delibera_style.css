@@ -216,6 +216,10 @@ resolucao - 90248f
     display: none;
 }
 
+.lista-de-pautas .navigation {
+	display: none;
+}
+
 /* BANNER CICLO VIDAS */
 
 .banner-ciclo {
