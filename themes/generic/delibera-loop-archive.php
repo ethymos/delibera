@@ -74,6 +74,7 @@ $temas = wp_get_post_terms(get_the_ID(), 'tema');
 				<?php printf( __( 'Arquivado em', 'delibera' ), 'entry-utility-prep entry-utility-prep-cat-links', get_the_category_list( ', ' ) ); ?>
 			</span>
 			<span class="meta-sep">|</span>
+<<<<<<< HEAD
 		<?php endif;?>
 		<div id="delibera-comment-botoes-<?php echo $comment->comment_ID; ?>" class="delibera-comment-botoes">
 			<div class="group-button-like"><?php
@@ -123,6 +124,56 @@ $temas = wp_get_post_terms(get_the_ID(), 'tema');
 				</a>
 			</span>
 		</div><!-- .delibera-comment-botoes -->
+=======
+		<?php endif;
+		echo '<div id="delibera-comment-botoes-'.$comment->comment_ID.'" class="delibera-comment-botoes">';
+		echo '<div class="archive-botoes">';
+		echo delibera_gerar_curtir($post->ID, 'pauta');
+		echo delibera_gerar_discordar($post->ID, 'pauta');
+		echo '</div>';
+		echo '</div>';
+		?>
+		
+		<?php
+		/*
+		$tags_list = get_the_tag_list( '', ', ' );
+		if ( $tags_list ):
+		?>
+		<span class="tag-links">
+		<?php printf( __( 'Palavras-chave', 'delibera' ), 'entry-utility-prep entry-utility-prep-tag-links', $tags_list ); ?>
+		</span>
+		<span class="meta-sep">|</span>
+		<?php endif;
+		*/
+		?>
+		<span class="comments-link button">
+			<a href="<?php echo delibera_get_comments_link(); ?>">
+				<?php
+				// validacao,discussao,relatoria,emvotacao,comresolucao
+				switch ($status_pauta) {
+					case 'validacao':
+					$labelButton = 'decida';
+					break;
+					case 'discussao':
+					$labelButton = 'comente';
+					break;
+					case 'relatoria':
+					$labelButton = 'comente';
+					break;
+					case 'emvotacao':
+					$labelButton = 'Vote';
+					break;
+
+					default:
+					$labelButton = 'ver pauta';
+					break;
+				}
+				_e( $labelButton, 'delibera' );
+				?>
+				<?php //comments_number( '', '('. __( '1', 'delibera' ) . ')', '('. __( '%', 'delibera' ) . ')' ); ?>
+			</a>
+		</span>
+>>>>>>> css-revision
 	</div><!-- .entry-utility -->
 </div><!-- #post-## -->
 
