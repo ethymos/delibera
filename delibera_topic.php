@@ -458,7 +458,7 @@ function deliberaCreateTopic($args = array())
 		$pauta['post_title'] = $title;
 		$pauta['post_excerpt'] = $excerpt;
 		$pauta['post_type'] = 'pauta';
-		
+		$pauta['post_name'] = sanitize_title($title);
 		$pauta['post_content'] = $content;
 		
 		// para que a situação da pauta seja criada corretamente,
@@ -511,9 +511,12 @@ function deliberaCreateTopic($args = array())
 			//TODO tratar as categorias e tags
 			deliberaAddTerms($pauta_id, $args, 'tema', true);
 			
-			ini_set('display_errors', 1);
-			ini_set('display_startup_errors', 1);
-			error_reporting(E_ALL & ~E_STRICT);
+			if(defined('WP_DEBUG') && WP_DEBUG)
+			{
+				ini_set('display_errors', 1);
+				ini_set('display_startup_errors', 1);
+				error_reporting(E_ALL & ~E_STRICT);
+			}
 			
 			// publica o post
 			wp_publish_post($pauta_id);
@@ -523,8 +526,6 @@ function deliberaCreateTopic($args = array())
 			// draft e o wp_publish_post tb não cria o slug
 			unset($pauta['post_status']);
 			$pauta['ID'] = $pauta_id;
-			$pauta['post_name'] = sanitize_post_field('post_name', $title, 
-					$pauta_id, 'save');
 			wp_update_post($pauta);
 			
 			if(array_key_exists('redirect', $args) && $args['redirect'])
@@ -543,8 +544,12 @@ function deliberaCreateTopic($args = array())
 					die();
 				}
 			}
-		return $pauta_id;	
+			return $pauta_id;	
 		}
+	}
+	elseif($opt['criar_pauta_pelo_front_end'] == 'S')
+	{
+		wp_die(__('Criação de pauta fora do painel está desabilitada, favor contactar o administrador e pedir sua ativação.', 'delibera'));
 	}
 }
 

@@ -54,14 +54,14 @@ function delibera_get_main_config($config = array()) {
     $opt = array();
     $opt['theme'] = plugin_dir_path(__FILE__)."/themes/generic";
     
-    $opt['criar_pauta_pelo_front_end'] = 'N';
-    $opt['representante_define_prazos'] = 'N';
+    $opt['criar_pauta_pelo_front_end'] = 'S';
+    $opt['representante_define_prazos'] = 'S';
     $opt['dias_novo_prazo'] = '2';
     $opt['limitar_tamanho_comentario'] = 'N';
     $opt['numero_max_palavras_comentario'] = '50';
     $opt['plan_restriction'] = 'N';
     $opt['cabecalho_arquivo'] = __( 'Bem-vindo a plataforma de debate do ', 'delibera' ).get_bloginfo('name');
-    $opt['todos_usuarios_logados_podem_participar'] = 'N';
+    $opt['todos_usuarios_logados_podem_participar'] = 'S';
     $now = new DateTime();
 	$opt['data_fixa_nova_pauta_externa'] = $now->format('d/m/Y');
 	
