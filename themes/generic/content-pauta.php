@@ -57,7 +57,7 @@ $flow = $DeliberaFlow->get(get_the_ID());
 		<?php printf( __( 'Situação da pauta', 'delibera' ).': %s', delibera_get_situacao($post->ID)->name );?>
 	</div .entry-situacao -->
 	<div class="entry-author">
-		<?php _e( 'Por', 'delibera' ); ?>
+		<span class="author-text"><?php _e( 'Por', 'delibera' ); ?></span>
 		<span class="author vcard">
 			<a class="url fn n" href="<?php echo get_site_url().'/delibera/' . get_the_author_meta( 'ID' ) . '/pautas' ; ?>" title="<?php printf( __( 'Ver o perfil de %s', 'delibera' ), get_the_author() ); ?>">
 				<?php the_author(); ?>
@@ -111,7 +111,7 @@ social_buttons(get_permalink(), get_the_title());
 ?>
 </div>
 </div><!-- #post-## -->
-<h2 class="discussion-title">Discussão sobre a Pauta</h3>
+<h2 class="discussion-title">Discussão sobre a Pauta</h2>
 	<?php comments_template( '', true ); ?>
 </div>
 <?php endwhile; // end of the loop. ?>

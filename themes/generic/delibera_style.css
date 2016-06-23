@@ -141,11 +141,15 @@ resolucao - 90248f
 	margin: 1% 0% 1% 1%;
 }
 
-
-.lista-de-pautas .type-pauta .entry-author,
-.lista-de-pautas .type-pauta .entry-date {
-	display: none;
+.lista-de-pautas .entry-date,
+.lista-de-pautas .entry-author {
+    display: block;
+    float: left;
+    position: relative;
+    width: 40%;
+    display: none;
 }
+
 .lista-de-pautas .type-pauta .entry-title {
 	min-height: 50px;
 	color: #fff;
@@ -185,6 +189,31 @@ resolucao - 90248f
 }
 .lista-de-pautas .type-pauta .entry-utility .comments-link a {
 	color: #fff;
+}
+
+.lista-de-pautas .delibera-comment-botoes {
+	width: 100%;
+}
+
+.lista-de-pautas .group-button-like {
+	width: 25%;
+}
+
+.lista-de-pautas .social-buttons {
+	width: unset;
+	display: none;
+}
+
+.lista-de-pautas .meta-temas {
+	display: none;
+}
+
+.lista-de-pautas .entry-blame {
+    display: block;
+    float: left;
+    position: relative;
+    width: 100%;
+    display: none;
 }
 
 /* BANNER CICLO VIDAS */
@@ -441,7 +470,7 @@ text-align: right;
 }
 
 .delibera_lista_validacoes .delibera-comment-botoes {
-	display: none;
+/*	display: none;*/
 }
 
 .delibera_unlike .delibera_unlike_text,
