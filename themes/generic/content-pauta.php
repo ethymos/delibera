@@ -90,45 +90,26 @@ $temas = wp_get_post_terms(get_the_ID(), 'tema');
 	<div class="entry-print button">
 		<a title="Versão simplificada para impressão" href="?delibera_print=1" class=""><i class="delibera-icon-print"></i></a>
 	</div><!-- .entry-print -->
-	<!--div class="entry-comment">
-	<?php if(comments_open(get_the_ID()) && is_user_logged_in())
-	{?>
-	<a href="#delibera-comments">
-	<?php _e( 'Discuta', 'delibera' ); ?>
-	<?php comments_number( '', '('. __( 'Um comentário', 'delibera' ) . ')', '('. __( '% comentários', 'delibera' ) . ')' ); ?>
-</a>
-<?php
-}
-elseif(delibera_comments_is_open(get_the_ID()) && !is_user_logged_in())
-{
-?>
-<a href="<?php echo wp_login_url( get_post_type() == "pauta" ? get_permalink() : delibera_get_comment_link());?>#delibera-comments">
-<?php _e( 'Discuta', 'delibera' ); ?>
-<?php comments_number( '', '('. __( 'Um comentário', 'delibera' ) . ')', '('. __( '% comentários', 'delibera' ) . ')' ); ?>
-</a>
-<?php
-}
-?>
-</div> .entry-comment -->
 
-<div class="entry-attachment">
-</div><!-- .entry-attachment -->
-<!--/div><!-- .entry-meta -->
-</div><!-- #leader -->
+	<div class="entry-attachment">
+	</div><!-- .entry-attachment -->
+	
+	</div><!-- #leader -->
 
-<div class="entry-content">
-	<?php the_content(); ?>
-</div><!-- .entry-content -->
+	<div class="entry-content">
+		<?php the_content(); ?>
+	</div><!-- .entry-content -->
 
-<?php
-echo '<div id="delibera-comment-botoes-'.get_the_ID().'" class="delibera-comment-botoes">';
-echo '<div class="group-button-like">
-<!--span class="label">O que achou?</span-->';
-echo delibera_gerar_curtir($post->ID, 'pauta');
-echo delibera_gerar_discordar($post->ID, 'pauta');
-echo '</div>';
-social_buttons(get_permalink(), get_the_title());
-?>
+	<?php
+	echo '<div id="delibera-comment-botoes-'.get_the_ID().'" class="delibera-comment-botoes">';
+	echo '<div class="group-button-like">
+	<!--span class="label">O que achou?</span-->';
+	echo delibera_gerar_curtir($post->ID, 'pauta');
+	echo delibera_gerar_discordar($post->ID, 'pauta');
+	echo '</div>';
+	social_buttons(get_permalink(), get_the_title());
+	?>
+
 </div>
 </div><!-- #post-## -->
 <h2 class="discussion-title">Discussão sobre a Pauta</h2>

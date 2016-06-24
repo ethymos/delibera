@@ -76,9 +76,11 @@ $temas = wp_get_post_terms(get_the_ID(), 'tema');
 			<span class="meta-sep">|</span>
 		<?php endif;?>
 		<div id="delibera-comment-botoes-<?php echo $comment->comment_ID; ?>" class="delibera-comment-botoes">
-			<div class="group-button-like"><?php
+				<div class="archive-botoes"><?php
 				echo delibera_gerar_curtir($post->ID, 'pauta');
 				echo delibera_gerar_discordar($post->ID, 'pauta');?>
+				</div>
+			<div class="group-button-like">
 			</div><?php
 			if(function_exists('social_buttons'))
 			{
