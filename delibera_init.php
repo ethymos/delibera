@@ -472,4 +472,4 @@ function fb_opengraph() {
         return;
     }
 }
-add_action('wp_head', 'fb_opengraph', 5);
+add_action('wp_head', 'fb_opengraph', 20);
