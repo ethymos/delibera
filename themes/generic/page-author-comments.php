@@ -13,6 +13,8 @@ $order	= isset( $_GET['order-by'] ) ?	esc_html( $_GET['order-by'] ) : '' ;
 $paged = get_query_var( 'paged' );
 
 ?>
+<div id="container">
+	<div id="main-content" role="main">
 <div id="user_form_search" class="user_form_search">
 	<form method="get"	name="form">
 		<p>
@@ -110,6 +112,8 @@ if ( $comments )
 			?>
 		</p>
 	</div>
+	</div><!-- #content -->
+</div><!-- #container -->
 	<?php
 	wp_footer();
 	?>

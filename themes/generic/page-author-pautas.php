@@ -13,6 +13,8 @@ $order	= isset( $_GET['order-by'] ) ?	esc_html( $_GET['order-by'] ) : '' ;
 
 global $user_display;
 ?>
+<div id="container">
+	<div id="main-content" role="main">
 <div id="user_form_search" class="user_form_search">
 	<form method="get"	name="form">
 		<p>
@@ -43,44 +45,46 @@ global $user_display;
 	</div>
 </p>
 
-<?php
-$args = array(
-	'author'					=> $user->ID,
-	'status'					=> 'approve',
-	's'							 => $search,
-	'posts_per_page'	=> $per_page,
-	'post_type'			 => 'pauta',
-	'paged'					 => get_query_var( 'paged' )
-);
-
-$author_posts = new WP_Query( $args );
-?>
-<div id="user_pager" class="user_pager">
-	<p>
-		<?php echo \Delibera\Theme\UserDisplay::getPaginator( $author_posts->max_num_pages, $paged ); ?>
-	</p>
-</div>
-<?php
-foreach( $author_posts->posts as $post )
-{
-	?>
-	<p>
-		<a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>">
-			<?php the_title('<h3>', '</h3>'); ?>
-		</a>
-	</p>
 	<?php
-	the_excerpt();
-	echo '<br>';
-	echo delibera_get_situacao($post->ID)->name;
-}
+	$args = array(
+		'author'					=> $user->ID,
+		'status'					=> 'approve',
+		's'							 => $search,
+		'posts_per_page'	=> $per_page,
+		'post_type'			 => 'pauta',
+		'paged'					 => get_query_var( 'paged' )
+	);
 
-?>
-<div id="user_pager" class="user_pager">
-	<p>
-		<?php echo \Delibera\Theme\UserDisplay::getPaginator( $author_posts->max_num_pages , $per_page ); ?>
-	</p>
-</div>
+	$author_posts = new WP_Query( $args );
+	?>
+	<div id="user_pager" class="user_pager">
+		<p>
+			<?php echo \Delibera\Theme\UserDisplay::getPaginator( $author_posts->max_num_pages, $paged ); ?>
+		</p>
+	</div>
+	<?php
+	foreach( $author_posts->posts as $post )
+	{
+		?>
+		<p>
+			<a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>">
+				<?php the_title('<h3>', '</h3>'); ?>
+			</a>
+		</p>
+		<?php
+		the_excerpt();
+		echo '<br>';
+		echo delibera_get_situacao($post->ID)->name;
+	}
+
+	?>
+		<div id="user_pager" class="user_pager">
+			<p>
+				<?php echo \Delibera\Theme\UserDisplay::getPaginator( $author_posts->max_num_pages , $per_page ); ?>
+			</p>
+		</div>
+	</div><!-- #content -->
+</div><!-- #container -->
 <?php
 wp_footer();
 ?>
