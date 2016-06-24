@@ -385,6 +385,22 @@ display: block;
 	margin: 15px auto;
 }
 
+.single-pauta .meta-temas .delibera-tema-entry-title {
+	display: none;
+}
+
+.single-pauta .entry-author .avatar {
+	display: none;
+}
+
+.single-pauta .meta-temas {
+	display: none;
+}
+
+.single-pauta .entry-date {
+	display: none;
+}
+
 /* COMMENTS */
 .delibera-comment-body {
 	width: 75%;

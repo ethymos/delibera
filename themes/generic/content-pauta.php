@@ -3,6 +3,8 @@ $status_pauta = delibera_get_situacao($post->ID)->slug;
 //echo $status_pauta;
 global $DeliberaFlow;
 $flow = $DeliberaFlow->get(get_the_ID());
+
+$temas = wp_get_post_terms(get_the_ID(), 'tema');
 ?>
 <div class="pauta-content <?php echo $status_pauta; ?>">
 
@@ -42,11 +44,23 @@ $flow = $DeliberaFlow->get(get_the_ID());
 <div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 	<div id="leader">
+		<?php if (!empty($temas)) : ?>
+			<ul class="meta meta-temas">
+				<li class="delibera-tema-entry-title"><?php _e('Tema(as)', 'delibera'); ?>:</li>
+				<?php $size = count($temas) - 1; ?>
+				<?php foreach ($temas as $key => $tema) : ?>
+				<li>
+					<a href="<?php echo get_term_link($tema);?>"><?php echo $tema->name; ?></a>
+					<?php echo ($key != $size) ? ',' : ''; ?>
+				</li>
+				<?php endforeach; ?>
+		    </ul>
+		<?php endif; ?>
 		<h1 class="entry-title"><?php the_title(); ?></h1>
 		<div class="entry-prazo">
 
 			<?php
-			if ( \Delibera\Flow::getDeadlineDays( $post->ID ) == -1 )
+			if ( \Delibera\Flow::getDeadlineDays( $post->ID ) <= -1 )
 			_e( 'Prazo encerrado', 'delibera' );
 			else
 			printf( _n( 'Por mais <br><span class="numero">1</span> dia', 'Por mais <br><span class="numero">%1$s</span> dias', \Delibera\Flow::getDeadlineDays( $post->ID ), 'delibera' ), number_format_i18n( \Delibera\Flow::getDeadlineDays( $post->ID ) ) );
@@ -56,14 +70,20 @@ $flow = $DeliberaFlow->get(get_the_ID());
 		<div class="entry-situacao">
 		<?php printf( __( 'Situação da pauta', 'delibera' ).': %s', delibera_get_situacao($post->ID)->name );?>
 	</div .entry-situacao -->
-	<div class="entry-author">
-		<span class="author-text"><?php _e( 'Por', 'delibera' ); ?></span>
-		<span class="author vcard">
-			<a class="url fn n" href="<?php echo get_site_url().'/delibera/' . get_the_author_meta( 'ID' ) . '/pautas' ; ?>" title="<?php printf( __( 'Ver o perfil de %s', 'delibera' ), get_the_author() ); ?>">
-				<?php the_author(); ?>
-			</a>
-		</span>
-	</div><!-- .entry-author -->
+	<div class="entry-blame">
+		<div class="entry-author">
+			<?php echo get_avatar( get_post(), 85 ); ?>
+			<span class="author-text"><?php _e( 'Por', 'delibera' ); ?></span>
+			<span class="author vcard">
+				<a class="url fn n" href="<?php echo get_site_url().'/delibera/' . get_the_author_meta( 'ID' ) . '/pautas' ; ?>" title="<?php printf( __( 'Ver o perfil de %s', 'delibera' ), get_the_author() ); ?>">
+					<?php the_author(); ?>
+				</a>
+			</span>
+		</div><!-- .entry-author -->
+		<div class="entry-date">
+			<?php the_date(); ?>
+		</div>
+	</div> <!-- entry-blame -->
 	<div class="entry-seguir button">
 		<?php echo delibera_gerar_seguir($post->ID); ?>
 	</div>
@@ -101,7 +121,7 @@ elseif(delibera_comments_is_open(get_the_ID()) && !is_user_logged_in())
 </div><!-- .entry-content -->
 
 <?php
-echo '<div id="delibera-comment-botoes-'.$comment->comment_ID.'" class="delibera-comment-botoes">';
+echo '<div id="delibera-comment-botoes-'.get_the_ID().'" class="delibera-comment-botoes">';
 echo '<div class="group-button-like">
 <!--span class="label">O que achou?</span-->';
 echo delibera_gerar_curtir($post->ID, 'pauta');
