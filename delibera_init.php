@@ -430,20 +430,22 @@ add_filter('language_attributes', 'doctype_opengraph');
 function fb_opengraph() {
     global $post;
 
-    if(is_single()) {
-        if(has_post_thumbnail($post->ID))
+    if(is_single())
+    {
+    	$img_src = '';
+        if(has_post_thumbnail($post))
         {
-            $img_src = wp_get_attachment_image_src(get_post_thumbnail_id( $post->ID ), 'medium');
+            $img_src = wp_get_attachment_image_src(get_post_thumbnail_id( $post ), 'medium');
         }
         elseif(file_exists(get_stylesheet_directory().'/img/delibera_icon.png'))
         {
             $img_src = get_stylesheet_directory_uri() . '/img/delibera_icon.png';
-            $img_src = array('url' => $img_src);
+            $img_src = array(0 => $img_src);
         }
         elseif(file_exists(get_stylesheet_directory().'/images/delibera_icon.png'))
         {
         	$img_src = get_stylesheet_directory_uri() . '/images/delibera_icon.png';
-        	$img_src = array('url' => $img_src);
+        	$img_src = array(0 => $img_src);
         }
         if($excerpt = $post->post_excerpt)
         {
@@ -462,9 +464,9 @@ function fb_opengraph() {
 	    <meta property="og:type" content="article"/>
 	    <meta property="og:url" content="<?php echo the_permalink(); ?>"/>
 	    <meta property="og:site_name" content="<?php echo get_bloginfo(); ?>"/><?php
-	    if(is_array($img_src) && array_key_exists('url', $img_src) && strlen($img_src['url']) > 0)
+	    if(is_array($img_src) && array_key_exists(0, $img_src) && strlen($img_src[0]) > 0)
 	    {?>
-	    	<meta property="og:image" content="<?php echo $img_src['url']; ?>"/><?php
+	    	<meta property="og:image" content="<?php echo $img_src[0]; ?>"/><?php
 	   	}
     } else {
         return;
