@@ -2,7 +2,6 @@
 /*
 Template Name: Author Page Comments
 */
-
 get_header();
 $id = $wp_query->query_vars['commentsfor'];
 $user = get_user_by( 'id' , deliberaEncryptor('decrypt',$id) );
@@ -15,16 +14,18 @@ $paged = get_query_var( 'paged' );
 ?>
 <div id="container">
 	<div id="main-content" role="main">
-<div id="user_form_search" class="user_form_search">
-	<form method="get"	name="form">
-		<p>
-			<input type="text" name="search" placeholder="<?php _e('Pesquisar por Comentários', 'delibera'); ?> ..." value="<?php echo $search; ?>"/>
-			<br>
-			<br>
-			<input type="submit" id="submit" class="button button-primary" value="Pesquisar"	/>
-		</p>
-	</form>
-</div>
+		<div id="primary" class="content-area">
+			<main id="main" class="site-main" role="main">
+				<div id="user_form_search" class="user_form_search">
+					<form method="get"	name="form">
+						<p>
+						<input type="text" name="search" placeholder="<?php _e('Pesquisar por Comentários', 'delibera'); ?> ..." value="<?php echo $search; ?>"/>
+						<br>
+						<br>
+						<input type="submit" id="submit" class="button button-primary" value="Pesquisar"	/>
+						</p>
+					</form>
+				</div>
 <form method="get">
 	<label for="per-page"><?php echo __('Comentários por Página:' , 'delibera'); ?></label>
 	<select id="per-page" name="per-page"	onchange='if(this.value != 0) { this.form.submit(); }' >
@@ -112,10 +113,12 @@ if ( $comments )
 			?>
 		</p>
 	</div>
+			</main><!-- #main -->
+		</div>
 	</div><!-- #content -->
 </div><!-- #container -->
-	<?php
-	wp_footer();
-	?>
+<?php
+get_footer();
+?>
 </body>
 </html>

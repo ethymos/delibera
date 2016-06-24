@@ -13,16 +13,18 @@ $number_of_pages = \Delibera\Theme\UserDisplay::getNumberOfPages( $blogusers->ge
 ?>
 <div id="container">
 	<div id="main-content" role="main">
-<div id="user_form_search" class="user_form_search">
-	<form method="get"	name="form">
-		<p>
-			<input type="text" name="search" placeholder="Pesquisar Membros ..." value="<?php echo $search; ?>"/>
-			<br>
-			<br>
-			<input type="submit" id="submit" class="button button-primary" value="Pesquisar"	/>
-		</p>
-	</form>
-</div>
+		<div id="primary" class="content-area">
+			<main id="main" class="site-main" role="main">
+				<div id="user_form_search" class="user_form_search">
+					<form method="get"	name="form">
+					<p>
+						<input type="text" name="search" placeholder="Pesquisar Membros ..." value="<?php echo $search; ?>"/>
+						<br>
+						<br>
+						<input type="submit" id="submit" class="button button-primary" value="Pesquisar"	/>
+					</p>
+					</form>
+				</div>
 
 <form method="get">
 	<label for="order-by"><?php echo __('Ordenar por: ' , 'delibera' ); ?></label>
@@ -91,8 +93,13 @@ $number_of_pages = \Delibera\Theme\UserDisplay::getNumberOfPages( $blogusers->ge
 			echo \Delibera\Theme\UserDisplay::getPaginator( $number_of_pages , $paged );
 		?>
 		<div>
+
+			</main><!-- #main -->
+		</div>
 	</div><!-- #content -->
 </div><!-- #container -->
-<?php get_footer(); ?>
+<?php
+get_footer(); 
+?>
 </body>
 </html>
