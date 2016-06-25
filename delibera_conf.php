@@ -64,6 +64,7 @@ function delibera_get_main_config($config = array()) {
     $opt['todos_usuarios_logados_podem_participar'] = 'S';
     $now = new DateTime();
 	$opt['data_fixa_nova_pauta_externa'] = $now->format('d/m/Y');
+	$opt['titulo_nova_pauta'] = __('nova pauta', 'delibera');
 	
 	$opt = apply_filters('delibera_get_main_config', $opt);
 
@@ -181,6 +182,11 @@ function delibera_conf_page()
 					"id" => "cabecalho_arquivo",
 					"label" => __('Título da página de listagem de pautas e da página de uma pauta:', 'delibera'),
 					"content" => '<input type="text" name="cabecalho_arquivo" id="cabecalho_arquivo" value="'.htmlspecialchars_decode($opt['cabecalho_arquivo']).'"/>'
+				);
+				$rows[] = array(
+					"id" => "titulo_nova_pauta",
+					"label" => __('Título do botão para criação de nova pauta:', 'delibera'),
+					"content" => '<input type="text" name="titulo_nova_pauta" id="titulo_nova_pauta" value="'.htmlspecialchars_decode($opt['titulo_nova_pauta']).'"/>'
 				);
 				$rows[] = array(
 					"id" => "data_fixa_nova_pauta_externa",

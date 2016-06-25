@@ -1,4 +1,6 @@
-<?php get_header(); ?>
+<?php get_header();
+	$options_plugin_delibera = delibera_get_config();
+?>
 <div id="container">
 	<div id="main-content" role="main">
 		<?php
@@ -10,7 +12,7 @@
 				<h2><?php echo _e('Todas as discussões', 'delibera'); ?></h2>
 			</div>
 			<div class="actions">
-				<a href="/wp-admin/post-new.php?post_type=pauta" class="button">nova pauta</a>
+				<a href="/wp-admin/post-new.php?post_type=pauta" class="button"><?php echo $options_plugin_delibera['titulo_nova_pauta']; ?></a>
 			</div>
 		</div>
 
@@ -19,7 +21,6 @@
 			global $deliberaThemes;
 			$deliberaThemes->archiveLoop();
 
-			$options_plugin_delibera = delibera_get_config();
 			$default_flow = isset($options_plugin_delibera['delibera_flow']) ? $options_plugin_delibera['delibera_flow'] : array();
 			$default_flow = apply_filters('delibera_flow_list', $default_flow);
 			?>
