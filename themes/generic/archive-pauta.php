@@ -12,7 +12,7 @@
 				<h2><?php echo _e('Todas as discussões', 'delibera'); ?></h2>
 			</div>
 			<div class="actions">
-				<a href="/wp-admin/post-new.php?post_type=pauta" class="button"><?php echo $options_plugin_delibera['titulo_nova_pauta']; ?></a>
+				<a href="<?php echo $options_plugin_delibera['url_nova_pauta'] == '' ? '/wp-admin/post-new.php?post_type=pauta' : $options_plugin_delibera['url_nova_pauta']; ?>" class="button"><?php echo $options_plugin_delibera['titulo_nova_pauta']; ?></a>
 			</div>
 		</div>
 

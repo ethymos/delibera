@@ -65,6 +65,7 @@ function delibera_get_main_config($config = array()) {
     $now = new DateTime();
 	$opt['data_fixa_nova_pauta_externa'] = $now->format('d/m/Y');
 	$opt['titulo_nova_pauta'] = __('nova pauta', 'delibera');
+	$opt['url_nova_pauta'] = '';
 	
 	$opt = apply_filters('delibera_get_main_config', $opt);
 
@@ -187,6 +188,11 @@ function delibera_conf_page()
 					"id" => "titulo_nova_pauta",
 					"label" => __('Título do botão para criação de nova pauta:', 'delibera'),
 					"content" => '<input type="text" name="titulo_nova_pauta" id="titulo_nova_pauta" value="'.htmlspecialchars_decode($opt['titulo_nova_pauta']).'"/>'
+				);
+				$rows[] = array(
+					"id" => "url_nova_pauta",
+					"label" => __('URl do botão para criação de nova pauta (deixe em branco para o padrão):', 'delibera'),
+					"content" => '<input type="text" name="url_nova_pauta" id="titulo_nova_pauta" value="'.htmlspecialchars_decode($opt['url_nova_pauta']).'"/>'
 				);
 				$rows[] = array(
 					"id" => "data_fixa_nova_pauta_externa",
