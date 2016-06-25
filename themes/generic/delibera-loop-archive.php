@@ -75,7 +75,7 @@ $temas = wp_get_post_terms(get_the_ID(), 'tema');
 			</span>
 			<span class="meta-sep">|</span>
 		<?php endif;?>
-		<div id="delibera-comment-botoes-<?php echo $comment->comment_ID; ?>" class="delibera-comment-botoes">
+		<div id="delibera-comment-botoes-<?php echo get_the_ID(); ?>" class="delibera-comment-botoes">
 				<div class="archive-botoes"><?php
 				echo delibera_gerar_curtir($post->ID, 'pauta');
 				echo delibera_gerar_discordar($post->ID, 'pauta');?>
