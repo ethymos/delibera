@@ -386,23 +386,30 @@ function delibera_gerar_curtir($ID, $type ='pauta')
 		$html .= '<span class="delibera-like-count" style="display: none;"></span>';
 	}
 
-	if (is_user_logged_in()) {
+	if (is_user_logged_in())
+	{
 		$user_id = get_current_user_id();
 		$ip = $_SERVER['REMOTE_ADDR'];
+		
+		$ja_curtiu = delibera_ja_curtiu($ID, $user_id, $ip, $type);
+		$ja_discordou = delibera_ja_discordou($ID, $user_id, $ip, $type);
 
 		if(
-		!delibera_ja_curtiu($ID, $user_id, $ip, $type) && // Ainda não curitu
-		(is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas)) && $situacoes_validas[$situacao->slug] && // é uma situação válida
-		!(delibera_ja_discordou($ID, $user_id, $ip, $type)) // não discordou
+			(is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas) && $situacoes_validas[$situacao->slug]) && // é uma situação válida
+			!$ja_discordou
 		)
 		{
 			$html .= "<input type='hidden' name='object_id' value='{$ID}' />";
 			$html .= "<input type='hidden' name='type' value='{$type}' />";
-			$html .= '<i class="delibera-icon-thumbs-up"></i>';
-		} else {
-			$html .= '<i class="delibera-icon-thumbs-up active"></i>';
+			$html .= '<i class="delibera-icon-thumbs-up'.( $ja_curtiu ? ' active' : '').'"></i>';
 		}
-	} else if (is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas) && $situacoes_validas[$situacao->slug]) { // é uma situação válida
+		elseif($ja_discordou)
+		{
+			$html .= '<i class="delibera-icon-thumbs-up'.( $ja_curtiu ? ' active' : '').'"></i>';
+		}
+	}
+	elseif(is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas) && $situacoes_validas[$situacao->slug]) // é uma situação válida
+	{
 		$html .= '<a class="delibera-like-login" href="';
 		$html .= wp_login_url( $type == "pauta" ? get_permalink() : delibera_get_comment_link());
 		$html .= '" ><i class="delibera-icon-thumbs-up"></i></a>';
@@ -458,23 +465,25 @@ function delibera_gerar_discordar($ID, $type ='pauta')
 	{
 		$user_id = get_current_user_id();
 		$ip = $_SERVER['REMOTE_ADDR'];
+		
+		$ja_curtiu = delibera_ja_curtiu($ID, $user_id, $ip, $type);
+		$ja_discordou = delibera_ja_discordou($ID, $user_id, $ip, $type);
 
 		if(
-		!delibera_ja_discordou($ID, $user_id, $ip, $type) && // Ainda não curitu
-		(is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas)) && $situacoes_validas[$situacao->slug] &&// é uma situação válida
-		!(delibera_ja_curtiu($ID, $user_id, $ip, $type)) // não discordou
+			(is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas) && $situacoes_validas[$situacao->slug]) &&// é uma situação válida
+			!$ja_curtiu
 		)
 		{
 			$html .= "<input type='hidden' name='object_id' value='{$ID}' />";
 			$html .= "<input type='hidden' name='type' value='{$type}' />";
+			$html .= '<i class="delibera-icon-thumbs-down'.( $ja_discordou ? ' active' : '').'"></i>';
+		}
+		elseif($ja_curtiu)
+		{
 			$html .= '<i class="delibera-icon-thumbs-down"></i>';
 		}
-		else
-		{
-			$html .= '<i class="delibera-icon-thumbs-down active"></i>';
-		}
 	}
-	else if(is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas) && $situacoes_validas[$situacao->slug]) // é uma situação válida
+	elseif(is_object($situacao) && array_key_exists($situacao->slug, $situacoes_validas) && $situacoes_validas[$situacao->slug]) // é uma situação válida
 	{
 		$html .= '<a class="delibera-unlike-login" href="';
 		$html .= wp_login_url( $type == "pauta" ? get_permalink() : delibera_get_comment_link());
