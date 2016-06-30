@@ -35,7 +35,7 @@ $paged = get_query_var( 'paged' );
 	</select>
 </form>
 <a href="<?php echo get_site_url(); ?>/delibera/membros" ><?php _e( 'Ver todos os Membros' , 'delibera' ); ?></a>
-<a href="<?php echo get_site_url(); ?>/delibera/<?php echo deliberaEncryptor('encrypt', $user->ID); ?>/pautas" ><?php _e( 'Ver todas as Pautas de' , 'delibera' ); ?> <?php echo $user->display_name; ?></a>
+<a href="<?php echo \Delibera\Member\MemberPath::getAuthorPautasUrl($user->ID); ?>" ><?php _e( 'Ver todas as Pautas de' , 'delibera' ); ?> <?php echo $user->display_name; ?></a>
 <p>
 	<div>
 		<?php echo get_avatar( $user->ID ); ?>

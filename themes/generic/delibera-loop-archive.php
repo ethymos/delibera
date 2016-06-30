@@ -32,7 +32,7 @@ $temas = wp_get_post_terms(get_the_ID(), 'tema');
 			<?php echo get_avatar( get_post(), 85 ); ?>
 			<span class="author-text"><?php _e( 'Por', 'delibera' ); ?></span>
 			<span class="author vcard">
-				<a class="url fn n" href="<?php echo get_site_url().'/delibera/' . get_the_author_meta( 'ID' ) . '/pautas' ; ?>" title="<?php printf( __( 'Ver o perfil de %s', 'delibera' ), get_the_author() ); ?>">
+				<a class="url fn n" href="<?php echo \Delibera\Member\MemberPath::getAuthorPautasUrl(get_the_author_meta( 'ID' )) ; ?>" title="<?php printf( __( 'Ver o perfil de %s', 'delibera' ), get_the_author() ); ?>">
 					<?php the_author(); ?>
 				</a>
 			</span>
