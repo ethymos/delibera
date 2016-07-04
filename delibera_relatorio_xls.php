@@ -14,7 +14,14 @@ if (!current_user_can('manage_options')) {
     die('Você não deveria estar aqui');
 }
 
-$pautas = get_posts(array('post_type' => 'pauta', 'post_status' => 'publish'));
+//$pautas = get_posts(array('post_type' => 'pauta', 'post_status' => 'publish'));
+$pautas_query = new WP_Query(array(
+	'post_type' => 'pauta',
+	'post_status' => 'publish',
+	'posts_per_page' => -1
+));
+$pautas = $pautas_query->get_posts();
+
 $comments = array();
 
 foreach ($pautas as $pauta) {
