@@ -790,6 +790,7 @@ span.read-more, span.re-collapse {
 
 .author-search {
 	float: left;
+	margin-left: 5px;
 }
 
 .author-search input.search-field {
@@ -829,6 +830,7 @@ span.read-more, span.re-collapse {
 .author-header {
 	background-color: #eee;
 	padding: 50px 50px;
+	overflow: auto;
 }
 
 .author-header img {
