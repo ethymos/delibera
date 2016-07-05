@@ -779,9 +779,9 @@ span.read-more, span.re-collapse {
 /* AUTHOR PAGE */
 
 .author-content-actions {
-    display: inline-block;
-    width: 80%;
-    float: left;
+	display: inline-block;
+	width: 80%;
+	float: left;
 }
 
 .all-authors {
@@ -793,21 +793,27 @@ span.read-more, span.re-collapse {
 }
 
 .author-search input.search-field {
-    width: auto;
-    margin: auto;
-    border: none;
-    color: #333;
-    background: #FFF;
+	width: auto;
+	margin: auto;
+	border: none;
+	color: #333;
+	background: #FFF;
+	padding: 10px;
 }
 
 .author-search input.search-button {
-    background-color: #166e87;
-    opacity: 1;
-    color: #FFF;
-    display: inline-block;
-    padding: 1px 15px;
-    font-size: 14px;
-    cursor: pointer;
+	background-color: #166e87;
+	opacity: 1;
+	color: #FFF;
+	display: inline-block;
+	padding: 10px 15px;
+        border-radius: 5px;
+	font-size: 14px;
+	cursor: pointer;
+	border: none;
+	text-transform: uppercase;
+	font-weight: bold;
+	font-family: "Open Sans", Arial, sans-serif;
 }
 
 .author-controls {
@@ -816,16 +822,28 @@ span.read-more, span.re-collapse {
 	color: #000;
 }
 
+.author-controls select#per-page {
+	border: none;
+}
+
 .author-header {
 	background-color: #eee;
 	padding: 50px 50px;
 }
 
+.author-header img {
+	max-width: 96px;
+	max-height: 96px;
+	margin-right: 20px;
+	float: left;
+}
+
 .author-data {
-	float: right;
+	float: left;
+	margin-top: -13px;
 }
 .author-comment-button {
-    background-color: #3dcff4;
+	background-color: #3dcff4;
 }
 
 
