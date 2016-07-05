@@ -34,8 +34,8 @@ global $user_display;
 						<option value="20" <?php echo $per_page=='20' ? 'selected' : '' ;?> >20</option>
 					</select>
 				</form>
-				<a href="<?php echo get_site_url(); ?>/delibera/membros" ><?php _e('Ver todos os Membros' , 'delibera' ); ?></a>
-				<a href="<?php echo get_site_url(); ?>/delibera/<?php echo deliberaEncryptor('encrypt', $user->ID); ?>/comentarios" ><? _e('Ver todas os Comentários de' , 'delibera' ); echo ' '.$user->display_name; ?></a>
+				<p><a href="<?php echo get_site_url(); ?>/delibera/membros" ><?php _e('Ver todos os Membros' , 'delibera' ); ?></a></p>
+				<p><a href="<?php echo get_site_url(); ?>/delibera/<?php echo deliberaEncryptor('encrypt', $user->ID); ?>/comentarios" ><?php echo __('Ver todas os Comentários de' , 'delibera' ).' '.$user->display_name; ?></a></p>
 				<p>
 					<div>
 						<?php echo get_avatar( $user->ID ); ?>
@@ -55,34 +55,37 @@ global $user_display;
 					'post_type'			 => 'pauta',
 					'paged'					 => get_query_var( 'paged' )
 				);
-			
-				$author_posts = new WP_Query( $args );
+				global $wp_query;
+				$wp_query = new WP_Query($args);
 				?>
-				<div id="user_pager" class="user_pager">
-					<p>
-						<?php echo \Delibera\Theme\UserDisplay::getPaginator( $author_posts->max_num_pages, $paged ); ?>
-					</p>
-				</div>
-				<?php
-				foreach( $author_posts->posts as $post )
-				{
-					?>
-					<p>
-						<a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>">
-							<?php the_title('<h3>', '</h3>'); ?>
-						</a>
-					</p>
+				<div class="lista-de-pautas">
 					<?php
-					the_excerpt();
-					echo '<br>';
-					echo delibera_get_situacao($post->ID)->name;
-				}
-			
-				?>
-				<div id="user_pager" class="user_pager">
-					<p>
-						<?php echo \Delibera\Theme\UserDisplay::getPaginator( $author_posts->max_num_pages , $per_page ); ?>
-					</p>
+					global $deliberaThemes;
+					$deliberaThemes->archiveLoop();
+					
+					//pagination hack
+					$big = 99999999; // need an unlikely integer
+					
+					$links = paginate_links(array(
+						'base' => str_replace($big, '%#%', get_pagenum_link($big)),
+						'format' => '?paged=%#%',
+						'total' => $wp_query->max_num_pages,
+						'current' => max(1, get_query_var('paged')),
+						'type' => 'array',
+						'prev_next' => false,
+					));
+		
+					?>
+					
+					<?php if (!empty($links)) : ?>
+						<nav class="navigation">
+							<ol>
+								<?php foreach ($links as $link) : ?>
+									<li><?php echo $link; ?></li>
+								<?php endforeach; ?>
+							</ol>
+						</nav>
+					<?php endif; ?>
 				</div>
 			</main><!-- #main -->
 		</div>
