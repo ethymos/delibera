@@ -31,13 +31,13 @@ if(!defined('__DIR__')) {
 
 define('DELIBERA_ABOUT_PAGE', __('sobre-a-plataforma', 'delibera'));
 
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_conf.php';
+
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_shortcodes.php';
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_widgets.php';
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_rewrite_rules.php';
-
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_conf.php';
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'delibera_permission.php';
 

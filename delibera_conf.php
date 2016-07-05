@@ -47,10 +47,6 @@ require_once('delibera_conf_themes.php');
  *
  */
 function delibera_get_main_config($config = array()) {
-    global $deliberaThemes;
-
-    if(!is_object($deliberaThemes)) $deliberaThemes = new DeliberaThemes;
-
     $opt = array();
     $opt['theme'] = plugin_dir_path(__FILE__)."/themes/generic";
     
