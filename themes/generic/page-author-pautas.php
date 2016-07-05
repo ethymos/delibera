@@ -19,44 +19,43 @@ global $user_display;
 				<div id="user_form_search" class="user_form_search">
 					<div class="delibera-header">
 						<h1 class="page-title"><span>Membros</span></h1>
-					<div class="delibera-apresentacao">
-						<p class="delibera-boasvindas">
-						Listagem de todas as pautas e comentários dos participantes das discussões
-						</p>
-						<p class="delibera-participacao">
-						<a class="button" href="<?php echo get_site_url(); ?>/delibera/membros" ><?php _e('Ver todos os Membros' , 'delibera' ); ?></a>
-						</p>
-					</div>
-				<div class="pesquisa-membros-content">
-					<form method="get" name="form">
-						<p>
-						<input type="text" name="search" placeholder="Pesquisar por Pautas ..." value="<?php echo $search; ?>"/>
-						<br>
-						<br>
-						<input type="submit" id="submit" class="button button-primary" value="Pesquisar"	/>
-						</p>
-					</form>
-					<form method="get">
-						<label for="per-page"><?php echo __('Pautas por Página:' , 'delibera'); ?></label>
-						<select id="per-page" name="per-page"	onchange='if(this.value != 0) { this.form.submit(); }' >
-							<option value="5" <?php echo $per_page=='5' ? 'selected' : '' ;?> >5</option>
-							<option value="10" <?php echo $per_page=='10' ? 'selected' : '' ;?> >10</option>
-							<option value="20" <?php echo $per_page=='20' ? 'selected' : '' ;?> >20</option>
-						</select>
-					</form>
-				</div><!-- .pesquisa-membros-content -->
+						<div class="delibera-apresentacao">
+							<p class="delibera-boasvindas">
+							Listagem de todas as pautas e comentários dos participantes das discussões
+							</p>
+							<div class="author-content-actions">
+								<a class="button" href="<?php echo get_site_url(); ?>/delibera/membros" ><?php _e('Ver todos os Membros' , 'delibera' ); ?></a>
+							<form method="get" name="form">
+								<p>
+								<input type="text" name="search" placeholder="Pesquisar por Pautas ..." value="<?php echo $search; ?>"/>
+								<br>
+								<br>
+								<input type="submit" id="submit" class="button" value="Pesquisar"	/>
+								</p>
+							</form>
+							</div><!-- .author-content-actions -->
+						</div><!-- .delibera-apresentacao -->
+						<div class="author-content-actions">
+						<form method="get">
+							<label for="per-page"><?php echo __('Pautas por Página:' , 'delibera'); ?></label>
+							<select id="per-page" name="per-page"	onchange='if(this.value != 0) { this.form.submit(); }' >
+								<option value="5" <?php echo $per_page=='5' ? 'selected' : '' ;?> >5</option>
+								<option value="10" <?php echo $per_page=='10' ? 'selected' : '' ;?> >10</option>
+								<option value="20" <?php echo $per_page=='20' ? 'selected' : '' ;?> >20</option>
+							</select>
+						</form>
+						</div><!-- .author-content-actions -->
 					</div><!-- .delibera-header -->
 					<div class="author-header">
 						<?php echo get_avatar( $user->ID ); ?>
+						<div class="author-data">
 						<h1><?php echo $user->first_name ?></h1>
 					<p><a href="<?php echo get_site_url(); ?>/delibera/<?php echo deliberaEncryptor('encrypt', $user->ID); ?>/comentarios" ><?php echo __('Ver todas os Comentários de' , 'delibera' ).' '.$user->display_name; ?></a></p>
+						</div><!-- .author-data -->
 					</div><!-- .author-header -->
 <div class="filter-bar">
 			<div class="title">
 				<h2><?php echo 'Pautas deste Membro:'; ?></h2>
-			</div>
-			<div class="actions">
-				<a href="/wp-admin/post-new.php?post_type=pauta" class="button">nova pauta</a>
 			</div>
 		</div>
 

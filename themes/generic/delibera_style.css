@@ -778,14 +778,23 @@ span.read-more, span.re-collapse {
 
 /* AUTHOR PAGE */
 
-.pesquisa-membros-content {
+.author-content-actions {
+    display: inline-block;
+}
+
+.author-controls {
 	float: right;
-	width: auto;
+	width: 12%;
 }
 
 .author-header {
 	background-color: #eee;
+	padding: 50px 50px;
 }
+
+.author-data {
+	float: right;
+} 
 
 
 /* Debug em outros temas */
