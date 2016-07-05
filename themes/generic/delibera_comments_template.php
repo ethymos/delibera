@@ -61,7 +61,7 @@ class Delibera_Walker_Comment extends Walker_Comment
 					<?php
 					//$url = get_author_posts_url($comment->user_id);
 					// XXX colocar hash
-					$url = get_site_url() . '/delibera/' . $comment->user_id . '/pautas/';
+					$url = \Delibera\Member\MemberPath::getAuthorPautasUrl($comment->user_id) ;
 					//print_r($comment);
 					$autor_link = "<a href='$url' rel='external nofollow' class='url'>$comment->comment_author</a>";
 					printf('<cite class="fn">%s</cite><span class="delibera-says"></span>', $autor_link);
