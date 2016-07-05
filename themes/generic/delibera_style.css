@@ -775,6 +775,19 @@ span.read-more, span.re-collapse {
 	margin-top: 20px;
 }
 
+
+/* AUTHOR PAGE */
+
+.pesquisa-membros-content {
+	float: right;
+	width: auto;
+}
+
+.author-header {
+	background-color: #eee;
+}
+
+
 /* Debug em outros temas */
 
 a.button {
