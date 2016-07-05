@@ -24,7 +24,7 @@ global $user_display;
 							Listagem de todas as pautas e comentários dos participantes das discussões
 							</p>
 							<div class="author-content-actions">
-								<a class="button" href="<?php echo get_site_url(); ?>/delibera/membros" ><?php _e('Ver todos os Membros' , 'delibera' ); ?></a>
+								<a class="button all-authors" href="<?php echo get_site_url(); ?>/delibera/membros" ><?php _e('Ver todos os Membros' , 'delibera' ); ?></a>
 							<form class="author-search" method="get" name="form">
 								<input type="text" class="search-field" name="search" placeholder="Pesquisar por Pautas ..." value="<?php echo $search; ?>"/>
 								<input type="submit" class="search-button"  value="Pesquisar"	/>
@@ -46,7 +46,7 @@ global $user_display;
 						<?php echo get_avatar( $user->ID ); ?>
 						<div class="author-data">
 						<h1><?php echo $user->first_name ?></h1>
-					<p><a class="button" href="<?php echo get_site_url(); ?>/delibera/<?php echo deliberaEncryptor('encrypt', $user->ID); ?>/comentarios" ><?php echo __('Ver todos os Comentários deste Membro' , 'delibera' ); ?></a></p>
+					<p><a class="button author-comment-button" href="<?php echo get_site_url(); ?>/delibera/<?php echo deliberaEncryptor('encrypt', $user->ID); ?>/comentarios" ><?php echo __('Ver todos os Comentários deste Membro' , 'delibera' ); ?></a></p>
 						</div><!-- .author-data -->
 					</div><!-- .author-header -->
 <div class="filter-bar">

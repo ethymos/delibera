@@ -784,11 +784,15 @@ span.read-more, span.re-collapse {
     float: left;
 }
 
+.all-authors {
+	float: left;
+}
+
 .author-search {
 	float: left;
 }
 
-.search-field {
+.author-search input.search-field {
     width: auto;
     margin: auto;
     border: none;
@@ -796,7 +800,7 @@ span.read-more, span.re-collapse {
     background: #FFF;
 }
 
-.search-button {
+.author-search input.search-button {
     background-color: #166e87;
     opacity: 1;
     color: #FFF;
@@ -819,7 +823,11 @@ span.read-more, span.re-collapse {
 
 .author-data {
 	float: right;
-} 
+}
+.author-comment-button {
+    background-color: #3dcff4;
+}
+
 
 
 /* Debug em outros temas */
