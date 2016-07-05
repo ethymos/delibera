@@ -25,17 +25,13 @@ global $user_display;
 							</p>
 							<div class="author-content-actions">
 								<a class="button" href="<?php echo get_site_url(); ?>/delibera/membros" ><?php _e('Ver todos os Membros' , 'delibera' ); ?></a>
-							<form method="get" name="form">
-								<p>
-								<input type="text" name="search" placeholder="Pesquisar por Pautas ..." value="<?php echo $search; ?>"/>
-								<br>
-								<br>
-								<input type="submit" id="submit" class="button" value="Pesquisar"	/>
-								</p>
+							<form class="author-search" method="get" name="form">
+								<input type="text" class="search-field" name="search" placeholder="Pesquisar por Pautas ..." value="<?php echo $search; ?>"/>
+								<input type="submit" class="search-button"  value="Pesquisar"	/>
 							</form>
 							</div><!-- .author-content-actions -->
 						</div><!-- .delibera-apresentacao -->
-						<div class="author-content-actions">
+						<div class="author-controls">
 						<form method="get">
 							<label for="per-page"><?php echo __('Pautas por Página:' , 'delibera'); ?></label>
 							<select id="per-page" name="per-page"	onchange='if(this.value != 0) { this.form.submit(); }' >
@@ -44,13 +40,13 @@ global $user_display;
 								<option value="20" <?php echo $per_page=='20' ? 'selected' : '' ;?> >20</option>
 							</select>
 						</form>
-						</div><!-- .author-content-actions -->
+						</div><!-- .author-controls -->
 					</div><!-- .delibera-header -->
 					<div class="author-header">
 						<?php echo get_avatar( $user->ID ); ?>
 						<div class="author-data">
 						<h1><?php echo $user->first_name ?></h1>
-					<p><a href="<?php echo get_site_url(); ?>/delibera/<?php echo deliberaEncryptor('encrypt', $user->ID); ?>/comentarios" ><?php echo __('Ver todas os Comentários de' , 'delibera' ).' '.$user->display_name; ?></a></p>
+					<p><a class="button" href="<?php echo get_site_url(); ?>/delibera/<?php echo deliberaEncryptor('encrypt', $user->ID); ?>/comentarios" ><?php echo __('Ver todos os Comentários deste Membro' , 'delibera' ); ?></a></p>
 						</div><!-- .author-data -->
 					</div><!-- .author-header -->
 <div class="filter-bar">

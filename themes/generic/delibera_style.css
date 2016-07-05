@@ -780,11 +780,36 @@ span.read-more, span.re-collapse {
 
 .author-content-actions {
     display: inline-block;
+    width: 80%;
+    float: left;
+}
+
+.author-search {
+	float: left;
+}
+
+.search-field {
+    width: auto;
+    margin: auto;
+    border: none;
+    color: #333;
+    background: #FFF;
+}
+
+.search-button {
+    background-color: #166e87;
+    opacity: 1;
+    color: #FFF;
+    display: inline-block;
+    padding: 1px 15px;
+    font-size: 14px;
+    cursor: pointer;
 }
 
 .author-controls {
 	float: right;
-	width: 12%;
+	width: 20%;
+	color: #000;
 }
 
 .author-header {
