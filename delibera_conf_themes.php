@@ -93,6 +93,7 @@ class DeliberaThemes
         } else {
             $conf = delibera_get_config();
             $themePath = $conf['theme'];
+            $themePath = $this->checkPath($themePath);
         }
 
         if (file_exists($themePath)) {
@@ -313,6 +314,16 @@ class DeliberaThemes
         $html .= "</select>";
 
         return $html;
+    }
+    
+    public function checkPath($path)
+    {
+    	if(strpos($path, 'home/hacklab') !== false) // need to remove old hardcode path from config
+    	{
+    		$theme = basename($path);
+    		$path = $this->baseDir . $theme;
+    	}
+    	return $path;
     }
 }
 global $deliberaThemes;
