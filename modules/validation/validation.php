@@ -35,6 +35,12 @@ class Validation extends \Delibera\Modules\ModuleBase
 	 */
 	protected $shortcodes = array('delibera_lista_de_propostas' => 'replacePropostas' );
 	
+	/**
+	 * Display priority
+	 * @var int
+	 */
+	public $priority = 1;
+	
 	public function __construct()
 	{
 		add_action('delibera_pauta_recusada', array('\Delibera\Cron', 'del'));

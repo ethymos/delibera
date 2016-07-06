@@ -30,6 +30,12 @@ class Result extends \Delibera\Modules\ModuleBase
 	protected $shortcodes = array('delibera_lista_de_resolucoes' => 'replaceResolucoes' );
 	
 	/**
+	 * Display priority
+	 * @var int
+	 */
+	public $priority = 5;
+	
+	/**
 	 * Register Tax for the module
 	 */
 	public function registerTax()

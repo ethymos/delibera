@@ -30,6 +30,12 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 	protected $days = array('dias_relatoria', 'dias_votacao_relator');
 	
 	/**
+	 * Display priority
+	 * @var int
+	 */
+	public $priority = 3;
+	
+	/**
 	 * Register Tax for the module
 	 */
 	public function registerTax()

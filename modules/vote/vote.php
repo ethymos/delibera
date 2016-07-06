@@ -30,6 +30,12 @@ class Vote extends \Delibera\Modules\ModuleBase
 	 */
 	protected $days = array('dias_votacao');
 	
+	/**
+	 * Display priority
+	 * @var int
+	 */
+	public $priority = 4;
+	
 	public function __construct()
 	{
 		parent::__construct();
