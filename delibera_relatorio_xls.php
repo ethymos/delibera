@@ -44,6 +44,12 @@ if($pautas_query->have_posts())
 		$comment_fake->comment_author = get_the_author();
 		$comment_fake->comment_author_email = get_the_author_meta('email', $pauta->post_author);
 		$comment_fake->comment_content = get_the_content();
+		$temas =  wp_get_object_terms($pauta->ID, 'tema', array('orderby' => 'name', 'order' => 'ASC', 'fields' => 'names'));
+		$comment_fake->temas = is_array($temas) ? implode(', ', $temas) : '';
+		$tags = wp_get_object_terms($pauta->ID, 'post_tag', array('orderby' => 'name', 'order' => 'ASC', 'fields' => 'names'));
+		$comment_fake->tags = is_array($tags) ? implode(', ',  $tags) : '';
+		$cats = wp_get_object_terms($pauta->ID, 'category', array('orderby' => 'name', 'order' => 'ASC', 'fields' => 'names'));
+		$comment_fake->cats = is_array($cats) ? implode(', ',  $cats) : '';
 		
 		$comment_tmp = delibera_get_comments($pauta->ID, array('discussao', 'encaminhamento', 'encaminhamento_selecionado', 'resolucao'));
 	    $comments = array_merge(
@@ -64,6 +70,9 @@ if($pautas_query->have_posts())
 	    $comment->concordaram = (int) get_comment_meta($comment->comment_ID, 'delibera_numero_curtir', true);
 	    $comment->discordaram = (int) get_comment_meta($comment->comment_ID, 'delibera_numero_discordar', true);
 	    $comment->votes_count = (int) get_comment_meta($comment->comment_ID, "delibera_comment_numero_votos", true);
+	    $comment->temas = '';
+	    $comment->tags = '';
+	    $comment->cats = '';
 	}
 }
 
@@ -74,44 +83,44 @@ header("Expires: 0");
 header('Content-Transfer-Encoding: none');
 header('Content-Type: application/vnd.ms-excel; charset=UTF-8'); // This should work for IE & Opera
 header("Content-type: application/x-msexcel; charset=UTF-8"); // This should work for the rest
-header('Content-Disposition: attachment; filename=relatorio.xls');
+header('Content-Disposition: attachment; filename='.date('Ymd').'_'.__('relatorio', 'delibera').'.xls');
 
-echo utf8_decode("
+
+ob_start(); ?>
 <table>
     <tr>
-        <td>Título da Pauta</td>
-        <td>Situação</td>
-        <td>Nome do Autor</td>
-        <td>E-mail</td>
-        <td>Tipo (Pauta ou tipo de comentário)</td>
-        <td>Conteúdo</td>
-        <td>Link</td>
-        <td>Concordaram</td>
-        <td>Discordaram</td>
-        <td>Votos</td>
-    </tr>"
-);
-    
-?>
-
-<?php foreach ($comments as $comment) : ?>
-
-    <?php ob_start(); ?>
-    
-    <tr>
-        <td><?php echo $comment->pauta_title; ?></td>
-        <td><?php echo $comment->pauta_status; ?></td>
-        <td><?php echo $comment->comment_author; ?></td>
-        <td><?php echo $comment->comment_author_email; ?></td>
-        <td><?php echo $comment->type; ?></td>
-        <td><?php echo $comment->comment_content; ?></td>
-        <td><?php echo $comment->link; ?></td>
-        <td><?php echo $comment->concordaram; ?></td>
-        <td><?php echo $comment->discordaram; ?></td><br />
-        <td><?php echo $comment->votes_count; ?></td>
-    </tr>
-
-    <?php echo utf8_decode(ob_get_clean()); ?>
-<?php endforeach; ?>
-
+		<td><?php _e("Título da Pauta", 'delibera'); ?></td>
+		<td><?php _e("Situação", 'delibera'); ?></td>
+		<td><?php _e("Nome do Autor", 'delibera'); ?></td>
+		<td><?php _e("E-mail", 'delibera'); ?></td>
+		<td><?php _e("Tipo (Pauta ou tipo de comentário)", 'delibera'); ?></td>
+		<td><?php _e("Conteúdo", 'delibera'); ?></td>
+		<td><?php _e("Link", 'delibera'); ?></td>
+		<td><?php _e("Concordaram", 'delibera'); ?></td>
+		<td><?php _e("Discordaram", 'delibera'); ?></td>
+		<td><?php _e("Votos", 'delibera'); ?></td>
+		<td><?php _e("Tema(as)", 'delibera'); ?></td>
+		<td><?php _e("Palavra(as) chave", 'delibera'); ?></td>
+		<td><?php _e("Categoria(as)", 'delibera'); ?></td>
+    </tr><?php
+    echo utf8_decode(ob_get_clean());
+    foreach ($comments as $comment) :
+	    ob_start(); ?>
+	    <tr>
+	        <td><?php echo $comment->pauta_title; ?></td>
+	        <td><?php echo $comment->pauta_status; ?></td>
+	        <td><?php echo $comment->comment_author; ?></td>
+	        <td><?php echo $comment->comment_author_email; ?></td>
+	        <td><?php echo $comment->type; ?></td>
+	        <td><?php echo $comment->comment_content; ?></td>
+	        <td><?php echo $comment->link; ?></td>
+	        <td><?php echo $comment->concordaram; ?></td>
+	        <td><?php echo $comment->discordaram; ?></td>
+	        <td><?php echo $comment->votes_count; ?></td>
+	        <td><?php echo $comment->temas; ?></td>
+	        <td><?php echo $comment->tags; ?></td>
+	        <td><?php echo $comment->cats; ?></td>
+	    </tr><?php
+	    echo utf8_decode(ob_get_clean());
+	endforeach; ?>
 </table>
