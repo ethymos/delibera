@@ -93,7 +93,7 @@ class ET_Builder_Module_Delibera_Categoria2 extends ET_Builder_Module {
 	function get_fields() {
 		$fields = array(
 			'include_categories' => array(
-				'label'            => esc_html__( 'Include Categories', 'et_builder' ),
+				'label'            => esc_html__( 'Incluir Temas', 'et_builder' ),
 				'renderer'         => 'et_builder_include_categories_delibera_option',
 				'option_category'  => 'basic_option',
 				'renderer_options' => array(
@@ -101,7 +101,7 @@ class ET_Builder_Module_Delibera_Categoria2 extends ET_Builder_Module {
 					'term_name' => 'tema',
 					'post_type'=>'pauta'
 				),
-				'description'      => esc_html__( 'Choose which categories you would like to include in the feed.', 'et_builder' ),
+				'description'      => esc_html__( 'Escolha qual o Tema você quer incluir na grade de pautas', 'et_builder' ),
 			),
 			'name' => array(
 				'label'           => esc_html__( 'Title', 'et_builder' ),
