@@ -660,6 +660,27 @@ class Flow
 		die('ok');
 	}
 	
+	/**
+	 * return list of Deadlines of a post in format: array of [situacao] => [date]
+	 * @param int $post_id
+	 * @return array
+	 */
+	public static function getDeadlineDates($post_id)
+	{
+		global $DeliberaFlow;
+	
+		$dates = array();
+		$flow = $DeliberaFlow->get($post_id);
+		$modules = $DeliberaFlow->getFlowModules();
+		foreach ($flow as $situacao)
+		{
+			if(array_key_exists($situacao, $modules))
+			{
+				$dates[$situacao] = $modules[$situacao]->getDeadline($post_id);
+			}
+		}
+		return $dates;
+	}
 	
 }
 
