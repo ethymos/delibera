@@ -435,12 +435,44 @@ display: block;
 	border-radius: 4px;
 }
 
+h3#reply-title.comment-reply-title{
+	display: none;
+}
+
 .delibera-index-comments {
 	display: inline-table;
 	margin-bottom: 30px;
 	font-weight: bolder;
 	width: 400px;
 	text-transform: uppercase;
+}
+
+.validacao .delibera-index-comments, .emvotacao .delibera-index-comments, .comresolucao .delibera-index-comments {
+	display: none;
+}
+
+input[type="radio"]#delibera_aceitar, input[type="radio"]#delibera_rejeitar  {
+   background-color: #ddd;
+    border-radius: 10px;
+    cursor: pointer;
+    display: inline-block;
+    height: 15px;
+    position: relative;
+    width: 15px;
+    -webkit-appearance: none;
+}
+
+input[type="radio"]:checked#delibera_aceitar, input[type="radio"]:checked#delibera_rejeitar  {
+    background-color: #3dcff4;
+}
+
+
+label.delibera_aceitar_radio_label  {
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    line-height: 18px;
+    margin: 0 20px 0 10px;
 }
 
 .delibera-index-comments-encaminhamento {
