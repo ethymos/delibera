@@ -445,6 +445,16 @@ class Vote extends \Delibera\Modules\ModuleBase
 		return $tipos;
 	}
 	
+	/**
+	 *
+	 * {@inheritDoc}
+	 * @see \Delibera\Modules\ModuleBase::getCommentListLabel()
+	 */
+	public function getCommentListLabel()
+	{
+		return __('Votação da Pauta', 'delibera');
+	}
+	
 }
 $DeliberaVote = new \Delibera\Modules\Vote();
 

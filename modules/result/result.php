@@ -217,6 +217,16 @@ class Result extends \Delibera\Modules\ModuleBase
 		$post_id = $args['post_ID'];
 	}
 	
+	/**
+	 *
+	 * {@inheritDoc}
+	 * @see \Delibera\Modules\ModuleBase::getCommentListLabel()
+	 */
+	public function getCommentListLabel()
+	{
+		return __('Resolução da Pauta', 'delibera');
+	}
+	
 }
 $DeliberaResult = new \Delibera\Modules\Result();
 

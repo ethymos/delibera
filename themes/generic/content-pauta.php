@@ -3,6 +3,7 @@ $status_pauta = delibera_get_situacao($post->ID)->slug;
 //echo $status_pauta;
 global $DeliberaFlow;
 $flow = $DeliberaFlow->get(get_the_ID());
+$current_module = $DeliberaFlow->getCurrentModule(get_the_ID());
 
 $temas = wp_get_post_terms(get_the_ID(), 'tema');
 ?>
@@ -112,7 +113,7 @@ $temas = wp_get_post_terms(get_the_ID(), 'tema');
 
 </div>
 </div><!-- #post-## -->
-<h2 class="discussion-title">Discussão sobre a Pauta</h2>
+<h2 class="discussion-title"><?php echo $current_module->getCommentListLabel(); ?></h2>
 	<?php comments_template( '', true ); ?>
 </div>
 <?php endwhile; // end of the loop. ?>
