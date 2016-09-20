@@ -50,6 +50,7 @@ if($pautas_query->have_posts())
 		$comment_fake->tags = is_array($tags) ? implode(', ',  $tags) : '';
 		$cats = wp_get_object_terms($pauta->ID, 'category', array('orderby' => 'name', 'order' => 'ASC', 'fields' => 'names'));
 		$comment_fake->cats = is_array($cats) ? implode(', ',  $cats) : '';
+		$comment_fake->delibera_dates = \Delibera\Flow::getDeadlineDates($pauta->ID); 
 		
 		$comment_tmp = delibera_get_comments($pauta->ID, array('discussao', 'encaminhamento', 'encaminhamento_selecionado', 'resolucao'));
 	    $comments = array_merge(
@@ -86,7 +87,10 @@ header("Content-type: application/x-msexcel; charset=UTF-8"); // This should wor
 header('Content-Disposition: attachment; filename='.date('Ymd_His').'_'.__('relatorio', 'delibera').'.xls');
 
 
-ob_start(); ?>
+ob_start();
+
+$situacoes = get_terms('situacao', array('hide_empty' => false));
+?>
 <table>
     <tr>
 		<td><?php _e("Título da Pauta", 'delibera'); ?></td>
@@ -102,6 +106,15 @@ ob_start(); ?>
 		<td><?php _e("Tema(as)", 'delibera'); ?></td>
 		<td><?php _e("Palavra(as) chave", 'delibera'); ?></td>
 		<td><?php _e("Categoria(as)", 'delibera'); ?></td>
+		<td><?php _e("Fluxo", 'delibera'); ?></td>
+		<?php
+			foreach ($situacoes as $situacao)
+			{
+				/** @var $situacao WP_Term **/ 
+				?>
+				<td><?php echo $situacao->name; ?></td><?php
+			}
+		?>
     </tr><?php
     echo utf8_decode(ob_get_clean());
     foreach ($comments as $comment) :
@@ -119,7 +132,24 @@ ob_start(); ?>
 	        <td><?php echo $comment->votes_count; ?></td>
 	        <td><?php echo $comment->temas; ?></td>
 	        <td><?php echo $comment->tags; ?></td>
-	        <td><?php echo $comment->cats; ?></td>
+	        <td><?php echo $comment->cats; ?></td><?php
+	        if(isset($comment->delibera_dates))
+	        {?>
+	        	<td><?php echo implode(',', array_keys($comment->delibera_dates)); ?></td><?php
+	        	
+	        	foreach ($situacoes as $situacao)
+				{
+					/** @var $situacao WP_Term **/
+					if (array_key_exists($situacao->slug, $comment->delibera_dates))
+					{?>
+						<td><?php echo $comment->delibera_dates[$situacao->slug] == -1 ? '' : $comment->delibera_dates[$situacao->slug]; ?></td><?php
+					}
+					else
+					{?>
+						<td></td><?php
+					}
+				}
+	        }?>
 	    </tr><?php
 	    echo utf8_decode(ob_get_clean());
 	endforeach; ?>
