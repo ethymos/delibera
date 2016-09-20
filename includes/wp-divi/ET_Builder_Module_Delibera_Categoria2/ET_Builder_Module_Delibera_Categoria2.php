@@ -25,6 +25,7 @@ class ET_Builder_Module_Delibera_Categoria2 extends ET_Builder_Module {
 			'orderby',
 			'order',
 			'num_posts',
+			'border',
 		);
 
 		$this->fields_defaults = array(
@@ -102,6 +103,16 @@ class ET_Builder_Module_Delibera_Categoria2 extends ET_Builder_Module {
 					'post_type'=>'pauta'
 				),
 				'description'      => esc_html__( 'Escolha qual o Tema você quer incluir na grade de pautas', 'et_builder' ),
+			),
+			'border' => array(
+				'label'           => esc_html__( 'Borda Arredondada', 'et_builder' ),
+				'type'            => 'yes_no_button',
+				'option_category' => 'configuration',
+				'options'         => array(
+					'on'  => esc_html__( 'Yes', 'et_builder' ),
+					'off' => esc_html__( 'No', 'et_builder' ),
+				),
+				'description'       => esc_html__( 'Habilite ou desabilite as bordas arredondas.', 'et_builder' ),
 			),
 			'name' => array(
 				'label'           => esc_html__( 'Title', 'et_builder' ),
@@ -276,7 +287,9 @@ class ET_Builder_Module_Delibera_Categoria2 extends ET_Builder_Module {
 		$orderby					= $this->shortcode_atts['orderby'];
 		$order						= $this->shortcode_atts['order'];
 		$num_posts					= $this->shortcode_atts['num_posts'];
+		$border						= $this->shortcode_atts['border'];
 		
+		var_dump($border);
 
 		$module_class = ET_Builder_Element::add_module_order_class( $module_class, $function_name );
 
