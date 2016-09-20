@@ -300,8 +300,6 @@ class ET_Builder_Module_Delibera_Categoria2 extends ET_Builder_Module {
 		$num_posts					= $this->shortcode_atts['num_posts'];
 		$border						= $this->shortcode_atts['border'];
 		$shadow						= $this->shortcode_atts['shadow'];
-		
-		var_dump($border);
 
 		$module_class = ET_Builder_Element::add_module_order_class( $module_class, $function_name );
 
