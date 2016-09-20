@@ -2,7 +2,6 @@
 
 .et_pb_module.et_pb_delibera_member {
     border-style: solid;
-    border: 1px solid;
     display: block;
     margin: 0 auto;
     padding: 2px;
@@ -15,7 +14,6 @@
 .et_pb_module.et_pb_delibera_member_border {
     border-radius: 12px;
     border-style: solid;
-    border: 1px solid;
     display: block;
     margin: 0 auto;
     padding: 2px;
@@ -23,6 +21,14 @@
     text-align: center;
     float: left;
     width: 100%;
+}
+
+.et_pb_delibera_shadow {
+    box-shadow: 5px 5px 5px #888888;
+}
+
+.et_pb_delibera_border{
+    border: 1px solid;
 }
 
 

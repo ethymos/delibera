@@ -24,7 +24,8 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 			'orderby',
 			'order',
 			'pauta_id',
-			'border'
+			'border',
+			'shadow'
 		);
 
 		$this->fields_defaults = array(
@@ -108,7 +109,17 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 					'on'  => esc_html__( 'Yes', 'et_builder' ),
 					'off' => esc_html__( 'No', 'et_builder' ),
 				),
-				'description'       => esc_html__( 'Habilite ou desabilite as bordas arredondas.', 'et_builder' ),
+				'description'       => esc_html__( 'Habilite ou desabilite as bordas arredondas nos cards.', 'et_builder' ),
+			),
+			'shadow' => array(
+				'label'           => esc_html__( 'Sombra', 'et_builder' ),
+				'type'            => 'yes_no_button',
+				'option_category' => 'configuration',
+				'options'         => array(
+					'on'  => esc_html__( 'Yes', 'et_builder' ),
+					'off' => esc_html__( 'No', 'et_builder' ),
+				),
+				'description'       => esc_html__( 'Habilite ou desabilite a sombra nos cards.', 'et_builder' ),
 			),
 			'name' => array(
 				'label'           => esc_html__( 'Title', 'et_builder' ),
@@ -307,6 +318,7 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 		$order				= $this->shortcode_atts['order'];
 		$pauta_id			= $this->shortcode_atts['pauta_id'];
 		$border				= $this->shortcode_atts['border'];
+		$shadow				= $this->shortcode_atts['shadow'];
 
 
 		$module_class = ET_Builder_Element::add_module_order_class( $module_class, $function_name );
@@ -446,7 +458,7 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 				$button = $button_image_url != '' ? '<img src="'.$button_image_url.'">' : __('Participar', 'et_builder');
 
 				$output = sprintf(
-						'<div%3$s class="et_pb_module ' . ( $border == 'on' ? 'et_pb_delibera_member_border' : 'et_pb_delibera_member') . '%4$s%9$s et_pb_bg_layout_%8$s clearfix">
+						'<div%3$s class="et_pb_module ' . ( $border == 'on' ? 'et_pb_delibera_member_border ' : 'et_pb_delibera_member ') . ($shadow == 'on' ? 'et_pb_delibera_shadow ' : 'et_pb_delibera_border ' ) . '%4$s%9$s et_pb_bg_layout_%8$s clearfix">
 				%2$s
 				<div class="tema" %20$s><a href="%12$s">%11$s</a></div>
 				<div class="et_pb_delibera_member_description">

@@ -26,6 +26,7 @@ class ET_Builder_Module_Delibera_Categoria2 extends ET_Builder_Module {
 			'order',
 			'num_posts',
 			'border',
+			'shadow'
 		);
 
 		$this->fields_defaults = array(
@@ -113,6 +114,16 @@ class ET_Builder_Module_Delibera_Categoria2 extends ET_Builder_Module {
 					'off' => esc_html__( 'No', 'et_builder' ),
 				),
 				'description'       => esc_html__( 'Habilite ou desabilite as bordas arredondas.', 'et_builder' ),
+			),
+			'shadow' => array(
+				'label'           => esc_html__( 'Sombra', 'et_builder' ),
+				'type'            => 'yes_no_button',
+				'option_category' => 'configuration',
+				'options'         => array(
+					'on'  => esc_html__( 'Yes', 'et_builder' ),
+					'off' => esc_html__( 'No', 'et_builder' ),
+				),
+				'description'       => esc_html__( 'Habilite ou desabilite a sombra nos cards.', 'et_builder' ),
 			),
 			'name' => array(
 				'label'           => esc_html__( 'Title', 'et_builder' ),
@@ -288,6 +299,7 @@ class ET_Builder_Module_Delibera_Categoria2 extends ET_Builder_Module {
 		$order						= $this->shortcode_atts['order'];
 		$num_posts					= $this->shortcode_atts['num_posts'];
 		$border						= $this->shortcode_atts['border'];
+		$shadow						= $this->shortcode_atts['shadow'];
 		
 		var_dump($border);
 
