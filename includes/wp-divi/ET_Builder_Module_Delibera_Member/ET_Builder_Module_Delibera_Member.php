@@ -461,7 +461,7 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 						'<div%3$s class="et_pb_module ' . ( $border == 'on' ? 'et_pb_delibera_member_border ' : 'et_pb_delibera_member ') . ($shadow == 'on' ? 'et_pb_delibera_shadow ' : 'et_pb_delibera_border ' ) . '%4$s%9$s et_pb_bg_layout_%8$s clearfix">
 				%2$s
 				<div class="tema" %20$s><a href="%12$s">%11$s</a></div>
-				<div class="et_pb_delibera_member_description">
+				<div class="et_pb_delibera_member_description " ' . ( '' !== $style ? $style : '' ) . '>
 					<a href="%10$s">
 						%5$s
 						%6$s
