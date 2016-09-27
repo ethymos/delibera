@@ -348,6 +348,7 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 		$tags = "";
 		$avatar = "";
 		$except = "";
+		$output = "";
 
 		foreach($wp_posts as $key=>$value)
 		{
