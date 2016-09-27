@@ -180,6 +180,7 @@ function delibera_comment_form($defaults)
 
 
 					$defaults['comment_field'] = preg_replace ("/<label for=\"comment\">(.*?)<\/label>/", $replace, $defaults['comment_field']);
+					$defaults['label_submit'] = __('Publicar','delibera');
 				}
 				else
 				{

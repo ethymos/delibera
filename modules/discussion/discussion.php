@@ -265,6 +265,16 @@ class Discussion extends \Delibera\Modules\ModuleBase
 		}
 	}
 	
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * @see \Delibera\Modules\ModuleBase::getCommentListLabel()
+	 */
+	public function getCommentListLabel()
+	{
+		return __('Discussão sobre a Pauta', 'delibera');
+	}
+	
 }
 $DeliberaDiscussion = new \Delibera\Modules\Discussion();
 

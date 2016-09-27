@@ -424,6 +424,11 @@ display: block;
 }
 
 /* COMMENTS */
+
+#delibera-comments {
+    overflow: hidden;
+}
+
 .delibera-comment-body {
 	width: 75%;
 	padding: 10px 10px 5px;
@@ -435,12 +440,44 @@ display: block;
 	border-radius: 4px;
 }
 
+h3#reply-title.comment-reply-title{
+	display: none;
+}
+
 .delibera-index-comments {
 	display: inline-table;
 	margin-bottom: 30px;
 	font-weight: bolder;
 	width: 400px;
 	text-transform: uppercase;
+}
+
+.validacao .delibera-index-comments, .emvotacao .delibera-index-comments, .comresolucao .delibera-index-comments {
+	display: none;
+}
+
+input[type="radio"]#delibera_aceitar, input[type="radio"]#delibera_rejeitar  {
+   background-color: #ddd;
+    border-radius: 10px;
+    cursor: pointer;
+    display: inline-block;
+    height: 15px;
+    position: relative;
+    width: 15px;
+    -webkit-appearance: none;
+}
+
+input[type="radio"]:checked#delibera_aceitar, input[type="radio"]:checked#delibera_rejeitar  {
+    background-color: #3dcff4;
+}
+
+
+label.delibera_aceitar_radio_label  {
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    line-height: 18px;
+    margin: 0 20px 0 10px;
 }
 
 .delibera-index-comments-encaminhamento {
@@ -539,9 +576,28 @@ unlike_color: #ce282a
 */
 
 .comment-form-comment .delibera-encaminha-label {
-	margin: 10px;
-	display: inline-block;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    line-height: 18px;
+    margin:10px;
 }
+
+input[type=radio].delibera-encaminha-label  {
+	background-color: #ddd;
+    border-radius: 10px;
+    cursor: pointer;
+    display: inline-block;
+    height: 15px;
+    position: relative;
+    width: 15px;
+    -webkit-appearance: none;
+}
+
+input[type=radio]:checked.delibera-encaminha-label  {
+	background-color: #3dcff4;
+}
+
 .comment-form-comment #comment {
 	display: block;
 	margin: 0 auto;
@@ -565,7 +621,19 @@ unlike_color: #ce282a
 	float: left;
 	padding: 10px 10px 5px;
 	margin: 1%;
-	background-color: #a8e7f9;
+	background-color: #cfcfcf;
+	overflow: auto;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+.emvotacao .delibera-comment-body {
+	width: 31%;
+	float: left;
+	padding: 10px 10px 5px;
+	margin: 1%;
+	background-color: #cfcfcf;
 	overflow: auto;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
@@ -648,23 +716,6 @@ span.read-more, span.re-collapse {
 	padding: 0px 15px;
 	font-size: 14px;
 }
-
-/*.delibera-comment-body .comment-edit-link {
-	margin: 10px 0;
-	display: inline-block;
-	background-color: #3dcff4;
-	border: none;
-	color: #fff;
-	position: initial;
-	font-size: 14px;
-	text-align: left;
-	font-weight: 700;
-	text-transform: uppercase;
-	border-radius: 4px;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	padding: 5px;
-}*/
 
 .delibera-edit-comment-button,
 .delibera-delete-comment-button,

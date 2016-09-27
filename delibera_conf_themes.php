@@ -76,6 +76,7 @@ class DeliberaThemes
         $this->wpThemePath = get_stylesheet_directory() . '/delibera';
         $this->wpThemeUrl = get_stylesheet_directory_uri() . '/delibera';
         $this->wpThemeName = wp_get_theme()->get_stylesheet();
+        add_filter('body_class', array(&$this,'body_class'), 10, 2);
     }
 
     /**
@@ -325,6 +326,17 @@ class DeliberaThemes
     	}
     	return $path;
     }
+    
+    public function body_class($classes, $class)
+    {
+    	if(is_pauta())
+    	{
+    		$situacao = delibera_get_situacao(get_the_ID());
+    		$classes[] = $situacao->slug;
+    	}
+    	return $classes;
+    }
+    
 }
 global $deliberaThemes;
 $deliberaThemes = new DeliberaThemes;

@@ -277,4 +277,9 @@ abstract class ModuleBase
 		return $days;
 	}
 	
+	/**
+	 * Return comment list Title
+	 */
+	abstract public function getCommentListLabel();
+	
 }
