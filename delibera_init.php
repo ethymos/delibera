@@ -78,7 +78,15 @@ function delibera_Add_custom_taxonomy()
 		'labels' => $labels,
 		'public' => true,
 		'capabilities' => array('assign_terms' => 'edit_pautas',
-								'edit_terms' => 'edit_pautas'),
+								'edit_terms' => 'edit_pautas'
+			/*
+			 *
+			'manage_terms' => 'manage_tema_term',
+            'edit_terms' => 'edit_tema_term',
+            'delete_terms' => 'delete_tema_term',
+            'assign_terms' => 'assign_tema_term'
+			 */
+		),
 		//'show_in_nav_menus' => true, // Public
 		// 'show_ui' => '', // Public
 		'hierarchical' => true,
