@@ -5,10 +5,124 @@ namespace Delibera\Conf;
 
 class Permission
 {
+	protected $roleList = array(
+		
+	);
 
 	public function __construct()
 	{
+		$this->roleList = array(
+			array(
+				'id' => 'delete_pautas',
+				'label' => __('remover pautas','delibera'),
+			),
+			array(
+				'id' => 'delete_private_pautas',
+				'label' => __('remover pautas privadas','delibera'),
+			),
+			array(
+				'id' => 'edit_pauta',
+				'label' => __('editar pauta','delibera'),
+			),
+			array(
+				'id' => 'edit_pautas',
+				'label' => __('editar multiplas pautas','delibera'),
+			),
+			array(
+				'id' => 'edit_private_pautas',
+				'label' => __('editar multiplas pautas privadas','delibera'),
+			),
+			array(
+				'id' => 'publish_pautas',
+				'label' => __('publicar pautas','delibera'),
+			),
+			array(
+				'id' => 'read_pauta',
+				'label' => __('visualizar pautas','delibera'),
+			),
+			array(
+				'id' => 'read_private_pautas',
+				'label' => __('visualizar pautas privadas','delibera'),
+			),
+			array(
+				'id' => 'delete_published_pautas',
+				'label' => __('remover pautas publicadas','delibera'),
+			),
+			array(
+				'id' => 'forcar_prazo',
+				'label' => __('forcar o final de prazo','delibera'),
+			),
+			array(
+				'id' => 'delibera_reabrir_pauta',
+				'label' => __('reabrir pauta','delibera'),
+			),
+			array(
+				'id' => 'edit_published_pautas',
+				'label' => __('editar multiplas pautas publicadas','delibera'),
+			),
+			array(
+				'id' => 'edit_published_pauta',
+				'label' => __('editar pauta publicada','delibera'),
+			),
+			array(
+				'id' => 'edit_encaminhamento',
+				'label' => __('editar encaminhamentos','delibera'),
+			),
+			array(
+				'id' => 'votar',
+				'label' => __('votar','delibera'),
+			),
+			array(
+				'id' => 'relatoria',
+				'label' => __('fazer relatoria','delibera'),
+			),
+			array(
+				'id' => 'edit_others_pautas',
+				'label' => __('editar multiplas pautas de outras pessoas','delibera'),
+			),
+			array(
+				'id' => 'edit_others_pauta',
+				'label' => __('editar pauta de outras pessoas','delibera'),
+			),
+			array(
+				'id' => 'delete_others_pautas',
+				'label' => __('remover multiplas pautas de outras pessoas','delibera'),
+			),
+			array(
+				'id' => 'manage_tema_term',
+				'label' => __('gerenciar temas','delibera'),
+			),
+			array(
+				'id' => 'edit_tema_term',
+				'label' => __('editar temas','delibera'),
+			),
+			array(
+				'id' => 'delete_tema_term',
+				'label' => __('remover temas','delibera'),
+			),
+			array(
+				'id' => 'assign_tema_term',
+				'label' => __('atribuir temas','delibera'),
+			),
+			array(
+				'id' => 'manage_delibera_cat_term',
+				'label' => __('gerenciar categorias','delibera'),
+			),
+			array(
+				'id' => 'edit_delibera_cat_term',
+				'label' => __('editar categorias','delibera'),
+			),
+			array(
+				'id' => 'delete_delibera_cat_term',
+				'label' => __('remover categorias','delibera'),
+			),
+			array(
+				'id' => 'assign_delibera_cat_term',
+				'label' => __('atribuir categorias','delibera'),
+			),
+		);
 		add_action('init', array($this, 'admin_init'));
+		add_action( 'registered_taxonomy', array($this, 'setTaxonomyCaps'), 10, 3 );
 	}
 	
 	public function admin_init()
@@ -23,6 +137,15 @@ class Permission
 	
 	public function confPage()
 	{
+		if ($_SERVER['REQUEST_METHOD']=='POST')
+		{
+			if (!current_user_can('manage_options'))
+			{
+				die(__('Você não pode editar as configurações do delibera.','delibera'));
+			}
+			check_admin_referer('delibera-permission-nonce');
+			$this->save();
+		}
 		$this->html();
 	}
 	
@@ -43,123 +166,59 @@ class Permission
 
 	function save()
 	{
-		// $this->security_check();
 		foreach($this->get_editable_roles() as $role => $role_name)
 		{
-			if($role != 'administrator')
+			if(is_super_admin() || $role != 'administrator')
 			{
-				$sp_view = false;
-				
-				// $role = str_replace(" ","_", strtolower( $role) );
-				
-				/*
-				 * $pos = strrpos($role, "s2member");
-				 *
-				 * if($pos !== false){
-				 * $role = $this->str_lreplace(" ", "", $role);
-				 * }
-				 */
 				$saverole = get_role($role);
-				
-				if(false !== get_class($saverole))
+				foreach ($this->roleList as $rolearray)
 				{
-					
-					if(isset($_POST[$role . "_edit"]))
+					if( isset($_POST[$role . "_{$rolearray['id']}"] ))
 					{
-						$sp_view = true;
-						$saverole->add_cap('delibera_email');
+						$saverole->add_cap( $rolearray['id']);
 					}
 					else
 					{
-						$saverole->remove_cap('delibera_email');
-					}
-					
-					if(isset($_POST[$role . "_send"]))
-					{
-						$sp_view = true;
-						$saverole->add_cap('delibera_email_send');
-					}
-					else
-					{
-						$saverole->remove_cap('delibera_email_send');
-					}
-					
-					if(isset($_POST[$role . "_reports"]))
-					{
-						$sp_view = true;
-						$saverole->add_cap('delibera_reports');
-					}
-					else
-					{
-						$saverole->remove_cap('delibera_reports');
-					}
-					
-					if(isset($_POST[$role . "_subscribers"]))
-					{
-						$sp_view = true;
-						$saverole->add_cap('delibera_subscribers');
-					}
-					else
-					{
-						$saverole->remove_cap('delibera_subscribers');
-					}
-					
-					if(isset($_POST[$role . "_settings"]))
-					{
-						$sp_view = true;
-						$saverole->add_cap('delibera_settings');
-					}
-					else
-					{
-						$saverole->remove_cap('delibera_settings');
-					}
-					
-					if(isset($_POST[$role . "_settings_access"]))
-					{
-						$sp_view = true;
-						$saverole->add_cap('delibera_settings_access');
-					}
-					else
-					{
-						$saverole->remove_cap('delibera_settings_access');
-					}
-					
-					if(isset($_POST[$role . "_addons"]))
-					{
-						$sp_view = true;
-						$saverole->add_cap('delibera_addons');
-					}
-					else
-					{
-						$saverole->remove_cap('delibera_addons');
-					}
-					if(isset($_POST[$role . "_queue"]))
-					{
-						$sp_view = true;
-						$saverole->add_cap('delibera_queue');
-					}
-					else
-					{
-						$saverole->remove_cap('delibera_queue');
-					}
-					
-					if($sp_view == true)
-					{
-						$saverole->add_cap('delibera_view');
-					}
-					else
-					{
-						$saverole->remove_cap('delibera_view');
+						$saverole->remove_cap($rolearray['id']);
 					}
 				}
 			}
 		}
-		
-		// SendPress_Admin::redirect('Settings_Access');
+	}
+	
+	function GenerateCheckbox($id, $role, $echo = false, $label = "", $checked = '')
+	{
+		$listrole = get_role(sanitize_title($role));
+		if($listrole->has_cap($id))
+		{
+			$checked = 'checked';
+		}
+		$output = "
+			<td>
+				<input $checked name='" . $role ."_{$id}' type='checkbox' >".
+				'<span class="delibera-conf-permission-label">'.$label.'</span>'.
+			"</td>"
+		;
+		if($echo) echo $output;
+		return $output;
 	}
 
 	function html()
 	{
+		$roles = array();
+		foreach ($this->roleList as $cap)
+		{
+			foreach($this->get_editable_roles() as $role => $role_name)
+			{
+				if(is_super_admin() || $role != 'administrator')
+				{
+					if(!array_key_exists($cap['label'], $roles)) $roles[$cap['label']] = array(); 
+					$roles[$cap['label']][$role] = $cap['id'];
+				}
+			}
+		}
+		$header = reset($roles);
+		//echo '<pre>';print_r($roles);die();
 		?>
 		<form method="post" id="post">
 			<!--
@@ -169,223 +228,23 @@ class Permission
 			-->
 			<br class="clear"> <br class="clear">
 			<table class="table table-bordered table-striped">
-				<tr>
-					<th><?php _e('Delete Pautas','delibera'); ?></th>
-					<th><?php _e('Delete Private Pautas','delibera'); ?></th>
-					<th><?php _e('Edit Pauta','delibera'); ?></th>
-					<th><?php _e('Edit Pautas','delibera'); ?></th>
-					<th><?php _e('Edit Private Pautas','delibera'); ?></th>
-					<th><?php _e('Publish Pautas','delibera'); ?></th>
-					<th><?php _e('Read Pauta','delibera'); ?></th>
-					<th><?php _e('Read Private Pautas','delibera'); ?></th>
-					<th><?php _e('Delete Published Pautas','delibera'); ?></th>
-					<th><?php _e('Forcar Fim de Prazo','delibera'); ?></th>
-					<th><?php _e('Reabrir Pauta','delibera'); ?></th>
-					<th><?php _e('Edit Published Pautas','delibera'); ?></th>
-					<th><?php _e('Edit Published Pauta','delibera'); ?></th>
-					<th><?php _e('Edit Encaminhamento','delibera'); ?></th>
-					<th><?php _e('Votar','delibera'); ?></th>
-					<th><?php _e('Relatoria','delibera'); ?></th>
-					<th><?php _e('Edit Others Pautas','delibera'); ?></th>
-					<th><?php _e('Edit Others Pauta','delibera'); ?></th>
-					<th><?php _e('Delete Others Pautas','delibera'); ?></th>
-					<th><?php _e('Delete Others Pauta','delibera'); ?></th>
-				</tr>
-			
-			
-					<?php
-				foreach($this->get_editable_roles() as $role => $role_name)
+				<?php
+				echo '<tr><th>&nbsp;</th>';
+				
+				foreach (array_keys($header) as $head)
 				{
-					if($role != 'administrator')
+					echo '<th>'.$head.'</th>';
+				}
+				echo '</tr>';
+				foreach($roles as $rolelabel => $rolelist)
+				{
+					echo '<tr><td><span class="delibera-conf-permission-line-label">'.$rolelabel.'</span></td>';
+					foreach ($rolelist as $group => $roleid)
 					{
-						
-						// $role = str_replace(" ","_", strtolower( $role) );
-						
-						/*
-						 * $pos = strrpos($role, "s2member");
-						 *
-						 * if($pos !== false){
-						 * $role = $this->str_lreplace("_", "", $role);
-						 * }
-						 *
-						 * echo $role . "<br>";
-						 */
-						// $saverole = get_role( $role );
-						
-						$listrole = get_role(str_replace(" ", "_", strtolower($role)));
-						// $role = str_replace(" ","_", strtolower( $role) );
-						$checked = '';
-						
-						echo "<tr>";
-						echo "<td>". $role_name . "</td>";
-						
-						if(false !== get_class($listrole))
-						{
-							echo "<tr>";
-							$checked = '';
-							if($listrole->has_cap('delete_pautas'))
-							{
-								$checked = 'checked';
-							}
-							echo "<td><input $checked name='" . $role .
-									 "_delete_pautas' type='checkbox' >&nbsp;" .
-									 /*__('Send', 'delibera') .*/ "</td>";
-							$checked = '';
-							if($listrole->has_cap('delete_private_pautas'))
-							{
-								$checked = 'checked';
-							}
-							echo "<td><input $checked name='" . $role .
-									 "_delete_private_pautas' type='checkbox' >&nbsp;" .
-									 /*__('Send', 'delibera') .*/ "</td>";
-							$checked = '';
-							if($listrole->has_cap('edit_pauta'))
-							{
-								$checked = 'checked';
-							}
-							echo "<td><input $checked name='" . $role .
-									 "_edit_pauta' type='checkbox' >&nbsp;" .
-									 /*__('Send', 'delibera') .*/ "</td>";
-							$checked = '';
-							if($listrole->has_cap('edit_pautas'))
-							{
-								$checked = 'checked';
-							}
-							echo "<td><input $checked name='" . $role .
-									 "_edit_pautas' type='checkbox' >&nbsp;" .
-									 /*__('Send', 'delibera') .*/ "</td>";
-							$checked = '';
-							if($listrole->has_cap('edit_private_pautas'))
-							{
-								$checked = 'checked';
-							}
-							echo "<td><input $checked name='" . $role .
-									 "_edit_private_pautas' type='checkbox' >&nbsp;" .
-									 /*__('Send', 'delibera') .*/ "</td>";
-							$checked = '';
-							if($listrole->has_cap('publish_pautas'))
-							{
-								$checked = 'checked';
-							}
-							echo "<td><input $checked name='" . $role .
-									 "_publish_pautas' type='checkbox' >&nbsp;" .
-									 /*__('Send', 'delibera') .*/ "</td>";
-							$checked = '';
-							if($listrole->has_cap('read_pauta'))
-							{
-								$checked = 'checked';
-							}
-							echo "<td><input $checked name='" . $role .
-									 "_read_pauta' type='checkbox' >&nbsp;" .
-									 /*__('Send', 'delibera') .*/ "</td>";
-							$checked = '';
-							if($listrole->has_cap('read_private_pautas'))
-							{
-								$checked = 'checked';
-							}
-							echo "<td><input $checked name='" . $role .
-									 "_read_private_pautas' type='checkbox' >&nbsp;" .
-									 /*__('Send', 'delibera') .*/ "</td>";
-							$checked = '';
-							if($listrole->has_cap('delete_published_pautas'))
-							{
-								$checked = 'checked';
-							}
-							echo "<td><input $checked name='" . $role .
-									 "_delete_published_pautas' type='checkbox' >&nbsp;" .
-									 /*__('Send', 'delibera') .*/ "</td>";
-							$checked = '';
-							if($listrole->has_cap('forcar_prazo'))
-							{
-								$checked = 'checked';
-							}
-							echo "<td><input $checked name='" . $role .
-									 "_forcar_prazo' type='checkbox' >&nbsp;" .
-									 /*__('Send', 'delibera') .*/ "</td>";
-							$checked = '';
-							if($listrole->has_cap('delibera_reabrir_pauta'))
-							{
-								$checked = 'checked';
-							}
-							echo "<td><input $checked name='" . $role .
-									 "_delibera_reabrir_pauta' type='checkbox' >&nbsp;" .
-									 /*__('Send', 'delibera') .*/ "</td>";
-							$checked = '';
-							if($listrole->has_cap('edit_published_pautas'))
-							{
-								$checked = 'checked';
-							}
-							echo "<td><input $checked name='" . $role .
-									 "_edit_published_pautas' type='checkbox' >&nbsp;" .
-									 /*__('Send', 'delibera') .*/ "</td>";
-							$checked = '';
-							if($listrole->has_cap('edit_published_pauta'))
-							{
-								$checked = 'checked';
-							}
-							echo "<td><input $checked name='" . $role .
-									 "_edit_published_pauta' type='checkbox' >&nbsp;" .
-									 /*__('Send', 'delibera') .*/ "</td>";
-							$checked = '';
-							if($listrole->has_cap('edit_encaminhamento'))
-							{
-								$checked = 'checked';
-							}
-							echo "<td><input $checked name='" . $role .
-									 "_edit_encaminhamento' type='checkbox' >&nbsp;" .
-									 /*__('Send', 'delibera') .*/ "</td>";
-							$checked = '';
-							if($listrole->has_cap('votar'))
-							{
-								$checked = 'checked';
-							}
-							echo "<td><input $checked name='" . $role .
-									 "_votar' type='checkbox' >&nbsp;" .
-									 /*__('Send', 'delibera') .*/ "</td>";
-							$checked = '';
-							if($listrole->has_cap('relatoria'))
-							{
-								$checked = 'checked';
-							}
-							echo "<td><input $checked name='" . $role .
-									 "_relatoria' type='checkbox' >&nbsp;" .
-									 /*__('Send', 'delibera') .*/ "</td>";
-							$checked = '';
-							if($listrole->has_cap('edit_others_pautas'))
-							{
-								$checked = 'checked';
-							}
-							echo "<td><input $checked name='" . $role .
-									 "_edit_others_pautas' type='checkbox' >&nbsp;" .
-									 /*__('Send', 'delibera') .*/ "</td>";
-							$checked = '';
-							if($listrole->has_cap('edit_others_pauta'))
-							{
-								$checked = 'checked';
-							}
-							echo "<td><input $checked name='" . $role .
-									 "_edit_others_pauta' type='checkbox' >&nbsp;" .
-									 /*__('Send', 'delibera') .*/ "</td>";
-							$checked = '';
-							if($listrole->has_cap('delete_others_pautas'))
-							{
-								$checked = 'checked';
-							}
-							echo "<td><input $checked name='" . $role .
-									 "_delete_others_pautas' type='checkbox' >&nbsp;" .
-									 /*__('Send', 'delibera') .*/ "</td>";
-							$checked = '';
-							if($listrole->has_cap('delete_others_pauta'))
-							{
-								$checked = 'checked';
-							}
-							echo "<td><input $checked name='" . $role .
-									 "_delete_others_pauta' type='checkbox' >&nbsp;" .
-									 /*__('Send', 'delibera') .*/ "</td>";
-							echo "</tr>";
-						}
-						// print_r($role);
+						$this->GenerateCheckbox($roleid, $group,true);
+						//echo '<pre>';print_r($group);print_r($roleid);die();
 					}
+					echo '</tr>';
 				}
 				echo "</table>";
 				/*
@@ -399,8 +258,10 @@ class Permission
 				 * echo "</pre>";
 				 */
 				?>
-			<?php wp_nonce_field( 'delibera-permission-nonce', '_delibera-permission-nonce' );; ?>
+			<?php wp_nonce_field( 'delibera-permission-nonce' ); ?>
+			<input type="submit" class="delibera-permission-bt-save" value="<?php _e('Salvar', 'delibera'); ?>" />
 		</form><?php
+		
 	}
 
 	function get_role($role)
@@ -428,6 +289,19 @@ class Permission
 		return $all_roles;
 	}
 	/*** End Copied from Sendpress ***/
+	
+	public function setTaxonomyCaps( $taxonomy, $object_type, $args )
+	{
+		global $wp_taxonomies;
+		if ( 'tema' == $taxonomy && ( ( is_string($object_type) && 'pauta' == $object_type ) || (is_array($object_type) && in_array('pauta', $object_type) ) ) )
+		{
+			$wp_taxonomies[ 'category' ]->cap->manage_terms = 'manage_delibera_cat_term';
+			$wp_taxonomies[ 'category' ]->cap->edit_terms = 'edit_delibera_cat_term';
+			$wp_taxonomies[ 'category' ]->cap->delete_terms = 'delete_delibera_cat_term';
+			$wp_taxonomies[ 'category' ]->cap->assign_terms = 'assign_delibera_cat_term';
+		}
+	}
+	
 }
 
 $DeliberaConfPermission = new \Delibera\Conf\Permission();
