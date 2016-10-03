@@ -81,6 +81,7 @@ class Vote extends \Delibera\Modules\ModuleBase
 	public function getMainConfig($opts)
 	{
 		$opts['dias_votacao'] = '5';
+		$opts['tipo_votacao'] = 'checkbox';
 		return $opts;
 	}
 	
@@ -94,6 +95,19 @@ class Vote extends \Delibera\Modules\ModuleBase
 			"id" => "dias_votacao",
 			"label" => __('Dias para votação de encaminhamentos:', 'delibera'),
 			"content" => '<input type="text" name="dias_votacao" id="dias_votacao" value="'.htmlspecialchars_decode($opt['dias_votacao']).'" autocomplete="off" />'
+		);
+		$id = 'tipo_votacao';
+		$value = htmlspecialchars_decode($opt[$id]);
+		$rows[] = array(
+			"id" => $id,
+			"label" => __('Tipo da votação:', 'delibera'),
+			//"content" => '<input type="text" name="dias_votacao" id="dias_votacao" value="'.htmlspecialchars_decode($opt['dias_votacao']).'" autocomplete="off" />'
+			"content" => '
+				<select name="'.$id.'" id="'.$id.'" autocomplete="off" >
+					<option value="checkbox" '.($value == 'checkbox' ? 'selected="selected"' : '').'>'.__('Checkbox', 'delibera').'</option>
+					<option value="dropdown" '.($value == 'dropdown' ? 'selected="selected"' : '').'>'.__('Dropdown', 'delibera').'</option>
+				</select>
+			'
 		);
 		return $rows;
 	}
