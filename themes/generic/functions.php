@@ -234,8 +234,8 @@ function delibera_comment_form($defaults)
 							';
 						}
 						$form .= '
-						<input name="delibera_comment_tipo" value="voto" style="display:none;" />
-						<input name="comment" value="O voto de '.$current_user->display_name.' foi registrado no sistema" style="display:none;" />
+						<input type="hidden" name="delibera_comment_tipo" value="voto" style="display:none;" />
+						<input type="hidden" name="comment" value="O voto de '.$current_user->display_name.' foi registrado no sistema" style="display:none;" />
 						</div>'
 						;
 
