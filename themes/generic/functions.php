@@ -220,18 +220,45 @@ function delibera_comment_form($defaults)
 				{
 					$defaults['must_log_in'] = sprintf(__('Você precisar <a href="%s">estar logado</a> e ter permissão para votar.'),wp_login_url( apply_filters( 'the_permalink', get_permalink( $post->ID ))));
 					$encaminhamentos = array();
-					if (delibera_current_user_can_participate()) {
-						$form = '<div class="delibera_checkbox_voto">';
+					if (delibera_current_user_can_participate())
+					{
+						$tipo_votacao = get_post_meta($post->ID, 'tipo_votacao', true);
+						$form = '<div class="delibera_'.$tipo_votacao.'_voto">';
 						$encaminhamentos = delibera_get_comments_encaminhamentos($post->ID);
 
-						$form .= '<h3 class="comment-respond">'.__('Escolha os encaminhamentos que deseja aprovar e depois clique em "Votar":','delibera').'</h3>';
-
 						$i = 0;
-						foreach ($encaminhamentos as $encaminhamento)
+						switch ($tipo_votacao)
 						{
-							$form .= '
-							<div class="checkbox-voto"><input type="checkbox" name="delibera_voto'.$i.'" id="delibera_voto'.$i.'" value="'.$encaminhamento->comment_ID.'" /><label for="delibera_voto'.$i++.'" class="label-voto">'.$encaminhamento->comment_content.'</label></div>
-							';
+							case 'radio':
+								$form .= '<h3 class="comment-respond">'.__('Escolha o encaminhamento que deseja aprovar e depois clique em "Votar":','delibera').'</h3>';
+								foreach ($encaminhamentos as $encaminhamento)
+								{
+									$form .= '
+									<div class="checkbox-voto"><input type="radio" name="delibera_voto" id="delibera_voto'.$i.'" value="'.$encaminhamento->comment_ID.'" /><label for="delibera_voto'.$i++.'" class="label-voto">'.$encaminhamento->comment_content.'</label></div>
+									';
+								}
+								break;
+							case 'dropdown':
+								$form .= '<h3 class="comment-respond">'.__('Escolha o encaminhamento que deseja aprovar e depois clique em "Votar":','delibera').'</h3>';
+								$form .= '<div class="delibera_voto"><select name="delibera_voto" id="delibera_voto" class="delibera_voto_select">';
+								foreach ($encaminhamentos as $encaminhamento)
+								{
+									$form .= '
+									<option value="'.$encaminhamento->comment_ID.'" />'.$encaminhamento->comment_content.'</option>
+									';
+								}
+								$form .= '</select></div>';
+								break;
+							case 'checkbox':
+							default:
+								$form .= '<h3 class="comment-respond">'.__('Escolha os encaminhamentos que deseja aprovar e depois clique em "Votar":','delibera').'</h3>';
+								foreach ($encaminhamentos as $encaminhamento)
+								{
+									$form .= '
+									<div class="checkbox-voto"><input type="checkbox" name="delibera_voto'.$i.'" id="delibera_voto'.$i.'" value="'.$encaminhamento->comment_ID.'" /><label for="delibera_voto'.$i++.'" class="label-voto">'.$encaminhamento->comment_content.'</label></div>
+									';
+								}
+							break;
 						}
 						$form .= '
 						<input type="hidden" name="delibera_comment_tipo" value="voto" style="display:none;" />

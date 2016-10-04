@@ -105,6 +105,7 @@ class Vote extends \Delibera\Modules\ModuleBase
 			"content" => '
 				<select name="'.$id.'" id="'.$id.'" autocomplete="off" >
 					<option value="checkbox" '.($value == 'checkbox' ? 'selected="selected"' : '').'>'.__('Checkbox', 'delibera').'</option>
+					<option value="radio" '.($value == 'radio' ? 'selected="selected"' : '').'>'.__('Radio Buttons', 'delibera').'</option>
 					<option value="dropdown" '.($value == 'dropdown' ? 'selected="selected"' : '').'>'.__('Dropdown', 'delibera').'</option>
 				</select>
 			'
@@ -158,6 +159,7 @@ class Vote extends \Delibera\Modules\ModuleBase
 		$discussao = array_search('discussao', $haystack)*/
 		
 		$prazo_votacao = $this->generateDeadline($options_plugin_delibera);
+		$tipo_votacao = $options_plugin_delibera['tipo_votacao'];
 		
 		if(!($post->post_status == 'draft' ||
 			$post->post_status == 'auto-draft' ||
@@ -165,12 +167,21 @@ class Vote extends \Delibera\Modules\ModuleBase
 		{
 			
 			$prazo_votacao = array_key_exists("prazo_votacao", $custom) ?  $custom["prazo_votacao"][0] : $prazo_votacao;
+			$tipo_votacao = array_key_exists("tipo_votacao", $custom) ?  $custom["tipo_votacao"][0] : $tipo_votacao;
 		}
 		
 		?>
 		<p>
 			<label class="label_prazo_votacao"><?php _e('Prazo para Votações','delibera') ?>:</label>
 			<input <?php echo $disable_edicao ?> name="prazo_votacao" class="prazo_votacao widefat hasdatepicker" value="<?php echo $prazo_votacao; ?>"/>
+		</p>
+		<p>
+			<label class="label_tipo_votacao"><?php _e('Tipo de Votação','delibera') ?>:</label>
+			<select name="tipo_votacao" id="tipo_votacao" class="tipo_votacao widefat" autocomplete="off" >
+				<option value="checkbox" <?php echo $tipo_votacao == 'checkbox' ? 'selected="selected"' : ''; ?>><?php _e('Checkbox', 'delibera'); ?></option>
+				<option value="radio" <?php echo $tipo_votacao == 'radio' ? 'selected="selected"' : ''; ?>><?php _e('Radio Buttons', 'delibera'); ?></option>
+				<option value="dropdown" <?php echo $tipo_votacao == 'dropdown' ? 'selected="selected"' : ''; ?>><?php _e('Dropdown', 'delibera'); ?></option>
+			</select>
 		</p>
 		
 		<div class="delibera_comment_list_panel" style="display: none;">
@@ -244,6 +255,10 @@ class Vote extends \Delibera\Modules\ModuleBase
 		if(array_key_exists('prazo_votacao', $_POST))
 		{
 			$events_meta['prazo_votacao'] = sanitize_text_field($_POST['prazo_votacao']);
+		}
+		if(array_key_exists('tipo_votacao', $_POST))
+		{
+			$events_meta['tipo_votacao'] = sanitize_text_field($_POST['tipo_votacao']);
 		}
 		
 		global $post, $current_user;
