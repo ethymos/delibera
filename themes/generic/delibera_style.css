@@ -1006,6 +1006,43 @@ color: #777;
     width: 100%;
 }
 
+.delibera-voto-option {
+    background-color: #a8e7f9;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    padding: 1em 1em 0.75em;
+    position: relative;
+    float: left;
+}
+
+.delibera-voto-option input {
+    left: 1em;
+    position: absolute;
+    top: 45%;
+}
+
+.delibera-voto-content {
+    margin-left: 3em;
+    text-align: justify;
+}
+
+.delibera-voto-title {
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+.delibera-voto-bt-read {
+    background-color: #0b5394;
+    border-radius: 10px;
+    color: #fff;
+    display: block;
+    float: right;
+    font-weight: bold;
+    padding: 0.25em 0.5em;
+    text-transform: uppercase;
+}
+
 /* portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android) */
 @media (max-width:641px) {
 	.delibera-header {
