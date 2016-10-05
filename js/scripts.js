@@ -1,12 +1,5 @@
 jQuery(document).ready(function()
 {
-	  jQuery('.label-voto').expander({
-		  slicePoint: 70,
-		  expandText: '[leia o encaminhamento inteiro]',
-		  expandPrefix: '... ',
-		  userCollapseText: '[fechar visão completa]'
-	  });
-
 	  if (window.location.href.indexOf('#comment') > 0 && document.referrer == window.location.href.substring(0,window.location.href.indexOf('#')))
 	  {
   		jQuery("#mensagem-confirma-voto").show();
