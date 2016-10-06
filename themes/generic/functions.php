@@ -254,9 +254,9 @@ function delibera_comment_form($defaults)
 												<div class="delibera-voto-icons">
 												</div>
 												<div class="delibera-voto-text">
-													'.wp_trim_excerpt($encaminhamento->comment_content).'
+													'.wp_trim_words( $encaminhamento->comment_content, 55, '' ).'
 												</div>
-												<div class="delibera-voto-bt-read">'.__('Proposta Completa', 'delibera').'</div>
+												<div id="delibera-voto-bt-read-'.$i.'" class="delibera-voto-bt-read">'.__('Proposta Completa', 'delibera').'</div>
 											</div>
 										</label>
 									</div>
