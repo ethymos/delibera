@@ -697,6 +697,17 @@ input[type=radio]:checked.delibera-encaminha-label  {
 	font-weight: 600;
 }
 
+.baseadoem-checkbox-div {
+	float: right;
+	display: block;
+	overflow: hidden;
+}
+
+.baseadoem-checkbox-label {
+	font-weight: bold;
+	font-size: 1.1em;
+}
+
 span.read-more, span.re-collapse {
 	font-weight: bold;
 }
