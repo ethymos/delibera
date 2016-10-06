@@ -239,14 +239,14 @@ function delibera_comment_form($defaults)
 									$users[$encaminhamento->comment_author]++;
 									
 									$form .= '<div id="delibera-voto-modal-'.$i.'" class="delibera-voto-modal"><div class="delibera-voto-modal-window"><div class="delibera-voto-modal-close">×</div>';
-										$form .= '<div id="delibera-voto-modal-content-'.$i.'" class="delibera-voto-modal-content"><textarea readonly="readonly">';
-											$form .= apply_filters( 'get_comment_text', $encaminhamento->comment_content, $encaminhamento, array() );
-										$form .= '</textarea></div>';
+										$form .= '<div id="delibera-voto-modal-content-'.$i.'" class="delibera-voto-modal-content">';
+											$form .= wpautop(apply_filters( 'get_comment_text', $encaminhamento->comment_content, $encaminhamento, array() ));
+										$form .= '</div>';
 									$form .= '</div></div>';
 									$form .= '
 									<div id="delibera-voto-option-'.$i.'" class="delibera-voto-option radio-voto">
 										<input type="radio" name="delibera_voto" id="delibera_voto'.$i.'" value="'.$encaminhamento->comment_ID.'" />
-										<label id="delibera-label-voto-'.$i.'" for="delibera_voto'.$i++.'" class="label-voto">
+										<label id="delibera-label-voto-'.$i.'" for="delibera_voto'.$i.'" class="label-voto">
 											<div class="delibera-voto-content">
 												<div class="delibera-voto-title">
 													'.__('Proposta', 'delibera').' '.$users[$encaminhamento->comment_author].' de @'.get_comment_author($encaminhamento).'
@@ -261,6 +261,7 @@ function delibera_comment_form($defaults)
 										</label>
 									</div>
 									';
+									$i++;
 								}
 								break;
 							case 'dropdown':
