@@ -100,6 +100,8 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . 
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . 'api'. DIRECTORY_SEPARATOR . 'wp-api.php';
 
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'admin' . DIRECTORY_SEPARATOR . 'delibera_conf_permission.php';
+
  /**
    * Redir e ciona usuários que não são membros do site
  * onde o Delibera foi instalado para a página de pautas após o

@@ -372,6 +372,7 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 		$tags = "";
 		$avatar = "";
 		$except = "";
+		$output = "";
 
 		foreach($wp_posts as $key=>$value)
 		{
@@ -400,11 +401,11 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 			$pauta_url = $wp_posts[$key]->guid;
 			$titulo = get_the_title($wp_posts[$key]);
 			$except = apply_filters( 'get_the_excerpt', $wp_posts[$key]->post_excerpt );
-		}
-
-		if($url_tema!=="")
-			$temaLink = $url_tema;
-
+			
+	
+			if($url_tema!=="")
+				$temaLink = $url_tema;
+	
 			if ( '' !== $icon_color ) {
 				ET_Builder_Element::set_style( $function_name, array(
 					'selector'    => '%%order_class%% .et_pb_member_social_links a',
@@ -428,84 +429,86 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 			if($image_code !='')
 				$image_url = $image_code;
 
-				if ( '' !== $image_url ) {
-					$image = sprintf(
-							'<div class="' . ($border == 'on' ? 'et_pb_delibera_member_image_border' : 'et_pb_delibera_member_image' ) . ' et-waypoint%3$s" style="background-image:url(%1$s);" title="%2$s" >
-								<img src="%1$s" style="visibility: hidden;" />
-							</div>',
-							esc_url( $image_url ),
-							esc_attr( $titulo ),
-							esc_attr( " et_pb_animation_{$animation}" )
-							);
-				}
+			if ( '' !== $image_url ) {
+				$image = sprintf(
+						'<div class="' . ($border == 'on' ? 'et_pb_delibera_member_image_border' : 'et_pb_delibera_member_image' ) . ' et-waypoint%3$s" style="background-image:url(%1$s);" title="%2$s" >
+							<img src="%1$s" style="visibility: hidden;" />
+						</div>',
+						esc_url( $image_url ),
+						esc_attr( $titulo ),
+						esc_attr( " et_pb_animation_{$animation}" )
+						);
+			}
 
-				$style = $class = '';
 
-				if ( '' !== $background_color ) {
-					$style .= sprintf( 'background-color:%s;',
-							esc_attr( $background_color )
-							);
-				}
 
-				$style = '' !== $style ? " style='{$style}'" : '';
+			$style = $class = '';
 
-				global $deliberaThemes;
-				$svg = $deliberaThemes->themeFileUrl('images/icons.svg');
-				$like = delibera_gerar_curtir($wp_posts[$key]->ID);
-				$unlike = delibera_gerar_discordar($wp_posts[$key]->ID);
-				$comment_count = delibera_comment_number($wp_posts[$key]->ID,'todos');
+			if ( '' !== $background_color ) {
+				$style .= sprintf( 'background-color:%s;',
+						esc_attr( $background_color )
+						);
+			}
 
-				$button = $button_image_url != '' ? '<img src="'.$button_image_url.'">' : __('Participar', 'et_builder');
+			$style = '' !== $style ? " style='{$style}'" : '';
 
-				$output = sprintf(
-						'<div%3$s class="et_pb_module ' . ( $border == 'on' ? 'et_pb_delibera_member_border ' : 'et_pb_delibera_member ') . ($shadow == 'on' ? 'et_pb_delibera_shadow ' : 'et_pb_delibera_border ' ) . '%4$s%9$s et_pb_bg_layout_%8$s clearfix">
-				%2$s
-				<div class="tema" %20$s><a href="%12$s">%11$s</a></div>
-				<div class="et_pb_delibera_member_description " ' . ( '' !== $style ? $style : '' ) . '>
-					<a href="%10$s">
-						%5$s
-						%6$s
-						%1$s
-						%7$s
-        			</a>
-					<div class="tags" id="tags">%14$s</div>
-					<a href="%22$s">
-						<div class="user" id="user">
-							<div class="imageInterna">%15$s</div>
-							<div class="name">%13$s</div>
-						</div>
-					</a>
-					%16$s
-        			%17$s
-					<div class="comments"><span class="comments-count">%18$s</span><i class="delibera-icon-chat"></i></div>
-				</div> <!-- .et_pb_delibera_member_description -->
-				<a href="%10$s" ><div class="faixa" %20$s>%21$s</div></a>
-			</div> <!-- .et_pb_delibera_member -->',
-						$this->shortcode_content,
-						( '' !== $image ? $image : '' ),
-						( '' !== $module_id ? sprintf( ' id="%1$s"', esc_attr( $module_id ) ) : '' ),
-						( '' !== $module_class ? sprintf( ' %1$s', esc_attr( str_replace("delibera","team",$module_class) ) ) : '' ),
-						( '' !== $titulo ? sprintf( '<h4>%1$s</h4>', esc_html( $titulo ) ) : '' ),
-						( '' !== $position ? sprintf( '<p class="et_pb_member_position">%1$s</p>', esc_html( $position ) ) : '' ),
-						$social_links,
-						$background_layout,
-						( '' === $image ? ' et_pb_delibera_member_no_image' : '' ),
-						$pauta_url,
-						$tema,
-						$temaLink,
-						$autor,
-						$tags,
-						$avatar,
-						$like,
-						$unlike,
-						$comment_count,
-						$svg,
-						( '' !== $style ? $style : '' ),
-						$button,
-						$autor_url
-				);
+			global $deliberaThemes;
+			$svg = $deliberaThemes->themeFileUrl('images/icons.svg');
+			$like = delibera_gerar_curtir($wp_posts[$key]->ID);
+			$unlike = delibera_gerar_discordar($wp_posts[$key]->ID);
+			$comment_count = delibera_comment_number($wp_posts[$key]->ID,'todos');
 
-				return $output;
+			$button = $button_image_url != '' ? '<img src="'.$button_image_url.'">' : __('Participar', 'et_builder');
+
+			$output = sprintf(
+				'<div%3$s class="et_pb_module et_pb_delibera_member%4$s%9$s et_pb_bg_layout_%8$s clearfix">
+					%2$s
+					<div class="tema" %20$s><a href="%12$s">%11$s</a></div>
+					<div class="et_pb_delibera_member_description">
+						<a href="%10$s">
+							%5$s
+							%6$s
+							%1$s
+							%7$s
+	        			</a>
+						<div class="tags" id="tags">%14$s</div>
+						<a href="%22$s">
+							<div class="user" id="user">
+								<div class="imageInterna">%15$s</div>
+								<div class="name">%13$s</div>
+							</div>
+						</a>
+						%16$s
+	        			%17$s
+						<div class="comments"><span class="comments-count">%18$s</span><i class="delibera-icon-chat"></i></div>
+					</div> <!-- .et_pb_delibera_member_description -->
+					<a href="%10$s" ><div class="faixa" %20$s>%21$s</div></a>
+				</div> <!-- .et_pb_delibera_member -->',
+				$this->shortcode_content,
+				( '' !== $image ? $image : '' ),
+				( '' !== $module_id ? sprintf( ' id="%1$s"', esc_attr( $module_id ) ) : '' ),
+				( '' !== $module_class ? sprintf( ' %1$s', esc_attr( str_replace("delibera","team",$module_class) ) ) : '' ),
+				( '' !== $titulo ? sprintf( '<h4>%1$s</h4>', esc_html( $titulo ) ) : '' ),
+				( '' !== $position ? sprintf( '<p class="et_pb_member_position">%1$s</p>', esc_html( $position ) ) : '' ),
+				$social_links,
+				$background_layout,
+				( '' === $image ? ' et_pb_delibera_member_no_image' : '' ),
+				$pauta_url,
+				$tema,
+				$temaLink,
+				$autor,
+				$tags,
+				$avatar,
+				$like,
+				$unlike,
+				$comment_count,
+				$svg,
+				( '' !== $style ? $style : '' ),
+				$button,
+				$autor_url
+			);
+		}
+		return $output;
 	}
 	
 	/**

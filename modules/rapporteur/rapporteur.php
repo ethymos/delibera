@@ -298,6 +298,16 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 		}
 	}
 	
+	/**
+	 *
+	 * {@inheritDoc}
+	 * @see \Delibera\Modules\ModuleBase::getCommentListLabel()
+	 */
+	public function getCommentListLabel()
+	{
+		return __('Relatoria da Pauta', 'delibera');
+	}
+	
 }
 $DeliberaRapporteur = new \Delibera\Modules\Rapporteur();
 
