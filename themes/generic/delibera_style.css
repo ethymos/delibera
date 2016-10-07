@@ -671,6 +671,11 @@ unlike_color: #ce282a
 	text-align: left;
 }
 
+.delibera_checkbox_voto .label-voto {
+    margin-left: 3em;
+    display: block;
+}
+
 .delibera_comment_button {
 	margin: 5px auto;
 }
