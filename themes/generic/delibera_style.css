@@ -1184,4 +1184,9 @@ color: #777;
 		font-size: 28px;
 	}
 
+	.delibera-voto-modal-window {
+	    left: 5%;
+	    top: 5%;
+	    width: 90%;
+	}
 }
