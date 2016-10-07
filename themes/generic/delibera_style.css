@@ -583,7 +583,7 @@ unlike_color: #ce282a
     margin:10px;
 }
 
-input[type=radio].delibera-encaminha-label  {
+.delibera-encaminha-label input[type=radio] {
 	background-color: #ddd;
     border-radius: 10px;
     cursor: pointer;
@@ -594,13 +594,13 @@ input[type=radio].delibera-encaminha-label  {
     -webkit-appearance: none;
 }
 
-input[type=radio]:checked.delibera-encaminha-label  {
+.delibera-encaminha-label input[type=radio]:checked {
 	background-color: #3dcff4;
 }
 
 .comment-form-comment #comment {
 	display: block;
-	margin: 0 auto;
+	margin: 20px auto 0;
 }
 
 .validacao p.comment-form-url.comment-form-attachment, .emvotacao p.comment-form-attachment {
