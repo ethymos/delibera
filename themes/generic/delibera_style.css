@@ -603,7 +603,7 @@ input[type=radio]:checked.delibera-encaminha-label  {
 	margin: 0 auto;
 }
 
-.validacao p.comment-form-url.comment-form-attachment, .relatoria p.comment-form-url.comment-form-attachment, .emvotacao p.comment-form-attachment {
+.validacao p.comment-form-url.comment-form-attachment, .emvotacao p.comment-form-attachment {
 	display: none;
 }
 
