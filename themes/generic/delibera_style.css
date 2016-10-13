@@ -1024,6 +1024,13 @@ color: #777;
     width: 100%;
 }
 
+.delibera_radio_voto {
+    display: inline-block;
+    clear: both;
+    width: 100%;
+    overflow: overlay;
+}
+
 .delibera-voto-option {
     background-color: #a8e7f9;
     border-radius: 12px;
@@ -1031,6 +1038,8 @@ color: #777;
     padding: 1em 1em 0.75em;
     position: relative;
     float: left;
+    display: inline-block;
+    width: 100%;
 }
 
 .delibera-voto-option input {
