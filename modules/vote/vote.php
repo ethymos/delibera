@@ -107,7 +107,7 @@ class Vote extends \Delibera\Modules\ModuleBase
 				<select name="'.$id.'" id="'.$id.'" autocomplete="off" >
 					<option value="checkbox" '.($value == 'checkbox' ? 'selected="selected"' : '').'>'.__('Checkbox', 'delibera').'</option>
 					<option value="radio" '.($value == 'radio' ? 'selected="selected"' : '').'>'.__('Radio Buttons', 'delibera').'</option>
-					<option value="dropdown" '.($value == 'dropdown' ? 'selected="selected"' : '').'>'.__('Dropdown', 'delibera').'</option>
+					<!-- <option value="dropdown" '.($value == 'dropdown' ? 'selected="selected"' : '').'>'.__('Dropdown', 'delibera').'</option> -->
 				</select>
 			'
 		);
@@ -181,7 +181,7 @@ class Vote extends \Delibera\Modules\ModuleBase
 			<select name="tipo_votacao" id="tipo_votacao" class="tipo_votacao widefat" autocomplete="off" >
 				<option value="checkbox" <?php echo $tipo_votacao == 'checkbox' ? 'selected="selected"' : ''; ?>><?php _e('Checkbox', 'delibera'); ?></option>
 				<option value="radio" <?php echo $tipo_votacao == 'radio' ? 'selected="selected"' : ''; ?>><?php _e('Radio Buttons', 'delibera'); ?></option>
-				<option value="dropdown" <?php echo $tipo_votacao == 'dropdown' ? 'selected="selected"' : ''; ?>><?php _e('Dropdown', 'delibera'); ?></option>
+				<!-- <option value="dropdown" <?php echo $tipo_votacao == 'dropdown' ? 'selected="selected"' : ''; ?>><?php _e('Dropdown', 'delibera'); ?></option> -->
 			</select>
 		</p>
 		
