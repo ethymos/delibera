@@ -23,7 +23,9 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 			'button_image_url',
 			'orderby',
 			'order',
-			'pauta_id'
+			'pauta_id',
+			'border',
+			'shadow'
 		);
 
 		$this->fields_defaults = array(
@@ -98,6 +100,26 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 					'post_type'=>'pauta'
 				),
 				'description'      => esc_html__( 'Choose which categories you would like to include in the feed.', 'et_builder' ),
+			),
+			'border' => array(
+				'label'           => esc_html__( 'Borda Arredondada', 'et_builder' ),
+				'type'            => 'yes_no_button',
+				'option_category' => 'configuration',
+				'options'         => array(
+					'on'  => esc_html__( 'Yes', 'et_builder' ),
+					'off' => esc_html__( 'No', 'et_builder' ),
+				),
+				'description'       => esc_html__( 'Habilite ou desabilite as bordas arredondas nos cards.', 'et_builder' ),
+			),
+			'shadow' => array(
+				'label'           => esc_html__( 'Sombra', 'et_builder' ),
+				'type'            => 'yes_no_button',
+				'option_category' => 'configuration',
+				'options'         => array(
+					'on'  => esc_html__( 'Yes', 'et_builder' ),
+					'off' => esc_html__( 'No', 'et_builder' ),
+				),
+				'description'       => esc_html__( 'Habilite ou desabilite a sombra nos cards.', 'et_builder' ),
 			),
 			'name' => array(
 				'label'           => esc_html__( 'Title', 'et_builder' ),
@@ -295,6 +317,8 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 		$orderby			= $this->shortcode_atts['orderby'];
 		$order				= $this->shortcode_atts['order'];
 		$pauta_id			= $this->shortcode_atts['pauta_id'];
+		$border				= $this->shortcode_atts['border'];
+		$shadow				= $this->shortcode_atts['shadow'];
 
 
 		$module_class = ET_Builder_Element::add_module_order_class( $module_class, $function_name );
@@ -407,7 +431,7 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 
 			if ( '' !== $image_url ) {
 				$image = sprintf(
-						'<div class="et_pb_delibera_member_image et-waypoint%3$s" style="background-image:url(%1$s);" title="%2$s" >
+						'<div class="' . ($border == 'on' ? 'et_pb_delibera_member_image_border' : 'et_pb_delibera_member_image' ) . ' et-waypoint%3$s" style="background-image:url(%1$s);" title="%2$s" >
 							<img src="%1$s" style="visibility: hidden;" />
 						</div>',
 						esc_url( $image_url ),
@@ -415,6 +439,8 @@ class ET_Builder_Module_Delibera_Member extends ET_Builder_Module {
 						esc_attr( " et_pb_animation_{$animation}" )
 						);
 			}
+
+
 
 			$style = $class = '';
 
