@@ -434,7 +434,7 @@ display: block;
 	padding: 10px 10px 5px;
 	margin: 10px auto;
 	background-color: #a8e7f9;
-	overflow: auto;
+	overflow: inherit;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
@@ -613,7 +613,7 @@ unlike_color: #ce282a
 
 .delibera_lista_validacoes {
 	margin: 20px auto 0px;
-	overflow: auto;
+	overflow: inherit;
 }
 
 .delibera_lista_validacoes .delibera-comment-body {
@@ -622,7 +622,7 @@ unlike_color: #ce282a
 	padding: 10px 10px 5px;
 	margin: 1%;
 	background-color: #cfcfcf;
-	overflow: auto;
+	overflow: inherit;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
@@ -634,7 +634,7 @@ unlike_color: #ce282a
 	padding: 10px 10px 5px;
 	margin: 1%;
 	background-color: #cfcfcf;
-	overflow: auto;
+	overflow: inherit;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
@@ -1189,8 +1189,13 @@ color: #777;
 	}
 
 	.delibera_lista_validacoes .delibera-comment-body {
-		width: 100%;
+		width: 98%;
 	}
+	
+	.emvotacao  .delibera-comment-body {
+		width: 98%;
+	}
+
 	.single-pauta h2.discussion-title {
 		font-size: 18px;
 	}
