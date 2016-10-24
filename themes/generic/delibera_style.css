@@ -583,7 +583,7 @@ unlike_color: #ce282a
     margin:10px;
 }
 
-input[type=radio].delibera-encaminha-label  {
+.delibera-encaminha-label input[type=radio] {
 	background-color: #ddd;
     border-radius: 10px;
     cursor: pointer;
@@ -594,16 +594,16 @@ input[type=radio].delibera-encaminha-label  {
     -webkit-appearance: none;
 }
 
-input[type=radio]:checked.delibera-encaminha-label  {
+.delibera-encaminha-label input[type=radio]:checked {
 	background-color: #3dcff4;
 }
 
 .comment-form-comment #comment {
 	display: block;
-	margin: 0 auto;
+	margin: 20px auto 0;
 }
 
-.validacao p.comment-form-url.comment-form-attachment, .relatoria p.comment-form-url.comment-form-attachment, .emvotacao p.comment-form-attachment {
+.validacao p.comment-form-url.comment-form-attachment, .emvotacao p.comment-form-attachment {
 	display: none;
 }
 
@@ -671,6 +671,11 @@ input[type=radio]:checked.delibera-encaminha-label  {
 	text-align: left;
 }
 
+.delibera_checkbox_voto .label-voto {
+    margin-left: 3em;
+    display: block;
+}
+
 .delibera_comment_button {
 	margin: 5px auto;
 }
@@ -697,6 +702,17 @@ input[type=radio]:checked.delibera-encaminha-label  {
 	font-weight: 600;
 }
 
+.baseadoem-checkbox-div {
+	float: right;
+	display: block;
+	overflow: hidden;
+}
+
+.baseadoem-checkbox-label {
+	font-weight: bold;
+	font-size: 1.1em;
+}
+
 span.read-more, span.re-collapse {
 	font-weight: bold;
 }
@@ -717,6 +733,7 @@ span.read-more, span.re-collapse {
 	font-size: 14px;
 }
 
+.submit-edit-comment-button,
 .delibera-edit-comment-button,
 .delibera-delete-comment-button,
 .reply {
@@ -971,7 +988,88 @@ color: #777;
 	background: none;
 }
 
+.delibera-voto-modal {
+    background-color: rgba(0,0,0,0.40);
+    display: block;
+    height: 100%;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+    z-index: 100000;
+    display: none;
+}
 
+.delibera-voto-modal-window {
+    background-color: #fff;
+    left: 25%;
+    position: absolute;
+    top: 20%;
+    width: 50%;
+    padding: 2em 1em;
+    text-align: justify;
+}
+
+.delibera-voto-modal-close {
+    cursor: pointer;
+    font-size: 1.5em;
+    position: absolute;
+    right: 0.5em;
+    text-transform: uppercase;
+    top: 0;
+}
+
+.delibera-voto-modal-content textarea{
+	height: 500px;
+    width: 100%;
+}
+
+.delibera_radio_voto {
+    display: inline-block;
+    clear: both;
+    width: 100%;
+    overflow: overlay;
+}
+
+.delibera-voto-option {
+    background-color: #a8e7f9;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    padding: 1em 1em 0.75em;
+    position: relative;
+    float: left;
+    display: inline-block;
+    width: 100%;
+}
+
+.delibera-voto-option input {
+    left: 1em;
+    position: absolute;
+    top: 45%;
+}
+
+.delibera-voto-content {
+    margin-left: 3em;
+    text-align: justify;
+}
+
+.delibera-voto-title {
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+.delibera-voto-bt-read {
+    background-color: #0b5394;
+    border-radius: 10px;
+    color: #fff;
+    display: block;
+    float: right;
+    font-weight: bold;
+    padding: 0.25em 0.5em;
+    text-transform: uppercase;
+    cursor: pointer;
+}
 
 /* portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android) */
 @media (max-width:641px) {
@@ -1101,4 +1199,9 @@ color: #777;
 		font-size: 28px;
 	}
 
+	.delibera-voto-modal-window {
+	    left: 5%;
+	    top: 5%;
+	    width: 90%;
+	}
 }

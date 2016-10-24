@@ -40,6 +40,7 @@ class Vote extends \Delibera\Modules\ModuleBase
 	{
 		parent::__construct();
 		add_action( 'admin_print_scripts', array($this, 'adminScripts') );
+		add_action( 'wp_enqueue_scripts', array($this, 'js') );
 		add_filter('delibera_unfilter_duplicate', array($this, 'unfilterDuplicate'));
 	}
 	
@@ -106,7 +107,7 @@ class Vote extends \Delibera\Modules\ModuleBase
 				<select name="'.$id.'" id="'.$id.'" autocomplete="off" >
 					<option value="checkbox" '.($value == 'checkbox' ? 'selected="selected"' : '').'>'.__('Checkbox', 'delibera').'</option>
 					<option value="radio" '.($value == 'radio' ? 'selected="selected"' : '').'>'.__('Radio Buttons', 'delibera').'</option>
-					<option value="dropdown" '.($value == 'dropdown' ? 'selected="selected"' : '').'>'.__('Dropdown', 'delibera').'</option>
+					<!-- <option value="dropdown" '.($value == 'dropdown' ? 'selected="selected"' : '').'>'.__('Dropdown', 'delibera').'</option> -->
 				</select>
 			'
 		);
@@ -180,7 +181,7 @@ class Vote extends \Delibera\Modules\ModuleBase
 			<select name="tipo_votacao" id="tipo_votacao" class="tipo_votacao widefat" autocomplete="off" >
 				<option value="checkbox" <?php echo $tipo_votacao == 'checkbox' ? 'selected="selected"' : ''; ?>><?php _e('Checkbox', 'delibera'); ?></option>
 				<option value="radio" <?php echo $tipo_votacao == 'radio' ? 'selected="selected"' : ''; ?>><?php _e('Radio Buttons', 'delibera'); ?></option>
-				<option value="dropdown" <?php echo $tipo_votacao == 'dropdown' ? 'selected="selected"' : ''; ?>><?php _e('Dropdown', 'delibera'); ?></option>
+				<!-- <option value="dropdown" <?php echo $tipo_votacao == 'dropdown' ? 'selected="selected"' : ''; ?>><?php _e('Dropdown', 'delibera'); ?></option> -->
 			</select>
 		</p>
 		
@@ -206,8 +207,13 @@ class Vote extends \Delibera\Modules\ModuleBase
 		$screenid = $screen->id;
 		if(strpos($screenid, 'page_delibera') !== false || $screenid == 'pauta' )
 		{
-			wp_enqueue_script('delibera-module-vote',WP_PLUGIN_URL.'/delibera/modules/vote/assets/js/vote.js', array('jquery'));
+			wp_enqueue_script('delibera-module-vote-admin',WP_PLUGIN_URL.'/delibera/modules/vote/assets/js/admin-vote.js', array('jquery'));
 		}
+	}
+	
+	public function js()
+	{
+		wp_enqueue_script('delibera-module-vote',WP_PLUGIN_URL.'/delibera/modules/vote/assets/js/vote.js', array('jquery'));
 	}
 	
 	public function publishPauta($postID, $opt)
@@ -286,7 +292,7 @@ class Vote extends \Delibera\Modules\ModuleBase
 				
 				foreach ($_POST['delibera_comment_add_list'] as $vote_option)
 				{
-					$vote_option = explode(',', $vote_option);
+					$vote_option = explode(',', $vote_option, 2);
 					if(count($vote_option) == 1) $vote_option = array('', $vote_option[0]);
 					if($vote_option[0] == '')
 					{

@@ -225,17 +225,43 @@ function delibera_comment_form($defaults)
 						$tipo_votacao = get_post_meta($post->ID, 'tipo_votacao', true);
 						$form = '<div class="delibera_'.$tipo_votacao.'_voto">';
 						$encaminhamentos = delibera_get_comments_encaminhamentos($post->ID);
-
+						
 						$i = 0;
+						$users = array();
 						switch ($tipo_votacao)
 						{
 							case 'radio':
 								$form .= '<h3 class="comment-respond">'.__('Escolha o encaminhamento que deseja aprovar e depois clique em "Votar":','delibera').'</h3>';
+								/* @var WP_Comment $encaminhamento */
 								foreach ($encaminhamentos as $encaminhamento)
 								{
+									if(!array_key_exists($encaminhamento->comment_author, $users)) $users[$encaminhamento->comment_author] = 0;
+									$users[$encaminhamento->comment_author]++;
+									
+									$form .= '<div id="delibera-voto-modal-'.$i.'" class="delibera-voto-modal"><div class="delibera-voto-modal-window"><div class="delibera-voto-modal-close">×</div>';
+										$form .= '<div id="delibera-voto-modal-content-'.$i.'" class="delibera-voto-modal-content">';
+											$form .= wpautop(apply_filters( 'get_comment_text', $encaminhamento->comment_content, $encaminhamento, array() ));
+										$form .= '</div>';
+									$form .= '</div></div>';
 									$form .= '
-									<div class="checkbox-voto"><input type="radio" name="delibera_voto" id="delibera_voto'.$i.'" value="'.$encaminhamento->comment_ID.'" /><label for="delibera_voto'.$i++.'" class="label-voto">'.$encaminhamento->comment_content.'</label></div>
+									<div id="delibera-voto-option-'.$i.'" class="delibera-voto-option radio-voto">
+										<input type="radio" name="delibera_voto" id="delibera_voto'.$i.'" value="'.$encaminhamento->comment_ID.'" />
+										<label id="delibera-label-voto-'.$i.'" for="delibera_voto'.$i.'" class="label-voto">
+											<div class="delibera-voto-content">
+												<div class="delibera-voto-title">
+													'.__('Proposta', 'delibera').' '.$users[$encaminhamento->comment_author].' de @'.get_comment_author($encaminhamento).'
+												</div>
+												<div class="delibera-voto-icons">
+												</div>
+												<div class="delibera-voto-text">
+													'.wp_trim_words( $encaminhamento->comment_content, 55, '' ).'
+												</div>
+											</div>
+										</label>
+										<div id="delibera-voto-bt-read-'.$i.'" class="delibera-voto-bt-read">'.__('Proposta Completa', 'delibera').'</div>
+									</div>
 									';
+									$i++;
 								}
 								break;
 							case 'dropdown':
@@ -254,9 +280,33 @@ function delibera_comment_form($defaults)
 								$form .= '<h3 class="comment-respond">'.__('Escolha os encaminhamentos que deseja aprovar e depois clique em "Votar":','delibera').'</h3>';
 								foreach ($encaminhamentos as $encaminhamento)
 								{
+									if(!array_key_exists($encaminhamento->comment_author, $users)) $users[$encaminhamento->comment_author] = 0;
+									$users[$encaminhamento->comment_author]++;
+										
+									$form .= '<div id="delibera-voto-modal-'.$i.'" class="delibera-voto-modal"><div class="delibera-voto-modal-window"><div class="delibera-voto-modal-close">×</div>';
+									$form .= '<div id="delibera-voto-modal-content-'.$i.'" class="delibera-voto-modal-content">';
+									$form .= wpautop(apply_filters( 'get_comment_text', $encaminhamento->comment_content, $encaminhamento, array() ));
+									$form .= '</div>';
+									$form .= '</div></div>';
 									$form .= '
-									<div class="checkbox-voto"><input type="checkbox" name="delibera_voto'.$i.'" id="delibera_voto'.$i.'" value="'.$encaminhamento->comment_ID.'" /><label for="delibera_voto'.$i++.'" class="label-voto">'.$encaminhamento->comment_content.'</label></div>
-									';
+										<div id="delibera-voto-option-'.$i.'" class="delibera-voto-option checkbox-voto">
+											<input type="checkbox" name="delibera_voto'.$i.'" id="delibera_voto'.$i.'" value="'.$encaminhamento->comment_ID.'" />
+											<label id="delibera-label-voto-'.$i.'" for="delibera_voto'.$i.'" class="label-voto">
+												<div class="delibera-voto-content">
+													<div class="delibera-voto-title">
+														'.__('Proposta', 'delibera').' '.$users[$encaminhamento->comment_author].' de @'.get_comment_author($encaminhamento).'
+													</div>
+													<div class="delibera-voto-icons">
+													</div>
+													<div class="delibera-voto-text">
+														'.wp_trim_words( $encaminhamento->comment_content, 55, '' ).'
+													</div>
+												</div>
+											</label>
+											<div id="delibera-voto-bt-read-'.$i.'" class="delibera-voto-bt-read">'.__('Proposta Completa', 'delibera').'</div>
+										</div>
+										';
+									$i++;
 								}
 							break;
 						}
