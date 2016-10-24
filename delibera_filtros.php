@@ -1,9 +1,17 @@
 <?php
+/**
+ * Gerencia filtro de pautas
+ * @package Pauta\Template
+ */
 
+/**
+ * Gera html responsável por apresentar opções de filtro
+ *
+ */
 function delibera_filtros_gerar()
 {
     global $deliberaThemes;
-    
+
 	?>
 	<div id="filtro-horizontal">
 		<h4><?php _e( 'Filtros de conteúdo', 'delibera' ); ?><span id="delibera-filtros-archive-mostrar" onclick="delibera_filtros_archive_mostrar()" class="delibera-filtros-mostrar" style="display: none" title="Mostrar Filtros" ></span><span id="delibera-filtros-archive-esconder" onclick="delibera_filtros_archive_esconder()" class="delibera-filtros-esconder" title="Esconder Filtros"></span></h4>
@@ -13,7 +21,7 @@ function delibera_filtros_gerar()
 		?>
 		<div style="clear:both;"> </div>
 		<span id="form-filtro-button"><?php _e("Recarregar", 'delibera')?></span>
-		</form>  
+		</form>
 	</div><!-- #filtro -->
 	<script type="text/javascript">
 	//<![CDATA[
@@ -51,7 +59,7 @@ function delibera_filtros_gerar()
 		{
 			var html = '<div id="'+id+'">';
 			<?php
-			
+
 			$iloader = $deliberaThemes->getThemeDir() . "/images/ajax-loader.gif";
 			$iloader_padrao = $deliberaThemes->getThemeUrl() . "/images/ajax-loader.gif";
 			if(file_exists($iloader))
@@ -75,26 +83,26 @@ function delibera_filtros_gerar()
 		{
 			var tema_filtro = new Array();
 			jQuery("input[name='tema_filtro[]']:checked").each(function() {tema_filtro.push(jQuery(this).val());});
-			
+
 			var data =
 			{
 				action: 'delibera_filtros_archive',
 				tema_filtro: tema_filtro
 			};
-			 
+
 	        jQuery.ajax({
 	        		type: 'POST',
 					url: '<?php echo admin_url('admin-ajax.php'); ?>',
 	        		data: data,
 	        		success: function(response)
 				        {
-				            jQuery('#lista-de-pautas').replaceWith(response); 
-				            delibera_update_pager(); 
+				            jQuery('#lista-de-pautas').replaceWith(response);
+				            delibera_update_pager();
 				        },
 				    beforeSend: function()
 				        {
 				        	overlay_filtro('lista-de-pautas');
-				        }, 
+				        },
 	        });
 		}
 		jQuery(document).ready(function()
@@ -118,20 +126,20 @@ function delibera_filtros_gerar()
 					tema_filtro: tema_filtro,
 					paged: paged
 				};
-				 
+
 		        jQuery.ajax({
 		        		type: 'POST',
 						url: '<?php echo admin_url('admin-ajax.php'); ?>',
 		        		data: data,
 		        		success: function(response)
 					        {
-					            jQuery('#lista-de-pautas').replaceWith(response); 
+					            jQuery('#lista-de-pautas').replaceWith(response);
 					            delibera_update_pager();
 					        },
 					    beforeSend: function()
 					        {
 					        	overlay_filtro('lista-de-pautas');
-					        }, 
+					        },
 		        });
 		        return false;
 			});
@@ -140,7 +148,14 @@ function delibera_filtros_gerar()
 	</script>
 	<?php
 }
-
+/**
+ * Helper para gerar filtros disponíveis
+ *
+ * @param string $tax
+ * @param bool $value
+ * @param string $linha
+ *
+ */
 function delibera_filtros_get_filtros($tax, $value = false, $linha = "<br/>")
 {
 	$terms = get_terms($tax, array('hide_empty' => 0, 'filtro' => true));
@@ -152,12 +167,12 @@ function delibera_filtros_get_filtros($tax, $value = false, $linha = "<br/>")
 			id="form-filtro-ultimos-todos-<?php echo "{$tax}"; ?>"
 			onclick="jQuery('input[name=\'<?php echo $tax; ?>_filtro[]\']').prop('checked', this.checked);"
 		/><?php _e("Marcar todos", 'delibera'); ?></label>
-		
+
 	<div class="form-filtro-ultimos-div">
 	<?php
 	foreach ($terms as $term)
 	{
-		
+
 		?>
 				<span class="form-filtro-ultimos-chebox-span">
 				<label class="form-filtro-ultimos-chebox-label"><input type="checkbox" name="<?php echo "{$tax}_filtro[]"; ?>" value="<?php echo $term->slug; ?>" class="form-filtro-ultimos-chebox" autocomplete="off" /><?php _e($term->name, 'delibera'); ?></label><?php echo $linha; ?>
@@ -198,18 +213,22 @@ function delibera_filtros_get_filtros($tax, $value = false, $linha = "<br/>")
 	}
 }
 
+/**
+ * Monta lista de pautas disponíveis em formato arquivo do wp 
+ * 
+ */
 function delibera_filtros_archive_callback()
 {
 	global $wp_query, $deliberaThemes;
-	
+
 	$action = new stdClass();
 	$action->canQuery = true;
-	
+
 	$args = delibera_filtros_get_tax_filtro($_POST, array('post_type' => 'pauta', 'post_status' => 'publish'));
 	
 	$paged = ( array_key_exists('paged', $_POST) && $_POST['paged'] > 0 ) ? $_POST['paged'] : 1;
 	$args['paged'] = $paged;
-	
+
 	$args = apply_filters('delibera_filtros_archive_callback_filter', $args);
 	
 	query_posts($args);
@@ -233,6 +252,7 @@ add_action('wp_ajax_nopriv_delibera_filtros_archive', 'delibera_filtros_archive_
  * Retorna array com o filtro de tax para ser usado nas querys do WP
  * @param array $dados Exemplo: $_POST deve conter a chave (array)tema_filtro para tema
  * @param array $args Query
+ * @param string $field
  */
 function delibera_filtros_get_tax_filtro($dados, $args, $field = "slug")
 {
@@ -271,11 +291,15 @@ function delibera_filtros_get_tax_filtro($dados, $args, $field = "slug")
 	return $args;
 }
 
+/**
+ * Carrega Javascript necessários para filtro funcionar no frontend
+ *
+ */
 function delibera_filtros_scripts()
 {
 	if(is_pauta())
 	{
-		wp_enqueue_script('ui-tooltip',WP_CONTENT_URL.'/plugins/delibera/js/jquery.ui.tooltip.js', array( 'jquery', 'jquery-ui-widget'));
+		wp_enqueue_script('ui-tooltip',plugin_dir_url(__FILE__).'/js/jquery.ui.tooltip.js', array( 'jquery', 'jquery-ui-widget'));
 	}
 }
 add_action( 'wp_print_scripts', 'delibera_filtros_scripts' );

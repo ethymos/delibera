@@ -8,7 +8,7 @@ function delibera_curtir_comment_meta($comment_id)
 		$ncurtiram = array();
 		add_comment_meta($comment_id, 'delibera_numero_curtir', $ncurtiram, true);
 	}
-	
+
 	$curtiram = get_comment_meta($comment_id, "delibera_curtiram", true);
 	if($curtiram == false || $curtiram == "")
 	{
@@ -22,11 +22,12 @@ function delibera_curtir($ID, $type = 'pauta')
 	$user_id = get_current_user_id();
 	$ip = $_SERVER['REMOTE_ADDR'];
 	
+	$ncurtir = intval($type == 'pauta' || $type == 'post' ? get_post_meta($ID, 'delibera_numero_curtir', true) : get_comment_meta($ID, 'delibera_numero_curtir', true));
+	
 	if(!delibera_ja_curtiu($ID, $user_id, $ip, $type) && !(function_exists('delibera_ja_discordou') && delibera_ja_discordou($ID, $user_id, $ip, $type)) )
 	{
 		if ($type == 'pauta') {
 			$postID = $ID;
-			$ncurtir = get_post_meta($postID, 'delibera_numero_curtir', true);
 			$ncurtir++;
 			update_post_meta($postID, 'delibera_numero_curtir', $ncurtir);
 			$curtiram = get_post_meta($postID, 'delibera_curtiram', true);
@@ -37,7 +38,6 @@ function delibera_curtir($ID, $type = 'pauta')
 			update_post_meta($postID, 'delibera_curtiram', $curtiram);
 		} elseif ($type == 'comment') {
 			$comment_id = $ID;
-			$ncurtir = intval(get_comment_meta($comment_id, 'delibera_numero_curtir', true));
 			$ncurtir++;
 			update_comment_meta($comment_id, 'delibera_numero_curtir', $ncurtir);
 			$curtiram = get_comment_meta($comment_id, 'delibera_curtiram', true);
@@ -47,14 +47,81 @@ function delibera_curtir($ID, $type = 'pauta')
 			$curtiram[$hora][] = array('user' => $user_id, 'ip' => $ip);
 			update_comment_meta($comment_id, 'delibera_curtiram', $curtiram);
 		}
-
-		return sprintf(_n('%d concordou', '%d concordaram', $ncurtir, 'delibera'), $ncurtir);
 	}
+	elseif(delibera_ja_curtiu($ID, $user_id, $ip, $type))
+	{
+		if ($type == 'pauta') {
+			$postID = $ID;
+			$curtiram = get_post_meta($postID, 'delibera_curtiram', true);
+			$acho  = 0;
+			foreach ($curtiram as $hora => $curtiuem)
+			{
+				for($i = 0; $i < count($curtiuem); $i++)
+				{
+					if(intval($user_id) == 0 && $ip == $curtiuem[$i]['ip'])
+					{
+						unset($curtiuem[$i]);
+						$acho--;
+					}
+					elseif($user_id == $curtiuem[$i]['user'])
+					{
+						unset($curtiuem[$i]);
+						$acho--;
+					}
+				}
+				if(count($curtiuem) == 0)
+				{
+					unset($curtiram[$hora]);
+				}
+				else
+				{
+					$curtiram[$hora] = $curtiuem;
+				}
+			}
+			$ncurtir += $acho;
+			if($ncurtir < 0) $ncurtir = 0; // fix previews bug
+			update_post_meta($postID, 'delibera_numero_curtir', $ncurtir);
+			update_post_meta($postID, 'delibera_curtiram', $curtiram);
+		} elseif ($type == 'comment') {
+			$comment_id = $ID;
+			$curtiram = get_comment_meta($comment_id, 'delibera_curtiram', true);
+			$acho  = 0;
+			foreach ($curtiram as $hora => $curtiuem)
+			{
+				for($i = 0; $i < count($curtiuem); $i++)
+				{
+					if(intval($user_id) == 0 && $ip == $curtiuem[$i]['ip'])
+					{
+						unset($curtiuem[$i]);
+						$acho--;
+					}
+					elseif($user_id == $curtiuem[$i]['user'])
+					{
+						unset($curtiuem[$i]);
+						$acho--;
+					}
+				}
+				if(count($curtiuem) == 0)
+				{
+					unset($curtiram[$hora]);
+				}
+				else
+				{
+					$curtiram[$hora] = $curtiuem;
+				}
+			}
+			$ncurtir += $acho;
+			if($ncurtir < 0) $ncurtir = 0; // fix previews bug
+			update_comment_meta($comment_id, 'delibera_numero_curtir', $ncurtir);
+			update_comment_meta($comment_id, 'delibera_curtiram', $curtiram);
+		}
+	}
+	return apply_filters('delibera_curtir', $ncurtir);
 }
 
 function delibera_numero_curtir($ID, $type ='pauta')
 {
-	if($type == 'puata')
+	if($type == 'pauta')
 	{
 		$postID = $ID;
 		$ncurtir = get_post_meta($postID, 'delibera_numero_curtir', true);
@@ -75,12 +142,12 @@ function delibera_ja_curtiu($postID, $user_id, $ip, $type)
 	{
 		$curtiram = get_post_meta($postID, 'delibera_curtiram', true);
 	}
-	else 
+	else
 	{
 		$curtiram = get_comment_meta($postID, 'delibera_curtiram', true);
 	}
 	if(!is_array($curtiram)) $curtiram = array();
-	
+
 	foreach ($curtiram as $hora => $curtiuem)
 	{
 		foreach ($curtiuem as $curtiu)
@@ -116,7 +183,7 @@ function delibera_get_quem_curtiu($ID, $type = 'pauta', $return = 'array')
 	{
 		$curtiram = get_post_meta($ID, 'delibera_curtiram', true);
 	}
-	else 
+	else
 	{
 		$curtiram = get_comment_meta($ID, 'delibera_curtiram', true);
 	}
@@ -140,6 +207,6 @@ function delibera_get_quem_curtiu($ID, $type = 'pauta', $return = 'array')
 			return $curtiram;
 		break;
 	}
-	
+
 }
 ?>
