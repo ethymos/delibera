@@ -15,10 +15,10 @@ class Flow
 	public function __construct()
 	{
 		add_filter('delibera_get_main_config', array($this, 'getMainConfig'));
-		add_filter('delivera_config_page_rows', array($this, 'configPageRows'), 10, 2);
+		//add_filter('delivera_config_page_rows', array($this, 'configPageRows'), 10, 2);
 		add_filter('delibera-pre-main-config-save', array($this, 'preMainConfigSave'));
 		add_action('delibera_topic_meta', array($this, 'topicMeta'), 10, 5);
-		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 1, 2);
+		add_filter('delibera_save_post_metas', array($this, 'savePostMetas'), 1, 3);
 		add_action('delibera_publish_pauta', array($this, 'publishPauta'), 10, 2);
 		add_filter('delibera_flow_list', array($this, 'filterFlowList'));
 		add_filter('delibera_check_post_data', array($this, 'checkPostData'), 1000, 3);
@@ -35,7 +35,7 @@ class Flow
 	}
 	
 	/**
-	 * Append configurations 
+	 * Append defaults configurations 
 	 * @param array $opts
 	 */
 	public function getMainConfig($opts)
@@ -64,9 +64,23 @@ class Flow
 	 */
 	public function preMainConfigSave($opts)
 	{
-		if(array_key_exists('delibera_flow', $opts) && !is_array($opts['delibera_flow']))
+		$save_opts = delibera_get_config();
+		
+		if(array_key_exists('delibera_flow', $opts) && is_string($opts['delibera_flow']) && strlen($opts['delibera_flow']) > 1)
 		{
 			$opts['delibera_flow'] = explode(',', trim($opts['delibera_flow']));
+		}
+		
+		if( empty($opts['delibera_flow']) || (is_string($opts['delibera_flow']) && strlen($opts['delibera_flow']) < 2 ) )
+		{
+			if(empty($save_opts['delibera_flow']))
+			{
+				$opts = $this->getMainConfig($opts);
+			}
+			else 
+			{
+				$opts['delibera_flow'] = $save_opts['delibera_flow'];
+			}
 		}
 		return $opts;
 	}
@@ -184,11 +198,16 @@ class Flow
 	 * 
 	 * @return array return filtered $events_meta array
 	 */
-	public function savePostMetas($events_meta, $opt)
+	public function savePostMetas($events_meta, $opt, $post_id)
 	{
 		if(array_key_exists('delibera_flow', $_POST) )
 		{
-			$flow = explode(',', trim($_POST['delibera_flow']));
+			$flow = $_POST['delibera_flow'];
+			
+			if(is_string($flow))
+			{
+				$flow = explode(',', trim($_POST['delibera_flow']));
+			}
 			$events_meta['delibera_flow'] = $flow;
 			
 			$modules = $this->getFlowModules();
@@ -236,10 +255,21 @@ class Flow
 		/**
 		 * Update flow meta after publish because is before save metas  
 		 */
-		$flow = explode(',', trim(strip_tags($_POST['delibera_flow'])));
-		update_post_meta($postID, 'delibera_flow', $flow);
-		file_put_contents('/tmp/publish.log', date('Ymd H:i:s').$postID."\n", FILE_APPEND);
-		self::reabrirPauta($postID, false);
+		if(array_key_exists('delibera_flow', $_POST))
+		{
+			$flow = array();
+			if(is_array($_POST['delibera_flow']))
+			{
+				$flow = array_map("strip_tags", $_POST['delibera_flow']);
+			}
+			else 
+			{
+				$flow = explode(',', trim(strip_tags($_POST['delibera_flow'])));
+			}
+			update_post_meta($postID, 'delibera_flow', $flow);
+			//file_put_contents('/tmp/publish.log', date('Ymd H:i:s').$postID."\n", FILE_APPEND);
+			self::reabrirPauta($postID, false);
+		}
 	}
 	
 	/**
@@ -272,7 +302,14 @@ class Flow
 			}
 			$current = 0;
 		}
-		return $modules[$flow[$current]];
+		if(array_key_exists($current, $flow) && array_key_exists($flow[$current], $modules))
+		{
+			return $modules[$flow[$current]];
+		}
+		else 
+		{
+			return array_shift($modules);
+		}
 	}
 	
 	/**
@@ -493,17 +530,17 @@ class Flow
 		if(strpos($screenid, 'page_delibera') !== false || $screenid == 'pauta' )
 		{
 			$post_id = get_the_ID();
-			wp_enqueue_script('delibera-admin-flow',WP_CONTENT_URL.'/plugins/delibera/admin/js/flow.js', array( 'jquery-ui-core'));
+			wp_enqueue_script('delibera-admin-flow', plugin_dir_url(__FILE__).'/js/flow.js', array( 'jquery-ui-core', 'jquery-ui-sortable'));
 			$data = array(
 					'ajax_url' => admin_url('admin-ajax.php'),
 					'post_id' => $post_id
 			);
 			
 			wp_localize_script('delibera-admin-flow', 'delibera_admin_flow', $data);
-			wp_enqueue_script('jquery-ui-datepicker-ptbr', WP_CONTENT_URL.'/plugins/delibera/js/jquery.ui.datepicker-pt-BR.js', array('jquery-ui-datepicker'));
-			wp_enqueue_script('delibera-admin',WP_CONTENT_URL.'/plugins/delibera/admin/js/admin_scripts.js', array( 'jquery-ui-datepicker-ptbr'));
+			wp_enqueue_script('jquery-ui-datepicker-ptbr', DELIBERA_DIR_URL.'/js/jquery.ui.datepicker-pt-BR.js', array('jquery-ui-datepicker'));
+			wp_enqueue_script('delibera-admin', plugin_dir_url(__FILE__).'/js/admin_scripts.js', array( 'jquery-ui-datepicker-ptbr'));
 			
-			wp_enqueue_style('delibera-admin-flow',WP_CONTENT_URL.'/plugins/delibera/admin/css/flow.css');
+			wp_enqueue_style('delibera-admin-flow',plugin_dir_url(__FILE__).'/css/flow.css');
 		}
 	}
 	
@@ -519,7 +556,10 @@ class Flow
 		if(array_key_exists('delibera_flow', $_POST) )
 		{
 			$flow = $_POST['delibera_flow'];
-			$flow = explode(',', strip_tags($_POST['delibera_flow']));
+			if(is_string($flow))
+			{
+				$flow = explode(',', strip_tags($_POST['delibera_flow']));
+			}
 			$valida = is_array($flow) ? count($flow) : false;
 			if(!$autosave && ($valida === false || $valida < 1))
 			{
@@ -587,16 +627,21 @@ class Flow
 		else 
 		{
 			$rows = array();
-			$rows = apply_filters('delivera_config_page_rows', $rows, $opt);
+			$rows = $this->configPageRows($rows, $opt);
+			$modules = \Delibera\Flow::getFlowModules();
+			foreach ($modules as $module)
+			{
+				$rows = $module->configPageRows($rows, $opt);
+			}
 			$oldFlow = implode(',', $opt['delibera_flow']);
-			$configs_to_save = array_value_recursive('id', $rows); 
-			foreach (array_keys(delibera_get_main_config()) as $option_name) //TODO better way to do this
+			$configs_to_save = array_value_recursive('id', $rows);
+			foreach ($configs_to_save as $option_name) //TODO better way to do this
 			{
 				if (isset($_POST[$option_name]))
 				{
 					$opt[$option_name] = htmlspecialchars($_POST[$option_name]);
 				}
-				elseif( in_array($option_name, $configs_to_save) )
+				else // checkbox maybe
 				{
 					$opt[$option_name] = "N";
 				}
@@ -604,7 +649,7 @@ class Flow
 			$opt['delibera_flow'] = $flow;
 			if(! update_option('delibera-config', $opt) && $oldFlow != implode(',', $flow) )
 			{
-				$all_errors = array(__('can not update flow', 'delibera'));
+				$all_errors = array(__('can not update modules configs', 'delibera'));
 			}
 			
 			if(count($all_errors) > 0)
@@ -615,6 +660,27 @@ class Flow
 		die('ok');
 	}
 	
+	/**
+	 * return list of Deadlines of a post in format: array of [situacao] => [date]
+	 * @param int $post_id
+	 * @return array
+	 */
+	public static function getDeadlineDates($post_id)
+	{
+		global $DeliberaFlow;
+	
+		$dates = array();
+		$flow = $DeliberaFlow->get($post_id);
+		$modules = $DeliberaFlow->getFlowModules();
+		foreach ($flow as $situacao)
+		{
+			if(array_key_exists($situacao, $modules))
+			{
+				$dates[$situacao] = $modules[$situacao]->getDeadline($post_id);
+			}
+		}
+		return $dates;
+	}
 	
 }
 

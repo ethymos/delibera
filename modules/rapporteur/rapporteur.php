@@ -30,11 +30,17 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 	protected $days = array('dias_relatoria', 'dias_votacao_relator');
 	
 	/**
+	 * Display priority
+	 * @var int
+	 */
+	public $priority = 3;
+	
+	/**
 	 * Register Tax for the module
 	 */
 	public function registerTax()
 	{
-		if(term_exists('eleicao_redator', 'situacao', null) == false)
+		/*if(term_exists('eleicao_redator', 'situacao', null) == false) // TODO create election
 		{
 			delibera_insert_term('Regime de Votação de Relator', 'situacao', array(
 					'description'=> 'Pauta em Eleição de Relator',
@@ -46,7 +52,7 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 					'qtrans_term_es' => 'Elección del Relator',
 				)
 			);
-		}
+		}*/
 
 		if(term_exists('relatoria', 'situacao', null) == false)
 		{
@@ -103,18 +109,18 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 		$rows[] = array(
 			"id" => "dias_relatoria",
 			"label" => __('Prazo para relatoria:', 'delibera'),
-			"content" => '<input type="text" name="dias_relatoria" id="dias_relatoria" value="'.htmlspecialchars_decode($opt['dias_relatoria']).'"/>'
+			"content" => '<input type="text" name="dias_relatoria" id="dias_relatoria" value="'.htmlspecialchars_decode($opt['dias_relatoria']).'" autocomplete="off" />'
 		);
-		$rows[] = array(
+		/*$rows[] = array(
 			"id" => "eleicao_relator",
 			"label" => __('Necessário eleição de relator?', 'delibera'),
-			"content" => '<input type="checkbox" name="eleicao_relator" value="S" '.(htmlspecialchars_decode($opt['eleicao_relator']) == 'S' ? 'checked="checked"' : '').' />'
+			"content" => '<input type="checkbox" name="eleicao_relator" value="S" '.(htmlspecialchars_decode($opt['eleicao_relator']) != 'N' ? 'checked="checked"' : '').' autocomplete="off"  />'
 		);
 		$rows[] = array(
 			"id" => "dias_votacao_relator",
 			"label" => __('Prazo para eleição de relator:', 'delibera'),
-			"content" => '<input type="text" name="dias_votacao_relator" id="dias_votacao_relator" value="'.htmlspecialchars_decode($opt['dias_votacao_relator']).'"/>'
-		);
+			"content" => '<input type="text" name="dias_votacao_relator" id="dias_votacao_relator" value="'.htmlspecialchars_decode($opt['dias_votacao_relator']).'" autocomplete="off" />'
+		);*/
 		return $rows;
 	}
 	
@@ -187,9 +193,9 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 		}
 		
 		if($options_plugin_delibera['eleicao_relator'] == "S")
-		{
+		{ //TODO remove display none when have election
 		?>
-			<p>
+			<p style="display: none;">
 				<label class="label_prazo_eleicao_relator"><?php _e('Prazo para Eleição de Relator','delibera') ?>:</label>
 				<input <?php echo $disable_edicao ?> name="prazo_eleicao_relator" class="prazo_eleicao_relator widefat hasdatepicker" value="<?php echo $prazo_eleicao_relator; ?>"/>
 			</p>
@@ -252,11 +258,7 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 	
 	public function createPautaAtFront($opt)
 	{
-		$_POST['prazo_relatoria'] = date('d/m/Y', strtotime ('+'.$opt['dias_relatoria'].' DAYS'));
-		if($opt['eleicao_relator'] == 'S')
-		{
-			$_POST['prazo_eleicao_relator'] = date('d/m/Y', strtotime ('+'.$opt['dias_votacao_relator'].' DAYS'));
-		}
+		$_POST['prazo_relatoria'] = $this->generateDeadline($opt);
 	}
 	
 	/**
@@ -294,6 +296,16 @@ class Rapporteur extends \Delibera\Modules\ModuleBase
 			wp_set_object_terms($post_id, 'relatoria', 'situacao', false);
 			$this->newDeadline($post_id);
 		}
+	}
+	
+	/**
+	 *
+	 * {@inheritDoc}
+	 * @see \Delibera\Modules\ModuleBase::getCommentListLabel()
+	 */
+	public function getCommentListLabel()
+	{
+		return __('Relatoria da Pauta', 'delibera');
 	}
 	
 }

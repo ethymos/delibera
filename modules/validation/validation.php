@@ -35,6 +35,12 @@ class Validation extends \Delibera\Modules\ModuleBase
 	 */
 	protected $shortcodes = array('delibera_lista_de_propostas' => 'replacePropostas' );
 	
+	/**
+	 * Display priority
+	 * @var int
+	 */
+	public $priority = 1;
+	
 	public function __construct()
 	{
 		add_action('delibera_pauta_recusada', array('\Delibera\Cron', 'del'));
@@ -107,13 +113,13 @@ class Validation extends \Delibera\Modules\ModuleBase
 		$rows[] = array(
 				"id" => "minimo_validacao",
 				"label" => __('Mínimo de validações para uma pauta:', 'delibera'),
-				"content" => '<input type="text" name="minimo_validacao" id="minimo_validacao" value="'.htmlspecialchars_decode($opt['minimo_validacao']).'"/>'
+				"content" => '<input type="text" name="minimo_validacao" id="minimo_validacao" value="'.htmlspecialchars_decode($opt['minimo_validacao']).'" autocomplete="off" />'
 		);
 		
 		$rows[] = array(
 				"id" => "dias_validacao",
 				"label" => __('Dias para validação da pauta:', 'delibera'),
-				"content" => '<input type="text" name="dias_validacao" id="dias_validacao" value="'.htmlspecialchars_decode($opt['dias_validacao']).'"/>'
+				"content" => '<input type="text" name="dias_validacao" id="dias_validacao" value="'.htmlspecialchars_decode($opt['dias_validacao']).'" autocomplete="off" />'
 		);
 		return $rows;
 	}
@@ -297,7 +303,7 @@ class Validation extends \Delibera\Modules\ModuleBase
 	 */
 	public function createPautaAtFront($opt)
 	{
-		$_POST['prazo_validacao'] = date('d/m/Y', strtotime ('+'.$opt['dias_validacao'].' DAYS'));
+		$_POST['prazo_validacao'] = $this->generateDeadline($opt);
 		$_POST['min_validacoes'] = $opt['minimo_validacao'];
 	}
 	
@@ -326,6 +332,16 @@ class Validation extends \Delibera\Modules\ModuleBase
 		{
 			do_action('delibera_pauta_recusada', $postID);
 		}
+	}
+	
+	/**
+	 *
+	 * {@inheritDoc}
+	 * @see \Delibera\Modules\ModuleBase::getCommentListLabel()
+	 */
+	public function getCommentListLabel()
+	{
+		return __('Validação da Pauta', 'delibera');
 	}
 	
 }

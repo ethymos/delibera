@@ -37,6 +37,12 @@ class Discussion extends \Delibera\Modules\ModuleBase
 	protected $days = array('dias_discussao');
 	
 	/**
+	 * Display priority
+	 * @var int
+	 */
+	public $priority = 2;
+	
+	/**
 	 * Register Tax for the module
 	 */
 	public function registerTax()
@@ -87,12 +93,12 @@ class Discussion extends \Delibera\Modules\ModuleBase
 		$rows[] = array(
 			"id" => "dias_discussao",
 			"label" => __('Dias para discussão da pauta:', 'delibera'),
-			"content" => '<input type="text" name="dias_discussao" id="dias_discussao" value="'.htmlspecialchars_decode($opt['dias_discussao']).'"/>'
+			"content" => '<input type="text" name="dias_discussao" id="dias_discussao" value="'.htmlspecialchars_decode($opt['dias_discussao']).'" autocomplete="off" />'
 		);
 		$rows[] = array(
 			"id" => "pauta_suporta_encaminhamento",
 			"label" => __('Pautas suportam sugestão de encaminhamento?', 'delibera'),
-			"content" => '<input type="checkbox" name="pauta_suporta_encaminhamento" id="pauta_suporta_encaminhamento" value="S" '. ( htmlspecialchars_decode($opt['pauta_suporta_encaminhamento']) == "S" ? "checked='checked'" : "" ).'/>',
+			"content" => '<input type="checkbox" name="pauta_suporta_encaminhamento" id="pauta_suporta_encaminhamento" value="S" '. ( htmlspecialchars_decode($opt['pauta_suporta_encaminhamento']) != "N" ? "checked='checked'" : "" ).' autocomplete="off" />',
 		);
 		return $rows;
 	}
@@ -222,11 +228,12 @@ class Discussion extends \Delibera\Modules\ModuleBase
 	
 	public function createPautaAtFront($opt)
 	{
-		if (trim($opt['data_fixa_nova_pauta_externa']) != '') {
-			$prazo_discussao = DateTime::createFromFormat('d/m/Y', $opt['data_fixa_nova_pauta_externa']);
+		$data_externa = trim($opt['data_fixa_nova_pauta_externa']);
+		if ( !empty($data_externa) && strlen($data_externa) == 10) {
+			$prazo_discussao = \DateTime::createFromFormat('d/m/Y', $data_externa);
 			$_POST['prazo_discussao'] = $prazo_discussao->format('d/m/Y');
 		} else {
-			$_POST['prazo_discussao'] = date('d/m/Y', strtotime ('+'.$opt['dias_discussao'].' DAYS'));
+			$_POST['prazo_discussao'] = $this->generateDeadline($opt);
 		}
 	}
 	
@@ -256,6 +263,16 @@ class Discussion extends \Delibera\Modules\ModuleBase
 				$current->newDeadline($post_id, false);
 			}
 		}
+	}
+	
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * @see \Delibera\Modules\ModuleBase::getCommentListLabel()
+	 */
+	public function getCommentListLabel()
+	{
+		return __('Discussão sobre a Pauta', 'delibera');
 	}
 	
 }
