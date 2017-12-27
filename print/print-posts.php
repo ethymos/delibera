@@ -24,11 +24,7 @@
 	<title><?php bloginfo('name'); ?> <?php wp_title(); ?></title>
 	<meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
 	<meta name="Robots" content="noindex, nofollow" />
-	<?php if(@file_exists(TEMPLATEPATH.'/print-css.css')): ?>
-		<link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri(); ?>/print-css.css" type="text/css" media="screen, print" />
-	<?php else: ?>
-		<link rel="stylesheet" href="<?php echo plugins_url('delibera/print/print-css.css'); ?>" type="text/css" media="screen, print" />
-	<?php endif; ?>
+	<link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri(); ?>/print-css.css" type="text/css" media="screen, print" />
 	<?php if('rtl' == $text_direction): ?>
 		<?php if(@file_exists(TEMPLATEPATH.'/print-css-rtl.css')): ?>
 			<link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri(); ?>/print-css-rtl.css" type="text/css" media="screen, print" />
