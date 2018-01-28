@@ -36,7 +36,8 @@
 			{
 			 	?><p id="CommentTitle"><?php echo sprintf(_n('%s Validação', '%s Validações', $validacao, 'delibera'), number_format_i18n($validacao)); ?></p><?php
 			 	$comments_tmp = delibera_comments_filter_portipo($comments, array('validacao'));
-			 	include('print_comment_template.php');
+			 	// include('print_comment_template.php');
+			 	get_template_part('print_comment_template');
 			}
 			if($discussao > 0)
 			{
@@ -48,20 +49,23 @@
 					}
 				?></p><?php
 				$comments_tmp = delibera_comments_filter_portipo($comments, array('discussao', 'encaminhamento', 'resolucao'));
-				include('print_comment_template.php');
+				// include('print_comment_template.php');
+				get_template_part('print_comment_template');
 			}
 			if($voto > 0)
 			{
 				?><p id="CommentTitle"><?php echo sprintf(_n('%s Voto', '%s Votos', $voto, 'delibera'), number_format_i18n($voto)); ?></p><?php
 				$comments_tmp = delibera_comments_filter_portipo($comments, array('voto'));
-				include('print_comment_template.php');
+				// include('print_comment_template.php');
+				get_template_part('print_comment_template');
 			}
 			if($encaminhamento > 0)
 			{
 				define('RESOLUCOES', true);
 				?><p id="CommentTitle"><?php echo 'Votação' ?></p><?php
 				$comments_tmp = delibera_comments_filter_portipo($comments, array('encaminhamento', 'resolucao'));
-				include('print_comment_template.php');
+				// include('print_comment_template.php');
+				get_template_part('print_comment_template');
 			}
 			
 			/*if($resolucao > 0)
